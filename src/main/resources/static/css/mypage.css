@@ -1,0 +1,448 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+@font-face {
+  font-family: "JeonjuCraftMjB";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/JeonjuCraftMjB.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  font-family: "Open Sans", sans-serif;
+  box-sizing: border-box;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+  font-family: "Open Sans", sans-serif;
+  color: #000000;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+button {
+  outline: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 5px 10px;
+  color: #fff;
+}
+
+/* custom css start */
+main {
+  display: flex;
+  min-height: 100vh;
+}
+main .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  max-width: 300px;
+  flex: 1 1 0;
+  padding: 3rem 2rem;
+  background-color: #F8F9FA;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: 0.2s linear;
+}
+main .sidebar .top_logo {
+  font-family: "JeonjuCraftMjB";
+}
+main .sidebar .top_logo h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 32px;
+  font-weight: bold;
+}
+main .sidebar .top_nav {
+  height: 40px;
+  margin: 20px 0 30px;
+}
+main .sidebar .top_nav li {
+  display: inline-block;
+}
+main .sidebar .top_nav li a {
+  display: block;
+  padding: 0 7px 0 0;
+  font-size: 10px;
+  letter-spacing: 1px;
+  transition: 0.3s;
+  font-weight: 400;
+  font-family: Arial, sans-serif;
+}
+main .sidebar .top_nav li a:hover {
+  color: #cccccc;
+}
+main .sidebar .top_menu {
+  display: flex;
+  margin-bottom: 50px;
+}
+main .sidebar .top_menu .category,
+main .sidebar .top_menu .boardinfo {
+  width: 50%;
+}
+main .sidebar .top_menu .category > h2,
+main .sidebar .top_menu .boardinfo > h2 {
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #353535;
+}
+main .sidebar .top_menu .category > ul > li,
+main .sidebar .top_menu .boardinfo > ul > li {
+  width: 110px;
+  margin-right: 15px;
+  height: 22px;
+}
+main .sidebar .top_menu .category > ul > li a,
+main .sidebar .top_menu .boardinfo > ul > li a {
+  display: block;
+  text-align: left;
+  color: #000;
+  font-size: 11px;
+  line-height: 22px;
+  letter-spacing: 0.1em;
+}
+main .sidebar .top_menu .category > ul > li:hover,
+main .sidebar .top_menu .boardinfo > ul > li:hover {
+  color: #cccccc;
+}
+main .sidebar .top_menu .category ul li {
+  position: relative;
+}
+main .sidebar .top_menu .category ul li .sub_category {
+  position: absolute;
+  display: none;
+  width: 170px;
+  background-color: #fff;
+  padding: 15px 15px;
+  top: -22px;
+  right: -150px;
+  z-index: 100;
+  border: 1px solid #f1f1f1;
+}
+main .sidebar .top_menu .category ul li .sub_category ul li {
+  background-color: #fff;
+  padding: 4px 7px;
+}
+main .sidebar .top_menu .category ul li .sub_category ul li a {
+  display: block;
+  color: #000;
+}
+main .sidebar .top_menu .category ul li .sub_category ul li a:hover {
+  color: #000;
+}
+main .sidebar .top_menu .category ul li .sub_category ul li:has(a:hover) {
+  background-color: #f0f0f0;
+}
+main .sidebar .top_menu .category ul li:hover .sub_category {
+  display: block;
+}
+main .sidebar .search_form {
+  margin-bottom: 30px;
+}
+main .sidebar .search_form form > input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #000;
+  width: 200px;
+  outline: none;
+  font-size: 12px;
+}
+main .sidebar .search_form .fz16 {
+  vertical-align: middle;
+  font-size: 16px;
+  cursor: pointer;
+}
+main .sidebar .menu_cs > ul > li:nth-child(1) {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+main .sidebar .menu_cs > ul > li:nth-child(2) {
+  font-size: 11px;
+}
+main .content {
+  flex: 1 1 0;
+  padding-top: 70px;
+  padding-left: 300px;
+  /* footer */
+}
+main .content nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding: 20px 5%;
+  background-color: #fff;
+  height: 70px;
+  z-index: 99;
+}
+main .content nav .menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main .content nav .menu .menu_link {
+  display: flex;
+  gap: 30px;
+}
+main .content nav .menu .menu_link li {
+  padding: 20px 0;
+}
+main .content nav .menu .menu_link li a {
+  font-size: 13px;
+}
+main .content nav .menu .menu_link li .account_menu {
+  position: absolute;
+  display: none;
+  width: 140px;
+  background-color: #fff;
+  padding: 10px 10px;
+  top: 85%;
+  left: -25%;
+  z-index: 100;
+  border: 1px solid #f1f1f1;
+}
+main .content nav .menu .menu_link li .account_menu ul li {
+  background-color: #fff;
+  padding: 4px 7px;
+}
+main .content nav .menu .menu_link li .account_menu ul li a {
+  color: #000;
+  display: block;
+}
+main .content nav .menu .menu_link li .account_menu ul li a:hover {
+  color: #000;
+}
+main .content nav .menu .menu_link li .account_menu ul li:has(a:hover) {
+  background-color: #f0f0f0;
+}
+main .content nav .menu .menu_link li:nth-child(2) {
+  cursor: pointer;
+  position: relative;
+}
+main .content nav .menu .menu_link li:nth-child(2):hover .account_menu {
+  display: block;
+}
+main .content nav .menu_toggle {
+  display: none;
+}
+main .content nav .menu_toggle input {
+  display: none;
+}
+main .content nav .menu_toggle label {
+  width: 35px;
+  height: 25px;
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+main .content nav .menu_toggle label span {
+  position: absolute;
+  height: 3px;
+  border-radius: 99px;
+  background-color: #000;
+  width: 100%;
+  left: 0;
+  transition: 0.3s;
+}
+main .content nav .menu_toggle label span:nth-child(1) {
+  top: 0;
+}
+main .content nav .menu_toggle label span:nth-child(2) {
+  top: 50%;
+}
+main .content nav .menu_toggle label span:nth-child(3) {
+  top: 100%;
+}
+main .content nav .menu_toggle input:checked + label span:nth-child(1) {
+  top: 50%;
+  transform: rotate(45deg);
+}
+main .content nav .menu_toggle input:checked + label span:nth-child(2) {
+  opacity: 0;
+}
+main .content nav .menu_toggle input:checked + label span:nth-child(3) {
+  top: 50%;
+  transform: rotate(-45deg);
+}
+main .content #mypage .mypage .mypage_header h2 {
+  font-size: 15px;
+  text-align: center;
+}
+main .content #mypage .mypage .mypage_header .divider {
+  width: 70px;
+  height: 1px;
+  background: #aaa;
+  margin: 20px auto;
+}
+main .content #mypage .mypage .mypage_body {
+  width: 100%;
+  margin: 0 auto;
+}
+main .content #mypage .mypage .mypage_body .bank_book {
+  overflow: hidden;
+}
+main .content #mypage .mypage .mypage_body .bank_book ul li {
+  float: left;
+}
+main .content #mypage .mypage .mypage_body .bank_book ul li strong.title,
+main .content #mypage .mypage .mypage_body .bank_book ul li strong.data {
+  font-weight: normal;
+  font-size: 13px;
+}
+main .content #mypage .mypage .mypage_body .bank_book ul li span {
+  font-weight: bold;
+  font-size: 18px;
+}
+main .content #mypage .mypage .mypage_body .order_state {
+  margin: 20px 0 0;
+  border: 1px solid #333;
+}
+main .content #mypage .mypage .mypage_body .order_state .title {
+  padding: 20px 21px;
+  margin: 0;
+  border-bottom: 1px solid #e9e9e9;
+  background-color: #f8f8f8;
+}
+main .content #mypage .mypage .mypage_body .order_state .title h3 {
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+  color: #000;
+  font-weight: bold;
+}
+main .content #mypage .mypage .mypage_body .order_state .state {
+  overflow: hidden;
+  padding: 40px 0;
+}
+main .content #mypage .mypage .mypage_body .order_state .state li {
+  float: left;
+  width: 25%;
+  padding: 0 0 4px;
+  margin: 0 -1px 0 0;
+  border-right: 1px dotted #c9c7ca;
+  text-align: center;
+}
+main .content #mypage .mypage .mypage_body .order_state .state li strong {
+  display: block;
+  margin: 2px 0 7px;
+  font-size: 17px;
+  color: #353535;
+}
+main .content #mypage .mypage .mypage_body .order_state .state li a {
+  font-weight: bold;
+  font-size: 24px;
+  color: #000;
+}
+main .content #mypage .mypage .mypage_body .myshop_main {
+  margin: 30px 0 0;
+  overflow: hidden;
+}
+main .content #mypage .mypage .mypage_body .myshop_main ul {
+  margin: 0 -1.65% 0;
+}
+main .content #mypage .mypage .mypage_body .myshop_main ul li {
+  float: left;
+  width: 18%;
+  height: 180px;
+  margin: 0 0 1.65% 1.65%;
+  padding: 40px 2%;
+  border: 1px solid #e9e9e9;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+main .content #mypage .mypage .mypage_body .myshop_main ul li h3 {
+  position: relative;
+  font-size: 12px;
+  color: #333;
+  font-weight: normal;
+}
+main .content #mypage .mypage .mypage_body .myshop_main ul li h3 a {
+  display: block;
+  padding: 0 0 25px;
+}
+main .content #mypage .mypage .mypage_body .myshop_main ul li p {
+  margin: 0;
+  padding: 0;
+}
+main .content #mypage .mypage .mypage_body .myshop_main ul li p a {
+  font-size: 12px;
+  line-height: 20px;
+  color: #a5a5a5;
+}
+main .content footer {
+  padding: 100px 0;
+}
+main .content footer .footer_header {
+  text-align: center;
+  line-height: 35px;
+  height: 35px;
+}
+main .content footer .footer_header ul li {
+  display: inline-block;
+  padding: 0 10px;
+}
+main .content footer .footer_header ul li a {
+  color: #333;
+  font-family: "Open Sasns", sans-serif;
+  font-size: 12px;
+}
+main .content footer .footer_address {
+  text-align: center;
+  padding: 22px 0 0 0;
+  color: #333;
+  line-height: 18px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+main .content footer .footer_address span {
+  display: inline-block;
+}
+main .content footer .footer_address .shop_black {
+  padding: 0 3px;
+}
+main .content footer .footer_copyright {
+  height: 32px;
+  color: #aaa;
+  font-size: 11px;
+  line-height: 32px;
+  text-align: center;
+}
+
+@media (max-width: 786px) {
+  main .sidebar {
+    position: fixed;
+    left: -300px;
+    width: 100%;
+  }
+  main .sidebar.active {
+    left: 0;
+  }
+  main .content {
+    padding-left: 0;
+  }
+  main .content nav .menu {
+    display: none;
+  }
+  main .content nav .menu_toggle {
+    display: block;
+  }
+}/*# sourceMappingURL=mypage.css.map */

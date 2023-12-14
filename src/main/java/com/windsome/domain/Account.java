@@ -25,11 +25,11 @@ public class Account {
 
     private String password;
 
-    private String memberAddr1;
+    private String Address1;
 
-    private String memberAddr2;
+    private String Address2;
 
-    private String memberAddr3;
+    private String Address3;
 
     @Enumerated(EnumType.STRING)
     private Role state;
