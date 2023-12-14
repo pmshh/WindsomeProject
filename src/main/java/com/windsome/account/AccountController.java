@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
-    private final AccountRepository accountRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender javaMailSender;
+    private final AccountService accountService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -39,25 +37,9 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             return "account/sign-up";
         }
-
-        Account account = Account.builder()
-                .userId(signUpForm.getUserId())
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .address1(signUpForm.getAddress1())
-                .address2(signUpForm.getAddress2())
-                .address3(signUpForm.getAddress3())
-                .build();
-        Account newAccount = accountRepository.save(account);
-
-        newAccount.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("윈섬, 회원 가입 인증");
-        mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
-        javaMailSender.send(mailMessage);
-
+        accountService.processNewAccount(signUpForm);
         return "redirect:/";
     }
+
+
 }
