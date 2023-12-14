@@ -1,6 +1,5 @@
 package com.windsome.mail;
 
-import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailException;
@@ -9,12 +8,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
 
 @Slf4j
 @Profile("local")
 @Component
 public class ConsoleMailSender implements JavaMailSender {
+
     @Override
     public MimeMessage createMimeMessage() {
         return null;

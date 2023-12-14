@@ -1,8 +1,8 @@
 package com.windsome.domain;
 
-import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -11,7 +11,8 @@ import java.util.UUID;
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @Column(unique = true)
@@ -51,5 +52,9 @@ public class Account {
     public void completeSignUp() {
         this.emailVerified = true;
         this.joinedAt = LocalDateTime.now();
+    }
+
+    public boolean isValidToken(String token) {
+        return this.emailCheckToken.equals(token);
     }
 }

@@ -6,20 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public PasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -28,24 +25,19 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/"),
-                                new AntPathRequestMatcher("/login"),
-                                new AntPathRequestMatcher("/sign-up/**"),
-                                new AntPathRequestMatcher("/check-email-token/**"),
-                                new AntPathRequestMatcher("/css/**"),
-                                new AntPathRequestMatcher("/imgs/**"),
-                                new AntPathRequestMatcher("/js/**"),
-                                new AntPathRequestMatcher("/h2-console/**")
-                        ).permitAll()
-                        .anyRequest().authenticated())
+                .authorizeRequests()
+                .antMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                        "/email-login", "/check-email-login", "/login-link", "/imgs/**").permitAll()
+                .anyRequest().authenticated();
 
-                .logout((logout) -> logout
-                        .logoutSuccessUrl("/"));
+        http.formLogin()
+                .loginPage("/login").permitAll();
+
+        http.logout()
+                .logoutSuccessUrl("/");
+
         return http.build();
     }
 }

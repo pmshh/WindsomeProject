@@ -1,17 +1,17 @@
 package com.windsome.account;
 
 import com.windsome.domain.Account;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDateTime;
+import javax.validation.Valid;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -28,16 +28,18 @@ public class AccountController {
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
-        model.addAttribute("signUpForm", new SignUpForm());
+        model.addAttribute(new SignUpForm());
         return "account/sign-up";
     }
 
     @PostMapping("/sign-up")
-    public String signUpSubmit(@Valid SignUpForm signUpForm, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
+    public String signUpSubmit(@Valid SignUpForm signUpForm, Errors errors) {
+        if (errors.hasErrors()) {
             return "account/sign-up";
         }
-        accountService.processNewAccount(signUpForm);
+
+        Account account = accountService.processNewAccount(signUpForm);
+        accountService.login(account);
         return "redirect:/";
     }
 
@@ -50,14 +52,16 @@ public class AccountController {
             return view;
         }
 
-        if (!account.getEmailCheckToken().equals(token)) {
+        if (!account.isValidToken(token)) {
             model.addAttribute("error", "wrong.token");
             return view;
         }
 
         account.completeSignUp();
+        accountService.login(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;
     }
+
 }
