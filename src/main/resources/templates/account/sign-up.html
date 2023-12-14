@@ -22,17 +22,17 @@
     <!-- sidebar -->
     <aside class="sidebar">
         <div class="top_logo">
-            <a href="index.html">
+            <a th:href="@{/}">
                 <h1>WINDSOME</h1>
             </a>
         </div>
         <div class="top_nav">
             <ul>
                 <li>
-                    <a href="login.html">LOGIN</a>
+                    <a th:href="@{/login}">LOGIN</a>
                 </li>
                 <li>
-                    <a href="sign-up.html">JOIN</a>
+                    <a th:href="@{/sign-up}">JOIN</a>
                 </li>
                 <li>
                     <a href="cart.html">CART</a>
@@ -155,13 +155,13 @@
             <div class="menu">
                 <ul class="menu_link">
                     <li>
-                        <a href="login.html">Login</a>
+                        <a th:href="@{/login}">Login</a>
                     </li>
                     <li>
-                        <a href="index.html">My Account</a>
+                        <a>My Account</a>
                         <div class="account_menu">
                             <ul>
-                                <li><a href="signup.html">Join</a></li>
+                                <li><a th:href="@{/sign-up}">Join</a></li>
                                 <li><a href="mypage.html">Mypage</a></li>
                                 <li><a href="orderlist.html">Order Check</a></li>
                                 <li><a href="wishlist.html">Wish List</a></li>
@@ -192,7 +192,7 @@
                     <div class="divider"></div>
                 </div>
                 <div class="signup_body mt-5">
-                    <form id="signupForm" th:action="@{/sign-up}" method="post">
+                    <form id="signupForm" th:action="@{/sign-up}" th:object="${signUpForm}" method="post">
                         <table>
                             <colgroup>
                                 <col style="width:150px;">
@@ -201,10 +201,10 @@
                             <tbody>
                             <tr>
                                 <th scope="row">
-                                    <label for="userId">아이디 <span>*</span></label>
+                                    <label th:for="*{userId}">아이디 <span>*</span></label>
                                 </th>
                                 <td>
-                                    <input class="id_input" id="userId" name="userId" type="text" minlength="5"
+                                    <input class="id_input" th:field="*{userId}" type="text" minlength="5"
                                            maxlength="20">
                                     <span class="id_input_re_1 text-success">사용 가능한 아이디입니다.</span>
                                     <span class="id_input_re_2 text-danger">아이디가 이미 존재합니다.</span>
@@ -214,10 +214,10 @@
                             </tr>
                             <tr>
                                 <th scope="row">
-                                    <label for="password">비밀번호 <span>*</span></label>
+                                    <label th:for="*{password}">비밀번호 <span>*</span></label>
                                 </th>
                                 <td>
-                                    <input class="pw_input" id="password" name="password" type="password" minlength="8"
+                                    <input class="pw_input" th:field="*{password}" type="password" minlength="8"
                                            maxlength="20">
                                     <span class="final_pw_ck text-danger">비밀번호를 입력해주세요.</span>
                                     (영문 대소문자/숫자, 8~20자)
@@ -238,19 +238,19 @@
                             </tr>
                             <tr>
                                 <th scope="row">
-                                    <label for="nickname">닉네임 <span>*</span></label>
+                                    <label th:for="*{nickname}">닉네임 <span>*</span></label>
                                 </th>
                                 <td>
-                                    <input class="name_input" id="nickname" name="nickname" type="text">
+                                    <input class="name_input" th:field="*{nickname}" type="text">
                                     <span class="final_name_ck text-danger">닉네임을 입력해주세요.</span>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row">
-                                    <label for="email">이메일 <span>*</span></label>
+                                    <label th:for="*{email}" >이메일 <span>*</span></label>
                                 </th>
                                 <td>
-                                    <input class="mail_input" id="email" name="email" type="email">
+                                    <input class="mail_input" th:field="*{email}" type="email">
                                     <span class="mail_input_re_1 text-success">사용 가능한 이메일입니다.</span>
                                     <span class="mail_input_re_2 text-danger">이메일이 이미 존재합니다.</span>
                                     <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
@@ -258,16 +258,16 @@
                             </tr>
                             <tr>
                                 <th scope="row">
-                                    <label for="address1">주소 <span>*</span></label>
+                                    <label th:for="*{address1}">주소 <span>*</span></label>
                                 </th>
                                 <td>
 
-                                    <input id="address1" name="address1" class="address_input_1 mb-1" readonly="readonly">
+                                    <input th:field="*{address1}" class="address_input_1 mb-1" readonly="readonly">
                                     <a class="find_addr mb-1" onclick="execution_daum_address()">주소 찾기</a>
                                     <div class="clearfix"></div>
-                                    <input id="address2" name="address2" class="address_input_2 d-block w-50 mb-1"
+                                    <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
                                            readonly="readonly">
-                                    <input id="address3" name="address3" class="address_input_3 d-block w-50 mb-1"
+                                    <input th:field="*{address3}" class="address_input_3 d-block w-50 mb-1"
                                            readonly="readonly">
                                     <span class="final_addr_ck text-danger">주소를 입력해주세요.</span>
                                 </td>

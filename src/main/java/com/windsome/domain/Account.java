@@ -25,11 +25,11 @@ public class Account {
 
     private String password;
 
-    private String Address1;
+    private String address1;
 
-    private String Address2;
+    private String address2;
 
-    private String Address3;
+    private String address3;
 
     @Enumerated(EnumType.STRING)
     private Role state;
@@ -44,4 +44,7 @@ public class Account {
 
     private String emailCheckToken;
 
+    public void generateEmailCheckToken() {
+        this.emailCheckToken = UUID.randomUUID().toString();
+    }
 }
