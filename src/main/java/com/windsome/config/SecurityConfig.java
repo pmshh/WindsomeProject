@@ -21,7 +21,9 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return (web) -> web.ignoring()
+                .mvcMatchers("/imgs/**")
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Bean
@@ -29,14 +31,14 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
-                        "/email-login", "/check-email-login", "/login-link", "/imgs/**").permitAll()
+                        "/email-login", "/check-email-login", "/login-link").permitAll()
                 .anyRequest().authenticated();
-
-        http.formLogin()
-                .loginPage("/login").permitAll();
-
-        http.logout()
-                .logoutSuccessUrl("/");
+//
+//        http.formLogin()
+//                .loginPage("/login").permitAll();
+//
+//        http.logout()
+//                .logoutSuccessUrl("/");
 
         return http.build();
     }
