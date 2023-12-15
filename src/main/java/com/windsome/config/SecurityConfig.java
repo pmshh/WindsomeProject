@@ -30,7 +30,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                .antMatchers("/", "/login", "/sign-up", "/check-email", "/check-id", "/check-email-token",
                         "/email-login", "/check-email-login", "/login-link").permitAll()
                 .anyRequest().authenticated();
 //

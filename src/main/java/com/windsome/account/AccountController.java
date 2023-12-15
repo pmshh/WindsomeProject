@@ -9,6 +9,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 
@@ -43,25 +44,24 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/check-email-token")
-    public String checkEmailToken(String token, String email, Model model) {
-        Account account = accountRepository.findByEmail(email);
-        String view = "account/checked-email";
-        if (account == null) {
-            model.addAttribute("error", "wrong.email");
-            return view;
+    @PostMapping("/check-id")
+    @ResponseBody
+    public String checkId(String userId) {
+        if (accountRepository.existsByUserId(userId)) {
+            return "fail";
+        } else {
+            return "success";
         }
+    }
 
-        if (!account.isValidToken(token)) {
-            model.addAttribute("error", "wrong.token");
-            return view;
+    @PostMapping("/check-email")
+    @ResponseBody
+    public String checkEmail(String email) {
+        if (accountRepository.existsByEmail(email)) {
+            return "fail";
+        } else {
+            return "success";
         }
-
-        account.completeSignUp();
-        accountService.login(account);
-        model.addAttribute("numberOfUser", accountRepository.count());
-        model.addAttribute("nickname", account.getNickname());
-        return view;
     }
 
 }
