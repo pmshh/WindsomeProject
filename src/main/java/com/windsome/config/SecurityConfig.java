@@ -31,14 +31,19 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/sign-up", "/check-email", "/check-id", "/check-email-token",
-                        "/email-login", "/check-email-login", "/login-link").permitAll()
+                        "/email-login", "/check-email-login", "/login-link","/test").permitAll()
                 .anyRequest().authenticated();
-//
-//        http.formLogin()
-//                .loginPage("/login").permitAll();
-//
-//        http.logout()
-//                .logoutSuccessUrl("/");
+
+        http.formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error=true")
+                .usernameParameter("userId")
+                .passwordParameter("password")
+                .loginProcessingUrl("/login");
+
+        http.logout()
+                .logoutSuccessUrl("/");
 
         return http.build();
     }

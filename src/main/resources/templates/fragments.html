@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
+
+<th:block th:fragment="head">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
@@ -13,232 +13,223 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZxltAc9eNBvH0H/ZpiBw=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- bootstrap js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous"></script>
-    <!-- fontawesome js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
-            integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- xeicon css -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- 사용자 CSS -->
-    <th:block layout:fragment="css"></th:block>
-</head>
-<body>
-<main>
-    <!-- sidebar -->
-    <aside class="sidebar">
-        <div class="top_logo">
-            <a th:href="@{/}">
-                <h1>WINDSOME</h1>
-            </a>
-        </div>
-        <div class="top_nav">
-            <ul>
-                <li sec:authorize="!isAuthenticated()">
-                    <a th:href="@{/login}">LOGIN</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/logout}">LOGOUT</a>
-                </li>
-                <li>
-                    <a th:href="@{/sign-up}">JOIN</a>
-                </li>
-                <li>
-                    <a href="cart.html">CART</a>
-                </li>
-                <li>
-                    <a href="orderlist.html">ORDER</a>
-                </li>
-                <li>
-                    <a href="mypage.html">MYPAGE</a>
-                </li>
-            </ul>
-        </div>
-        <div class="top_menu">
-            <div class="category">
-                <h2>CATEGORY</h2>
-                <ul>
-                    <li>
-                        <a href="../index.html">ALL</a>
-                    </li>
-                    <li>
-                        <a href="../index.html">OUTER</a>
-                        <div class="sub_category">
-                            <ul>
-                                <li><a href="../index.html">Padding & Jumper</a></li>
-                                <li><a href="../index.html">Coat & Jacket</a></li>
-                                <li><a href="../index.html">Cardigan</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="../index.html">TOP</a>
-                        <div class="sub_category">
-                            <ul>
-                                <li><a href="../index.html">Knitwear</a></li>
-                                <li><a href="../index.html">T-Shirt</a></li>
-                                <li><a href="../index.html">Shirt</a></li>
-                                <li><a href="../index.html">MTM & Hoodie</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="../index.html">BOTTOM</a>
-                        <div class="sub_category">
-                            <ul>
-                                <li><a href="../index.html">Padding & Jumper</a></li>
-                                <li><a href="../index.html">Coat & Jacket</a></li>
-                                <li><a href="../index.html">Cardigan</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="../index.html">SHOES</a>
-                        <div class="sub_category">
-                            <ul>
-                                <li><a href="../index.html">Jean & Denim</a></li>
-                                <li><a href="../index.html">Trousers</a></li>
-                                <li><a href="../index.html">Sweat Pants</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="../index.html">ACC</a>
-                        <div class="sub_category">
-                            <ul>
-                                <li><a href="../index.html">Eyewear</a></li>
-                                <li><a href="../index.html">Hat</a></li>
-                                <li><a href="../index.html">Bag</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="boardinfo">
-                <h2>COMMUNITY</h2>
-                <ul>
-                    <li>
-                        <a href="board.html">NOTICE</a>
-                    </li>
-                    <li>
-                        <a href="board.html">FAQ</a>
-                    </li>
-                    <li>
-                        <a href="board.html">Q&A</a>
-                    </li>
-                    <li>
-                        <a href="board.html">REVIEW</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="search_form">
-            <form action="">
-                <input type="text">
-                <i class="fa-solid fa-magnifying-glass fz16"></i>
-            </form>
-        </div>
-        <div class="menu_cs">
-            <ul>
-                <li>
-                    T.070-0000-0000
-                </li>
-                <li>
-                    mon-fri 09:00pm-18:00pm
-                    <br>
-                    sat,sun,holiday off
-                    <br>
-                    <br>
-                    예금주 : 주식회사 윈섬
-                    <br>
-                    우리 1002-449-862316
-                </li>
-            </ul>
-        </div>
-    </aside>
-
-    <!-- content -->
-    <article class="content">
-        <!-- nav -->
-        <nav>
-            <div class="menu">
-                <ul class="menu_link">
-                    <li>
-                        <a th:href="@{/login}">Login</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/}">My Account</a>
-                        <div class="account_menu">
-                            <ul>
-                                <li><a th:href="@{/sign-up}">Join</a></li>
-                                <li><a href="mypage.html">Mypage</a></li>
-                                <li><a href="orderlist.html">Order Check</a></li>
-                                <li><a href="wishlist.html">Wish List</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="cart.html">Cart / 0</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu_toggle">
-                <input type="checkbox" id="hamburger">
-                <label for="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </label>
-            </div>
-        </nav>
-
-        <!-- content -->
-        <th:block layout:fragment="content"></th:block>
-
-        <!-- footer -->
-        <footer>
-            <div class="footer_header">
-                <ul>
-                    <li><a href="../index.html">HOME</a></li>
-                    <li><a href="../index.html">COMPANY</a></li>
-                    <li><a href="../index.html">AGREEMENT</a></li>
-                    <li><a href="../index.html">PRIVACY</a></li>
-                    <li><a href="../index.html">GUIDE</a></li>
-                </ul>
-            </div>
-            <div class="footer_address">
-                <span>TEL: 070-0000-0000</span>
-                <span class="shop_black"></span>
-                <span>ADDRESS: 서울특별시 서초구 언남16길 13 윈섬 WINDSOME</span>
-            </div>
-            <div class="footer_copyright">
-                Copyright &copy <strong>윈섬 WINDSOME</strong>. All rights reserved.
-            </div>
-        </footer>
-    </article>
-</main>
-
-<!-- nav scroll 시 투명 -->
-<script>
-    $(window).scroll(function () {
-        if ($(this).scrollTop() == 0)
-            $('nav').css('opacity', '1');
-        else
-            $('nav').css('opacity', '.6');
-    });
-</script>
-<!-- 사용자 JS -->
-<th:block layout:fragment="script">
 
 </th:block>
 
+    <main>
+        <!-- sidebar -->
+        <aside class="sidebar" th:fragment="sidebar">
+            <div class="top_logo">
+                <a th:href="@{/}">
+                    <h1>WINDSOME</h1>
+                </a>
+            </div>
+            <div class="top_nav">
+                <ul>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}">LOGIN</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a th:href="@{/logout}">LOGOUT</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/sign-up}">JOIN</a>
+                    </li>
+                    <li>
+                        <a href="cart.html">CART</a>
+                    </li>
+                    <li>
+                        <a href="orderlist.html">ORDER</a>
+                    </li>
+                    <li>
+                        <a href="mypage.html">MYPAGE</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="top_menu">
+                <div class="category">
+                    <h2>CATEGORY</h2>
+                    <ul>
+                        <li>
+                            <a href="../index.html">ALL</a>
+                        </li>
+                        <li>
+                            <a href="../index.html">OUTER</a>
+                            <div class="sub_category">
+                                <ul>
+                                    <li><a href="../index.html">Padding & Jumper</a></li>
+                                    <li><a href="../index.html">Coat & Jacket</a></li>
+                                    <li><a href="../index.html">Cardigan</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="../index.html">TOP</a>
+                            <div class="sub_category">
+                                <ul>
+                                    <li><a href="../index.html">Knitwear</a></li>
+                                    <li><a href="../index.html">T-Shirt</a></li>
+                                    <li><a href="../index.html">Shirt</a></li>
+                                    <li><a href="../index.html">MTM & Hoodie</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="../index.html">BOTTOM</a>
+                            <div class="sub_category">
+                                <ul>
+                                    <li><a href="../index.html">Padding & Jumper</a></li>
+                                    <li><a href="../index.html">Coat & Jacket</a></li>
+                                    <li><a href="../index.html">Cardigan</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="../index.html">SHOES</a>
+                            <div class="sub_category">
+                                <ul>
+                                    <li><a href="../index.html">Jean & Denim</a></li>
+                                    <li><a href="../index.html">Trousers</a></li>
+                                    <li><a href="../index.html">Sweat Pants</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="../index.html">ACC</a>
+                            <div class="sub_category">
+                                <ul>
+                                    <li><a href="../index.html">Eyewear</a></li>
+                                    <li><a href="../index.html">Hat</a></li>
+                                    <li><a href="../index.html">Bag</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="boardinfo">
+                    <h2>COMMUNITY</h2>
+                    <ul>
+                        <li>
+                            <a href="board.html">NOTICE</a>
+                        </li>
+                        <li>
+                            <a href="board.html">FAQ</a>
+                        </li>
+                        <li>
+                            <a href="board.html">Q&A</a>
+                        </li>
+                        <li>
+                            <a href="board.html">REVIEW</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="search_form">
+                <form action="">
+                    <input type="text">
+                    <i class="fa-solid fa-magnifying-glass fz16"></i>
+                </form>
+            </div>
+            <div class="menu_cs">
+                <ul>
+                    <li>
+                        T.070-0000-0000
+                    </li>
+                    <li>
+                        mon-fri 09:00pm-18:00pm
+                        <br>
+                        sat,sun,holiday off
+                        <br>
+                        <br>
+                        예금주 : 주식회사 윈섬
+                        <br>
+                        우리 1002-449-862316
+                    </li>
+                </ul>
+            </div>
+        </aside>
 
+        <!-- content -->
+        <article class="content">
+            <!-- nav -->
+            <nav th:fragment="nav">
+                <div class="menu">
+                    <ul class="menu_link">
+                        <li>
+                            <a th:href="@{/login}">Login</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/}">My Account</a>
+                            <div class="account_menu">
+                                <ul>
+                                    <li><a th:href="@{/sign-up}">Join</a></li>
+                                    <li><a href="mypage.html">Mypage</a></li>
+                                    <li><a href="orderlist.html">Order Check</a></li>
+                                    <li><a href="wishlist.html">Wish List</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="cart.html">Cart / 0</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu_toggle">
+                    <input type="checkbox" id="hamburger">
+                    <label for="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </label>
+                </div>
+            </nav>
 
+            <!-- footer -->
+            <footer th:fragment="footer">
+                <div class="footer_header">
+                    <ul>
+                        <li><a href="../index.html">HOME</a></li>
+                        <li><a href="../index.html">COMPANY</a></li>
+                        <li><a href="../index.html">AGREEMENT</a></li>
+                        <li><a href="../index.html">PRIVACY</a></li>
+                        <li><a href="../index.html">GUIDE</a></li>
+                    </ul>
+                </div>
+                <div class="footer_address">
+                    <span>TEL: 070-0000-0000</span>
+                    <span class="shop_black"></span>
+                    <span>ADDRESS: 서울특별시 서초구 언남16길 13 윈섬 WINDSOME</span>
+                </div>
+                <div class="footer_copyright">
+                    Copyright &copy <strong>윈섬 WINDSOME</strong>. All rights reserved.
+                </div>
+            </footer>
+        </article>
+    </main>
+
+    <th:block th:fragment="JS">
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <!-- bootstrap js -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"></script>
+        <!-- fontawesome js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+                integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- 스크롤 시 navbar 투명 -->
+        <script>
+            $(window).scroll(function () {
+                if ($(this).scrollTop() == 0)
+                    $('nav').css('opacity', '1');
+                else
+                    $('nav').css('opacity', '.6');
+            });
+        </script>
+    </th:block>
 </body>
 </html>
