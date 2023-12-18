@@ -1,5 +1,6 @@
 package com.windsome.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,11 +10,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AuthenticationFailureHandler customAuthFailureHandler;
 
     @Bean
     public PasswordEncoder bCryptPasswordEncoder() {
@@ -37,9 +42,10 @@ public class SecurityConfig {
 
         http.formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true)
                 .usernameParameter("userId")
                 .passwordParameter("password")
+                .defaultSuccessUrl("/", true)
+                .failureHandler(customAuthFailureHandler)
                 .permitAll();
 
         http.logout()

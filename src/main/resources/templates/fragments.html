@@ -167,7 +167,9 @@
                             <a href="#none">My Account</a>
                             <div class="account_menu">
                                 <ul>
-                                    <li><a th:href="@{/sign-up}">Join</a></li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/sign-up}">Join</a>
+                                    </li>
                                     <li><a href="mypage.html">Mypage</a></li>
                                     <li><a href="orderlist.html">Order Check</a></li>
                                     <li><a href="wishlist.html">Wish List</a></li>

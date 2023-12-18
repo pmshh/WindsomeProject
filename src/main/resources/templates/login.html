@@ -22,6 +22,9 @@
                     <div class="divider"></div>
                 </div>
                 <div class="login_body">
+                    <div th:if="${error}">
+                        <div class="alert alert-danger" style="font-size: 13px;" th:text="${exception}"></div>
+                    </div>
                     <div class="login_form">
                         <form th:action="@{/login}" method="post">
                             <input id="userId" name="userId" type="text" placeholder="아이디">
