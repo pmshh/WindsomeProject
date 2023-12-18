@@ -51,7 +51,7 @@ main .sidebar {
   height: 100vh;
   max-width: 300px;
   flex: 1 1 0;
-  padding: 3rem 2rem;
+  padding: 3rem 1.5rem;
   background-color: #F8F9FA;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.1);
   z-index: 100;
@@ -367,8 +367,8 @@ main .content #signup .signup .signup_body form table tbody td select {
   background-color: #fff;
   font-size: 12px;
 }
-main .content #signup .signup .signup_body form table tbody td a.send_mail {
-  display: inline-block;
+main .content #signup .signup .signup_body form table tbody td a.send_mail,
+main .content #signup .signup .signup_body form table tbody td a.check_number {
   background-color: #FFFFFF;
   border: 1px solid #c5c5c5;
   color: black;
@@ -377,6 +377,12 @@ main .content #signup .signup .signup_body form table tbody td a.send_mail {
   text-align: center;
   padding-top: 5px;
   border-radius: 2px;
+}
+main .content #signup .signup .signup_body form table tbody td a.send_mail {
+  display: inline-block;
+}
+main .content #signup .signup .signup_body form table tbody td a.check_number {
+  display: none;
 }
 main .content #signup .signup .signup_body form table tbody td a.find_addr {
   display: inline-block;

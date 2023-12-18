@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -30,20 +31,23 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/sign-up", "/check-email", "/check-id", "/check-email-token",
+                .antMatchers("/", "/login", "/logout", "/sign-up", "/check-email", "/check-id", "/check-email-token",
                         "/email-login", "/check-email-login", "/login-link","/test").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .failureUrl("/login?error=true")
+                .defaultSuccessUrl("/", true)
                 .usernameParameter("userId")
                 .passwordParameter("password")
-                .loginProcessingUrl("/login");
+                .permitAll();
 
         http.logout()
-                .logoutSuccessUrl("/");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"));
+
+//        http.csrf().disable();
 
         return http.build();
     }

@@ -23,10 +23,10 @@
                 </div>
                 <div class="login_body">
                     <div class="login_form">
-                        <form>
+                        <form th:action="@{/login}" method="post">
                             <input id="userId" name="userId" type="text" placeholder="아이디">
                             <input id="password" name="password" type="password" placeholder="비밀번호">
-                            <button>로그인</button>
+                            <button type="submit">로그인</button>
                         </form>
                     </div>
                     <div class="login_find">
@@ -40,7 +40,7 @@
                             <a target="_blank" href="index.html">주문조회</a>
                         </div>
                         <div class="join_txt">
-                            <a target="_blank" href="signup.html">회원가입</a>
+                            <a target="_blank" th:href="@{sign-up}">회원가입</a>
                         </div>
                     </div>
                     <!--                <ul class="sns_login">-->

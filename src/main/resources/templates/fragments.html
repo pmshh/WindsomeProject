@@ -157,11 +157,14 @@
             <nav th:fragment="nav">
                 <div class="menu">
                     <ul class="menu_link">
-                        <li>
+                        <li sec:authorize="!isAuthenticated()">
                             <a th:href="@{/login}">Login</a>
                         </li>
+                        <li sec:authorize="isAuthenticated()">
+                            <a th:href="@{/logout}">Logout</a>
+                        </li>
                         <li>
-                            <a th:href="@{/}">My Account</a>
+                            <a href="#none">My Account</a>
                             <div class="account_menu">
                                 <ul>
                                     <li><a th:href="@{/sign-up}">Join</a></li>
@@ -221,6 +224,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
                 integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
         <!-- 스크롤 시 navbar 투명 -->
         <script>
             $(window).scroll(function () {
@@ -231,5 +235,15 @@
             });
         </script>
     </th:block>
+
+    <script type="application/javascript" th:inline="javascript" th:fragment="csrf">
+        $(function () {
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+        });
+    </script>
 </body>
 </html>
