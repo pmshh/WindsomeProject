@@ -32,7 +32,9 @@
                         <a th:href="@{/login}">LOGIN</a>
                     </li>
                     <li sec:authorize="isAuthenticated()">
-                        <a th:href="@{/logout}">LOGOUT</a>
+                        <form action="#" th:action="@{/logout}" method="post">
+                            <button type="submit">LOGOUT</button>
+                        </form>
                     </li>
                     <li>
                         <a th:href="@{/sign-up}">JOIN</a>
@@ -161,7 +163,9 @@
                             <a th:href="@{/login}">Login</a>
                         </li>
                         <li sec:authorize="isAuthenticated()">
-                            <a th:href="@{/logout}">Logout</a>
+                            <form action="#" th:action="@{/logout}" method="post">
+                                <button type="submit">Logout</button>
+                            </form>
                         </li>
                         <li>
                             <a href="#none">My Account</a>

@@ -74,7 +74,8 @@ main {
             li {
                 display: inline-block;
 
-                a {
+                a,
+                button {
                     display: block;
                     padding: 0 7px 0 0;
                     font-size: 10px;
@@ -87,8 +88,13 @@ main {
                 a:hover {
                     color: #cccccc;
                 }
-            }
 
+                button {
+                    outline: none;
+                    background: none;
+                    border: none;
+                }
+            }
         }
 
         .top_menu {
@@ -231,8 +237,15 @@ main {
                     li {
                         padding: 20px 0;
 
-                        a {
+                        a,
+                        button {
                             font-size: 13px;
+                        }
+
+                        button {
+                            outline: none;
+                            background: none;
+                            border: none;
                         }
 
                         .account_menu {
