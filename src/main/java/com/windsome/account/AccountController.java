@@ -62,10 +62,4 @@ public class AccountController {
     public String checkEmail(String email) throws Exception {
         return accountService.sendSignUpConfirmEmail(email);
     }
-
-    @GetMapping("/modify")
-    public String modify(Model model) {
-        model.addAttribute(new ModifyForm());
-        return "account/modify";
-    }
 }

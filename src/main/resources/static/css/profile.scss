@@ -4,9 +4,9 @@
 /* custom css start */
 main {
     .content {
-        #signup {
-            .signup {
-                .signup_header {
+        #modify {
+            .modify {
+                .modify_header {
                     h2 {
                         font-size: 15px;
                         text-align: center;
@@ -20,7 +20,12 @@ main {
                     }
                 }
 
-                .signup_body {
+                .alert {
+                    width: 80%;
+                    margin: 45px auto 15px;
+                }
+
+                .modify_body {
                     display: flex;
                     justify-content: center;
 
@@ -72,7 +77,8 @@ main {
                                     span.final_mail_ck,
                                     span.final_addr_ck,
                                     span.pwck_input_re_1,
-                                    span.pwck_input_re_2 {
+                                    span.pwck_input_re_2,
+                                    span.need_mail_check {
                                         display: none;
                                     }
 

@@ -52,7 +52,7 @@ button.black_btn:hover {
   background-color: #474747;
 }
 
-button.white_btn {
+a.white_btn {
   display: inline-block;
   width: 130px;
   padding: 10px 8px 10px 8px;
@@ -65,7 +65,7 @@ button.white_btn {
   border-radius: 0px !important;
 }
 
-button.white_btn:hover {
+a.white_btn:hover {
   border: 1px solid black;
 }
 

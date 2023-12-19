@@ -175,7 +175,7 @@
                                         <a th:href="@{/sign-up}">Join</a>
                                     </li>
                                     <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/modify}">Modify</a>
+                                        <a th:href="@{/settings/profile}">Modify</a>
                                     </li>
                                     <li sec:authorize="!isAuthenticated()">
                                         <a th:href="@{/login}">Modify</a>

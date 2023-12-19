@@ -1,8 +1,10 @@
 package com.windsome.account;
 
 import com.windsome.domain.Account;
+import com.windsome.settings.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -87,5 +89,15 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
+    }
+
+    public void updateProfile(Account account, ProfileForm profileForm) {
+        account.setPassword(passwordEncoder.encode(profileForm.getNewPassword()));
+        account.setNickname(profileForm.getNickname());
+        account.setEmail(profileForm.getEmail());
+        account.setAddress1(profileForm.getAddress1());
+        account.setAddress2(profileForm.getAddress2());
+        account.setAddress3(profileForm.getAddress3());
+        accountRepository.save(account);
     }
 }

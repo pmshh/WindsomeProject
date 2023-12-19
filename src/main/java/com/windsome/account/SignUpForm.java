@@ -26,6 +26,10 @@ public class SignUpForm {
     @Length(min = 8,max = 20)
     private String password;
 
+    @NotBlank
+    @Length(min = 8,max = 20)
+    private String passwordConfirm;
+
     private String address1;
 
     private String address2;
