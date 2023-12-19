@@ -63,5 +63,9 @@ public class AccountController {
         return accountService.sendSignUpConfirmEmail(email);
     }
 
-
+    @GetMapping("/modify")
+    public String modify(Model model) {
+        model.addAttribute(new ModifyForm());
+        return "account/modify";
+    }
 }

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
 @font-face {
   font-family: "JeonjuCraftMjB";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/JeonjuCraftMjB.woff2") format("woff2");
@@ -30,13 +31,43 @@ li {
   list-style: none;
 }
 
-button {
-  outline: none;
+button:focus {
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  padding: 5px 10px;
+  outline: none;
+}
+
+button.black_btn {
+  display: inline-block;
+  width: 130px;
+  padding: 10px 8px 10px 8px;
+  font-size: 13px;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  text-align: center;
   color: #fff;
+  background-color: #151515;
+  border-radius: 0px !important;
+}
+
+button.black_btn:hover {
+  background-color: #474747;
+}
+
+button.white_btn {
+  display: inline-block;
+  width: 130px;
+  padding: 10px 8px 10px 8px;
+  font-size: 13px;
+  border: 1px solid #e2e2e2;
+  vertical-align: middle;
+  text-align: center;
+  color: #222;
+  background-color: #fff;
+  border-radius: 0px !important;
+}
+
+button.white_btn:hover {
+  border: 1px solid black;
 }
 
 /* custom css start */
@@ -49,6 +80,7 @@ main .sidebar {
   top: 0;
   left: 0;
   height: 100vh;
+  min-width: 295px;
   max-width: 300px;
   flex: 1 1 0;
   padding: 3rem 1.5rem;
@@ -185,6 +217,8 @@ main .content {
   flex: 1 1 0;
   padding-top: 70px;
   padding-left: 300px;
+  /* nav */
+  /* content */
   /* footer */
 }
 main .content nav {
@@ -295,6 +329,65 @@ main .content nav .menu_toggle input:checked + label span:nth-child(3) {
   top: 50%;
   transform: rotate(-45deg);
 }
+main .content footer {
+  padding: 100px 0;
+}
+main .content footer .footer_header {
+  text-align: center;
+  line-height: 35px;
+  height: 35px;
+}
+main .content footer .footer_header ul li {
+  display: inline-block;
+  padding: 0 10px;
+}
+main .content footer .footer_header ul li a {
+  color: #333;
+  font-family: "Open Sasns", sans-serif;
+  font-size: 12px;
+}
+main .content footer .footer_address {
+  text-align: center;
+  padding: 22px 0 0 0;
+  color: #333;
+  line-height: 18px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+main .content footer .footer_address span {
+  display: inline-block;
+}
+main .content footer .footer_address .shop_black {
+  padding: 0 3px;
+}
+main .content footer .footer_copyright {
+  height: 32px;
+  color: #aaa;
+  font-size: 11px;
+  line-height: 32px;
+  text-align: center;
+}
+
+@media (max-width: 786px) {
+  main .sidebar {
+    position: fixed;
+    left: -300px;
+    width: 100%;
+  }
+  main .sidebar.active {
+    left: 0;
+  }
+  main .content {
+    padding-left: 0;
+  }
+  main .content nav .menu {
+    display: none;
+  }
+  main .content nav .menu_toggle {
+    display: block;
+  }
+}
+/* custom css start */
 main .content #cart .cart .cart_header h2 {
   font-size: 15px;
   text-align: center;
@@ -472,62 +565,4 @@ main .content #cart .cart .cart_btn span {
   position: absolute;
   top: 0px;
   right: 0;
-}
-main .content footer {
-  padding: 100px 0;
-}
-main .content footer .footer_header {
-  text-align: center;
-  line-height: 35px;
-  height: 35px;
-}
-main .content footer .footer_header ul li {
-  display: inline-block;
-  padding: 0 10px;
-}
-main .content footer .footer_header ul li a {
-  color: #333;
-  font-family: "Open Sasns", sans-serif;
-  font-size: 12px;
-}
-main .content footer .footer_address {
-  text-align: center;
-  padding: 22px 0 0 0;
-  color: #333;
-  line-height: 18px;
-  font-size: 11px;
-  letter-spacing: 0.05em;
-}
-main .content footer .footer_address span {
-  display: inline-block;
-}
-main .content footer .footer_address .shop_black {
-  padding: 0 3px;
-}
-main .content footer .footer_copyright {
-  height: 32px;
-  color: #aaa;
-  font-size: 11px;
-  line-height: 32px;
-  text-align: center;
-}
-
-@media (max-width: 786px) {
-  main .sidebar {
-    position: fixed;
-    left: -300px;
-    width: 100%;
-  }
-  main .sidebar.active {
-    left: 0;
-  }
-  main .content {
-    padding-left: 0;
-  }
-  main .content nav .menu {
-    display: none;
-  }
-  main .content nav .menu_toggle {
-    display: block;
-  }
 }/*# sourceMappingURL=cart.css.map */

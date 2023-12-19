@@ -174,9 +174,30 @@
                                     <li sec:authorize="!isAuthenticated()">
                                         <a th:href="@{/sign-up}">Join</a>
                                     </li>
-                                    <li><a href="mypage.html">Mypage</a></li>
-                                    <li><a href="orderlist.html">Order Check</a></li>
-                                    <li><a href="wishlist.html">Wish List</a></li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/modify}">Modify</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Modify</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/mypage}">Mypage</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Mypage</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/order-check}">Order Check</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Order Check</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/wishlist}">Wish List</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Wish List</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

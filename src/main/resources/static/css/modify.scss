@@ -133,30 +133,46 @@ main {
                             }
                         }
 
-                        .btn {
+                        .btn_box {
                             padding: 10px 0;
                             text-align: center;
                             display: block;
                             margin-top: 30px;
-
-                            button {
-                                // display: inline-block;
-                                // width: 130px;
-                                // padding: 10px 8px 10px 8px;
-                                // font-size: 13px;
-                                // border: 1px solid transparent;
-                                // vertical-align: middle;
-                                // text-align: center;
-                                // color: #fff;
-                                // background-color: #151515;
-                                // border-radius: 0px !important;
-                            }
                         }
                     }
 
                 }
             }
 
+        }
+
+    }
+}
+
+@media (max-width: 786px) {
+    main {
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            width: 100%;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .content {
+            padding-left: 0;
+
+            nav {
+                .menu {
+                    display: none;
+                }
+
+                .menu_toggle {
+                    display: block;
+                }
+            }
         }
     }
 }
