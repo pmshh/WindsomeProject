@@ -309,7 +309,8 @@ main .content #login .login .login_body {
   width: 400px;
   margin: 100px auto 0px;
 }
-main .content #login .login .login_body .login_form input {
+main .content #login .login .login_body .login_form input[type=text],
+main .content #login .login .login_body .login_form input[type=password] {
   display: block;
   width: 100%;
   height: 50px;
@@ -318,7 +319,7 @@ main .content #login .login .login_body .login_form input {
   margin: 0 0 8px;
   border: 1px solid #9e9e9e;
 }
-main .content #login .login .login_body .login_form button {
+main .content #login .login .login_body .login_form button[type=submit] {
   display: inline-block;
   height: 50px;
   width: 100%;

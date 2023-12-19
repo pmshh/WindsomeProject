@@ -372,7 +372,9 @@ main {
                     margin: 100px auto 0px;
 
                     .login_form {
-                        input {
+
+                        input[type=text],
+                        input[type=password] {
                             display: block;
                             width: 100%;
                             height: 50px;
@@ -382,7 +384,7 @@ main {
                             border: 1px solid #9e9e9e;
                         }
 
-                        button {
+                        button[type=submit] {
                             display: inline-block;
                             height: 50px;
                             width: 100%;

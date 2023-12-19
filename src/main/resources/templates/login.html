@@ -1,75 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <div th:replace="fragments.html :: head"></div>
     <!--  사용자 CSS -->
     <link rel="stylesheet" href="css/login.css">
 </head>
+
 <body>
 
-<main>
-    <div th:replace="fragments.html :: sidebar"></div>
+    <main>
+        <div th:replace="fragments.html :: sidebar"></div>
 
-    <article class="content">
-        <div th:replace="fragments.html :: nav"></div>
+        <article class="content">
+            <div th:replace="fragments.html :: nav"></div>
 
-        <!-- login section -->
-        <section id="login">
-            <div class="container login">
-                <div class="login_header">
-                    <h2>LOGIN</h2>
-                    <div class="divider"></div>
+            <!-- login section -->
+            <section id="login">
+                <div class="container login">
+                    <div class="login_header">
+                        <h2>LOGIN</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="login_body">
+                        <div th:if="${error}">
+                            <div class="alert alert-danger" style="font-size: 13px;" th:text="${exception}"></div>
+                        </div>
+                        <div class="login_form">
+                            <form th:action="@{/login}" method="post">
+                                <input id="userId" name="userId" type="text" placeholder="아이디">
+                                <input id="password" name="password" type="password" placeholder="비밀번호">
+                                <button type="submit">로그인</button>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me" checked>
+                                    <label class="form-check-label" style="font-size: 14px" for="rememberMe">로그인 유지</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="login_find">
+                            <div class="txt">
+                                <a target="_blank" href="index.html">아이디 찾기</a>
+                            </div>
+                            <div class="txt">
+                                <a target="_blank" href="index.html">비밀번호 찾기</a>
+                            </div>
+                            <div class="txt">
+                                <a target="_blank" href="index.html">주문조회</a>
+                            </div>
+                            <div class="join_txt">
+                                <a target="_blank" th:href="@{sign-up}">회원가입</a>
+                            </div>
+                        </div>
+                        <!--                <ul class="sns_login">-->
+                        <!--                    <li class="kakao">-->
+                        <!--                        <a href="">-->
+                        <!--                            <i class="xi-kakaotalk"></i>-->
+                        <!--                            <span>카카오계정 로그인</span>-->
+                        <!--                        </a>-->
+                        <!--                    </li>-->
+                        <!--                    <li class="naver">-->
+                        <!--                        <a href="">-->
+                        <!--                            <i class="xi-naver-square"></i>-->
+                        <!--                            <span>네이버 로그인</span>-->
+                        <!--                        </a>-->
+                        <!--                    </li>-->
+                        <!--                </ul>-->
+                    </div>
                 </div>
-                <div class="login_body">
-                    <div th:if="${error}">
-                        <div class="alert alert-danger" style="font-size: 13px;" th:text="${exception}"></div>
-                    </div>
-                    <div class="login_form">
-                        <form th:action="@{/login}" method="post">
-                            <input id="userId" name="userId" type="text" placeholder="아이디">
-                            <input id="password" name="password" type="password" placeholder="비밀번호">
-                            <button type="submit">로그인</button>
-                        </form>
-                    </div>
-                    <div class="login_find">
-                        <div class="txt">
-                            <a target="_blank" href="index.html">아이디 찾기</a>
-                        </div>
-                        <div class="txt">
-                            <a target="_blank" href="index.html">비밀번호 찾기</a>
-                        </div>
-                        <div class="txt">
-                            <a target="_blank" href="index.html">주문조회</a>
-                        </div>
-                        <div class="join_txt">
-                            <a target="_blank" th:href="@{sign-up}">회원가입</a>
-                        </div>
-                    </div>
-                    <!--                <ul class="sns_login">-->
-                    <!--                    <li class="kakao">-->
-                    <!--                        <a href="">-->
-                    <!--                            <i class="xi-kakaotalk"></i>-->
-                    <!--                            <span>카카오계정 로그인</span>-->
-                    <!--                        </a>-->
-                    <!--                    </li>-->
-                    <!--                    <li class="naver">-->
-                    <!--                        <a href="">-->
-                    <!--                            <i class="xi-naver-square"></i>-->
-                    <!--                            <span>네이버 로그인</span>-->
-                    <!--                        </a>-->
-                    <!--                    </li>-->
-                    <!--                </ul>-->
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <div th:replace="fragments.html :: footer"></div>
-    </article>
-</main>
+            <div th:replace="fragments.html :: footer"></div>
+        </article>
+    </main>
 
-<div th:replace="fragments.html :: JS"></div>
+    <div th:replace="fragments.html :: JS"></div>
 
-<!-- 사용자 JS -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </body>
