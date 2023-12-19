@@ -81,11 +81,16 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserId(userId);
+    public UserDetails loadUserByUsername(String userIdOrEmail) throws UsernameNotFoundException {
+        Account account = accountRepository.findByUserId(userIdOrEmail);
         if (account == null) {
-            throw new UsernameNotFoundException(userId);
+            account = accountRepository.findByEmail(userIdOrEmail);
+        }
+
+        if (account == null) {
+            throw new UsernameNotFoundException(userIdOrEmail);
         }
 
         return new UserAccount(account);

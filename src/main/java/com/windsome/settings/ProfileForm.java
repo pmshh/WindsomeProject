@@ -16,6 +16,7 @@ public class ProfileForm {
     private String email;
 
     @NotBlank
+    @Length(min = 3,max = 16)
     private String nickname;
 
     @NotBlank
