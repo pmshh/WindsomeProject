@@ -13,7 +13,7 @@ public class ProfileFormValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         ProfileForm profileForm = (ProfileForm) target;
-        if (!profileForm.getNewPassword().equals(profileForm.getNewPasswordConfirm())) {
+        if (!profileForm.getPassword().equals(profileForm.getPasswordConfirm())) {
             errors.rejectValue("newPassword","wrong.value", "입력한 새 패스워드가 일치하지 않습니다.");
         }
     }

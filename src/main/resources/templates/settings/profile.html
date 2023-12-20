@@ -37,12 +37,12 @@
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            <label th:for="*{userId}">아이디 <span>*</span></label>
+                                            <label for="userId">아이디 <span>*</span></label>
                                         </th>
                                         <td>
                                             <div class="id_input_box">
-                                                <input class="id_input" th:field="*{userId}" type="text" minlength="5"
-                                                       maxlength="20" disabled="true">
+                                                <input class="id_input" name="userId" id="userId" type="text" minlength="5"
+                                                       maxlength="20" th:value="${userId}" disabled="disabled">
                                                 (영문 소문자/숫자, 5~20자)
                                             </div>
                                             <span class="id_input_re_1 text-success">사용 가능한 아이디입니다.</span>
@@ -52,11 +52,11 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <label th:for="*{newPassword}">비밀번호 <span>*</span></label>
+                                            <label th:for="*{password}">비밀번호 <span>*</span></label>
                                         </th>
                                         <td>
                                             <div class="password_input_box">
-                                                <input class="pw_input" th:field="*{newPassword}" type="password"
+                                                <input class="pw_input" th:field="*{password}" type="password"
                                                     minlength="8" maxlength="20">
                                                 (영문 대소문자/숫자, 8~20자)
                                             </div>
@@ -65,11 +65,11 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <label th:for="*{newPasswordConfirm}">비밀번호 확인 <span>*</span></label>
+                                            <label th:for="*{passwordConfirm}">비밀번호 확인 <span>*</span></label>
                                         </th>
                                         <td>
                                             <div class="password_confirm_input_box">
-                                                <input class="pwck_input" th:field="*{newPasswordConfirm}"
+                                                <input class="pwck_input" th:field="*{passwordConfirm}"
                                                     type="password" minlength="8" maxlength="20">
                                                 (영문 대소문자/숫자, 8~20자)
                                             </div>

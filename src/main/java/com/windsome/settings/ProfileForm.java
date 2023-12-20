@@ -10,8 +10,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class ProfileForm {
 
-    private String userId;
-
     @Email
     private String email;
 
@@ -21,11 +19,11 @@ public class ProfileForm {
 
     @NotBlank
     @Length(min = 8,max = 20)
-    private String newPassword;
+    private String password;
 
     @NotBlank
     @Length(min = 8,max = 20)
-    private String newPasswordConfirm;
+    private String passwordConfirm;
 
     private String address1;
 
@@ -36,12 +34,4 @@ public class ProfileForm {
     public ProfileForm() {
     }
 
-    public ProfileForm(Account account) {
-        this.userId = account.getUserId();
-        this.email = account.getEmail();
-        this.nickname = account.getNickname();
-        this.address1 = account.getAddress1();
-        this.address2 = account.getAddress2();
-        this.address3 = account.getAddress3();
-    }
 }

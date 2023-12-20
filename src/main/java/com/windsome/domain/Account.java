@@ -41,20 +41,7 @@ public class Account {
 
     private int point;
 
-    private boolean emailVerified;
-
-    private String emailCheckToken;
-
-    public void generateEmailCheckToken() {
-        this.emailCheckToken = UUID.randomUUID().toString();
-    }
-
     public void completeSignUp() {
-        this.emailVerified = true;
         this.joinedAt = LocalDateTime.now();
-    }
-
-    public boolean isValidToken(String token) {
-        return this.emailCheckToken.equals(token);
     }
 }

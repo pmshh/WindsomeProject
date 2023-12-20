@@ -4,6 +4,7 @@ import com.windsome.domain.Account;
 import com.windsome.settings.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,11 +32,12 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
-        newAccount.generateEmailCheckToken();
+//        newAccount.generateEmailCheckToken();
         return newAccount;
     }
 
@@ -81,6 +83,12 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    public void updateProfile(Account account, ProfileForm profileForm) {
+        modelMapper.map(profileForm, account);
+        account.setPassword(passwordEncoder.encode(profileForm.getPassword()));
+        accountRepository.save(account);
+    }
+
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String userIdOrEmail) throws UsernameNotFoundException {
@@ -94,15 +102,5 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);
-    }
-
-    public void updateProfile(Account account, ProfileForm profileForm) {
-        account.setPassword(passwordEncoder.encode(profileForm.getNewPassword()));
-        account.setNickname(profileForm.getNickname());
-        account.setEmail(profileForm.getEmail());
-        account.setAddress1(profileForm.getAddress1());
-        account.setAddress2(profileForm.getAddress2());
-        account.setAddress3(profileForm.getAddress3());
-        accountRepository.save(account);
     }
 }

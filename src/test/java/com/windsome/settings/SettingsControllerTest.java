@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +26,7 @@ class SettingsControllerTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountService accountService;
     @Autowired AccountRepository accountRepository;
+    @Autowired PasswordEncoder passwordEncoder;
 
     @AfterEach
     void afterEach() {
@@ -45,27 +47,30 @@ class SettingsControllerTest {
     @DisplayName("프로필 수정 - 입력값 정상")
     @Test
     void updateProfile() throws Exception {
+        String changeNickname = "닉네임 변경 테스트";
         mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
-                        .param("newPassword", "test1234")
-                        .param("newPasswordConfirm", "test1234")
-                        .param("nickname", "닉네임 변경 테스트")
+                        .param("newPassword", "change1234")
+                        .param("newPasswordConfirm", "change1234")
+                        .param("nickname", changeNickname)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(SettingsController.SETTINGS_PROFILE_URL))
                 .andExpect(flash().attributeExists("message"));
 
         Account account = accountRepository.findByUserId("pms000723");
-        assertEquals("닉네임 변경 테스트", account.getNickname());
+        assertEquals(changeNickname, account.getNickname());
+        assertTrue(passwordEncoder.matches("change1234", account.getPassword()));
     }
 
     @WithAccount("pms000723")
     @DisplayName("프로필 수정 - 입력값 에러")
     @Test
     void updateProfile_with_error() throws Exception {
+        String changeNickname = "닉네임을 길게 입력해서 에러를 발생시키자";
         mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
-                        .param("newPassword", "test1234")
-                        .param("newPasswordConfirm", "test1234")
-                        .param("nickname", "닉네임을 길게 입력해서 에러를 발생시키자")
+                        .param("newPassword", "change1234")
+                        .param("newPasswordConfirm", "change1234")
+                        .param("nickname", changeNickname)
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name(SettingsController.SETTINGS_PROFILE_VIEW_NAME))
@@ -74,7 +79,8 @@ class SettingsControllerTest {
                 .andExpect(model().hasErrors());
 
         Account account = accountRepository.findByUserId("pms000723");
-        assertEquals("홍길동", account.getNickname());
+        assertNotEquals(changeNickname, account.getNickname());
+        assertFalse(passwordEncoder.matches("change1234", account.getPassword()));
     }
 
 
