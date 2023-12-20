@@ -41,7 +41,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/logout", "/sign-up", "/check-email", "/check-id", "/check-email-token",
-                        "/email-login", "/check-email-login", "/login-link").permitAll()
+                        "/email-login", "/check-email-login", "/login-link", "/find-pass", "/update-pass").permitAll()
                 .anyRequest().authenticated();
 
         http

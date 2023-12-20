@@ -1,5 +1,7 @@
-package com.windsome.account;
+package com.windsome.account.validator;
 
+import com.windsome.account.AccountRepository;
+import com.windsome.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

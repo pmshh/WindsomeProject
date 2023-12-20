@@ -2,8 +2,7 @@ package com.windsome;
 
 import com.windsome.account.AccountRepository;
 import com.windsome.account.AccountService;
-import com.windsome.account.SignUpForm;
-import org.aspectj.lang.annotation.After;
+import com.windsome.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,11 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -40,7 +37,7 @@ class MainControllerTest {
         SignUpForm signUpForm = new SignUpForm();
         signUpForm.setUserIdentifier("pms000723");
         signUpForm.setEmail("pms000723@gmail.com");
-        signUpForm.setNickname("pms000723");
+        signUpForm.setName("홍길동");
         signUpForm.setPassword("12345678");
         signUpForm.setAddress1("test");
         signUpForm.setAddress2("test");

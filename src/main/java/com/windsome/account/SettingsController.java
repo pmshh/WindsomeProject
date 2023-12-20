@@ -1,10 +1,8 @@
-package com.windsome.settings;
+package com.windsome.account;
 
-import com.windsome.account.AccountService;
-import com.windsome.account.CurrentAccount;
 import com.windsome.domain.Account;
-import com.windsome.settings.form.ProfileForm;
-import com.windsome.settings.validator.ProfileFormValidator;
+import com.windsome.account.form.ProfileForm;
+import com.windsome.account.validator.ProfileFormValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -24,8 +22,8 @@ import javax.validation.Valid;
 @Slf4j
 public class SettingsController {
 
-    static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-    static final String SETTINGS_PROFILE_URL = "/settings/profile";
+    public static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
+    public static final String SETTINGS_PROFILE_URL = "/settings/profile";
 
     private final AccountService accountService;
     private final ModelMapper modelMapper;

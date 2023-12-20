@@ -1,4 +1,4 @@
-package com.windsome.settings.form;
+package com.windsome.account.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -17,7 +17,7 @@ public class ProfileForm {
 
     @NotBlank
     @Length(min = 3,max = 16)
-    private String nickname;
+    private String name;
 
     @NotBlank
     @Length(min = 8,max = 20)

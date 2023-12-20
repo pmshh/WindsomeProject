@@ -1,7 +1,7 @@
 package com.windsome;
 
 import com.windsome.account.AccountService;
-import com.windsome.account.SignUpForm;
+import com.windsome.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +22,7 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
         SignUpForm signUpForm = new SignUpForm();
         signUpForm.setUserIdentifier(userIdentifier);
         signUpForm.setEmail("pms000723@gmail.com");
-        signUpForm.setNickname("홍길동");
+        signUpForm.setName("홍길동");
         signUpForm.setPassword("test1234");
         signUpForm.setAddress1("test");
         signUpForm.setAddress2("test");

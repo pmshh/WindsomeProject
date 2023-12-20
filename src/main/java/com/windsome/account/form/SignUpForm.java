@@ -1,4 +1,4 @@
-package com.windsome.account;
+package com.windsome.account.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -20,7 +20,7 @@ public class SignUpForm {
     private String email;
 
     @NotBlank
-    private String nickname;
+    private String name;
 
     @NotBlank
     @Length(min = 8,max = 20)

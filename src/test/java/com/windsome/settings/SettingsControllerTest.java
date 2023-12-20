@@ -3,6 +3,7 @@ package com.windsome.settings;
 import com.windsome.WithAccount;
 import com.windsome.account.AccountRepository;
 import com.windsome.account.AccountService;
+import com.windsome.account.SettingsController;
 import com.windsome.domain.Account;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,14 +52,14 @@ class SettingsControllerTest {
         mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
                         .param("newPassword", "change1234")
                         .param("newPasswordConfirm", "change1234")
-                        .param("nickname", changeNickname)
+                        .param("name", changeNickname)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(SettingsController.SETTINGS_PROFILE_URL))
                 .andExpect(flash().attributeExists("message"));
 
         Account account = accountRepository.findByUserIdentifier("pms000723");
-        assertEquals(changeNickname, account.getNickname());
+        assertEquals(changeNickname, account.getName());
         assertTrue(passwordEncoder.matches("change1234", account.getPassword()));
     }
 
@@ -70,7 +71,7 @@ class SettingsControllerTest {
         mockMvc.perform(post(SettingsController.SETTINGS_PROFILE_URL)
                         .param("newPassword", "change1234")
                         .param("newPasswordConfirm", "change1234")
-                        .param("nickname", changeNickname)
+                        .param("name", changeNickname)
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name(SettingsController.SETTINGS_PROFILE_VIEW_NAME))
@@ -79,7 +80,7 @@ class SettingsControllerTest {
                 .andExpect(model().hasErrors());
 
         Account account = accountRepository.findByUserIdentifier("pms000723");
-        assertNotEquals(changeNickname, account.getNickname());
+        assertNotEquals(changeNickname, account.getName());
         assertFalse(passwordEncoder.matches("change1234", account.getPassword()));
     }
 
