@@ -50,7 +50,7 @@ public class AccountController {
     @PostMapping("/check-id")
     @ResponseBody
     public String checkId(String userId) {
-        if (accountRepository.existsByUserId(userId)) {
+        if (accountRepository.existsByUserIdentifier(userId)) {
             return "fail";
         } else {
             return "success";

@@ -1,6 +1,5 @@
-package com.windsome.settings;
+package com.windsome.settings.form;
 
-import com.windsome.domain.Account;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,7 +9,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class ProfileForm {
 
+    private String userIdentifier;
+
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank

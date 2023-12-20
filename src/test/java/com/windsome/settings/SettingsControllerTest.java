@@ -57,7 +57,7 @@ class SettingsControllerTest {
                 .andExpect(redirectedUrl(SettingsController.SETTINGS_PROFILE_URL))
                 .andExpect(flash().attributeExists("message"));
 
-        Account account = accountRepository.findByUserId("pms000723");
+        Account account = accountRepository.findByUserIdentifier("pms000723");
         assertEquals(changeNickname, account.getNickname());
         assertTrue(passwordEncoder.matches("change1234", account.getPassword()));
     }
@@ -78,7 +78,7 @@ class SettingsControllerTest {
                 .andExpect(model().attributeExists("profileForm"))
                 .andExpect(model().hasErrors());
 
-        Account account = accountRepository.findByUserId("pms000723");
+        Account account = accountRepository.findByUserIdentifier("pms000723");
         assertNotEquals(changeNickname, account.getNickname());
         assertFalse(passwordEncoder.matches("change1234", account.getPassword()));
     }

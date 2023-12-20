@@ -17,10 +17,10 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
 
     @Override
     public SecurityContext createSecurityContext(WithAccount withAccount) {
-        String userId = withAccount.value();
+        String userIdentifier = withAccount.value();
 
         SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setUserId(userId);
+        signUpForm.setUserIdentifier(userIdentifier);
         signUpForm.setEmail("pms000723@gmail.com");
         signUpForm.setNickname("홍길동");
         signUpForm.setPassword("test1234");
@@ -29,7 +29,7 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
         signUpForm.setAddress3("test");
         accountService.processNewAccount(signUpForm);
 
-        UserDetails principal = accountService.loadUserByUsername(userId);
+        UserDetails principal = accountService.loadUserByUsername(userIdentifier);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

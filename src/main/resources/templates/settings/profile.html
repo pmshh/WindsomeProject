@@ -37,12 +37,12 @@
                                 <tbody>
                                     <tr>
                                         <th scope="row">
-                                            <label for="userId">아이디 <span>*</span></label>
+                                            <label th:for="*{userIdentifier}">아이디 <span>*</span></label>
                                         </th>
                                         <td>
                                             <div class="id_input_box">
-                                                <input class="id_input" name="userId" id="userId" type="text" minlength="5"
-                                                       maxlength="20" th:value="${userId}" disabled="disabled">
+                                                <input class="id_input" th:field="*{userIdentifier}" th:value="${account.getUserIdentifier()}" type="text" minlength="5"
+                                                       maxlength="20" readonly="readonly">
                                                 (영문 소문자/숫자, 5~20자)
                                             </div>
                                             <span class="id_input_re_1 text-success">사용 가능한 아이디입니다.</span>

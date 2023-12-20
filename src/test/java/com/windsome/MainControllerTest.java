@@ -38,7 +38,7 @@ class MainControllerTest {
     @BeforeEach
     void beforeEach() {
         SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setUserId("pms000723");
+        signUpForm.setUserIdentifier("pms000723");
         signUpForm.setEmail("pms000723@gmail.com");
         signUpForm.setNickname("pms000723");
         signUpForm.setPassword("12345678");

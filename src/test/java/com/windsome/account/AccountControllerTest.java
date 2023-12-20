@@ -73,7 +73,7 @@ class AccountControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        Account account = accountRepository.findByUserId("pms000723");
+        Account account = accountRepository.findByUserIdentifier("pms000723");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678");
     }

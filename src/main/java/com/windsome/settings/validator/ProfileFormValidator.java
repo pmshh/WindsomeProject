@@ -1,5 +1,6 @@
-package com.windsome.settings;
+package com.windsome.settings.validator;
 
+import com.windsome.settings.form.ProfileForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

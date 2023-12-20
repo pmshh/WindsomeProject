@@ -1,11 +1,10 @@
 package com.windsome.account;
 
 import com.windsome.domain.Account;
-import com.windsome.settings.ProfileForm;
+import com.windsome.settings.form.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -37,7 +35,6 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
-//        newAccount.generateEmailCheckToken();
         return newAccount;
     }
 
@@ -64,7 +61,7 @@ public class AccountService implements UserDetailsService {
 
     private Account saveNewAccount(SignUpForm signUpForm) {
         Account account = Account.builder()
-                .userId(signUpForm.getUserId())
+                .userIdentifier(signUpForm.getUserIdentifier())
                 .email(signUpForm.getEmail())
                 .nickname(signUpForm.getNickname())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
@@ -92,7 +89,7 @@ public class AccountService implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String userIdOrEmail) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserId(userIdOrEmail);
+        Account account = accountRepository.findByUserIdentifier(userIdOrEmail);
         if (account == null) {
             account = accountRepository.findByEmail(userIdOrEmail);
         }

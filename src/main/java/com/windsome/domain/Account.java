@@ -16,7 +16,7 @@ public class Account {
     private Long id;
 
     @Column(unique = true)
-    private String userId;
+    private String userIdentifier;
 
     @Column(unique = true)
     private String email;
