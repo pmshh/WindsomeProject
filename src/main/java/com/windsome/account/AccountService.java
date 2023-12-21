@@ -3,6 +3,8 @@ package com.windsome.account;
 import com.windsome.account.form.SignUpForm;
 import com.windsome.domain.Account;
 import com.windsome.account.form.ProfileForm;
+import com.windsome.mail.EmailMessage;
+import com.windsome.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,8 +34,8 @@ public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender javaMailSender;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         return saveNewAccount(signUpForm);
@@ -54,14 +56,12 @@ public class AccountService implements UserDetailsService {
 
     public String sendSignUpConfirmEmail(String email) throws MessagingException {
         String authNum = getAuthNum(6);
-        log.info("{}", authNum);
-
-        String from = "pms000723@gmail.com";
-        String title = "윈섬, 회원가입 인증 메일";
-        String content = "홈페이지를 방문해주셔서 감사합니다.<br>아래 인증 번호를 인증 번호 확인란에 기입하여 주세요.<br>인증 번호 : " + authNum;
-
-        sendEmail(email, from, title, content);
-
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(email)
+                .subject("윈섬, 회원 가입 인증")
+                .message("홈페이지를 방문해주셔서 감사합니다.<br>아래 인증 번호를 인증 번호 확인란에 기입하여 주세요.<br>인증 번호 : " + authNum)
+                .build();
+        emailService.sendEmail(emailMessage);
         return authNum;
     }
 
@@ -72,15 +72,16 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updatePassword(String email, String name) throws MessagingException {
-        String randomNumber = getAuthNum(8);
-        String from = "pms000723@gmail.com";
-        String title = "윈섬, 임시 비밀번호 안내 이메일";
-        String content = "안녕하세요. 윈섬 임시비밀번호 안내 관련 이메일 입니다." + "[" + name + "]" +"님의 임시 비밀번호는 "
-                + randomNumber + " 입니다.";
-        sendEmail(email, from, title, content);
-
+        String authNum = getAuthNum(8);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(email)
+                .subject("윈섬, 임시 비밀번호 안내")
+                .message("안녕하세요. 윈섬 임시비밀번호 안내 관련 이메일 입니다." + "[" + name + "]" +"님의 임시 비밀번호는 "
+                        + authNum + " 입니다.")
+                .build();
+        emailService.sendEmail(emailMessage);
         Account account = accountRepository.findByEmail(email);
-        account.setPassword(passwordEncoder.encode(randomNumber));
+        account.setPassword(passwordEncoder.encode(authNum));
     }
 
     public void login(Account account) {
@@ -89,18 +90,6 @@ public class AccountService implements UserDetailsService {
                 account.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
         SecurityContextHolder.getContext().setAuthentication(token);
-    }
-
-    private void sendEmail(String email, String from, String title, String content) throws MessagingException {
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
-        helper.setFrom(from);
-        helper.setTo(email);
-        helper.setSubject(title);
-        helper.setText(content, true);
-        log.info("이메일 설정 완료");
-        javaMailSender.send(message);
-        log.info("이메일 전송 완료");
     }
 
     public boolean userEmailCheck(String email, String name) {

@@ -27,7 +27,6 @@ public class AccountController {
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
