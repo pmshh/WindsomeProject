@@ -1,16 +1,15 @@
 package com.windsome.config;
 
-import com.windsome.account.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -24,9 +23,13 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     private final AuthenticationFailureHandler customAuthFailureHandler;
-    private final AccountService accountService;
+    private final CustomUserDetails customUserDetails;
     private final DataSource dataSource;
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
@@ -42,6 +45,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/logout", "/sign-up", "/check-email", "/check-id", "/check-email-token",
                         "/email-login", "/check-email-login", "/login-link", "/find-pass", "/find-id").permitAll()
+                .antMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http
@@ -63,7 +67,7 @@ public class SecurityConfig {
 
         http
                 .rememberMe()
-                .userDetailsService(accountService)
+                .userDetailsService(customUserDetails)
                 .tokenRepository(getJDBCRepository());
 
 //        http.csrf().disable();

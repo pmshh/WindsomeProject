@@ -13,7 +13,8 @@ public class UserAccount extends User {
     private Account account;
 
     public UserAccount(Account account) {
-        super(account.getUserIdentifier(), account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        // User 정보 등록
+        super(account.getUserIdentifier(), account.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + account.getState())));
         this.account = account;
     }
 }

@@ -3,35 +3,35 @@ package com.windsome.account;
 import com.windsome.account.form.SignUpForm;
 import com.windsome.domain.Account;
 import com.windsome.account.form.ProfileForm;
+import com.windsome.domain.Role;
 import com.windsome.mail.EmailMessage;
 import com.windsome.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.util.List;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class AccountService implements UserDetailsService {
+public class AccountService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final EmailService emailService;
+    private final AuthenticationManager authenticationManager;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         return saveNewAccount(signUpForm);
@@ -46,6 +46,7 @@ public class AccountService implements UserDetailsService {
                 .address1(signUpForm.getAddress1())
                 .address2(signUpForm.getAddress2())
                 .address3(signUpForm.getAddress3())
+                .state(Role.ADMIN)
                 .build();
         return accountRepository.save(account);
     }
@@ -80,12 +81,18 @@ public class AccountService implements UserDetailsService {
         account.setPassword(passwordEncoder.encode(authNum));
     }
 
-    public void login(Account account) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                new UserAccount(account),
-                account.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(token);
+    // 회원가입 후 자동 로그인
+    public void login(String username, String password) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(authentication);
+
+//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+//                new UserAccount(account),
+//                account.getPassword(),
+//                List.of(new SimpleGrantedAuthority("ROLE_" + account.getState())));
+//        SecurityContextHolder.getContext().setAuthentication(token);
     }
 
     public boolean userEmailCheck(String email, String name) {
@@ -105,21 +112,6 @@ public class AccountService implements UserDetailsService {
             resultNum.append(ranNum);
         }
         return resultNum.toString();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public UserDetails loadUserByUsername(String userIdOrEmail) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUserIdentifier(userIdOrEmail);
-        if (account == null) {
-            account = accountRepository.findByEmail(userIdOrEmail);
-        }
-
-        if (account == null) {
-            throw new UsernameNotFoundException(userIdOrEmail);
-        }
-
-        return new UserAccount(account);
     }
 
     public String findId(String email, String name) {

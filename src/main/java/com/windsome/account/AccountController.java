@@ -44,7 +44,7 @@ public class AccountController {
         }
 
         Account account = accountService.processNewAccount(signUpForm);
-        accountService.login(account);
+        accountService.login(signUpForm.getUserIdentifier(), signUpForm.getPassword());
         return "redirect:/";
     }
 
@@ -87,5 +87,10 @@ public class AccountController {
     public @ResponseBody String findIdPost(String email, String name) {
         boolean userEmailCheckResult = accountService.userEmailCheck(email, name);
         return accountService.findId(email, name);
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
     }
 }
