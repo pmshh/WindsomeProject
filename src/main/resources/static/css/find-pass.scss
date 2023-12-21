@@ -4,9 +4,9 @@
 /* custom css start */
 main {
     .content {
-        #signup {
-            .signup {
-                .signup_header {
+        #find_pass {
+            .find_pass {
+                .find_pass_header {
                     h2 {
                         font-size: 15px;
                         text-align: center;
@@ -20,7 +20,7 @@ main {
                     }
                 }
 
-                .signup_body {
+                .find_pass_body {
                     display: flex;
                     justify-content: center;
 
@@ -128,12 +128,6 @@ main {
                                         vertical-align: middle;
                                         padding-top: 5px;
                                         border-radius: 2px;
-                                    }
-
-                                    a.send_mail:hover,
-                                    a.check_number:hover,
-                                    a.find_addr:hover {
-                                        border: 1px solid black;
                                     }
                                 }
                             }

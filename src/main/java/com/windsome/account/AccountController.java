@@ -5,7 +5,6 @@ import com.windsome.account.validator.SignUpFormValidator;
 import com.windsome.domain.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -67,17 +65,27 @@ public class AccountController {
     }
 
     @GetMapping("/find-pass")
-    public String findPass() {
-        return "account/find-password";
+    public String findPassGet() {
+        return "account/find-pass";
     }
 
-    @PostMapping("/update-pass")
-    public @ResponseBody boolean updatePass(String email, String name) throws MessagingException {
+    @PostMapping("/find-pass")
+    public @ResponseBody boolean findPassPost(String email, String name, Model model) throws MessagingException {
         boolean result = accountService.userEmailCheck(email, name);
-        accountRepository.findByEmail(email);
         if (result) {
             accountService.updatePassword(email, name);
         }
         return result;
+    }
+
+    @GetMapping("/find-id")
+    public String findIdGet() {
+        return "account/find-id";
+    }
+
+    @PostMapping("/find-id")
+    public @ResponseBody String findIdPost(String email, String name) {
+        boolean userEmailCheckResult = accountService.userEmailCheck(email, name);
+        return accountService.findId(email, name);
     }
 }

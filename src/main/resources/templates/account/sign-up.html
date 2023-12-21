@@ -336,6 +336,7 @@
             let send_btn = $(".send_mail"); // 인증 번호 전송 버튼
             let check_btn = $(".check_number"); // 인증 번호 확인 버튼
 
+            // 이메일 중복 체크 및 이메일 전송
             $.ajax({
                 type: "GET",
                 url: "/check-email?email=" + email,

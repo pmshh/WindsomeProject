@@ -4,9 +4,9 @@
 /* custom css start */
 main {
     .content {
-        #find_password {
-            .find_password {
-                .find_password_header {
+        #find_id {
+            .find_id {
+                .find_id_header {
                     h2 {
                         font-size: 15px;
                         text-align: center;
@@ -20,7 +20,14 @@ main {
                     }
                 }
 
-                .find_password_body {
+                .message_box_fail,
+                .message_box_success {
+                    width: 80%;
+                    display: none;
+                    margin: 45px auto 15px;
+                }
+
+                .find_id_body {
                     display: flex;
                     justify-content: center;
 
@@ -130,6 +137,17 @@ main {
                                         border-radius: 2px;
                                     }
                                 }
+                            }
+                        }
+
+                        .find_id_result {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 20px;
+
+                            small {
+                                display: none;
                             }
                         }
 

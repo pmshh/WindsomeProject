@@ -4,7 +4,7 @@
 <head>
     <div th:replace="fragments.html :: head"></div>
     <!--  사용자 CSS -->
-    <link rel="stylesheet" href="css/find-password.css">
+    <link rel="stylesheet" href="css/find-id.css">
 </head>
 
 <body>
@@ -16,13 +16,21 @@
         <div th:replace="fragments.html :: nav"></div>
 
         <!-- signup section -->
-        <section id="find_password">
-            <div class="container find_password">
-                <div class="find_password_header">
-                    <h2>비밀번호 찾기</h2>
+        <section id="find_id">
+            <div class="container find_id">
+                <div class="find_id_header">
+                    <h2>아이디 찾기</h2>
                     <div class="divider"></div>
                 </div>
-                <div class="find_password_body mt-5">
+                <div class="message_box_fail alert alert-danger alert-dismissible fade show">
+                    <i class="xi-warning me-2"></i><small class="message_fail" style="font-size: 14px;"></small>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div class="message_box_success alert alert-success alert-dismissible fade show">
+                    <i class="xi-check-min me-2"></i><small class="message_success" style="font-size: 14px;"></small>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div class="find_id_body mt-5">
 
                     <form onsubmit="return false">
                         <table>
@@ -57,7 +65,7 @@
                             </tbody>
                         </table>
                         <div class="btn_box">
-                            <button class="find_psasword_btn black_btn" type="button">비밀번호 찾기</button>
+                            <button class="find_id_btn black_btn" type="button">아이디 찾기</button>
                         </div>
                     </form>
                 </div>
@@ -74,24 +82,26 @@
 <!-- 사용자 JS -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-    $(".find_psasword_btn").click( function () {
+    $(".find_id_btn").click( function () {
         let email = $(".user_email").val();
         let name = $(".user_name").val();
 
         $.ajax({
             type: "post",
-            url: "/update-pass",
-            async: false,
+            url: "/find-id",
             data: {
                 "email": email,
                 "name": name
             },
-            success: function (result) {
-                if (result) {
-                    alert("입력하신 이메일로 임시비밀번호가 발송되었습니다.");
-                    window.location.href = "/login";
+            success: function (res) {
+                if (res === "fail") {
+                    $(".message_box_fail").css("display", "block");
+                    $(".message_box_success").css("display", "none");
+                    $(".message_fail").html("일치하는 정보가 없습니다.");
                 } else {
-                    alert("일치하는 정보가 없습니다.");
+                    $(".message_box_success").css("display", "block");
+                    $(".message_box_fail").css("display", "none");
+                    $(".message_success").html("회원님의 아이디는 " + res + " 입니다.");
                 }
             }
         })

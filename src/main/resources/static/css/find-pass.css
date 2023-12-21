@@ -388,24 +388,24 @@ main .content footer .footer_copyright {
   }
 }
 /* custom css start */
-main .content #find_password .find_password .find_password_header h2 {
+main .content #find_pass .find_pass .find_pass_header h2 {
   font-size: 15px;
   text-align: center;
 }
-main .content #find_password .find_password .find_password_header .divider {
+main .content #find_pass .find_pass .find_pass_header .divider {
   width: 70px;
   height: 1px;
   background: #aaa;
   margin: 20px auto;
 }
-main .content #find_password .find_password .find_password_body {
+main .content #find_pass .find_pass .find_pass_body {
   display: flex;
   justify-content: center;
 }
-main .content #find_password .find_password .find_password_body form {
+main .content #find_pass .find_pass .find_pass_body form {
   width: 80%;
 }
-main .content #find_password .find_password .find_password_body form table {
+main .content #find_pass .find_pass .find_pass_body form table {
   width: 100%;
   position: relative;
   margin: 10px 0 0;
@@ -416,11 +416,11 @@ main .content #find_password .find_password .find_password_body form table {
   color: #fff;
   line-height: 1.5;
 }
-main .content #find_password .find_password .find_password_body form table tbody {
+main .content #find_pass .find_pass .find_pass_body form table tbody {
   font-size: 12px;
   color: #353535;
 }
-main .content #find_password .find_password .find_password_body form table tbody th {
+main .content #find_pass .find_pass .find_pass_body form table tbody th {
   padding: 11px 0 10px 18px;
   border: 1px solid #dfdfdf;
   border-bottom-width: 0;
@@ -429,40 +429,40 @@ main .content #find_password .find_password .find_password_body form table tbody
   font-weight: normal;
   vertical-align: middle;
 }
-main .content #find_password .find_password .find_password_body form table tbody th span {
+main .content #find_pass .find_pass .find_pass_body form table tbody th span {
   color: #008BCC;
 }
-main .content #find_password .find_password .find_password_body form table tbody td {
+main .content #find_pass .find_pass .find_pass_body form table tbody td {
   border-top: 1px solid #dfdfdf;
   vertical-align: middle;
   padding: 11px 0 10px 18px;
 }
-main .content #find_password .find_password .find_password_body form table tbody td span.id_input_re_1,
-main .content #find_password .find_password .find_password_body form table tbody td span.id_input_re_2,
-main .content #find_password .find_password .find_password_body form table tbody td span.mail_input_re_1,
-main .content #find_password .find_password .find_password_body form table tbody td span.mail_input_re_2,
-main .content #find_password .find_password .find_password_body form table tbody td span.final_id_ck,
-main .content #find_password .find_password .find_password_body form table tbody td span.final_pw_ck,
-main .content #find_password .find_password .find_password_body form table tbody td span.final_pwck_ck,
-main .content #find_password .find_password .find_password_body form table tbody td span.final_nickname_ck,
-main .content #find_password .find_password .find_password_body form table tbody td span.final_mail_ck,
-main .content #find_password .find_password .find_password_body form table tbody td span.final_addr_ck,
-main .content #find_password .find_password .find_password_body form table tbody td span.pwck_input_re_1,
-main .content #find_password .find_password .find_password_body form table tbody td span.pwck_input_re_2 {
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.id_input_re_1,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.id_input_re_2,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.mail_input_re_1,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.mail_input_re_2,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.final_id_ck,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.final_pw_ck,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.final_pwck_ck,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.final_nickname_ck,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.final_mail_ck,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.final_addr_ck,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.pwck_input_re_1,
+main .content #find_pass .find_pass .find_pass_body form table tbody td span.pwck_input_re_2 {
   display: none;
 }
-main .content #find_password .find_password .find_password_body form table tbody td input {
+main .content #find_pass .find_pass .find_pass_body form table tbody td input {
   height: 29px;
   padding: 2px 4px;
   border: 1px solid #d5d5d5;
 }
-main .content #find_password .find_password .find_password_body form table tbody td input:focus::-moz-placeholder {
+main .content #find_pass .find_pass .find_pass_body form table tbody td input:focus::-moz-placeholder {
   color: transparent;
 }
-main .content #find_password .find_password .find_password_body form table tbody td input:focus::placeholder {
+main .content #find_pass .find_pass .find_pass_body form table tbody td input:focus::placeholder {
   color: transparent;
 }
-main .content #find_password .find_password .find_password_body form table tbody td select {
+main .content #find_pass .find_pass .find_pass_body form table tbody td select {
   width: 60px;
   height: 30px;
   line-height: 29px;
@@ -472,8 +472,8 @@ main .content #find_password .find_password .find_password_body form table tbody
   background-color: #fff;
   font-size: 12px;
 }
-main .content #find_password .find_password .find_password_body form table tbody td a.send_mail,
-main .content #find_password .find_password .find_password_body form table tbody td a.check_number {
+main .content #find_pass .find_pass .find_pass_body form table tbody td a.send_mail,
+main .content #find_pass .find_pass .find_pass_body form table tbody td a.check_number {
   background-color: #FFFFFF;
   border: 1px solid #c5c5c5;
   color: black;
@@ -483,13 +483,13 @@ main .content #find_password .find_password .find_password_body form table tbody
   padding-top: 5px;
   border-radius: 2px;
 }
-main .content #find_password .find_password .find_password_body form table tbody td a.send_mail {
+main .content #find_pass .find_pass .find_pass_body form table tbody td a.send_mail {
   display: inline-block;
 }
-main .content #find_password .find_password .find_password_body form table tbody td a.check_number {
+main .content #find_pass .find_pass .find_pass_body form table tbody td a.check_number {
   display: none;
 }
-main .content #find_password .find_password .find_password_body form table tbody td a.find_addr {
+main .content #find_pass .find_pass .find_pass_body form table tbody td a.find_addr {
   display: inline-block;
   background-color: #FFFFFF;
   border: 1px solid #c5c5c5;
@@ -501,9 +501,9 @@ main .content #find_password .find_password .find_password_body form table tbody
   padding-top: 5px;
   border-radius: 2px;
 }
-main .content #find_password .find_password .find_password_body form .btn_box {
+main .content #find_pass .find_pass .find_pass_body form .btn_box {
   padding: 10px 0;
   text-align: center;
   display: block;
   margin-top: 30px;
-}/*# sourceMappingURL=find-password.css.map */
+}/*# sourceMappingURL=find-pass.css.map */
