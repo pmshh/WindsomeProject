@@ -1,8 +1,8 @@
 package com.windsome;
 
-import com.windsome.account.AccountService;
-import com.windsome.account.form.SignUpForm;
-import com.windsome.config.CustomUserDetailsService;
+import com.windsome.dto.SignUpDto;
+import com.windsome.service.AccountService;
+import com.windsome.config.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,15 +21,15 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
     public SecurityContext createSecurityContext(WithAccount withAccount) {
         String userIdentifier = withAccount.value();
 
-        SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setUserIdentifier(userIdentifier);
-        signUpForm.setEmail("pms000723@gmail.com");
-        signUpForm.setName("홍길동");
-        signUpForm.setPassword("test1234");
-        signUpForm.setAddress1("test");
-        signUpForm.setAddress2("test");
-        signUpForm.setAddress3("test");
-        accountService.processNewAccount(signUpForm);
+        SignUpDto signUpDto = new SignUpDto();
+        signUpDto.setUserIdentifier(userIdentifier);
+        signUpDto.setEmail("pms000723@gmail.com");
+        signUpDto.setName("홍길동");
+        signUpDto.setPassword("test1234");
+        signUpDto.setAddress1("test");
+        signUpDto.setAddress2("test");
+        signUpDto.setAddress3("test");
+        accountService.processNewAccount(signUpDto);
 
         UserDetails principal = customUserDetailsService.loadUserByUsername(userIdentifier);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());

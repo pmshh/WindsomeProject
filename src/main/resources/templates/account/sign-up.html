@@ -24,7 +24,7 @@
                     </div>
                     <div class="signup_body mt-5">
 
-                        <form id="signUpForm" th:action="@{/sign-up}" th:object="${signUpForm}" method="post"
+                        <form id="signUpDto" th:action="@{/sign-up}" th:object="${signUpDto}" method="post"
                             onsubmit="return chkPW()">
                             <table>
                                 <colgroup>
@@ -232,8 +232,8 @@
 
                 /* 최종 유효성 검사 */
                 if (idCheck && idckCheck && pwCheck && pwckCheck && pwckcorCheck && nicknameCheck && mailCheck && mailnumCheck && addressCheck) {
-                    $('#signUpForm').attr("action", "/sign-up");
-                    $('#signUpForm').submit();
+                    $('#signUpDto').attr("action", "/sign-up");
+                    $('#signUpDto').submit();
                 }
                 return false;
             });
