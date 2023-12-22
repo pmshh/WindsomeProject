@@ -48,7 +48,7 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @PostMapping("/check-id")
+    @PostMapping("/check/id")
     @ResponseBody
     public String checkId(String userId) {
         if (accountRepository.existsByUserIdentifier(userId)) {
@@ -58,18 +58,18 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/check-email")
+    @GetMapping("/check/email")
     @ResponseBody
     public String checkEmail(String email) throws Exception {
         return accountService.sendSignUpConfirmEmail(email);
     }
 
-    @GetMapping("/find-pass")
+    @GetMapping("/find/pass")
     public String findPassGet() {
         return "account/find-pass";
     }
 
-    @PostMapping("/find-pass")
+    @PostMapping("/find/pass")
     public @ResponseBody boolean findPassPost(String email, String name, Model model) throws MessagingException {
         boolean result = accountService.userEmailCheck(email, name);
         if (result) {
@@ -78,12 +78,12 @@ public class AccountController {
         return result;
     }
 
-    @GetMapping("/find-id")
+    @GetMapping("/find/id")
     public String findIdGet() {
         return "account/find-id";
     }
 
-    @PostMapping("/find-id")
+    @PostMapping("/find/id")
     public @ResponseBody String findIdPost(String email, String name) {
         boolean userEmailCheckResult = accountService.userEmailCheck(email, name);
         return accountService.findId(email, name);

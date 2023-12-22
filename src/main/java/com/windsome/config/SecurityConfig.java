@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     private final AuthenticationFailureHandler customAuthFailureHandler;
-    private final CustomUserDetails customUserDetails;
+    private final CustomUserDetailsService customUserDetails;
     private final DataSource dataSource;
 
     @Bean
@@ -34,7 +34,6 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return (web) -> web.ignoring()
-                .mvcMatchers("/imgs/**")
                 .antMatchers("/h2-console/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
@@ -43,9 +42,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/logout", "/sign-up", "/check-email", "/check-id", "/check-email-token",
-                        "/email-login", "/check-email-login", "/login-link", "/find-pass", "/find-id").permitAll()
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/", "/login", "/logout", "/sign-up", "/check-email", "/check/**", "/find/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http

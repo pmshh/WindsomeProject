@@ -2,6 +2,7 @@ package com.windsome;
 
 import com.windsome.account.AccountService;
 import com.windsome.account.form.SignUpForm;
+import com.windsome.config.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 @RequiredArgsConstructor
 public class WithAccountSecurityContextFacotry implements WithSecurityContextFactory<WithAccount> {
 
+    private final CustomUserDetailsService customUserDetailsService;
     private final AccountService accountService;
 
     @Override
@@ -29,7 +31,7 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
         signUpForm.setAddress3("test");
         accountService.processNewAccount(signUpForm);
 
-        UserDetails principal = accountService.loadUserByUsername(userIdentifier);
+        UserDetails principal = customUserDetailsService.loadUserByUsername(userIdentifier);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);

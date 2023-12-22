@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+@font-face {
+    font-family: 'JeonjuCraftMjB';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/JeonjuCraftMjB.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    box-sizing: border-box;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    color: #000000;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+button:focus {
+    border: none;
+    outline: none;
+}
+
+/* custom css start */
+main {
+    align-items: stretch;
+    display: flex;
+    width: 100%;
+
+    .sidebar {
+        max-width: 264px;
+        min-width: 264px;
+        background: var(--bs-dark);
+        transition: all 0.35s ease-in-out;
+
+        .sidebar-logo {
+            padding: 1.15rem;
+
+            a {
+                color: #e9ecef;
+                font-size: 1.15rem;
+            }
+        }
+
+        .sidebar-nav {
+            flex-grow: 1;
+            margin-bottom: 0;
+            padding-left: 0;
+            margin-left: 0;
+
+            .sidebar-header {
+                color: #e9ecef;
+                font-size: 0.75rem;
+                padding: 1.5rem 1.5rem .375rem;
+            }
+
+            .sidebar-item {
+
+                a.sidebar-link {
+                    padding: 0.625rem 1.625rem;
+                    color: #e9ecef;
+                    position: relative;
+                    display: block;
+                    font-size: 0.875rem;
+                }
+
+                a.sidebar-link[data-bs-toggle="collapse"]::after {
+                    border: solid;
+                    border-width: 0 .075rem .075rem 0;
+                    content: "";
+                    display: inline-block;
+                    padding: 2px;
+                    position: absolute;
+                    right: 1.5rem;
+                    top: 1.4rem;
+                    transform: rotate(-135deg);
+                    transition: all .2s ease-out;
+                }
+
+                a.sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+                    transform: rotate(45deg);
+                    transition: all .2s ease-out;
+                }
+            }
+        }
+    }
+
+    .sidebar.collapsed {
+        margin-left: -264px;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        min-width: 0;
+        overflow: hidden;
+        transition: all 0.35s ease-in-out;
+        width: 100%;
+        background: var(--bs-dark-bg-subtle);
+
+        nav {
+            .navbar-collpase {
+                margin-left: auto;
+
+                .navbar-nav {
+
+                    .nav-item {
+                        a {
+                            img.avatar {
+                                height: 40px;
+                                width: 40px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        section {
+            flex: 1;
+            min-width: 100vw;
+            width: 100vw;
+
+        }
+    }
+}

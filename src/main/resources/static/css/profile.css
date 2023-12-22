@@ -398,7 +398,7 @@ main .content #modify .modify .modify_header .divider {
   background: #aaa;
   margin: 20px auto;
 }
-main .content #modify .modify .alert {
+main .content #modify .modify .message_box {
   width: 80%;
   margin: 45px auto 15px;
 }

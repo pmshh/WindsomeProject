@@ -46,7 +46,7 @@ public class AccountService {
                 .address1(signUpForm.getAddress1())
                 .address2(signUpForm.getAddress2())
                 .address3(signUpForm.getAddress3())
-                .state(Role.ADMIN)
+                .state(Role.USER)
                 .build();
         return accountRepository.save(account);
     }
