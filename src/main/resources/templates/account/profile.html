@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="fragments.html :: head"></div>
+    <div th:replace="/fragments/fragments.html :: head"></div>
     <!--  사용자 CSS -->
     <link rel="stylesheet" href="/css/profile.css">
 </head>
@@ -10,10 +10,10 @@
 <body>
 
     <main>
-        <div th:replace="fragments.html :: sidebar"></div>
+        <div th:replace="/fragments/fragments.html :: sidebar"></div>
 
         <article class="content">
-            <div th:replace="fragments.html :: nav"></div>
+            <div th:replace="/fragments/fragments.html :: nav"></div>
 
             <!-- signup section -->
             <section id="modify">
@@ -27,7 +27,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                     <div class="modify_body mt-5">
-                        <form id="profileDto" th:action="@{/settings/profile}" th:object="${profileDto}" method="post"
+                        <form id="profileDto" th:action="@{/account/profile}" th:object="${profileDto}" method="post"
                             onsubmit="return chkPW()">
                             <table>
                                 <colgroup>
@@ -129,19 +129,19 @@
                             </table>
                             <div class="btn_box">
                                 <button class="modify_btn black_btn" type="submit">회원정보수정</button>
-                                <a class="white_btn" th:href="@{/}">취소</a>
+                                <a class="white_btn" th:href="@{/static}">취소</a>
                             </div>
                         </form>
                     </div>
                 </div>
             </section>
 
-            <div th:replace="fragments.html :: footer"></div>
+            <div th:replace="/fragments/fragments.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="fragments.html :: JS"></div>
-    <div th:replace="fragments.html :: csrf"></div>
+    <div th:replace="/fragments/fragments.html :: JS"></div>
+    <div th:replace="/fragments/fragments.html :: csrf"></div>
 
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -221,7 +221,7 @@
 
                 /* 최종 유효성 검사 */
                 if (pwCheck && pwckCheck && pwckcorCheck && mailCheck && mailnumCheck && nicknameCheck && addressCheck) {
-                    $('#profileDto').attr("action", "/settings/profile");
+                    $('#profileDto').attr("action", "/account/profile");
                     $('#profileDto').submit();
                 } else if (!mailnumCheck) {
                     $('.need_mail_check').css('display', 'inline-block');
@@ -297,7 +297,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/check-email?email=" + email,
+                url: "/check/email?email=" + email,
                 success: function (data) {
                     alert("인증번호가 발송되었습니다.");
                     check_input.attr("disabled", false);

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="fragments.html :: head"></div>
+    <div th:replace="/fragments/fragments.html :: head"></div>
     <!--  사용자 CSS -->
     <link rel="stylesheet" href="css/login.css">
 </head>
@@ -10,10 +10,10 @@
 <body>
 
     <main>
-        <div th:replace="fragments.html :: sidebar"></div>
+        <div th:replace="/fragments/fragments.html :: sidebar"></div>
 
         <article class="content">
-            <div th:replace="fragments.html :: nav"></div>
+            <div th:replace="/fragments/fragments.html :: nav"></div>
 
             <!-- login section -->
             <section id="login">
@@ -39,13 +39,13 @@
                         </div>
                         <div class="login_find">
                             <div class="txt">
-                                <a th:href="@{/find-id}">아이디 찾기</a>
+                                <a th:href="@{/find/id}">아이디 찾기</a>
                             </div>
                             <div class="txt">
-                                <a th:href="@{/find-pass}">비밀번호 찾기</a>
+                                <a th:href="@{/find/pass}">비밀번호 찾기</a>
                             </div>
                             <div class="txt">
-                                <a target="_blank" href="main.html">주문조회</a>
+                                <a target="_blank" href="../main.html">주문조회</a>
                             </div>
                             <div class="join_txt">
                                 <a target="_blank" th:href="@{sign-up}">회원가입</a>
@@ -69,11 +69,11 @@
                 </div>
             </section>
 
-            <div th:replace="fragments.html :: footer"></div>
+            <div th:replace="/fragments/fragments.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="fragments.html :: JS"></div>
+    <div th:replace="/fragments/fragments.html :: JS"></div>
 
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

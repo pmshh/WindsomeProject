@@ -24,6 +24,6 @@ public class MainController {
                         Model model) {
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
-        return "login";
+        return "account/login";
     }
 }

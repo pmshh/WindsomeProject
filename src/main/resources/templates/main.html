@@ -2,17 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <div th:replace="fragments.html :: head"></div>
+    <div th:replace="/fragments/fragments.html :: head"></div>
     <!--  사용자 CSS -->
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
 <main>
-    <div th:replace="fragments.html :: sidebar"></div>
+    <div th:replace="/fragments/fragments.html :: sidebar"></div>
 
     <article class="content">
-        <div th:replace="fragments.html :: nav"></div>
+        <div th:replace="/fragments/fragments.html :: nav"></div>
 
         <!-- items section -->
         <section id="items">
@@ -137,11 +137,11 @@
             </div>
         </section>
 
-        <div th:replace="fragments.html :: footer"></div>
+        <div th:replace="/fragments/fragments.html :: footer"></div>
     </article>
 </main>
 
-<div th:replace="fragments.html :: JS"></div>
+<div th:replace="/fragments/fragments.html :: JS"></div>
 
 <!-- 사용자 JS -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

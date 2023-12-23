@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -16,7 +17,7 @@ public class ProfileDto {
     private String email;
 
     @NotBlank
-    @Length(min = 3,max = 16)
+    @Length(min = 1, max = 8)
     private String name;
 
     @NotBlank
