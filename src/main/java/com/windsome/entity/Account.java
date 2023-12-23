@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "id", callSuper = true)
 @Builder @AllArgsConstructor @NoArgsConstructor
-public class Account {
+public class Account extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "account_id")
@@ -34,13 +34,8 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Role state;
 
-    private LocalDateTime joinedAt;
-
     private int money;
 
     private int point;
 
-    public void completeSignUp() {
-        this.joinedAt = LocalDateTime.now();
-    }
 }
