@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "cateCode")
 @Builder @AllArgsConstructor @NoArgsConstructor
+@ToString
 public class Category {
 
     @Id @GeneratedValue
-    @Column
     private Long cateCode;
 
     private String name;

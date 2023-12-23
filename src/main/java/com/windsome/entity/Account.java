@@ -7,8 +7,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id", callSuper = true)
+@Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
+@ToString
 public class Account extends BaseTimeEntity {
 
     @Id @GeneratedValue

@@ -5,38 +5,42 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class Item {
+public class Item extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_id")
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String itemNm; // 상품명
+    private String itemNm;
 
     @Column(nullable = false)
-    private int price; // 가격
+    private int price;
 
     @Column(nullable = false)
-    private int stockNumber; // 재고 수량
+    private int stockNumber;
 
     @Lob
     @Column(nullable = false)
-    private String itemDetail; // 상품 상세 설명
+    private String itemDetail;
 
     @Enumerated(EnumType.STRING)
-    private ItemSellStatus itemSellStatus; // 상품 판매 상태
+    private ItemSellStatus itemSellStatus;
 
-    private double discount; // 할인율
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cate_code")
+    private Category cateCode;
 
-    private String category; // 카테고리
+    private double discount;
 
-    private LocalDateTime regTime; // 등록 시간
+    private LocalDateTime regTime;
 
-    private LocalDateTime updateTime; // 수정 시간
+    private LocalDateTime updateTime;
 }
