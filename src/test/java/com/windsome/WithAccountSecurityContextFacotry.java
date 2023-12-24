@@ -1,6 +1,6 @@
 package com.windsome;
 
-import com.windsome.dto.SignUpDto;
+import com.windsome.dto.SignUpFormDto;
 import com.windsome.service.AccountService;
 import com.windsome.config.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,15 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
     public SecurityContext createSecurityContext(WithAccount withAccount) {
         String userIdentifier = withAccount.value();
 
-        SignUpDto signUpDto = new SignUpDto();
-        signUpDto.setUserIdentifier(userIdentifier);
-        signUpDto.setEmail("pms000723@gmail.com");
-        signUpDto.setName("홍길동");
-        signUpDto.setPassword("test1234");
-        signUpDto.setAddress1("test");
-        signUpDto.setAddress2("test");
-        signUpDto.setAddress3("test");
-        accountService.processNewAccount(signUpDto);
+        SignUpFormDto signUpFormDto = new SignUpFormDto();
+        signUpFormDto.setUserIdentifier(userIdentifier);
+        signUpFormDto.setEmail("pms000723@gmail.com");
+        signUpFormDto.setName("홍길동");
+        signUpFormDto.setPassword("test1234");
+        signUpFormDto.setAddress1("test");
+        signUpFormDto.setAddress2("test");
+        signUpFormDto.setAddress3("test");
+        accountService.processNewAccount(signUpFormDto);
 
         UserDetails principal = customUserDetailsService.loadUserByUsername(userIdentifier);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());

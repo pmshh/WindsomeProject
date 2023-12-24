@@ -1,0 +1,218 @@
+/* cart page start */
+.cart_header {
+    h2 {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    .divider {
+        width: 70px;
+        height: 1px;
+        background: #aaa;
+        margin: 20px auto;
+    }
+}
+
+.cart_body {
+    width: 100%;
+    margin: 0 auto;
+
+    table {
+        font-size: 12px;
+
+        thead {
+            th {
+                padding: 15px 0 14px;
+                border-bottom: 1px solid #e5e5e5;
+                color: #353535;
+                vertical-align: middle;
+                font-weight: normal;
+                background: #fff;
+                text-align: center;
+            }
+        }
+
+        tbody {
+            vertical-align: middle;
+            text-align: center;
+
+            tr {
+                td {
+                    padding: 15px 5px 14px;
+                    border-top: 1px solid #e5e5e5;
+                    color: #353535;
+
+
+                    a {
+                        width: 90px;
+                        margin: 1px 0;
+
+                        img {
+                            // margin: 20px;
+                        }
+                    }
+
+                    a.btn_submit {
+                        display: inline-block;
+                        padding: 4px 8px;
+                        border: 1px solid transparent;
+                        border-radius: 0px;
+                        font-size: 12px;
+                        line-height: 18px;
+                        font-weight: normal;
+                        text-decoration: none;
+                        word-spacing: -0.5px;
+                        letter-spacing: 0;
+                        white-space: nowrap;
+                        color: #fff;
+                        background-color: #000;
+                    }
+
+                    a.btn_normal {
+                        display: inline-block;
+                        padding: 4px 8px;
+                        border: 1px solid #e2e2e2;
+                        border-radius: 0px;
+                        font-size: 12px;
+                        line-height: 18px;
+                        font-weight: normal;
+                        text-decoration: none;
+                        word-spacing: -0.5px;
+                        letter-spacing: 0;
+                        white-space: nowrap;
+                        color: #222;
+                        background-color: #fff;
+                    }
+                }
+
+                td.left {
+                    padding-left: 20px;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+
+.cart_total {
+    width: 100%;
+    margin: 0 auto;
+
+    table {
+        font-size: 12px;
+        text-align: center;
+
+        thead {
+            vertical-align: middle;
+
+            th {
+                padding: 15px 0 14px;
+                border-bottom: 1px solid #e5e5e5;
+                color: #353535;
+                font-weight: normal;
+                background: #fff;
+                font-size: 15px;
+                font-weight: bold;
+            }
+
+        }
+
+        tbody {
+            vertical-align: middle;
+
+            td {
+                padding: 15px 5px 14px;
+                border-top: 1px solid #e5e5e5;
+                color: #353535;
+                font-size: 16px;
+                font-weight: bold;
+
+                span {
+                    font-size: 23px;
+                    font-weight: bold;
+                }
+
+                a {
+                    width: 90px;
+                    margin: 1px 0;
+                }
+
+                a.btn_submit {
+                    display: inline-block;
+                    padding: 4px 8px;
+                    border: 1px solid transparent;
+                    border-radius: 0px;
+                    font-size: 12px;
+                    line-height: 18px;
+                    font-weight: normal;
+                    text-decoration: none;
+                    word-spacing: -0.5px;
+                    letter-spacing: 0;
+                    white-space: nowrap;
+                    color: #fff;
+                    background-color: #000;
+                }
+
+                a.btn_normal {
+                    display: inline-block;
+                    padding: 4px 8px;
+                    border: 1px solid #e2e2e2;
+                    border-radius: 0px;
+                    font-size: 12px;
+                    line-height: 18px;
+                    font-weight: normal;
+                    text-decoration: none;
+                    word-spacing: -0.5px;
+                    letter-spacing: 0;
+                    white-space: nowrap;
+                    color: #222;
+                    background-color: #fff;
+                }
+
+                &.left {
+                    padding-left: 20px;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+
+.cart_btn {
+    position: relative;
+    margin: 10px 0 40px;
+    text-align: center;
+
+    a {
+        width: 130px;
+        padding: 10px 16px;
+        display: inline-block;
+        border: 1px solid transparent;
+        border-radius: 0;
+        font-size: 13px;
+        line-height: 18px;
+        text-decoration: none;
+        vertical-align: middle;
+        word-spacing: -0.5px;
+        letter-spacing: 0;
+        text-align: center;
+        white-space: nowrap;
+        color: #fff;
+        background-color: #151515;
+    }
+
+    .option_order,
+    .resume {
+        border: 1px solid #e2e2e2;
+        color: #222;
+        background-color: #fff;
+    }
+
+    span {
+        position: absolute;
+        top: 0px;
+        right: 0;
+
+        a {}
+    }
+}

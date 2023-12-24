@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- signup section -->
+            <section id="find_id">
+                <div class="container find_id">
+                    <div class="find_id_header">
+                        <h2>아이디 찾기</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="message_box_fail alert alert-danger alert-dismissible fade show">
+                        <i class="xi-warning me-2"></i><small class="message_fail" style="font-size: 14px;"></small>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div class="message_box_success alert alert-success alert-dismissible fade show">
+                        <i class="xi-check-min me-2"></i><small class="message_success"
+                            style="font-size: 14px;"></small>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div class="find_id_body mt-5">
+                        <form onsubmit="return false">
+                            <table>
+                                <colgroup>
+                                    <col style="width:150px;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="email">이메일 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="id_input_box">
+                                                <input class="user_email" name="email" id="email" type="text">
+                                                가입시 등록한 이메일을 입력하세요.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="name">이름 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="password_input_box">
+                                                <input class="user_name" name="name" id="name" type="text">
+                                                가입시 등록한 이름을 입력하세요.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="check_msg text-warning"></div>
+                                </tbody>
+                            </table>
+                            <div class="btn_box">
+                                <button class="find_id_btn black_btn" type="button">아이디 찾기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/defaultLayout.html :: JS"></div>
+    <div th:replace="/layouts/defaultLayout.html :: csrf"></div>
+
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        $(".find_id_btn").click(function () {
+            let email = $(".user_email").val();
+            let name = $(".user_name").val();
+
+            $.ajax({
+                type: "post",
+                url: "/find/id",
+                data: {
+                    "email": email,
+                    "name": name
+                },
+                success: function (res) {
+                    if (res === "fail") {
+                        $(".message_box_fail").css("display", "block");
+                        $(".message_box_success").css("display", "none");
+                        $(".message_fail").html("일치하는 정보가 없습니다.");
+                    } else {
+                        $(".message_box_success").css("display", "block");
+                        $(".message_box_fail").css("display", "none");
+                        $(".message_success").html("회원님의 아이디는 " + res + " 입니다.");
+                    }
+                }
+            })
+        })
+    </script>
+</body>

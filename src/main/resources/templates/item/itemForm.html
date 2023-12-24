@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/adminLayout.html :: head"></div>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/adminLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/adminLayout.html :: nav"></div>
+
+            <!-- section -->
+            <section class="content px-3 py-2">
+                <div class="container-fluid">
+                    <div class="content-head mb-3">
+                        <h4>아이템 등록</h4>
+                    </div>
+                    <div class="content-body">
+                        <div class="form_box">
+                            <form th:action="@{/admin/item/new}" th:object="${itemFormDto}" method="post">
+                                <div class="mb-3">
+                                    <label th:for="*{id}" class="form-label">name</label>
+                                    <input type="text" class="form-control" th:field="*{id}">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="*{itemNm}" class="form-label">content</label>
+                                    <input type="text" class="form-control" th:field="*{itemNm}">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="*{price}" class="form-label">price</label>
+                                    <input type="text" class="form-control" th:field="*{price}">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="*{itemDetail}" class="form-label">discount</label>
+                                    <input type="text" class="form-control" th:field="*{itemDetail}">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="*{stockNumber}" class="form-label">cnt</label>
+                                    <input type="text" class="form-control" th:field="*{stockNumber}">
+                                </div>
+                                <div class="mb-3">
+                                    <label th:for="*{itemSellStatus}" class="form-label">cateCode</label>
+                                    <input type="text" class="form-control" th:field="*{itemSellStatus}">
+                                </div>
+                                <button type="submit">아이템 등록</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/adminLayout.html :: JS"></div>
+    <div th:replace="/layouts/adminLayout.html :: csrf"></div>
+
+    <!-- 사용자 JS -->
+    <script></script>
+</body>
+
+</html>

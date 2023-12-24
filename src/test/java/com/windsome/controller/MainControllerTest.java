@@ -1,8 +1,8 @@
 package com.windsome.controller;
 
+import com.windsome.dto.SignUpFormDto;
 import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
-import com.windsome.dto.SignUpDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,15 +34,15 @@ class MainControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        SignUpDto signUpDto = new SignUpDto();
-        signUpDto.setUserIdentifier("pms000723");
-        signUpDto.setEmail("pms000723@gmail.com");
-        signUpDto.setName("홍길동");
-        signUpDto.setPassword("12345678");
-        signUpDto.setAddress1("test");
-        signUpDto.setAddress2("test");
-        signUpDto.setAddress3("test");
-        accountService.processNewAccount(signUpDto);
+        SignUpFormDto signUpFormDto = new SignUpFormDto();
+        signUpFormDto.setUserIdentifier("pms000723");
+        signUpFormDto.setEmail("pms000723@gmail.com");
+        signUpFormDto.setName("홍길동");
+        signUpFormDto.setPassword("12345678");
+        signUpFormDto.setAddress1("test");
+        signUpFormDto.setAddress2("test");
+        signUpFormDto.setAddress3("test");
+        accountService.processNewAccount(signUpFormDto);
     }
 
     @AfterEach

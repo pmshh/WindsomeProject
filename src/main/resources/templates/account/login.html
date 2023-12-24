@@ -2,18 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/fragments/fragments.html :: head"></div>
-    <!--  사용자 CSS -->
-    <link rel="stylesheet" href="css/login.css">
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
 </head>
 
 <body>
 
     <main>
-        <div th:replace="/fragments/fragments.html :: sidebar"></div>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
         <article class="content">
-            <div th:replace="/fragments/fragments.html :: nav"></div>
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
             <!-- login section -->
             <section id="login">
@@ -69,11 +67,11 @@
                 </div>
             </section>
 
-            <div th:replace="/fragments/fragments.html :: footer"></div>
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="/fragments/fragments.html :: JS"></div>
+    <div th:replace="/layouts/defaultLayout.html :: JS"></div>
 
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

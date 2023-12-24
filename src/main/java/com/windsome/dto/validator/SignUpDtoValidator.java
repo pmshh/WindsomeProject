@@ -1,6 +1,6 @@
 package com.windsome.dto.validator;
 
-import com.windsome.dto.SignUpDto;
+import com.windsome.dto.SignUpFormDto;
 import com.windsome.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,18 +15,18 @@ public class SignUpDtoValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz.isAssignableFrom(SignUpDto.class);
+        return clazz.isAssignableFrom(SignUpFormDto.class);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        SignUpDto signUpDto = (SignUpDto) target;
-        if (accountRepository.existsByUserIdentifier(signUpDto.getUserIdentifier())) {
-            errors.rejectValue("userId", "invalid.userId", new Object[]{signUpDto.getUserIdentifier()}, "이미 사용중인 아이디입니다.");
+        SignUpFormDto signUpFormDto = (SignUpFormDto) target;
+        if (accountRepository.existsByUserIdentifier(signUpFormDto.getUserIdentifier())) {
+            errors.rejectValue("userId", "invalid.userId", new Object[]{signUpFormDto.getUserIdentifier()}, "이미 사용중인 아이디입니다.");
         }
 
-        if (accountRepository.existsByEmail(signUpDto.getEmail())) {
-            errors.rejectValue("email", "invalid.email", new Object[]{signUpDto.getEmail()}, "이미 사용중인 이메일입니다.");
+        if (accountRepository.existsByEmail(signUpFormDto.getEmail())) {
+            errors.rejectValue("email", "invalid.email", new Object[]{signUpFormDto.getEmail()}, "이미 사용중인 이메일입니다.");
         }
     }
 }
