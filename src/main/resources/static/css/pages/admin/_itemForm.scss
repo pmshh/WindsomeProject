@@ -113,6 +113,20 @@
                     select.sell_status {
                         width: calc(50% - 1px);
                     }
+
+                    span {
+                        display: none;
+                        margin-top: 3px;
+                    }
+
+                    span.discount_price {
+                        display: inline-block;
+                    }
+
+                    span.discount_text {
+                        display: inline-block;
+
+                    }
                 }
             }
         }

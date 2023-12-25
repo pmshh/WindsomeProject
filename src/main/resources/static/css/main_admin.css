@@ -339,6 +339,16 @@ footer .footer_copyright {
 .add_item_body form table tbody td select.sell_status {
   width: calc(50% - 1px);
 }
+.add_item_body form table tbody td span {
+  display: none;
+  margin-top: 3px;
+}
+.add_item_body form table tbody td span.discount_price {
+  display: inline-block;
+}
+.add_item_body form table tbody td span.discount_text {
+  display: inline-block;
+}
 .add_item_body form .btn_box {
   padding: 10px 0;
   text-align: center;

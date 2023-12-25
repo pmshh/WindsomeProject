@@ -37,6 +37,7 @@
                                                 <option value="SELL">판매중</option>
                                                 <option value="SOLD_OUT">품절</option>
                                             </select>
+                                            <span class="text-danger sell_status_warn">판매 상태를 선택해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -50,6 +51,7 @@
                                             <select name="child_cate_id" id="child_cate_id" class="cate2">
                                                 <option selected value="none">선택</option>
                                             </select>
+                                            <span class="text-danger category_warn">카테고리를 선택해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -57,7 +59,8 @@
                                             <label th:for="*{itemNm}">상품명 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <input type="text" th:field="*{itemNm}" placeholder="상품명을 입력해주세요.">
+                                            <input class="name_input" type="text" th:field="*{itemNm}" placeholder="상품명">
+                                            <span class="text-danger name_warn">상품명을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -65,7 +68,19 @@
                                             <label th:for="*{price}">가격 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <input type="text" th:field="*{price}" placeholder="상품의 가격을 입력해주세요.">
+                                            <input class="price_input" type="text" th:field="*{price}" placeholder="가격">
+                                            <span class="text-danger price_warn">상품의 가격을 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="discount">할인율 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="discount_interface" placeholder="할인율" maxlength="2" value="0">
+                                            <input class="discount_input" type="hidden" name="discount" id="discount">
+                                            <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
+                                            <span class="discount_text">할인 가격 : <span class="discount_price"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -73,8 +88,9 @@
                                             <label th:for="*{stockNumber}">재고 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <input class="nickname_input" th:field="*{stockNumber}"
-                                                placeholder="상품의 재고를 입력해주세요.">
+                                            <input class="stock_input" th:field="*{stockNumber}"
+                                                placeholder="재고">
+                                            <span class="text-danger stock_warn">상품의 재고를 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -82,8 +98,9 @@
                                             <label th:for="*{itemDetail}">상품 상세 내용 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <textarea th:field="*{itemDetail}" placeholder="상품의 상세 내용을 입력해주세요"
+                                            <textarea th:field="*{itemDetail}" placeholder="상세 내용"
                                                 id="item_detail_textarea"></textarea>
+                                            <span class="text-danger detail_warn">상품의 상세 내용을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
@@ -115,7 +132,7 @@
                             </table>
                             <div class="btn_box">
                                 <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:action="@{/admin/item/new}"
-                                    class="black_btn" type="submit">저장</button>
+                                    class="black_btn enroll_btn" type="submit">저장</button>
                                 <button th:unless="${#strings.isEmpty(itemFormDto.id)}"
                                     th:action="@{'/admin/item/' + ${itemFormDto.id} }" class="white_btn"
                                     type="submit">수정</button>
@@ -135,12 +152,14 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <script th:inline="javascript">
         $(function () {
+            /* 위지웍 적용 */
             ClassicEditor
                 .create(document.querySelector('#item_detail_textarea'))
                 .catch(error => {
                     console.error(error);
                 });
 
+            /* 파일 유효성 검사 */
             let errorMessage = [[${ errorMessage }]];
             if (errorMessage != null) {
                 alert(errorMessage);
@@ -159,11 +178,10 @@
                 $(this).siblings(".fake_input").attr('value', fileName);
             })
 
-            // category
+            /* 카테고리 추가 */
             let jsonData = JSON.parse([[${categories}]]);
             console.log(jsonData);
 
-            // category 대분류
             let cate1Arr = [];
             let cate1Obj = {};
 
@@ -181,7 +199,6 @@
                 cate1Select.append("<option name='cateParent' value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
             }
 
-            // category 중분류
             cate1Select.on("change", function() {
                 let cate2Arr = [];
                 let cate2Obj = {};
@@ -208,6 +225,134 @@
                     }
                 }
             });
+
+            /* 상품 등록 버튼 */
+            $(".enroll_btn").on("click",function (e) {
+                e.preventDefault();
+                let itemForm = $("#itemFormDto");
+
+                let itemSellStatusChk = false;
+                let categoryChk = false;
+                let itemNmChk = false;
+                let priceChk = false;
+                let discountChk = false;
+                let stockNumberChk = false;
+                let itemDetailChk = false;
+
+                let itemSellStatus = $(".sell_status").val();
+                let category = $(".cate1").val();
+                let itemNm = $(".name_input").val();
+                let price = $(".price_input").val();
+                let discount = $(".discount_interface").val();
+                let stockNumber = $(".stock_input").val();
+                let itemDetail = $("p").html();
+
+                // 공란 체크
+                if (itemSellStatus !== 'none') {
+                    $(".sell_status_warn").css('display', 'none');
+                    itemSellStatusChk = true;
+                } else {
+                    $(".sell_status_warn").css('display', 'block');
+                    itemSellStatusChk = false;
+                }
+
+                if (category !== 'none') {
+                    $(".category_warn").css('display', 'none');
+                    categoryChk = true;
+                } else {
+                    $(".category_warn").css('display', 'block');
+                    categoryChk = false;
+                }
+
+                if (itemNm!== "") {
+                    $(".name_warn").css('display', 'none');
+                    itemNmChk = true;
+                } else {
+                    $(".name_warn").css('display', 'block');
+                    itemNmChk = false;
+                }
+
+                if (price !== "") {
+                    $(".price_warn").css('display', 'none');
+                    priceChk = true;
+                } else {
+                    $(".price_warn").css('display', 'block');
+                    priceChk = false;
+                }
+
+                if (isNaN(discount)) {
+                    $(".discount_warn").css('display', 'block');
+                    discountChk = false;
+                } else {
+                    $(".discount_warn").css('display', 'none');
+                    discountChk = true;
+                }
+
+                if (stockNumber !== "") {
+                    $(".stock_warn").css('display', 'none');
+                    stockNumberChk = true;
+                } else {
+                    $(".stock_warn").css('display', 'block');
+                    stockNumberChk = false;
+                }
+
+                if (itemDetail !== '<br data-cke-filler="true">') {
+                    $(".detail_warn").css('display', 'none');
+                    itemDetailChk = true;
+                } else {
+                    $(".detail_warn").css('display', 'block');
+                    itemDetailChk = false;
+                }
+
+                console.log("itemSellStatusChk = " + itemSellStatusChk);
+                console.log("categoryChk = " + categoryChk);
+                console.log("itemNmChk = " + itemNmChk);
+                console.log("priceChk = " + priceChk);
+                console.log("discountChk = " + discountChk);
+                console.log("stockNumberChk = " + stockNumberChk);
+                console.log("itemDetailChk = " + itemDetailChk);
+
+                if(itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk){
+                    itemForm.submit();
+                } else {
+                    return false;
+                }
+            })
+
+            /* 할인율 설정 */
+            $(".discount_interface").on("propertychange change keyup paste input", function(){
+
+                let userInput = $(".discount_interface");
+                let discountInput = $(".discount_input");
+
+                let discountRate = userInput.val();
+                let sendDiscountRate = discountRate / 100;
+                let itemPrice = $(".price_input").val();
+                let discountPrice = itemPrice * (1 - sendDiscountRate);
+
+                if (!isNaN(discountRate)) {
+                    $(".discount_price").html(discountPrice);
+                    discountInput.val(sendDiscountRate);
+                }
+            });
+
+            /* 할인율 설정 */
+            $(".price_input").on("propertychange change keyup paste input", function(){
+
+                let userInput = $(".discount_interface");
+                let discountInput = $(".discount_input");
+
+                let discountRate = userInput.val();
+                let sendDiscountRate = discountRate / 100;
+                let itemPrice = $(".price_input").val();
+                let discountPrice = itemPrice * (1 - sendDiscountRate);
+
+                if (!isNaN(discountRate)) {
+                    $(".discount_price").html(discountPrice);
+                }
+            });
+
+
         });
     </script>
 </body>
