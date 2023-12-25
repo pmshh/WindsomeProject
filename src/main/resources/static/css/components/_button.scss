@@ -10,10 +10,61 @@ button.black_btn {
     color: #fff;
     background-color: #151515;
     border-radius: 0 !important;
+
+    &:hover {
+        background-color: #474747;
+    }
 }
 
-button.black_btn:hover {
-    background-color: #474747;
+button.black_btn_sm {
+    display: inline-block;
+    width: 90px;
+    padding: 10px 8px 10px 8px;
+    font-size: 13px;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    background-color: #151515;
+    border-radius: 0 !important;
+
+    &:hover {
+        background-color: #474747;
+    }
+}
+
+button.white_btn {
+    display: inline-block;
+    width: 130px;
+    padding: 10px 8px 10px 8px;
+    font-size: 13px;
+    border: 1px solid #e2e2e2;
+    vertical-align: middle;
+    text-align: center;
+    color: #222;
+    background-color: #fff;
+    border-radius: 0px !important;
+
+    &:hover {
+        border: 1px solid black;
+    }
+}
+
+button.white_btn_sm {
+    display: inline-block;
+    width: 90px;
+    padding: 10px 8px 10px 8px;
+    font-size: 13px;
+    border: 1px solid #e2e2e2;
+    vertical-align: middle;
+    text-align: center;
+    color: #222;
+    background-color: #fff;
+    border-radius: 0px !important;
+
+    &:hover {
+        border: 1px solid black;
+    }
 }
 
 a.white_btn {
@@ -27,8 +78,62 @@ a.white_btn {
     color: #222;
     background-color: #fff;
     border-radius: 0px !important;
+
+    &:hover {
+        border: 1px solid black;
+    }
 }
 
-a.white_btn:hover {
-    border: 1px solid black;
+label.black_btn {
+    display: inline-block;
+    width: 130px;
+    padding: 10px 8px 10px 8px;
+    font-size: 13px;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    background-color: #151515;
+    border-radius: 0 !important;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #474747;
+    }
+}
+
+label.black_btn_sm {
+    display: inline-block;
+    width: 90px;
+    padding: 10px 8px 10px 8px;
+    font-size: 13px;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    background-color: #151515;
+    border-radius: 0 !important;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #474747;
+    }
+}
+
+label.white_btn_sm {
+    display: inline-block;
+    width: 90px;
+    padding: 4px 3px 4px 3px;
+    font-size: 11px;
+    border: 1px solid #e2e2e2;
+    vertical-align: middle;
+    text-align: center;
+    color: #222;
+    background-color: #fff;
+    border-radius: 0px !important;
+    cursor: pointer;
+
+    &:hover {
+        border: 1px solid black;
+    }
 }

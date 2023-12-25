@@ -14,191 +14,65 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- xeicon css -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-    <link rel="stylesheet" href="/css/adminStyle.css">
+
+    <link rel="stylesheet" href="/css/main_admin.css">
 </th:block>
 
 <body>
     <main>
-        <!-- sidebar -->
-        <aside class="sidebar active" th:fragment="sidebar">
-            <div class="top_logo">
-                <a th:href="@{/}">
-                    <h1>WINDSOME</h1>
-                </a>
-            </div>
-            <div class="top_nav">
-                <ul>
-                    <li sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/login}">LOGIN</a>
-                    </li>
-                    <li sec:authorize="isAuthenticated()">
-                        <form action="#" th:action="@{/logout}" method="post">
-                            <button type="submit">LOGOUT</button>
-                        </form>
-                    </li>
-                    <li>
-                        <a th:href="@{/signUp}">JOIN</a>
-                    </li>
-                    <li>
-                        <a href="cart.html">CART</a>
-                    </li>
-                    <li>
-                        <a href="orderlist.html">ORDER</a>
-                    </li>
-                    <li>
-                        <a href="mypage.html">MYPAGE</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="top_menu">
-                <div class="category">
-                    <h2>CATEGORY</h2>
-                    <ul>
-                        <li>
-                            <a href="../index.html">ALL</a>
-                        </li>
-                        <li>
-                            <a href="../index.html">OUTER</a>
-                            <div class="sub_category">
-                                <ul>
-                                    <li><a href="../index.html">Padding & Jumper</a></li>
-                                    <li><a href="../index.html">Coat & Jacket</a></li>
-                                    <li><a href="../index.html">Cardigan</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="../index.html">TOP</a>
-                            <div class="sub_category">
-                                <ul>
-                                    <li><a href="../index.html">Knitwear</a></li>
-                                    <li><a href="../index.html">T-Shirt</a></li>
-                                    <li><a href="../index.html">Shirt</a></li>
-                                    <li><a href="../index.html">MTM & Hoodie</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="../index.html">BOTTOM</a>
-                            <div class="sub_category">
-                                <ul>
-                                    <li><a href="../index.html">Jean & Denim</a></li>
-                                    <li><a href="../index.html">Trousers</a></li>
-                                    <li><a href="../index.html">Sweat Pants</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="../index.html">SHOES</a>
-                        </li>
-                        <li>
-                            <a href="../index.html">ACC</a>
-                            <div class="sub_category">
-                                <ul>
-                                    <li><a href="../index.html">Eyewear</a></li>
-                                    <li><a href="../index.html">Hat</a></li>
-                                    <li><a href="../index.html">Bag</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
+        <aside class="sidebar" th:fragment="sidebar (currentMenu)">
+            <div class="sidebar_logo">
+                <div class="profile_img">
+                    <img src="/images/기본 프로필.png" class="" alt="">
                 </div>
-                <div class="boardinfo">
-                    <h2>COMMUNITY</h2>
-                    <ul>
-                        <li>
-                            <a href="board.html">NOTICE</a>
-                        </li>
-                        <li>
-                            <a href="board.html">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="board.html">Q&A</a>
-                        </li>
-                        <li>
-                            <a href="board.html">REVIEW</a>
-                        </li>
+                <div class="profile_name">
+                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        pms000723
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="search_form">
-                <form action="">
-                    <input type="text">
-                    <i class="fa-solid fa-magnifying-glass fz16"></i>
-                </form>
-            </div>
-            <div class="menu_cs">
-                <ul>
-                    <li>
-                        T.070-0000-0000
-                    </li>
-                    <li>
-                        mon-fri 09:00pm-18:00pm
-                        <br>
-                        sat,sun,holiday off
-                        <br>
-                        <br>
-                        예금주 : 주식회사 윈섬
-                        <br>
-                        우리 1002-449-862316
-                    </li>
-                </ul>
+            <div class="sidebar_menu">
+                <div class="sidebar-header">
+                    NAVIGATION
+                </div>
+                <div class="sidebar-item">
+                    <a th:href="@{/admin/main}" class="sidebar-link" th:classappend="${currentMenu == 'home'}? active">
+                        <i class="xi-cog pe-2"></i>
+                        Home
+                    </a>
+                    <a th:href="@{/admin/item/new}" class="sidebar-link"
+                        th:classappend="${currentMenu == 'productManagement'}? active">
+                        <i class="xi-shop pe-2"></i>
+                        상품 관리
+                    </a>
+                    <a href="" class="sidebar-link" th:classappend="${currentMenu == 'orderManagement'}? active">
+                        <i class="xi-cart-o pe-2"></i>
+                        주문 관리
+                    </a>
+                    <a href="" class="sidebar-link" th:classappend="${currentMenu == 'customerManagement'}? active">
+                        <i class="xi-user-o pe-2"></i>
+                        고객 관리
+                    </a>
+                    <a href="" class="sidebar-link" th:classappend="${currentMenu == 'boardManagement'}? active">
+                        <i class="xi-list pe-2"></i>
+                        게시판 관리
+                    </a>
+                </div>
             </div>
         </aside>
 
-        <!-- content -->
         <article class="content">
-            <!-- nav -->
+            <!-- navigation -->
             <nav th:fragment="nav">
                 <div class="menu">
                     <ul class="menu_link">
-                        <li sec:authorize="hasRole('ADMIN')">
-                            <a th:href="@{/admin/main}">Admin</a>
-                        </li>
-                        <li sec:authorize="!isAuthenticated()">
-                            <a th:href="@{/login}">Login</a>
-                        </li>
-                        <li sec:authorize="isAuthenticated()">
-                            <form action="#" th:action="@{/logout}" method="post">
-                                <button type="submit">Logout</button>
-                            </form>
-                        </li>
-                        <li class="account_menu">
-                            <a href="#none">My Account</a>
-                            <div class="account_menu">
-                                <ul>
-                                    <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/signUp}">Join</a>
-                                    </li>
-                                    <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/account/profile}">Modify</a>
-                                    </li>
-                                    <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/login}">Modify</a>
-                                    </li>
-                                    <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/mypage}">Mypage</a>
-                                    </li>
-                                    <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/login}">Mypage</a>
-                                    </li>
-                                    <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/order-check}">Order Check</a>
-                                    </li>
-                                    <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/login}">Order Check</a>
-                                    </li>
-                                    <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/wishlist}">Wish List</a>
-                                    </li>
-                                    <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/login}">Wish List</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
                         <li>
-                            <a href="cart.html">Cart / 0</a>
+                            <a th:href="@{/}">
+                                <i class="xi-log-out" style="font-size: 24px;"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -256,6 +130,7 @@
                     $('nav').css('opacity', '.6');
             });
         </script>
+
         <!-- sidebar toggle 기능 -->
         <script>
             let toggleBtn = $('.menu_toggle');
@@ -263,11 +138,9 @@
             toggleBtn.click(function (e) {
                 e.preventDefault();
                 sidebar.toggleClass("active");
-                console.log('Btn 눌림');
             })
         </script>
     </th:block>
-
     <script type="application/javascript" th:inline="javascript" th:fragment="csrf">
         $(function () {
             var csrfToken = /*[[${_csrf.token}]]*/ null;

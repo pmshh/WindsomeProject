@@ -1,8 +1,8 @@
 package com.windsome.service;
 
-import com.windsome.dto.SignUpDto;
+import com.windsome.dto.ProfileFormDto;
+import com.windsome.dto.SignUpFormDto;
 import com.windsome.entity.Account;
-import com.windsome.dto.ProfileDto;
 import com.windsome.constant.Role;
 import com.windsome.service.mail.EmailMessage;
 import com.windsome.service.mail.EmailService;
@@ -31,22 +31,22 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-    private final EmailService emailService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
-    public Account processNewAccount(SignUpDto signUpDto) {
-        return saveNewAccount(signUpDto);
+    public Account processNewAccount(SignUpFormDto signUpFormDto) {
+        return saveNewAccount(signUpFormDto);
     }
 
-    private Account saveNewAccount(SignUpDto signUpDto) {
+    private Account saveNewAccount(SignUpFormDto signUpFormDto) {
         Account account = Account.builder()
-                .userIdentifier(signUpDto.getUserIdentifier())
-                .email(signUpDto.getEmail())
-                .name(signUpDto.getName())
-                .password(passwordEncoder.encode(signUpDto.getPassword()))
-                .address1(signUpDto.getAddress1())
-                .address2(signUpDto.getAddress2())
-                .address3(signUpDto.getAddress3())
+                .userIdentifier(signUpFormDto.getUserIdentifier())
+                .email(signUpFormDto.getEmail())
+                .name(signUpFormDto.getName())
+                .password(passwordEncoder.encode(signUpFormDto.getPassword()))
+                .address1(signUpFormDto.getAddress1())
+                .address2(signUpFormDto.getAddress2())
+                .address3(signUpFormDto.getAddress3())
                 .state(Role.USER)
                 .build();
         return accountRepository.save(account);
@@ -63,9 +63,9 @@ public class AccountService {
         return authNum;
     }
 
-    public void updateProfile(Account account, ProfileDto profileDto) {
-        modelMapper.map(profileDto, account);
-        account.setPassword(passwordEncoder.encode(profileDto.getPassword()));
+    public void updateProfile(Account account, ProfileFormDto profileFormDto) {
+        modelMapper.map(profileFormDto, account);
+        account.setPassword(passwordEncoder.encode(profileFormDto.getPassword()));
         accountRepository.save(account);
     }
 
@@ -82,18 +82,11 @@ public class AccountService {
         account.setPassword(passwordEncoder.encode(authNum));
     }
 
-    // 회원가입 후 자동 로그인
     public void login(String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(authentication);
-
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-//                new UserAccount(account),
-//                account.getPassword(),
-//                List.of(new SimpleGrantedAuthority("ROLE_" + account.getState())));
-//        SecurityContextHolder.getContext().setAuthentication(token);
     }
 
     public boolean userEmailCheck(String email, String name) {

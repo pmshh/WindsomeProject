@@ -7,59 +7,209 @@
 
 <body>
     <main>
-        <div th:replace="/layouts/adminLayout.html :: sidebar"></div>
+        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
 
         <article class="content">
             <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-            <!-- section -->
-            <section class="content px-3 py-2">
-                <div class="container-fluid">
-                    <div class="content-head mb-3">
-                        <h4>아이템 등록</h4>
+            <section>
+                <div class="container">
+                    <div class="add_item_header">
+                        <h2>상품 등록</h2>
                     </div>
-                    <div class="content-body">
-                        <div class="form_box">
-                            <form th:action="@{/admin/item/new}" th:object="${itemFormDto}" method="post">
-                                <div class="mb-3">
-                                    <label th:for="*{id}" class="form-label">name</label>
-                                    <input type="text" class="form-control" th:field="*{id}">
-                                </div>
-                                <div class="mb-3">
-                                    <label th:for="*{itemNm}" class="form-label">content</label>
-                                    <input type="text" class="form-control" th:field="*{itemNm}">
-                                </div>
-                                <div class="mb-3">
-                                    <label th:for="*{price}" class="form-label">price</label>
-                                    <input type="text" class="form-control" th:field="*{price}">
-                                </div>
-                                <div class="mb-3">
-                                    <label th:for="*{itemDetail}" class="form-label">discount</label>
-                                    <input type="text" class="form-control" th:field="*{itemDetail}">
-                                </div>
-                                <div class="mb-3">
-                                    <label th:for="*{stockNumber}" class="form-label">cnt</label>
-                                    <input type="text" class="form-control" th:field="*{stockNumber}">
-                                </div>
-                                <div class="mb-3">
-                                    <label th:for="*{itemSellStatus}" class="form-label">cateCode</label>
-                                    <input type="text" class="form-control" th:field="*{itemSellStatus}">
-                                </div>
-                                <button type="submit">아이템 등록</button>
-                            </form>
-                        </div>
-                        
+                    <div class="add_item_body mt-5">
+                        <form id="itemFormDto" th:action="@{/admin/item/new}" th:object="${itemFormDto}" method="post"
+                            enctype="multipart/form-data">
+                            <table>
+                                <colgroup>
+                                    <col style="width:150px;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                    <input th:type="hidden" th:field="*{id}"></input>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{itemSellStatus}">판매 상태 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <select class="sell_status" th:field="*{itemSellStatus}">
+                                                <option selected value="none">선택</option>
+                                                <option value="SELL">판매중</option>
+                                                <option value="SOLD_OUT">품절</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="parent_cate_id">카테고리 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <select name="parent_cate_id" id="parent_cate_id" class="cate1">
+                                                <option selected value="none">선택</option>
+                                            </select>
+                                            <select name="child_cate_id" id="child_cate_id" class="cate2">
+                                                <option selected value="none">선택</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{itemNm}">상품명 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input type="text" th:field="*{itemNm}" placeholder="상품명을 입력해주세요.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{price}">가격 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input type="text" th:field="*{price}" placeholder="상품의 가격을 입력해주세요.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{stockNumber}">재고 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="nickname_input" th:field="*{stockNumber}"
+                                                placeholder="상품의 재고를 입력해주세요.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{itemDetail}">상품 상세 내용 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <textarea th:field="*{itemDetail}" placeholder="상품의 상세 내용을 입력해주세요"
+                                                id="item_detail_textarea"></textarea>
+                                        </td>
+                                    </tr>
+                                    <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
+                                        <tr th:each="num: ${#numbers.sequence(1,5)}">
+                                            <th scope="row">
+                                                <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
+                                            </th>
+                                            <td>
+                                                <input class="fake_input" type="text">
+                                                <label class="white_btn_sm" th:for="${'img' + num}">파일 찾기</label>
+                                                <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + num}">
+                                            </td>
+                                        </tr>
+                                    </div>
+                                    <div th:if="${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
+                                        <tr th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
+                                            <th scope="row">
+                                                <label th:for="${'img' + num}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                            </th>
+                                            <td>
+                                                <input class="fake_input" type="text">
+                                                <label class="white_btn_sm" th:for="${'img' + num}">파일 찾기</label>
+                                                <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + num}">
+                                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                                            </td>
+                                        </tr>
+                                    </div>
+                                </tbody>
+                            </table>
+                            <div class="btn_box">
+                                <button th:if="${#strings.isEmpty(itemFormDto.id)}" th:action="@{/admin/item/new}"
+                                    class="black_btn" type="submit">저장</button>
+                                <button th:unless="${#strings.isEmpty(itemFormDto.id)}"
+                                    th:action="@{'/admin/item/' + ${itemFormDto.id} }" class="white_btn"
+                                    type="submit">수정</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </section>
+
+            <div th:replace="/layouts/adminLayout.html :: footer"></div>
         </article>
     </main>
 
     <div th:replace="/layouts/adminLayout.html :: JS"></div>
     <div th:replace="/layouts/adminLayout.html :: csrf"></div>
+    <!-- editor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+    <script th:inline="javascript">
+        $(function () {
+            ClassicEditor
+                .create(document.querySelector('#item_detail_textarea'))
+                .catch(error => {
+                    console.error(error);
+                });
 
-    <!-- 사용자 JS -->
-    <script></script>
+            let errorMessage = [[${ errorMessage }]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+
+            $(".real_input").on("change", function () {
+                let fileName = $(this).val().split("\\").pop(); // 이미지 파일명
+                let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
+                fileExt = fileExt.toLowerCase(); // 소문자 변환
+
+                if (fileExt !== "jpg" && fileExt !== "jpeg" && fileExt !== "gif" && fileExt !== "png" && fileExt !== "bmp") {
+                    alert("이미지 파일만 등록이 가능합니다.");
+                    return
+                }
+
+                $(this).siblings(".fake_input").attr('value', fileName);
+            })
+
+            // category
+            let jsonData = JSON.parse([[${categories}]]);
+            console.log(jsonData);
+
+            // category 대분류
+            let cate1Arr = [];
+            let cate1Obj = {};
+
+            for (let i = 0; i < jsonData.length; i++) {
+                if (jsonData[i].tier === "1") {
+                    cate1Obj = {};
+                    cate1Obj.id = jsonData[i].id;
+                    cate1Obj.name = jsonData[i].name;
+                    cate1Arr.push(cate1Obj);
+                }
+            }
+            let cate1Select = $("select.cate1");
+
+            for (let i = 0; i < cate1Arr.length; i++) {
+                cate1Select.append("<option name='cateParent' value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
+            }
+
+            // category 중분류
+            cate1Select.on("change", function() {
+                let cate2Arr = [];
+                let cate2Obj = {};
+
+                for (let i = 0; i < jsonData.length; i++) {
+                    for (let j = 0; j < jsonData[i].children.length; j++) {
+                        if (jsonData[i].children[j].tier === "2") {
+                            cate2Obj = {};
+                            cate2Obj.id = jsonData[i].children[j].id;
+                            cate2Obj.name = jsonData[i].children[j].name;
+                            cate2Obj.parent = jsonData[i].children[j].parent;
+                            cate2Arr.push(cate2Obj);
+                        }
+                    }
+                }
+                let cate2Select = $("select.cate2");
+                cate2Select.children().remove();
+                cate2Select.append("<option value=''>선택</option>");
+
+                let selectVal = $(this).find("option:selected").val();
+                for (let i = 0; i < cate2Arr.length; i++) {
+                    if (selectVal === cate2Arr[i].parent.toString()) {
+                        cate2Select.append("<option name='cateChild' value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

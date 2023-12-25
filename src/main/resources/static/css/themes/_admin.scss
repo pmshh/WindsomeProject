@@ -1,0 +1,241 @@
+main {
+    display: flex;
+
+    .sidebar {
+        position: fixed;
+        min-width: 264px;
+        max-width: 264px;
+        background-color: var(--bs-dark);
+        min-height: 100vh;
+        z-index: 10;
+        transition: 0.35s all ease-in-out;
+
+        .sidebar_logo {
+            background-color: #1a1a1a;
+            width: 100%;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+
+            .profile_img {
+                margin-bottom: 10px;
+
+                img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+            }
+
+            .profile_name {
+                button {
+                    color: white;
+
+                    &:hover {
+                        color: #bdbdbd;
+                    }
+                }
+            }
+
+        }
+
+        .sidebar_menu {
+            .sidebar-header {
+                color: #e0ecef;
+                font-size: 12px;
+                color: #8a8a8a;
+                font-weight: bold;
+                letter-spacing: 0.5px;
+                padding: 1.5rem 1.5rem .375rem;
+                margin-bottom: 10px;
+            }
+
+            .sidebar-item {
+                .sidebar-link {
+                    padding: 0.625rem 1.625rem;
+                    color: #e0ecef;
+                    position: relative;
+                    display: block;
+                    font-size: 0.875rem;
+                    transition: all .2s ease-in-out;
+                    margin-bottom: 5px;
+
+                    &:hover {
+                        background-color: #1a1a1a;
+                    }
+
+                    &.active {
+                        background-color: #1a1a1a;
+                    }
+                }
+            }
+        }
+    }
+
+    .content {
+        flex: 1 1 0;
+        min-height: 100vh;
+        padding-left: 264px;
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding: 20px 3%;
+            height: 70px;
+            z-index: 5;
+
+            .menu {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .menu_link {
+                    display: flex;
+                    gap: 30px;
+
+                    li {
+                        padding: 20px 0;
+
+                        a,
+                        button {
+                            font-size: 13px;
+                        }
+
+                        button {
+                            outline: none;
+                            background: none;
+                            border: none;
+                        }
+
+                        .account_menu {
+                            display: none;
+                            width: 140px;
+                            background-color: #fff;
+                            padding: 10px 10px;
+                            top: 85%;
+                            left: -25%;
+                            z-index: 100;
+                            border: 1px solid #f1f1f1;
+
+                            ul li {
+                                background-color: #fff;
+                                padding: 4px 7px;
+
+                                a {
+                                    color: #000;
+                                    display: block;
+                                }
+
+                                a:hover {
+                                    color: #000;
+                                }
+                            }
+
+                            ul li:has(a:hover) {
+                                background-color: #f0f0f0;
+                            }
+                        }
+                    }
+
+                    li.account_menu {
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .menu_toggle {
+                display: none;
+
+                input {
+                    display: none;
+                }
+
+                label {
+                    width: 35px;
+                    height: 25px;
+                    display: block;
+                    position: relative;
+                    cursor: pointer;
+
+                    span {
+                        position: absolute;
+                        height: 3px;
+                        border-radius: 99px;
+                        background-color: #000;
+                        width: 100%;
+                        left: 0;
+                        transition: 0.3s;
+                    }
+
+                    span:nth-child(1) {
+                        top: 0;
+                    }
+
+                    span:nth-child(2) {
+                        top: 50%;
+                    }
+
+                    span:nth-child(3) {
+                        top: 100%;
+                    }
+                }
+
+                input:checked+label {
+                    span:nth-child(1) {
+                        top: 50%;
+                        transform: rotate(45deg);
+                    }
+
+                    span:nth-child(2) {
+                        opacity: 0;
+                    }
+
+                    span:nth-child(3) {
+                        top: 50%;
+                        transform: rotate(-45deg);
+                    }
+                }
+            }
+        }
+
+        section {
+            padding-top: 70px;
+        }
+    }
+}
+
+@media (max-width: 786px) {
+    main {
+        .sidebar {
+            position: fixed;
+            left: -264px;
+            width: 100%;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .content {
+            padding-left: 0;
+
+            nav {
+                .menu {
+                    display: none;
+                }
+
+                .menu_toggle {
+                    display: block;
+                }
+            }
+        }
+    }
+}

@@ -7,20 +7,14 @@
 
 <body>
     <main>
-        <div th:replace="/layouts/adminLayout.html :: sidebar"></div>
+        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='home')"></div>
 
         <article class="content">
             <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-            <!-- section -->
-            <section class="content px-3 py-2">
-                <div class="container-fluid">
-                    <div class="content-head mb-3">
-                        <h4>관리자 페이지</h4>
-                    </div>
-                    <div class="content-body">
-                        관리자 페이지입니다.
-                    </div>
+            <section>
+                <div class="container">
+                    Admin Page에 오신 것을 환영합니다.
                 </div>
             </section>
         </article>
@@ -28,9 +22,6 @@
 
     <div th:replace="/layouts/adminLayout.html :: JS"></div>
     <div th:replace="/layouts/adminLayout.html :: csrf"></div>
-
-    <!-- 사용자 JS -->
-    <script></script>
 </body>
 
 </html>

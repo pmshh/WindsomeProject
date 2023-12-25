@@ -1,28 +1,29 @@
 package com.windsome.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "cateCode")
-@Builder @AllArgsConstructor @NoArgsConstructor
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
     @Id @GeneratedValue
-    private Long cateCode;
+    private Long id;
 
     private String name;
 
-    private int tier;
+    private String tier;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> child = new ArrayList<>();
+    @OneToMany(mappedBy = "parent")
+    private List<Category> children = new ArrayList<>();
 }

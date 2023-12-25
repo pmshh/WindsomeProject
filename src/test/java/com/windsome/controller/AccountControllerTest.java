@@ -38,37 +38,39 @@ class AccountControllerTest {
     @DisplayName("회원 가입 화면 보이는지 테스트")
     @Test
     void signUpForm() throws Exception {
-        mockMvc.perform(get("/sign-up"))
+        mockMvc.perform(get("/signUp"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/sign-up"))
-                .andExpect(model().attributeExists("signUpForm"));
+                .andExpect(view().name("account/signUp"))
+                .andExpect(model().attributeExists("signUpFormDto"));
     }
 
     @DisplayName("회원 가입 처리 - 입력값 오류")
     @Test
     void signUpSubmit_with_wrong_input() throws Exception {
-        mockMvc.perform(post("/sign-up")
-                        .param("userId", "pms000723")
+        mockMvc.perform(post("/signUp")
+                        .param("userIdentifier", "pms000723")
                         .param("email", "email..")
-                        .param("nickname", "minsu")
+                        .param("name", "minsu")
                         .param("password", "1234")
+                        .param("passwordConfirm", "test1234")
                         .param("address1", "test")
                         .param("address2", "test")
                         .param("address3", "test")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/signUp"));
     }
 
     @DisplayName("회원 가입 처리 - 입력값 정상")
     @Test
     void signUpSubmit() throws Exception {
-        mockMvc.perform(post("/sign-up")
-                        .param("userId", "pms000723")
+        mockMvc.perform(post("/signUp")
+                        .param("userIdentifier", "pms000723")
                         .param("email", "email@email.com")
-                        .param("nickname", "minsu")
-                        .param("password", "12345678")
+                        .param("name", "minsu")
+                        .param("password", "test1234")
+                        .param("passwordConfirm", "test1234")
                         .param("address1", "test")
                         .param("address2", "test")
                         .param("address3", "test")
@@ -78,7 +80,7 @@ class AccountControllerTest {
 
         Account account = accountRepository.findByUserIdentifier("pms000723");
         assertNotNull(account);
-        assertNotEquals(account.getPassword(), "12345678");
+        assertNotEquals(account.getPassword(), "test1234");
     }
 
     @WithAccount("pms000723")
@@ -88,7 +90,7 @@ class AccountControllerTest {
         mockMvc.perform(get("/account/profile"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("profileDto"));
+                .andExpect(model().attributeExists("profileFormDto"));
     }
 
     @WithAccount("pms000723")
@@ -132,7 +134,7 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/profile"))
                 .andExpect(model().attributeExists("account"))
-                .andExpect(model().attributeExists("profileDto"))
+                .andExpect(model().attributeExists("profileFormDto"))
                 .andExpect(model().hasErrors());
 
         assertNotEquals("닉네임을 길게 입력해서 에러를 발생시키자", account.getName());

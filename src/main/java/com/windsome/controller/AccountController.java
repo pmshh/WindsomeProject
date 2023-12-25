@@ -1,8 +1,8 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
-import com.windsome.dto.ProfileDto;
-import com.windsome.dto.SignUpDto;
+import com.windsome.dto.ProfileFormDto;
+import com.windsome.dto.SignUpFormDto;
 import com.windsome.dto.validator.ProfileDtoValidator;
 import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
@@ -44,20 +44,20 @@ public class AccountController {
         webDataBinder.addValidators(new ProfileDtoValidator());
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping("/signUp")
     public String signUpForm(Model model) {
-        model.addAttribute(new SignUpDto());
-        return "account/sign-up";
+        model.addAttribute(new SignUpFormDto());
+        return "account/signUp";
     }
 
-    @PostMapping("/sign-up")
-    public String signUpSubmit(@Valid SignUpDto signUpDto, Errors errors) {
+    @PostMapping("/signUp")
+    public String signUpSubmit(@Valid SignUpFormDto signUpFormDto, Errors errors) {
         if (errors.hasErrors()) {
-            return "account/sign-up";
+            return "account/signUp";
         }
 
-        Account account = accountService.processNewAccount(signUpDto);
-        accountService.login(signUpDto.getUserIdentifier(), signUpDto.getPassword());
+        Account account = accountService.processNewAccount(signUpFormDto);
+        accountService.login(signUpFormDto.getUserIdentifier(), signUpFormDto.getPassword());
         return "redirect:/";
     }
 
@@ -79,7 +79,7 @@ public class AccountController {
 
     @GetMapping("/find/pass")
     public String findPassGet() {
-        return "account/find-pass";
+        return "findPass";
     }
 
     @PostMapping("/find/pass")
@@ -93,7 +93,7 @@ public class AccountController {
 
     @GetMapping("/find/id")
     public String findIdGet() {
-        return "account/find-id";
+        return "findId";
     }
 
     @PostMapping("/find/id")
@@ -105,19 +105,19 @@ public class AccountController {
     @GetMapping("/account/profile")
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(account, ProfileDto.class));
+        model.addAttribute(modelMapper.map(account, ProfileFormDto.class));
         return "account/profile";
     }
 
     @PostMapping("/account/profile")
-    public String updateProfile(@CurrentAccount Account account, @Valid ProfileDto profileDto, Errors errors,
+    public String updateProfile(@CurrentAccount Account account, @Valid ProfileFormDto profileFormDto, Errors errors,
                                 Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return "account/profile";
         }
 
-        accountService.updateProfile(account, profileDto);
+        accountService.updateProfile(account, profileFormDto);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:/account/profile";
     }

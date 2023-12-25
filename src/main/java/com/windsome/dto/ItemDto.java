@@ -1,7 +1,6 @@
 package com.windsome.dto;
 
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.entity.Category;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ public class ItemDto {
 
     private double discount; // 할인율
 
-    private Category cateCode; // 카테고리
+//    private Category cateCode; // 카테고리
 
     private LocalDateTime regTime; // 등록 시간
 

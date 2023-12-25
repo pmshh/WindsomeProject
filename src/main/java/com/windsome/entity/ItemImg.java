@@ -1,5 +1,7 @@
 package com.windsome.entity;
 
+import com.windsome.entity.Auditing.BaseEntity;
+import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +10,7 @@ import javax.persistence.*;
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class ItemImg extends BaseEntity {
+public class ItemImg extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +34,4 @@ public class ItemImg extends BaseEntity {
         this.imgName = imgName;
         this.imgUrl = imgUrl;
     }
-
-
 }

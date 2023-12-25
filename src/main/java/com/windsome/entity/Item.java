@@ -1,12 +1,10 @@
 package com.windsome.entity;
 
 import com.windsome.constant.ItemSellStatus;
+import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
@@ -34,13 +32,9 @@ public class Item extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cate_code")
-    private Category cateCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cate_id")
+    private Category category;
 
     private double discount;
-
-    private LocalDateTime regTime;
-
-    private LocalDateTime updateTime;
 }
