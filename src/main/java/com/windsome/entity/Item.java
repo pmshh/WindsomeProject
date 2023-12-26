@@ -1,6 +1,7 @@
 package com.windsome.entity;
 
 import com.windsome.constant.ItemSellStatus;
+import com.windsome.dto.ItemFormDto;
 import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
@@ -37,4 +38,13 @@ public class Item extends BaseTimeEntity {
     private Category category;
 
     private double discount;
+
+    public void updateItem(ItemFormDto itemFormDto) {
+        this.itemNm = itemFormDto.getItemNm();
+        this.price = itemFormDto.getPrice();
+        this.stockNumber = itemFormDto.getStockNumber();
+        this.itemDetail = itemFormDto.getItemDetail();
+        this.itemSellStatus = itemFormDto.getItemSellStatus();
+        this.category = itemFormDto.getCategory();
+    }
 }

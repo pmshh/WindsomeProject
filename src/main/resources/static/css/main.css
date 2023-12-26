@@ -351,6 +351,9 @@ main {
   .content nav .menu_toggle {
     display: block;
   }
+  .signup_body form {
+    width: 100%;
+  }
 }
 /* navigation start */
 nav {
@@ -1915,4 +1918,13 @@ footer .footer_copyright {
   text-align: center;
   display: block;
   margin-top: 30px;
+}
+
+@media (max-width: 786px) {
+  .signup_body form {
+    width: 100%;
+  }
+  .signup_body form table colgroup .test {
+    width: 25% !important;
+  }
 }

@@ -144,3 +144,35 @@
 .ck-editor__editable {
     min-height: 400px;
 }
+
+@media (max-width: 1172px) {
+    .add_item_body {
+        form {
+            width: 80%;
+
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 786px) {
+    .add_item_body {
+        form {
+            width: 100%;
+
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
+                }
+            }
+        }
+    }
+}

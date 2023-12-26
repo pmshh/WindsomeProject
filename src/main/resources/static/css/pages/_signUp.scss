@@ -139,5 +139,20 @@
             margin-top: 30px;
         }
     }
+}
 
+@media (max-width: 786px) {
+    .signup_body {
+        form {
+            width: 100%;
+
+            table {
+                colgroup {
+                    .test {
+                        width: 25% !important;
+                    }
+                }
+            }
+        }
+    }
 }

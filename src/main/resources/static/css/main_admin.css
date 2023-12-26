@@ -360,6 +360,22 @@ footer .footer_copyright {
   min-height: 400px;
 }
 
+@media (max-width: 1172px) {
+  .add_item_body form {
+    width: 80%;
+  }
+  .add_item_body form table colgroup col:nth-child(1) {
+    width: 25% !important;
+  }
+}
+@media (max-width: 786px) {
+  .add_item_body form {
+    width: 100%;
+  }
+  .add_item_body form table colgroup col:nth-child(1) {
+    width: 25% !important;
+  }
+}
 main {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -441,6 +457,7 @@ main .content {
   padding-left: 264px;
 }
 main .content nav {
+  background-color: white;
   position: fixed;
   top: 0;
   left: 0;
