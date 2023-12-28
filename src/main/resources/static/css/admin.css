@@ -1,5 +1,6 @@
 /* reset start */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+@import url("https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 @font-face {
   font-family: "JeonjuCraftMjB";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/JeonjuCraftMjB.woff2") format("woff2");
@@ -41,6 +42,7 @@ button:focus {
 button.black_btn {
   display: inline-block;
   width: 130px;
+  height: 40px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid transparent;
@@ -57,6 +59,7 @@ button.black_btn:hover {
 button.black_btn_sm {
   display: inline-block;
   width: 90px;
+  height: 40px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid transparent;
@@ -73,6 +76,7 @@ button.black_btn_sm:hover {
 button.white_btn {
   display: inline-block;
   width: 130px;
+  height: 40px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid #e2e2e2;
@@ -89,6 +93,7 @@ button.white_btn:hover {
 button.white_btn_sm {
   display: inline-block;
   width: 90px;
+  height: 40px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid #e2e2e2;
@@ -102,9 +107,59 @@ button.white_btn_sm:hover {
   border: 1px solid black;
 }
 
+button.black_btn_w90_h40 {
+  display: inline-block;
+  width: 90px;
+  height: 40px;
+  font-size: 12px;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  text-align: center;
+  color: #fff;
+  background-color: #151515;
+  border-radius: 0 !important;
+}
+button.black_btn_w90_h40:hover {
+  background-color: #474747;
+}
+
+button.white_btn_w90_h40 {
+  display: inline-block;
+  width: 90px;
+  height: 40px;
+  font-size: 12px;
+  border: 1px solid #e2e2e2;
+  vertical-align: middle;
+  text-align: center;
+  color: #222;
+  background-color: #fff;
+  border-radius: 0px !important;
+}
+button.white_btn_w90_h40:hover {
+  border: 1px solid black;
+}
+
+a.black_btn {
+  display: inline-block;
+  width: 130px;
+  height: 40px;
+  padding: 10px 8px 10px 8px;
+  font-size: 13px;
+  border: 1px solid #e2e2e2;
+  vertical-align: middle;
+  text-align: center;
+  color: #fff;
+  background-color: #151515;
+  border-radius: 0px !important;
+}
+a.black_btn:hover {
+  background-color: #474747;
+}
+
 a.white_btn {
   display: inline-block;
   width: 130px;
+  height: 40px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid #e2e2e2;
@@ -118,9 +173,44 @@ a.white_btn:hover {
   border: 1px solid black;
 }
 
+a.black_btn_w90_h40 {
+  display: inline-block;
+  width: 90px;
+  height: 40px;
+  padding: 10px 8px 10px 8px;
+  font-size: 12px;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  text-align: center;
+  color: #fff;
+  background-color: #151515;
+  border-radius: 0 !important;
+}
+a.black_btn_w90_h40:hover {
+  background-color: #474747;
+}
+
+a.white_btn_w90_h40 {
+  display: inline-block;
+  width: 90px;
+  height: 40px;
+  padding: 10px 8px 10px 8px;
+  font-size: 12px;
+  border: 1px solid #e2e2e2;
+  vertical-align: middle;
+  text-align: center;
+  color: #222;
+  background-color: #fff;
+  border-radius: 0px !important;
+}
+a.white_btn_w90_h40:hover {
+  border: 1px solid black;
+}
+
 label.black_btn {
   display: inline-block;
   width: 130px;
+  height: 40px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid transparent;
@@ -138,6 +228,7 @@ label.black_btn:hover {
 label.black_btn_sm {
   display: inline-block;
   width: 90px;
+  height: 25px;
   padding: 10px 8px 10px 8px;
   font-size: 13px;
   border: 1px solid transparent;
@@ -155,6 +246,7 @@ label.black_btn_sm:hover {
 label.white_btn_sm {
   display: inline-block;
   width: 90px;
+  height: 25px;
   padding: 4px 3px 4px 3px;
   font-size: 11px;
   border: 1px solid #e2e2e2;
@@ -171,7 +263,7 @@ label.white_btn_sm:hover {
 
 /* footer start */
 footer {
-  padding: 100px 0;
+  padding: 140px 0 90px;
 }
 footer .footer_header {
   text-align: center;
@@ -210,6 +302,9 @@ footer .footer_copyright {
 }
 
 /* signUp page start */
+.add_item_header {
+  position: relative;
+}
 .add_item_header h2 {
   font-size: 15px;
   text-align: center;
@@ -219,6 +314,25 @@ footer .footer_copyright {
   height: 1px;
   background: #aaa;
   margin: 20px auto;
+}
+
+.box {
+  position: absolute;
+  left: 34%;
+  top: 65px;
+}
+.box ol li {
+  font-size: 11px;
+  display: inline-block;
+}
+.box ol li.link::after {
+  content: "/";
+  font-family: "fontawesome";
+  font-weight: normal;
+  padding-left: 2px;
+}
+.box ol li.current {
+  color: rgba(59, 66, 73, 0.75);
 }
 
 .add_item_body {
@@ -376,6 +490,155 @@ footer .footer_copyright {
     width: 25% !important;
   }
 }
+.item_mng_header h2 {
+  font-size: 15px;
+  text-align: center;
+}
+.item_mng_header .divider {
+  width: 70px;
+  height: 1px;
+  background: #aaa;
+  margin: 20px auto;
+}
+
+.item_mng_body {
+  margin: 0 auto;
+}
+.item_mng_body form table {
+  font-size: 12px;
+}
+.item_mng_body form table thead th {
+  padding: 15px 0 14px;
+  border-bottom: 1px solid #e5e5e5;
+  color: #353535;
+  vertical-align: middle;
+  font-weight: normal;
+  background: #fff;
+  text-align: center;
+}
+.item_mng_body form table tbody {
+  vertical-align: middle;
+  text-align: center;
+}
+.item_mng_body form table tbody tr td {
+  padding: 15px 5px 14px;
+  border-top: 1px solid #e5e5e5;
+  color: #353535;
+}
+.item_mng_body form table tbody tr td a {
+  width: 90px;
+  margin: 1px 0;
+}
+.item_mng_body form table tbody tr td a:hover {
+  text-decoration: underline;
+  color: rgb(107, 107, 107);
+}
+.item_mng_body form table tbody tr td:nth-child(2) {
+  text-align: left;
+}
+.item_mng_body .pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.item_mng_body .pagination ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 20px;
+  line-height: 50px;
+  font-size: 13px;
+}
+.item_mng_body .pagination ul li {
+  margin: 0 15px;
+}
+.item_mng_body .pagination ul li a {
+  color: #999;
+}
+.item_mng_body .pagination ul li.disabled {
+  pointer-events: none;
+}
+.item_mng_body .pagination ul .page {
+  text-align: center;
+}
+.item_mng_body .pagination ul .page:hover a {
+  color: #000;
+  font-weight: bold;
+}
+.item_mng_body .pagination ul .page.active a {
+  color: #000;
+  font-weight: bold;
+  text-decoration-line: underline;
+}
+.item_mng_body .pagination ul .prev,
+.item_mng_body .pagination ul .next {
+  color: rgb(50, 50, 50);
+  font-size: 13px;
+}
+.item_mng_body .pagination ul .prev {
+  margin-right: 20px;
+}
+.item_mng_body .pagination ul .next {
+  margin-left: 20px;
+}
+.item_mng_body .search_box {
+  margin-top: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.item_mng_body .search_box select {
+  border: 1px solid #d3d3d3;
+  font-size: 12px;
+  margin-right: 2px;
+  height: 40px;
+}
+.item_mng_body .search_box input {
+  width: 240px;
+  border: none;
+  height: 40px;
+  border: 1px solid #d3d3d3;
+  padding-left: 10px;
+  font-size: 12px;
+  margin-right: 2px;
+}
+.item_mng_body .search_box input:focus {
+  outline: none;
+}
+.item_mng_body .search_box input:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.item_mng_body .search_box input:focus::-moz-placeholder {
+  opacity: 0;
+}
+.item_mng_body .search_box input:focus:-ms-input-placeholder {
+  opacity: 0;
+}
+.item_mng_body .search_box input:focus::-ms-input-placeholder {
+  opacity: 0;
+}
+.item_mng_body .search_box input:focus::placeholder {
+  opacity: 0;
+}
+
 main {
   display: -webkit-box;
   display: -ms-flexbox;

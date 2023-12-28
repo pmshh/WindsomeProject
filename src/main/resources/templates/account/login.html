@@ -3,10 +3,11 @@
 
 <head>
     <div th:replace="/layouts/defaultLayout.html :: head"></div>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
 <body>
-
     <main>
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
@@ -70,9 +71,4 @@
             <div th:replace="/layouts/defaultLayout.html :: footer"></div>
         </article>
     </main>
-
-    <div th:replace="/layouts/defaultLayout.html :: JS"></div>
-
-    <!-- 사용자 JS -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </body>

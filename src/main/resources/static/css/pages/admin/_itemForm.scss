@@ -1,5 +1,7 @@
 /* signUp page start */
 .add_item_header {
+    position: relative;
+
     h2 {
         font-size: 15px;
         text-align: center;
@@ -10,6 +12,30 @@
         height: 1px;
         background: #aaa;
         margin: 20px auto;
+    }
+}
+
+.box {
+    position: absolute;
+    left: 34%;
+    top: 65px;
+
+    ol {
+        li {
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        li.link::after {
+            content: '/';
+            font-family: 'fontawesome';
+            font-weight: normal;
+            padding-left: 2px;
+        }
+
+        li.current {
+            color: rgba(59, 66, 73, 0.75);
+        }
     }
 }
 

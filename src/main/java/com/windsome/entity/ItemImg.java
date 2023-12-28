@@ -12,8 +12,7 @@ import javax.persistence.*;
 @ToString
 public class ItemImg extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_img_id")
     private Long id;
 

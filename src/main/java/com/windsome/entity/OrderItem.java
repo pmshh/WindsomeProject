@@ -11,8 +11,7 @@ import javax.persistence.*;
 @ToString
 public class OrderItem extends BaseTimeEntity {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long id;
 

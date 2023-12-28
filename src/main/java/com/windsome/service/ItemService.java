@@ -2,6 +2,7 @@ package com.windsome.service;
 
 import com.windsome.dto.ItemFormDto;
 import com.windsome.dto.ItemImgDto;
+import com.windsome.dto.ItemSearchDto;
 import com.windsome.entity.Category;
 import com.windsome.entity.Item;
 import com.windsome.constant.ItemSellStatus;
@@ -11,6 +12,8 @@ import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +31,11 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemImgRepository itemImgRepository;
     private final ItemImgService itemImgService;
+
+    @Transactional(readOnly = true)
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
         Item item = itemFormDto.createItem();
@@ -47,6 +55,19 @@ public class ItemService {
         return item.getId();
     }
 
+    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
+        Item item = itemRepository.findById(itemFormDto.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        item.updateItem(itemFormDto);
+
+        List<Long> itemImgIds = itemFormDto.getItemImgIds();
+
+        for (int i = 0; i < itemImgFileList.size(); i++) {
+            itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
+        }
+        return item.getId();
+    }
+
     @Transactional(readOnly = true)
     public ItemFormDto getItemFormDto(Long itemId) {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
@@ -60,19 +81,6 @@ public class ItemService {
         ItemFormDto itemFormDto = ItemFormDto.of(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
-    }
-
-    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
-        Item item = itemRepository.findById(itemFormDto.getId())
-                .orElseThrow(EntityNotFoundException::new);
-        item.updateItem(itemFormDto);
-
-        List<Long> itemImgIds = itemFormDto.getItemImgIds();
-
-        for (int i = 0; i < itemImgFileList.size(); i++) {
-            itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
-        }
-        return item.getId();
     }
 
     public Item itemSave(ItemDto itemDto) {

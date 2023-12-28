@@ -14,7 +14,47 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- xeicon css -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-    <link rel="stylesheet" href="/css/main.css">
+    <!-- custom css -->
+    <link rel="stylesheet" href="/css/default.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- fontawesome js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- common js -->
+    <script>
+        $(window).scroll(function () {
+            if ($(this).scrollTop() == 0)
+                $('nav').css('opacity', '1');
+            else
+                $('nav').css('opacity', '.6');
+        });
+
+        <!-- sidebar toggle 기능 -->
+        let toggleBtn = $('.menu_toggle');
+        let sidebar = $('.sidebar');
+        toggleBtn.click(function (e) {
+            e.preventDefault();
+            sidebar.toggleClass("active");
+        })
+    </script>
+    <!-- csrf token -->
+    <script type="application/javascript" th:inline="javascript">
+        $(function () {
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+        });
+    </script>
 </th:block>
 
 <body>
@@ -236,50 +276,6 @@
             </footer>
         </article>
     </main>
-
-    <th:block th:fragment="JS">
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- bootstrap js -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous"></script>
-        <!-- fontawesome js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
-            integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-        <!-- 스크롤 시 navbar 투명 -->
-        <script>
-            $(window).scroll(function () {
-                if ($(this).scrollTop() == 0)
-                    $('nav').css('opacity', '1');
-                else
-                    $('nav').css('opacity', '.6');
-            });
-        </script>
-
-        <!-- sidebar toggle 기능 -->
-        <script>
-            let toggleBtn = $('.menu_toggle');
-            let sidebar = $('.sidebar');
-            toggleBtn.click(function (e) {
-                e.preventDefault();
-                sidebar.toggleClass("active");
-            })
-        </script>
-    </th:block>
-
-    <script type="application/javascript" th:inline="javascript" th:fragment="csrf">
-        $(function () {
-            var csrfToken = /*[[${_csrf.token}]]*/ null;
-            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-            $(document).ajaxSend(function (e, xhr, options) {
-                xhr.setRequestHeader(csrfHeader, csrfToken);
-            });
-        });
-    </script>
 </body>
 
 </html>

@@ -148,7 +148,7 @@
 
             table {
                 colgroup {
-                    .test {
+                    col:nth-child(1) {
                         width: 25% !important;
                     }
                 }

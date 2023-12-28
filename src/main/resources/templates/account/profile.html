@@ -3,144 +3,6 @@
 
 <head>
     <div th:replace="/layouts/defaultLayout.html :: head"></div>
-</head>
-
-<body>
-
-    <main>
-        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
-
-        <article class="content">
-            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
-
-            <!-- signup section -->
-            <section id="modify">
-                <div class="container modify">
-                    <div class="modify_header">
-                        <h2>Modify</h2>
-                        <div class="divider"></div>
-                    </div>
-                    <div th:if="${message}" class="message_box alert alert-success alert-dismissible fade show">
-                        <i class="xi-check-min me-2"></i><span style="font-size: 14px;" th:text="${message}">메시지</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                    <div class="modify_body mt-5">
-                        <form id="profileFormDto" th:action="@{/account/profile}" th:object="${profileFormDto}" method="post"
-                            onsubmit="return chkPW()">
-                            <table>
-                                <colgroup>
-                                    <col style="width:150px;">
-                                    <col style="width:auto;">
-                                </colgroup>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{userIdentifier}">아이디 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <div class="id_input_box">
-                                                <input class="id_input" th:field="*{userIdentifier}" th:value="${account.getUserIdentifier()}" type="text" minlength="5"
-                                                       maxlength="20" readonly="readonly">
-                                                (영문 소문자/숫자, 5~20자)
-                                            </div>
-                                            <span class="id_input_re_1 text-success">사용 가능한 아이디입니다.</span>
-                                            <span class="id_input_re_2 text-danger">아이디가 이미 존재합니다.</span>
-                                            <span class="final_id_ck text-danger">아이디를 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{password}">비밀번호 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <div class="password_input_box">
-                                                <input class="pw_input" th:field="*{password}" type="password"
-                                                    minlength="8" maxlength="20">
-                                                (영문 대소문자/숫자, 8~20자)
-                                            </div>
-                                            <span class="final_pw_ck text-danger">비밀번호를 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{passwordConfirm}">비밀번호 확인 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <div class="password_confirm_input_box">
-                                                <input class="pwck_input" th:field="*{passwordConfirm}"
-                                                    type="password" minlength="8" maxlength="20">
-                                                (영문 대소문자/숫자, 8~20자)
-                                            </div>
-                                            <span class="pwck_input_re_1 text-success">비밀번호가 일치합니다.</span>
-                                            <span class="pwck_input_re_2 text-danger">비밀번호가 일치하지 않습니다.</span>
-                                            <span class="final_pwck_ck text-danger">비밀번호 확인을 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{name}">이름 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <div class="nickname_input_box">
-                                                <input class="nickname_input" th:field="*{name}" type="text">
-                                            </div>
-                                            <span class="final_nickname_ck text-danger">이름을 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{email}">이메일 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <div class="mail_input_box mb-1">
-                                                <input  class="mail_input" th:field="*{email}" type="email">
-                                            </div>
-                                            <div class="mail_check_box">
-                                                <input class="mail_check_input" disabled="disabled">
-                                                <a class="send_mail">인증번호 전송</a>
-                                                <a class="check_number" onclick="confirmNumber()">인증번호 확인</a>
-                                            </div>
-                                            <span class="mail_input_re_1 text-success">사용 가능한 이메일입니다.</span>
-                                            <span class="mail_input_re_2 text-danger">이메일이 이미 존재합니다.</span>
-                                            <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
-                                            <span class="need_mail_check text-danger">이메일 인증이 필요합니다.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{address1}">주소 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input th:field="*{address1}" class="address_input_1 mb-1"
-                                                readonly="readonly">
-                                            <a class="find_addr mb-1" onclick="execution_daum_address()">주소 찾기</a>
-                                            <div class="clearfix"></div>
-                                            <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
-                                                readonly="readonly">
-                                            <input th:field="*{address3}" class="address_input_3 d-block w-50 mb-1"
-                                                readonly="readonly">
-                                            <span class="final_addr_ck text-danger">주소를 입력해주세요.</span>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="btn_box">
-                                <button class="modify_btn black_btn" type="submit">회원정보수정</button>
-                                <a class="white_btn" th:href="@{/static}">취소</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
-        </article>
-    </main>
-
-    <div th:replace="/layouts/defaultLayout.html :: JS"></div>
-    <div th:replace="/layouts/defaultLayout.html :: csrf"></div>
-
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
@@ -379,6 +241,138 @@
                 }
             }).open();
         }
-
     </script>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- signup section -->
+            <section id="modify">
+                <div class="container modify">
+                    <div class="modify_header">
+                        <h2>Modify</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div th:if="${message}" class="message_box alert alert-success alert-dismissible fade show">
+                        <i class="xi-check-min me-2"></i><span style="font-size: 14px;" th:text="${message}">메시지</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div class="modify_body mt-5">
+                        <form id="profileFormDto" th:action="@{/account/profile}" th:object="${profileFormDto}" method="post"
+                            onsubmit="return chkPW()">
+                            <table>
+                                <colgroup>
+                                    <col style="width:150px;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{userIdentifier}">아이디 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="id_input_box">
+                                                <input class="id_input" th:field="*{userIdentifier}" th:value="${account.getUserIdentifier()}" type="text" minlength="5"
+                                                       maxlength="20" readonly="readonly">
+                                                (영문 소문자/숫자, 5~20자)
+                                            </div>
+                                            <span class="id_input_re_1 text-success">사용 가능한 아이디입니다.</span>
+                                            <span class="id_input_re_2 text-danger">아이디가 이미 존재합니다.</span>
+                                            <span class="final_id_ck text-danger">아이디를 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{password}">비밀번호 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="password_input_box">
+                                                <input class="pw_input" th:field="*{password}" type="password"
+                                                    minlength="8" maxlength="20">
+                                                (영문 대소문자/숫자, 8~20자)
+                                            </div>
+                                            <span class="final_pw_ck text-danger">비밀번호를 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{passwordConfirm}">비밀번호 확인 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="password_confirm_input_box">
+                                                <input class="pwck_input" th:field="*{passwordConfirm}"
+                                                    type="password" minlength="8" maxlength="20">
+                                                (영문 대소문자/숫자, 8~20자)
+                                            </div>
+                                            <span class="pwck_input_re_1 text-success">비밀번호가 일치합니다.</span>
+                                            <span class="pwck_input_re_2 text-danger">비밀번호가 일치하지 않습니다.</span>
+                                            <span class="final_pwck_ck text-danger">비밀번호 확인을 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{name}">이름 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="nickname_input_box">
+                                                <input class="nickname_input" th:field="*{name}" type="text">
+                                            </div>
+                                            <span class="final_nickname_ck text-danger">이름을 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{email}">이메일 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="mail_input_box mb-1">
+                                                <input  class="mail_input" th:field="*{email}" type="email">
+                                            </div>
+                                            <div class="mail_check_box">
+                                                <input class="mail_check_input" disabled="disabled">
+                                                <a class="send_mail">인증번호 전송</a>
+                                                <a class="check_number" onclick="confirmNumber()">인증번호 확인</a>
+                                            </div>
+                                            <span class="mail_input_re_1 text-success">사용 가능한 이메일입니다.</span>
+                                            <span class="mail_input_re_2 text-danger">이메일이 이미 존재합니다.</span>
+                                            <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
+                                            <span class="need_mail_check text-danger">이메일 인증이 필요합니다.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{address1}">주소 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input th:field="*{address1}" class="address_input_1 mb-1"
+                                                readonly="readonly">
+                                            <a class="find_addr mb-1" onclick="execution_daum_address()">주소 찾기</a>
+                                            <div class="clearfix"></div>
+                                            <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
+                                                readonly="readonly">
+                                            <input th:field="*{address3}" class="address_input_3 d-block w-50 mb-1"
+                                                readonly="readonly">
+                                            <span class="final_addr_ck text-danger">주소를 입력해주세요.</span>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="btn_box">
+                                <button class="modify_btn black_btn" type="submit">회원정보수정</button>
+                                <a class="white_btn" th:href="@{/static}">취소</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
 </body>

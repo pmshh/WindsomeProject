@@ -2,6 +2,7 @@ package com.windsome.entity;
 
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.ItemFormDto;
+import com.windsome.entity.Auditing.BaseEntity;
 import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
@@ -11,9 +12,9 @@ import javax.persistence.*;
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class Item extends BaseTimeEntity {
+public class Item extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @ToString
 public class Account extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long id;
 
