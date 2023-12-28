@@ -6,20 +6,20 @@
 
     <!-- custom js -->
     <script th:inline="javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".search_btn").on("click", function (e) {
                 e.preventDefault();
                 page(0);
             });
         })
 
-        function page(page){
+        function page(page) {
             let searchDateType = $(".search_date_type").val();
             let searchSellStatus = $(".search_sell_status").val();
             let searchBy = $(".search_by").val();
             let searchQuery = $(".search_query").val();
 
-            location.href="/admin/items/" + page + "?searchDateType=" + searchDateType
+            location.href = "/admin/items/" + page + "?searchDateType=" + searchDateType
                 + "&searchSellStatus=" + searchSellStatus
                 + "&searchBy=" + searchBy
                 + "&searchQuery=" + searchQuery;
@@ -28,104 +28,113 @@
 </head>
 
 <body>
-<main>
-    <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
+    <main>
+        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
 
-    <article class="content">
-        <div th:replace="/layouts/adminLayout.html :: nav"></div>
+        <article class="content">
+            <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-        <!-- items section -->
-        <section id="item_mng">
-            <div class="container item_mng">
-                <div class="item_mng_header">
-                    <h2>상품 관리</h2>
-                    <div class="divider"></div>
-                </div>
-                <div class="item_mng_body mt-5">
-                    <div class="table-responsive">
-                        <form th:action="@{'/admin/items/' + ${items.number}}" method="get" th:object="${items}">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th style="width: 10%;" scope="col">번호</th>
-                                    <th style="width: 30%;" scope="col">상품명</th>
-                                    <th style="width: 10%;" scope="col">상태</th>
-                                    <th style="width: 10%;" scope="col">등록자</th>
-                                    <th style="width: 20%;" scope="col">등록일</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="item, status: ${items.getContent()}">
-                                    <td th:text="${items.getTotalElements() - (items.getSize() * items.getNumber()) - status.index}"></td>
-                                    <td>
-                                        <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemNm}"></a>
-                                    </td>
-                                    <td th:text="${item.itemSellStatus == T(com.windsome.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
-                                    <td th:text="${item.createdBy}"></td>
-                                    <td th:text="${item.regTime}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+            <!-- items section -->
+            <section id="item_mng">
+                <div class="container item_mng">
+                    <div class="item_mng_header">
+                        <h2>상품 관리</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="item_mng_body mt-5">
+                        <div class="table-responsive">
+                            <form th:action="@{'/admin/items/' + ${items.number}}" method="get" th:object="${items}">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%;" scope="col">번호</th>
+                                            <th style="width: 30%;" scope="col">상품명</th>
+                                            <th style="width: 10%;" scope="col">상태</th>
+                                            <th style="width: 10%;" scope="col">등록자</th>
+                                            <th style="width: 20%;" scope="col">등록일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="item, status: ${items.getContent()}" >
+                                            <td
+                                                th:text="${items.getTotalElements() - (items.getSize() * items.getNumber()) - status.index}">
+                                            </td>
+                                            <td>
+                                                <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemNm}"></a>
+                                            </td>
+                                            <td
+                                                th:text="${item.itemSellStatus == sellStatus} ? '판매' : '품절'">
+                                            </td>
+                                            <td th:text="${item.createdBy}"></td>
+                                            <td th:text="${item.regTime}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                            <div class="pagination mt-3"
-                                 th:with="start=${(items.number/maxPage)*maxPage + 1},
+                                <div class="pagination mt-3"
+                                    th:with="start=${(items.number/maxPage)*maxPage + 1},
                                      end=(${(items.totalPages == 0) ? 1 :
                                      (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
-                                <ul>
-                                    <li class="prev" th:classappend="${items.first} ? 'disabled'">
-                                        <a th:onclick="'javascript:page(0)'">
-                                            <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="prev" th:classappend="${items.first} ? 'disabled'">
-                                        <a th:onclick="'javascript:page(' +  ${items.number - 1} + ')'">
-                                            <i class="fa-solid fa-angle-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page - 1} ? 'active' : ''">
-                                        <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text">[[${page}]]</a>
-                                    </li>
-                                    <li class="next" th:classappend="${items.last} ? 'disabled'">
-                                        <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'">
-                                            <i class="fa-solid fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                    <li class="next" th:classappend="${items.last} ? 'disabled'">
-                                        <a th:onclick="'javascript:page(' + ${items.totalPages - 1} + ')'">
-                                            <i class="fa-solid fa-angle-right"></i><i class="fa-solid fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                                    <ul>
+                                        <li class="prev" th:classappend="${items.first} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(0)'">
+                                                <i class="fa-solid fa-angle-left"></i><i
+                                                    class="fa-solid fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="prev" th:classappend="${items.first} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' +  ${items.number - 1} + ')'">
+                                                <i class="fa-solid fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                            th:classappend="${items.number eq page - 1} ? 'active' : ''">
+                                            <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                                th:inline="text">[[${page}]]</a>
+                                        </li>
+                                        <li class="next" th:classappend="${items.last} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'">
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li class="next" th:classappend="${items.last} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' + ${items.totalPages - 1} + ')'">
+                                                <i class="fa-solid fa-angle-right"></i><i
+                                                    class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                            <div class="search_box" th:object="${itemSearchDto}">
-                                <select class="search_date_type" th:field="*{searchDateType}">
-                                    <option value="all">전체기간</option>
-                                    <option value="1d">1일</option>
-                                    <option value="1w">1주</option>
-                                    <option value="1m">1개월</option>
-                                    <option value="6m">6개월</option>
-                                </select>
-                                <select class="search_sell_status" th:field="*{searchSellStatus}">
-                                    <option value="">판매상태(전체)</option>
-                                    <option value="SELL">판매</option>
-                                    <option value="SOLD_OUT">품절</option>
-                                </select>
-                                <select class="search_by" th:field="*{searchBy}" >
-                                    <option value="itemNm">상품명</option>
-                                    <option value="createdBy">등록자</option>
-                                </select>
-                                <input class="search_query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                                <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
-                                <a class="white_btn_w90_h40 ms-2" th:href="@{/admin/item}">상품 등록</a>
-                            </div>
-                        </form>
+                                <div class="search_box" th:object="${itemSearchDto}">
+                                    <select class="search_date_type" th:field="*{searchDateType}">
+                                        <option value="all">전체기간</option>
+                                        <option value="1d">1일</option>
+                                        <option value="1w">1주</option>
+                                        <option value="1m">1개월</option>
+                                        <option value="6m">6개월</option>
+                                    </select>
+                                    <select class="search_sell_status" th:field="*{searchSellStatus}">
+                                        <option value="">판매상태(전체)</option>
+                                        <option value="SELL">판매</option>
+                                        <option value="SOLD_OUT">품절</option>
+                                    </select>
+                                    <select class="search_by" th:field="*{searchBy}">
+                                        <option value="itemNm">상품명</option>
+                                        <option value="createdBy">등록자</option>
+                                    </select>
+                                    <input class="search_query" th:field="*{searchQuery}" type="text"
+                                        placeholder="검색어를 입력해주세요">
+                                    <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
+                                    <a class="white_btn_w90_h40 ms-2" th:href="@{/admin/item}">상품 등록</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <div th:replace="/layouts/adminLayout.html :: footer"></div>
-    </article>
-</main>
+            <div th:replace="/layouts/adminLayout.html :: footer"></div>
+        </article>
+    </main>
 </body>
