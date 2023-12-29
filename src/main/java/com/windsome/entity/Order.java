@@ -1,6 +1,7 @@
 package com.windsome.entity;
 
 import com.windsome.constant.OrderStatus;
+import com.windsome.entity.Auditing.BaseEntity;
 import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class Order extends BaseTimeEntity {
+public class Order extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -32,4 +33,27 @@ public class Order extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public static Order createOrder(Account account, List<OrderItem> orderItemList) {
+        Order order = new Order();
+        order.setAccount(account);
+        for (OrderItem orderItem : orderItemList) {
+            order.addOrderItem(orderItem);
+        }
+        order.setOrderStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 }

@@ -1,6 +1,6 @@
 package com.windsome.entity;
 
-import com.windsome.entity.Auditing.BaseTimeEntity;
+import com.windsome.entity.Auditing.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class OrderItem extends BaseTimeEntity {
+public class OrderItem extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
@@ -27,4 +27,17 @@ public class OrderItem extends BaseTimeEntity {
 
     private int count;
 
+    public static OrderItem createOrderItem(Item item, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOrderPrice(item.getPrice());
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }

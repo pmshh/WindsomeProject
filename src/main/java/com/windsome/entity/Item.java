@@ -4,6 +4,7 @@ import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.ItemFormDto;
 import com.windsome.entity.Auditing.BaseEntity;
 import com.windsome.entity.Auditing.BaseTimeEntity;
+import com.windsome.exception.OutOfStockException;
 import lombok.*;
 import org.hibernate.annotations.Subselect;
 
@@ -48,5 +49,13 @@ public class Item extends BaseEntity {
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemSellStatus = itemFormDto.getItemSellStatus();
         this.category = itemFormDto.getCategory();
+    }
+
+    public void removeStock(int stockNumber) {
+        int restStock = this.stockNumber - stockNumber;
+        if (restStock < 0) {
+            throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.stockNumber + ")");
+        }
+        this.stockNumber = restStock;
     }
 }

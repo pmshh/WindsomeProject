@@ -23,20 +23,19 @@
                     </div>
                     <div class="item_dtl_body mt-5">
                         <div class="row justify-content-md-center">
-                            <!--                        <div th:each="itemImg : ${item.itemImgDtoList}">-->
-                            <!--                            <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}">-->
-                            <!--                        </div>-->
                             <div class="col-md-auto img">
-                                <div class="item-small-img">
+                                <div class="main_img_box">
+                                    <img id="image_box" class="main_img" th:src="${item.itemImgDtoList[0].imgUrl}"
+                                        alt="">
+                                </div>
+                                <div class="thumb_img_box">
                                     <img class="thumb_img" th:src="${item.itemImgDtoList[0].imgUrl}"
                                         onclick="myFunction(this)" alt="img">
                                     <img class="thumb_img" th:src="${item.itemImgDtoList[1].imgUrl}"
                                         onclick="myFunction(this)" alt="img">
                                 </div>
-                                <div class="img-container">
-                                    <img id="image_box" th:src="${item.itemImgDtoList[0].imgUrl}" alt="">
-                                </div>
                             </div>
+
                             <div class="col-md-auto info">
                                 <div class="item_title">
                                     <h3 th:text="${item.itemNm}">Black Coat</h3>
@@ -54,33 +53,33 @@
                                 </div>
 
                                 <div class="item_option">
-                                    <div class="item_color">
-                                        <div class="title">
-                                            <span>색상</span>
-                                        </div>
-                                        <div class="con">
-                                            <select>
-                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>
-                                                <option value="1">블랙</option>
-                                                <option value="2">챠콜</option>
-                                                <option value="3">그레이</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="item_size">
-                                        <div class="title">
-                                            <span>사이즈</span>
-                                        </div>
-                                        <div class="con">
-                                            <select>
-                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>
-                                                <option value="1">S</option>
-                                                <option value="2">M</option>
-                                                <option value="3">L</option>
-                                                <option value="3">XL</option>
-                                            </select>
-                                        </div>
-                                    </div>
+<!--                                    <div class="item_color">-->
+<!--                                        <div class="title">-->
+<!--                                            <span>색상</span>-->
+<!--                                        </div>-->
+<!--                                        <div class="con">-->
+<!--                                            <select>-->
+<!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
+<!--                                                <option value="1">블랙</option>-->
+<!--                                                <option value="2">챠콜</option>-->
+<!--                                                <option value="3">그레이</option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="item_size">-->
+<!--                                        <div class="title">-->
+<!--                                            <span>사이즈</span>-->
+<!--                                        </div>-->
+<!--                                        <div class="con">-->
+<!--                                            <select>-->
+<!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
+<!--                                                <option value="1">S</option>-->
+<!--                                                <option value="2">M</option>-->
+<!--                                                <option value="3">L</option>-->
+<!--                                                <option value="4">XL</option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
                                     <div class="item_cnt">
                                         <div class="title">
                                             <span>주문 수량</span>
@@ -97,14 +96,15 @@
                                 <div class="total_price">
                                     <span class="total">
                                         <strong>
-                                            <em class="total_amount" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
+                                            <em class="total_amount"
+                                                th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
                                         </strong>
                                         <em class="total_order_cnt">(1개)</em>
                                     </span>
                                 </div>
                                 <div class="btn_inner">
                                     <div class="buy_btn">
-                                        <button>BUY NOW</button>
+                                        <button type="button" onclick="order()">BUY NOW</button>
                                     </div>
                                     <div class="cart_btn">
                                         <button>CART</button>
@@ -137,7 +137,7 @@
         function order_cnt(type) {
             let min_cnt = 1;
             let this_cnt = $('.order_cnt_input').val() * 1;
-            let max_cnt = [[${item.stockNumber}]]; // 현재 재고
+            let max_cnt = [[${ item.stockNumber }]]; // 현재 재고
 
             if (type === 'minus') {
                 this_cnt -= 1;
@@ -145,8 +145,7 @@
                     alert('수량은 1개 이상 입력해 주세요.');
                     return;
                 }
-            }
-            else if (type === 'plus') {
+            } else if (type === 'plus') {
                 this_cnt += 1;
                 if (this_cnt > max_cnt) {
                     alert('죄송합니다. 재고가 부족합니다.');
@@ -154,10 +153,42 @@
                 }
             }
 
-            let total_amount = [[${item.price}]] * this_cnt;
+            let total_amount = [[${ item.price }]] * this_cnt;
             $(".order_cnt_input").val(this_cnt);
             $(".total_order_cnt").html('(' + this_cnt + '개)');
             $(".total_amount").html(total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
         }
+
+        function order() {
+            let paramData = {
+                itemId: [[${ item.id }]],
+                count: $(".order_cnt_input").val()
+            };
+
+            let param = JSON.stringify(paramData);
+
+            $.ajax({
+                url: "/order",
+                type: "POST",
+                contentType: "application/json",
+                data: param,
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    alert("주문이 완료 되었습니다.");
+                    location.href = "/";
+                },
+                error: function (jqXHR, status, error) {
+                    if (jqXHR.status == '401') {
+                        alert("로그인 후 이용해주세요.");
+                        location.href = '/login';
+                    } else {
+                        alert(jqXHR.responseText);
+                    }
+                },
+            })
+        }
     </script>
 </body>
+
+</html>
