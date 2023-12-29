@@ -18,6 +18,6 @@ public class ItemController {
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId) {
         ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
         model.addAttribute("item", itemFormDto);
-        return "item/itemDtl";
+        return "main/item/itemDtl";
     }
 }

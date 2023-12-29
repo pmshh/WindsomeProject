@@ -22,7 +22,6 @@ import java.util.Optional;
 public class MainController {
 
     private final ItemService itemService;
-    private final ItemImgRepository itemImgRepository;
 
     @GetMapping("/")
     public String home(@CurrentAccount Account account, ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
@@ -36,7 +35,7 @@ public class MainController {
         model.addAttribute("itemSearchDto", itemSearchDto);
         model.addAttribute("maxPage", 10);
 
-        return "main";
+        return "main/main";
     }
 
     @GetMapping("/login")
