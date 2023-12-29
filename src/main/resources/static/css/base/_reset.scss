@@ -1,5 +1,6 @@
 /* reset start */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import url("https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
 @font-face {
@@ -38,3 +39,29 @@ button:focus {
     border: none;
     outline: none;
 }
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px transparent inset;
+    -webkit-text-fill-color: #000;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+// input::-ms-clear,
+// input::-ms-reveal {
+//     display: none;
+//     width: 0;
+//     height: 0;
+// }
+
+// input::-webkit-search-decoration,
+// input::-webkit-search-cancel-button,
+// input::-webkit-search-results-button,
+// input::-webkit-search-results-decoration {
+//     display: none;
+// }

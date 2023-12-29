@@ -1,12 +1,15 @@
 package com.windsome.repository;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.ItemSearchDto;
-import com.windsome.entity.Item;
-import com.windsome.entity.QItem;
+import com.windsome.dto.MainItemDto;
+import com.windsome.dto.QMainItemDto;
+import com.windsome.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +48,68 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .orderBy(item.id.desc());
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
+    }
+
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        List<MainItemDto> content = queryFactory
+                .select(
+                        new QMainItemDto(
+                                item.id,
+                                item.itemNm,
+                                item.category,
+                                item.itemDetail,
+                                itemImg.imgUrl,
+                                item.price)
+                )
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery())
+                        .or(itemCategoryLike(itemSearchDto.getCategory())))
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> total = queryFactory
+                .select(item.count())
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()));
+
+        return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
+    }
+
+    private BooleanBuilder itemCategoryLike(Long categoryId) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (categoryId != null && categoryId == 100L) {
+            return builder.or(item.category.id.in(100L, 101L, 102L, 103L));
+        } else if (categoryId != null && categoryId == 200L) {
+            return builder.or(item.category.id.in(200L, 201L, 202L, 203L, 204L));
+        } else if (categoryId != null && categoryId == 300L) {
+            return builder.or(item.category.id.in(300L, 301L, 302L, 303L));
+        } else if (categoryId != null && categoryId == 400L) {
+            return builder.or(item.category.id.in(400L));
+        } else if (categoryId != null && categoryId == 500L) {
+            return builder.or(item.category.id.in(500L, 501L, 502L, 503L));
+        } else if (categoryId != null) {
+            return builder.or(item.category.id.eq(categoryId));
+        } else {
+            return null;
+        }
+    }
+
+    private BooleanBuilder itemNmLike(String searchQuery){
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.or(QItem.item.itemNm.like("%" + searchQuery + "%"));
+        return builder;
     }
 
     private BooleanExpression searchSellStatusEq(ItemSellStatus searchSellStatus) {

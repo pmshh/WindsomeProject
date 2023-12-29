@@ -97,49 +97,49 @@
                     <h2>CATEGORY</h2>
                     <ul>
                         <li>
-                            <a href="../index.html">ALL</a>
+                            <a th:href="@{/}">ALL</a>
                         </li>
                         <li>
-                            <a href="../index.html">OUTER</a>
+                            <a th:href="@{/?category=100&searchQuery=none}">OUTER</a>
                             <div class="sub_category">
                                 <ul>
-                                    <li><a href="../index.html">Padding & Jumper</a></li>
-                                    <li><a href="../index.html">Coat & Jacket</a></li>
-                                    <li><a href="../index.html">Cardigan</a></li>
+                                    <li><a th:href="@{/?category=101&searchQuery=none}">Padding & Jumper</a></li>
+                                    <li><a th:href="@{/?category=102&searchQuery=none}">Coat & Jacket</a></li>
+                                    <li><a th:href="@{/?category=103&searchQuery=none}">Cardigan</a></li>
                                 </ul>
                             </div>
                         </li>
                         <li>
-                            <a href="../index.html">TOP</a>
+                            <a th:href="@{/?category=200&searchQuery=none}">TOP</a>
                             <div class="sub_category">
                                 <ul>
-                                    <li><a href="../index.html">Knitwear</a></li>
-                                    <li><a href="../index.html">T-Shirt</a></li>
-                                    <li><a href="../index.html">Shirt</a></li>
-                                    <li><a href="../index.html">MTM & Hoodie</a></li>
+                                    <li><a th:href="@{/?category=201&searchQuery=none}">Knitwear</a></li>
+                                    <li><a th:href="@{/?category=202&searchQuery=none}">T-Shirt</a></li>
+                                    <li><a th:href="@{/?category=203&searchQuery=none}">Shirt</a></li>
+                                    <li><a th:href="@{/?category=204&searchQuery=none}">MTM & Hoodie</a></li>
                                 </ul>
                             </div>
                         </li>
                         <li>
-                            <a href="../index.html">BOTTOM</a>
+                            <a th:href="@{/?category=300&searchQuery=none}">BOTTOM</a>
                             <div class="sub_category">
                                 <ul>
-                                    <li><a href="../index.html">Jean & Denim</a></li>
-                                    <li><a href="../index.html">Trousers</a></li>
-                                    <li><a href="../index.html">Sweat Pants</a></li>
+                                    <li><a th:href="@{/?category=301&searchQuery=none}">Jean & Denim</a></li>
+                                    <li><a th:href="@{/?category=302&searchQuery=none}">Trousers</a></li>
+                                    <li><a th:href="@{/?category=303&searchQuery=none}">Sweat Pants</a></li>
                                 </ul>
                             </div>
                         </li>
                         <li>
-                            <a href="../index.html">SHOES</a>
+                            <a th:href="@{/?category=400&searchQuery=none}">SHOES</a>
                         </li>
                         <li>
-                            <a href="../index.html">ACC</a>
+                            <a th:href="@{/?category=500&searchQuery=none}">ACC</a>
                             <div class="sub_category">
                                 <ul>
-                                    <li><a href="../index.html">Eyewear</a></li>
-                                    <li><a href="../index.html">Hat</a></li>
-                                    <li><a href="../index.html">Bag</a></li>
+                                    <li><a th:href="@{/?category=501&searchQuery=none}">Eyewear</a></li>
+                                    <li><a th:href="@{/?category=502&searchQuery=none}">Hat</a></li>
+                                    <li><a th:href="@{/?category=503&searchQuery=none}">Bag</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -164,9 +164,9 @@
                 </div>
             </div>
             <div class="search_form">
-                <form action="">
-                    <input type="text">
-                    <i class="fa-solid fa-magnifying-glass fz16"></i>
+                <form th:action="@{/}" method="get">
+                    <input name="searchQuery" type="search" placeholder="Search">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass fz16"></i></button>
                 </form>
             </div>
             <div class="menu_cs">

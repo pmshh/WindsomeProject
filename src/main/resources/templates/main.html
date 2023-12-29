@@ -18,117 +18,98 @@
                         <!--                    <div class="alert alert-warning" role="alert" th:if="${account != null}">-->
                         <!--                        account test-->
                         <!--                    </div>-->
-                        <div class="items_header">
-                            <h2>ALL ITEMS</h2>
+                        <div class="items_header" >
+                            <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL ITEMS</h2>
+                            <h2 th:if="${itemSearchDto.category == 100}">OUTER</h2>
+                            <h2 th:if="${itemSearchDto.category == 101}">Pading & Jumper</h2>
+                            <h2 th:if="${itemSearchDto.category == 102}">Coat & Jacket</h2>
+                            <h2 th:if="${itemSearchDto.category == 103}">Cardigan</h2>
+                            <h2 th:if="${itemSearchDto.category == 200}">TOP</h2>
+                            <h2 th:if="${itemSearchDto.category == 201}">Knitwear</h2>
+                            <h2 th:if="${itemSearchDto.category == 202}">T-Shirt</h2>
+                            <h2 th:if="${itemSearchDto.category == 203}">Shirt</h2>
+                            <h2 th:if="${itemSearchDto.category == 204}">MTM & Hoodie</h2>
+                            <h2 th:if="${itemSearchDto.category == 300}">BOTTOM</h2>
+                            <h2 th:if="${itemSearchDto.category == 301}">Jean & Denim</h2>
+                            <h2 th:if="${itemSearchDto.category == 302}">Trousers</h2>
+                            <h2 th:if="${itemSearchDto.category == 303}">Sweat Patns</h2>
+                            <h2 th:if="${itemSearchDto.category == 400}">SHOES</h2>
+                            <h2 th:if="${itemSearchDto.category == 500}">ACC</h2>
+                            <h2 th:if="${itemSearchDto.category == 501}">Eyewear</h2>
+                            <h2 th:if="${itemSearchDto.category == 502}">Hat</h2>
+                            <h2 th:if="${itemSearchDto.category == 503}">Bag</h2>
                             <div class="divider"></div>
                         </div>
+
                         <div class="items_body">
-                            <div class="row g-2">
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/1.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
+<!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
+                            <div class="search_result" th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
+                                <div class="search_input">
+                                    <form th:action="@{/}" method="get">
+                                        <input name="searchQuery" type="search" placeholder="Search" th:value="${itemSearchDto.searchQuery}">
+                                        <button type="submit"><i class="fa-solid fa-magnifying-glass icon"></i></button>
+                                    </form>
                                 </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/2.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/3.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/4.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/5.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/6.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/7.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                    <a href="item.html">
-                                        <img src="images/8.jpg" class="img-fluid" alt="">
-                                    </a>
-                                    <div class="desc">
-                                        <div class="name">
-                                            <a href="item.html">S. Raton Wool Jacket</a>
-                                        </div>
-                                        <div class="price">
-                                            <span>94,050원</span>
-                                        </div>
-                                    </div>
+                                <div class="search_result_msg mt-3">
+                                    <p class="content_count">총 <strong class="fw-bold" th:text="${items.getTotalElements()}"></strong>개의 상품이 검색되었습니다.</p>
                                 </div>
                             </div>
+
+                            <div class="row g-2">
+                                <th:block th:each="item, status: ${items.getContent()}">
+                                    <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
+                                        <a th:href="'/item/' + ${item.id}">
+                                            <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}">
+                                        </a>
+                                        <div class="desc">
+                                            <div class="name">
+                                                <a>[[${item.itemNm}]]</a>
+                                            </div>
+                                            <div class="price">
+                                                <span
+                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="pagination mt-3"
+                                th:with="start=${(items.number/maxPage)*maxPage + 1},
+                                     end=(${(items.totalPages == 0) ? 1 :
+                                     (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+                                <ul>
+                                    <li class="prev" th:classappend="${items.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(0)'">
+                                            <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="prev" th:classappend="${items.first} ? 'disabled'">
+                                        <a
+                                            th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number - 1 }}">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                        th:classappend="${items.number eq page - 1} ? 'active' : ''">
+                                        <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${page - 1}}"
+                                            th:inline="text">[[${page}]]</a>
+                                    </li>
+                                    <li class="next" th:classappend="${items.last} ? 'disabled'">
+                                        <a
+                                            th:href="@{'/' + '?searchQuery=' + ${itemSearchDto.searchQuery} + '&page=' + ${items.number + 1}}">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="next" th:classappend="${items.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${items.totalPages - 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i><i
+                                                class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
                         </div>
                     </div>
                 </div>

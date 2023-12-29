@@ -1,7 +1,10 @@
 package com.windsome.controller;
 
+import com.windsome.config.security.CurrentAccount;
+import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.ItemFormDto;
 import com.windsome.dto.ItemSearchDto;
+import com.windsome.entity.Account;
 import com.windsome.entity.Item;
 import com.windsome.service.CategoryService;
 import com.windsome.service.ItemService;
@@ -39,7 +42,7 @@ public class AdminController {
     public String itemForm(Model model) throws Exception {
         model.addAttribute("itemFormDto", new ItemFormDto());
         model.addAttribute("categories", categoryService.getJsonCategories());
-        model.addAttribute("formActionParam", "new");
+        model.addAttribute("formActionParam", "");
         return "item/itemForm";
     }
 
@@ -113,6 +116,8 @@ public class AdminController {
 
     @GetMapping(value = {"/items", "/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
+        model.addAttribute("sellStatus", ItemSellStatus.SELL);
+
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
 
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);

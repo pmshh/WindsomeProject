@@ -28,6 +28,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
         integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+            integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+    </script>
     <!-- common js -->
     <script>
         $(window).scroll(function () {
@@ -62,7 +65,7 @@
         <aside class="sidebar" th:fragment="sidebar (currentMenu)">
             <div class="sidebar_logo">
                 <div class="profile_img">
-                    <img src="/images/기본 프로필.png" class="" alt="">
+                    <svg th:data-jdenticon-value="${#authentication.name}" width="36" height="36"></svg>
                 </div>
                 <div class="profile_name">
                     <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

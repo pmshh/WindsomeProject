@@ -148,11 +148,18 @@
             font-size: 12px;
         }
 
-        .fz16 {
-            vertical-align: middle;
-            font-size: 16px;
-            cursor: pointer;
+        button {
+            background: transparent;
+            border: none;
+
+            .fz16 {
+                vertical-align: middle;
+                font-size: 16px;
+                cursor: pointer;
+            }
         }
+
+
     }
 
     .menu_cs>ul>li:nth-child(1) {

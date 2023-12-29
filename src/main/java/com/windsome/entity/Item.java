@@ -5,6 +5,7 @@ import com.windsome.dto.ItemFormDto;
 import com.windsome.entity.Auditing.BaseEntity;
 import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
+import org.hibernate.annotations.Subselect;
 
 import javax.persistence.*;
 

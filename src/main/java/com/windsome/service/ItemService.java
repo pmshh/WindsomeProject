@@ -1,13 +1,8 @@
 package com.windsome.service;
 
-import com.windsome.dto.ItemFormDto;
-import com.windsome.dto.ItemImgDto;
-import com.windsome.dto.ItemSearchDto;
-import com.windsome.entity.Category;
-import com.windsome.entity.Item;
+import com.windsome.dto.*;
+import com.windsome.entity.*;
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.ItemDto;
-import com.windsome.entity.ItemImg;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +76,11 @@ public class ItemService {
         ItemFormDto itemFormDto = ItemFormDto.of(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 
     public Item itemSave(ItemDto itemDto) {
