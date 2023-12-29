@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- item_dtl section -->
+            <section id="item_dtl">
+                <div class="container item_dtl">
+                    <div class="item_dtl_header">
+                        <h2>ITEM DETAIL</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="item_dtl_body mt-5">
+                        <div class="row justify-content-md-center">
+                            <!--                        <div th:each="itemImg : ${item.itemImgDtoList}">-->
+                            <!--                            <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}">-->
+                            <!--                        </div>-->
+                            <div class="col-md-auto img">
+                                <div class="item-small-img">
+                                    <img class="thumb_img" th:src="${item.itemImgDtoList[0].imgUrl}"
+                                        onclick="myFunction(this)" alt="img">
+                                    <img class="thumb_img" th:src="${item.itemImgDtoList[1].imgUrl}"
+                                        onclick="myFunction(this)" alt="img">
+                                </div>
+                                <div class="img-container">
+                                    <img id="image_box" th:src="${item.itemImgDtoList[0].imgUrl}" alt="">
+                                </div>
+                            </div>
+                            <div class="col-md-auto info">
+                                <div class="item_title">
+                                    <h3 th:text="${item.itemNm}">Black Coat</h3>
+                                </div>
+                                <div class="item_desc">
+                                    <th:block th:utext="${item.itemDetail}"></th:block>
+                                </div>
+                                <div class="item_price">
+                                    <div class="title">
+                                        <span>판매가</span>
+                                    </div>
+                                    <div class="con">
+                                        <span th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
+                                    </div>
+                                </div>
+
+                                <div class="item_option">
+                                    <div class="item_color">
+                                        <div class="title">
+                                            <span>색상</span>
+                                        </div>
+                                        <div class="con">
+                                            <select>
+                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                <option value="1">블랙</option>
+                                                <option value="2">챠콜</option>
+                                                <option value="3">그레이</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="item_size">
+                                        <div class="title">
+                                            <span>사이즈</span>
+                                        </div>
+                                        <div class="con">
+                                            <select>
+                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                <option value="1">S</option>
+                                                <option value="2">M</option>
+                                                <option value="3">L</option>
+                                                <option value="3">XL</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="item_cnt">
+                                        <div class="title">
+                                            <span>주문 수량</span>
+                                        </div>
+                                        <div class="con">
+                                            <input class="order_cnt_input" type="text" value="1">
+                                            <div class="cnt_btn">
+                                                <i class="xi-caret-up-min" onclick="order_cnt('plus')"></i>
+                                                <i class="xi-caret-down-min" onclick="order_cnt('minus')"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total_price">
+                                    <span class="total">
+                                        <strong>
+                                            <em class="total_amount" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
+                                        </strong>
+                                        <em class="total_order_cnt">(1개)</em>
+                                    </span>
+                                </div>
+                                <div class="btn_inner">
+                                    <div class="buy_btn">
+                                        <button>BUY NOW</button>
+                                    </div>
+                                    <div class="cart_btn">
+                                        <button>CART</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            let orderCntInput = document.querySelector('.order_cnt_input');
+
+            $('.order_cnt_input').on("propertychange change paste input", function () {
+                console.log(orderCntInput.value);
+            });
+        });
+
+        function myFunction(smallImg) {
+            let fullImg = document.querySelector('#image_box');
+            fullImg.src = smallImg.src;
+        }
+
+        function order_cnt(type) {
+            let min_cnt = 1;
+            let this_cnt = $('.order_cnt_input').val() * 1;
+            let max_cnt = [[${item.stockNumber}]]; // 현재 재고
+
+            if (type === 'minus') {
+                this_cnt -= 1;
+                if (this_cnt < min_cnt) {
+                    alert('수량은 1개 이상 입력해 주세요.');
+                    return;
+                }
+            }
+            else if (type === 'plus') {
+                this_cnt += 1;
+                if (this_cnt > max_cnt) {
+                    alert('죄송합니다. 재고가 부족합니다.');
+                    return;
+                }
+            }
+
+            let total_amount = [[${item.price}]] * this_cnt;
+            $(".order_cnt_input").val(this_cnt);
+            $(".total_order_cnt").html('(' + this_cnt + '개)');
+            $(".total_amount").html(total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+        }
+    </script>
+</body>
