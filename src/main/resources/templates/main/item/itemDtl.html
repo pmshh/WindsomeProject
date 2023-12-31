@@ -107,7 +107,7 @@
                                         <button type="button" onclick="order()">BUY NOW</button>
                                     </div>
                                     <div class="cart_btn">
-                                        <button>CART</button>
+                                        <button type="button" onclick="addCart()">CART</button>
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                     location.href = "/";
                 },
                 error: function (jqXHR, status, error) {
-                    if (jqXHR.status == '401') {
+                    if (jqXHR.status === '401') {
                         alert("로그인 후 이용해주세요.");
                         location.href = '/login';
                     } else {
@@ -188,6 +188,37 @@
                 },
             })
         }
+
+        function addCart() {
+            let paramData = {
+                itemId: [[${item.id}]],
+                count : $(".order_cnt_input").val()
+            };
+
+            let param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : "/cart",
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                dataType : "json",
+                cache : false,
+                success: function (result, status) {
+                    alert("상품을 장바구니에 담았습니다.");
+                    location.href = '/';
+                },
+                error: function (jqXHR, status, error) {
+                    if (jqXHR.status === '401') {
+                        alert('로그인 후 이용해주세요.');
+                        location.href = '/login';
+                    } else {
+                        alert(jqXHR.responseText);
+                    }
+                },
+            })
+        }
+
     </script>
 </body>
 
