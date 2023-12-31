@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- orderHist section -->
+            <section id="order_hist">
+                <div class="container order_hist">
+                    <div class="order_hist_header">
+                        <h2>ORDER CHECK</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="order_hist_body mt-5">
+                        <div class="table-responsive small">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10%;" scope="col">주문일자</th>
+                                        <th style="width: 10%;" scope="col">이미지</th>
+                                        <th style="width: auto;" scope="col">상품정보</th>
+                                        <th style="width: 10%;" scope="col">수량</th>
+                                        <th style="width: 10%;" scope="col">상품구매금액</th>
+                                        <th style="width: 10%;" scope="col">주문처리상태</th>
+                                        <th style="width: 10%;" scope="col">취소/교환/반품</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="center">
+                                    <tr th:each="order, status: ${orders.getContent()}">
+                                        <td class="order_date" th:text="${order.orderDate}"></td>
+                                        <th:block th:each="orderItem, status: ${order.orderItemDtoList}">
+                                            <td class="thumb">
+                                                <a th:href="${'/item/' + orderItem.itemId}">
+                                                    <img th:src="${orderItem.imgUrl}">
+                                                </a>
+                                            </td>
+                                            <td class="product left_top">
+                                                <strong class="name">
+                                                    <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
+                                                </strong>
+                                                <div class="option">[옵션: 선택 X]</div>
+                                            </td>
+                                            <td th:text="${orderItem.count}"></td>
+                                            <td class="right">
+                                                <strong th:text="|${#numbers.formatInteger(orderItem.orderPrice, 0, 'COMMA')}원|"></strong>
+                                            </td>
+                                            <td class="state">배송중</td>
+                                            <td>
+                                                <button class="black_btn_w65_h30">주문 취소</button>
+                                            </td>
+                                        </th:block>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div th:if="${#strings.isEmpty(orders.getContent())}" class="orders_null">
+                                <p class="message">주문 내역이 없습니다.</p>
+                            </div>
+
+                            <div class="pagination mt-3"
+                                th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                                                                 end=(${(orders.totalPages == 0) ? 1 :
+                                                                 (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
+                                <ul>
+                                    <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(0)'">
+                                            <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' +  ${orders.number - 1} + ')'">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                        th:classappend="${orders.number eq page - 1} ? 'active' : ''">
+                                        <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                            th:inline="text">[[${page}]]</a>
+                                    </li>
+                                    <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${orders.number + 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${orders.totalPages - 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i><i
+                                                class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+</body>
+
+</html>

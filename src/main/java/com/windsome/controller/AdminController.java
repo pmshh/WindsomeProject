@@ -41,7 +41,7 @@ public class AdminController {
         model.addAttribute("itemFormDto", new ItemFormDto());
         model.addAttribute("categories", categoryService.getJsonCategories());
         model.addAttribute("formActionParam", "");
-        return "item/itemForm";
+        return "admin/item/itemForm";
     }
 
     @PostMapping("/item")
@@ -51,13 +51,13 @@ public class AdminController {
                           @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getJsonCategories());
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
             model.addAttribute("categories", categoryService.getJsonCategories());
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
 
         try {
@@ -66,7 +66,7 @@ public class AdminController {
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
             model.addAttribute("categories", categoryService.getJsonCategories());
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
         return "redirect:/";
     }
@@ -81,9 +81,9 @@ public class AdminController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
-        return "item/itemForm";
+        return "admin/item/itemForm";
     }
 
     @PostMapping("/item/{itemId}")
@@ -92,12 +92,12 @@ public class AdminController {
                              @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
                              @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
         if (bindingResult.hasErrors()) {
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
 
         try {
@@ -106,7 +106,7 @@ public class AdminController {
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
             model.addAttribute("categories", categoryService.getJsonCategories());
-            return "item/itemForm";
+            return "admin/item/itemForm";
         }
 
         return "redirect:/";
@@ -123,7 +123,7 @@ public class AdminController {
         model.addAttribute("items", items);
         model.addAttribute("itemSearchDto", itemSearchDto);
         model.addAttribute("maxPage", 10);
-        return "item/itemMng";
+        return "admin/item/itemMng";
     }
 }
 

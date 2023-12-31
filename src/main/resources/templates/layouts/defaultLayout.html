@@ -85,7 +85,7 @@
                         <a href="cart.html">CART</a>
                     </li>
                     <li>
-                        <a href="orderlist.html">ORDER</a>
+                        <a th:href="@{/orders}">ORDER</a>
                     </li>
                     <li>
                         <a href="mypage.html">MYPAGE</a>
@@ -225,7 +225,7 @@
                                         <a th:href="@{/login}">Mypage</a>
                                     </li>
                                     <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/order-check}">Order Check</a>
+                                        <a th:href="@{/orders}">Order Check</a>
                                     </li>
                                     <li sec:authorize="!isAuthenticated()">
                                         <a th:href="@{/login}">Order Check</a>

@@ -3,6 +3,157 @@
 
 <head>
     <div th:replace="/layouts/adminLayout.html :: head"></div>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/adminLayout.html :: nav"></div>
+
+            <section>
+                <div class="container">
+                    <div class="add_item_header">
+                        <h2 th:if="${formActionParam == ''}">상품 등록</h2>
+                        <h2 th:if="${formActionParam != ''}">상품 수정</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="add_item_body mt-5">
+                        <form id="itemFormDto" th:action="@{'/admin/item/' + ${formActionParam}}"
+                            th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
+                            <table style="table-layout: fixed !important;">
+                                <colgroup>
+                                    <col style="width:20%;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                    <input th:type="hidden" th:field="*{id}"></input>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{itemSellStatus}">판매 상태 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <select class="sell_status" th:field="*{itemSellStatus}">
+                                                <option selected value="none">선택</option>
+                                                <option value="SELL">판매중</option>
+                                                <option value="SOLD_OUT">품절</option>
+                                            </select>
+                                            <span class="text-danger sell_status_warn">판매 상태를 선택해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="parent_cate_id">카테고리 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <select name="parent_cate_id" id="parent_cate_id" class="cate1">
+                                                <option selected value="none">선택</option>
+                                            </select>
+                                            <select name="child_cate_id" id="child_cate_id" class="cate2">
+                                                <option selected value="none">선택</option>
+                                            </select>
+                                            <span class="text-danger category_warn">카테고리를 선택해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{itemNm}">상품명 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="name_input" type="text" th:field="*{itemNm}"
+                                                placeholder="상품명">
+                                            <span class="text-danger name_warn">상품명을 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{price}">가격 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="price_input" type="text" th:field="*{price}" placeholder="가격">
+                                            <span class="text-danger price_warn">상품의 가격을 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="discount">할인율 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="discount_interface" placeholder="할인율" maxlength="2" value="">
+                                            <input class="discount_input" type="hidden" name="discount" id="discount">
+                                            <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
+                                            <span class="discount_text">할인 가격 : <span
+                                                    class="discount_price"></span></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{stockNumber}">재고 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="stock_input" th:field="*{stockNumber}" placeholder="재고">
+                                            <span class="text-danger stock_warn">상품의 재고를 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{itemDetail}">상품 상세 내용 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <textarea th:field="*{itemDetail}" placeholder="상세 내용"
+                                                id="item_detail_textarea"></textarea>
+                                            <span class="text-danger detail_warn">상품의 상세 내용을 입력해주세요.</span>
+                                        </td>
+                                    </tr>
+                                    <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
+                                        <tr th:each="num: ${#numbers.sequence(1,5)}">
+                                            <th scope="row">
+                                                <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
+                                            </th>
+                                            <td>
+                                                <input class="fake_input" type="text">
+                                                <label class="white_btn_sm" th:for="${'img' + num}">파일 찾기</label>
+                                                <input type="file" class="real_input" name="itemImgFile"
+                                                    th:id="${'img' + num}">
+                                            </td>
+                                        </tr>
+                                    </div>
+                                    <div th:if="${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
+                                        <tr th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
+                                            <th scope="row">
+                                                <label th:for="${'img' + status.index+1}"
+                                                    th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                            </th>
+                                            <td>
+                                                <input class="fake_input" type="text"
+                                                    th:value="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품 이미지 ' + ${status.index+1}">
+                                                <label class="white_btn_w90_h40" th:for="${'img' + status.index+1}">파일
+                                                    찾기</label>
+                                                <input type="file" class="real_input" name="itemImgFile"
+                                                    th:id="${'img' + status.index+1}">
+                                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                                            </td>
+                                        </tr>
+                                    </div>
+                                </tbody>
+                            </table>
+                            <div class="btn_box">
+                                <button th:if="${#strings.isEmpty(itemFormDto.id)}" class="black_btn_w130_h40 enroll_btn"
+                                    type="submit">저장</button>
+                                <button th:unless="${#strings.isEmpty(itemFormDto.id)}" class="black_btn_w130_h40"
+                                    type="submit">수정</button>
+                                <a class="white_btn_w130_h40" th:href="@{/admin/items}">취소</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/adminLayout.html :: footer"></div>
+        </article>
+    </main>
+
     <!-- editor -->
     <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <!-- custom js -->
@@ -205,153 +356,6 @@
 
         });
     </script>
-</head>
-
-<body>
-    <main>
-        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
-
-        <article class="content">
-            <div th:replace="/layouts/adminLayout.html :: nav"></div>
-
-            <section>
-                <div class="container">
-                    <div class="add_item_header">
-                        <h2 th:if="${formActionParam == ''}">상품 등록</h2>
-                        <h2 th:if="${formActionParam != ''}">상품 수정</h2>
-                        <div class="divider"></div>
-                    </div>
-                    <div class="add_item_body mt-5">
-                        <form id="itemFormDto" th:action="@{'/admin/item/' + ${formActionParam}}" th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
-                            <table style="table-layout: fixed !important;">
-                                <colgroup>
-                                    <col style="width:20%;">
-                                    <col style="width: auto;">
-                                </colgroup>
-                                <tbody>
-                                    <input th:type="hidden" th:field="*{id}"></input>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{itemSellStatus}">판매 상태 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <select class="sell_status" th:field="*{itemSellStatus}">
-                                                <option selected value="none">선택</option>
-                                                <option value="SELL">판매중</option>
-                                                <option value="SOLD_OUT">품절</option>
-                                            </select>
-                                            <span class="text-danger sell_status_warn">판매 상태를 선택해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="parent_cate_id">카테고리 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <select name="parent_cate_id" id="parent_cate_id" class="cate1">
-                                                <option selected value="none">선택</option>
-                                            </select>
-                                            <select name="child_cate_id" id="child_cate_id" class="cate2">
-                                                <option selected value="none">선택</option>
-                                            </select>
-                                            <span class="text-danger category_warn">카테고리를 선택해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{itemNm}">상품명 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input class="name_input" type="text" th:field="*{itemNm}"
-                                                placeholder="상품명">
-                                            <span class="text-danger name_warn">상품명을 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{price}">가격 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input class="price_input" type="text" th:field="*{price}" placeholder="가격">
-                                            <span class="text-danger price_warn">상품의 가격을 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label for="discount">할인율 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input class="discount_interface" placeholder="할인율" maxlength="2" value="">
-                                            <input class="discount_input" type="hidden" name="discount" id="discount">
-                                            <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
-                                            <span class="discount_text">할인 가격 : <span
-                                                    class="discount_price"></span></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{stockNumber}">재고 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input class="stock_input" th:field="*{stockNumber}" placeholder="재고">
-                                            <span class="text-danger stock_warn">상품의 재고를 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{itemDetail}">상품 상세 내용 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <textarea th:field="*{itemDetail}" placeholder="상세 내용"
-                                                id="item_detail_textarea"></textarea>
-                                            <span class="text-danger detail_warn">상품의 상세 내용을 입력해주세요.</span>
-                                        </td>
-                                    </tr>
-                                    <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
-                                        <tr th:each="num: ${#numbers.sequence(1,5)}">
-                                            <th scope="row">
-                                                <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
-                                            </th>
-                                            <td>
-                                                <input class="fake_input" type="text">
-                                                <label class="white_btn_sm" th:for="${'img' + num}">파일 찾기</label>
-                                                <input type="file" class="real_input" name="itemImgFile"
-                                                    th:id="${'img' + num}">
-                                            </td>
-                                        </tr>
-                                    </div>
-                                    <div th:if="${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
-                                        <tr th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
-                                            <th scope="row">
-                                                <label th:for="${'img' + status.index+1}"
-                                                    th:text="'상품 이미지 ' + ${status.index+1}"></label>
-                                            </th>
-                                            <td>
-                                                <input class="fake_input" type="text"
-                                                    th:value="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품 이미지 ' + ${status.index+1}">
-                                                <label class="white_btn_sm" th:for="${'img' + status.index+1}">파일
-                                                    찾기</label>
-                                                <input type="file" class="real_input" name="itemImgFile"
-                                                    th:id="${'img' + status.index+1}">
-                                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
-                                            </td>
-                                        </tr>
-                                    </div>
-                                </tbody>
-                            </table>
-                            <div class="btn_box">
-                                <button th:if="${#strings.isEmpty(itemFormDto.id)}" class="black_btn enroll_btn" type="submit">저장</button>
-                                <button th:unless="${#strings.isEmpty(itemFormDto.id)}" class="black_btn" type="submit">수정</button>
-                                <a class="white_btn" th:href="@{/admin/items}">취소</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-
-            <div th:replace="/layouts/adminLayout.html :: footer"></div>
-        </article>
-    </main>
-
 </body>
+
 </html>

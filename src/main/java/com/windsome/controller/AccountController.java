@@ -79,7 +79,7 @@ public class AccountController {
 
     @GetMapping("/find/pass")
     public String findPassGet() {
-        return "findPass";
+        return "account/findPass";
     }
 
     @PostMapping("/find/pass")
@@ -93,7 +93,7 @@ public class AccountController {
 
     @GetMapping("/find/id")
     public String findIdGet() {
-        return "findId";
+        return "account/findId";
     }
 
     @PostMapping("/find/id")

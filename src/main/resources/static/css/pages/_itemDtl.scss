@@ -1,4 +1,6 @@
 .item_dtl_header {
+    margin: 0px auto 60px;
+
     h2 {
         font-size: 15px;
         text-align: center;
@@ -73,7 +75,6 @@
             .title {
                 display: inline-block;
                 width: 20%;
-                margin: 7px 20px 7px 0;
                 vertical-align: middle;
                 font-size: 11px;
 
@@ -86,7 +87,6 @@
             .con {
                 display: inline-block;
                 width: auto;
-                margin: 7px 20px 7px 0;
                 vertical-align: middle;
                 font-size: 11px;
 
@@ -186,7 +186,7 @@
 
                     input {
                         width: 30px;
-                        height: 20px;
+                        height: 25px;
                         line-height: 20px;
                         border: 1px solid #CCCCCC;
                         border-top-left-radius: 2px;
@@ -202,8 +202,8 @@
                             background: transparent;
                             outline: none;
                             border: 1px solid #CCCCCC;
-                            width: 20px;
-                            height: 10px;
+                            width: 25px;
+                            height: 12.5px;
                             text-align: center;
                             vertical-align: middle;
                             border-top-right-radius: 2px;
@@ -258,8 +258,5 @@
                 }
             }
         }
-
     }
-
-
 }

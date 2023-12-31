@@ -3,31 +3,6 @@
 
 <head>
     <div th:replace="/layouts/defaultLayout.html :: head"></div>
-    <!-- 사용자 JS -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-        $(".find_psas_btn").click( function () {
-            let email = $(".user_email").val();
-            let name = $(".user_name").val();
-
-            $.ajax({
-                type: "post",
-                url: "/find/pass",
-                data: {
-                    "email": email,
-                    "name": name
-                },
-                success: function (result) {
-                    if (result) {
-                        alert("입력하신 이메일로 임시비밀번호가 발송되었습니다.");
-                        window.location.href = "/login";
-                    } else {
-                        alert("일치하는 정보가 없습니다.");
-                    }
-                }
-            })
-        })
-    </script>
 </head>
 
 <body>
@@ -79,7 +54,7 @@
                                 </tbody>
                             </table>
                             <div class="btn_box">
-                                <button class="find_psas_btn black_btn" type="button">비밀번호 찾기</button>
+                                <button class="find_psas_btn black_btn_w130_h40" type="button">비밀번호 찾기</button>
                             </div>
                         </form>
                     </div>
@@ -89,4 +64,29 @@
             <div th:replace="/layouts/defaultLayout.html :: footer"></div>
         </article>
     </main>
+
+    <!-- 사용자 JS -->
+    <script>
+        $(".find_psas_btn").click( function () {
+            let email = $(".user_email").val();
+            let name = $(".user_name").val();
+
+            $.ajax({
+                type: "post",
+                url: "/find/pass",
+                data: {
+                    "email": email,
+                    "name": name
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("입력하신 이메일로 임시비밀번호가 발송되었습니다.");
+                        window.location.href = "/login";
+                    } else {
+                        alert("일치하는 정보가 없습니다.");
+                    }
+                }
+            })
+        })
+    </script>
 </body>
