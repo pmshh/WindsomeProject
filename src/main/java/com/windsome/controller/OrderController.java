@@ -28,6 +28,18 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @GetMapping(value = {"/orders", "/orders/{page}"})
+    public String orderHist(@PathVariable("page") Optional<Integer> page, @CurrentAccount Account account, Model model) {
+        Pageable pageable = PageRequest.of(page.orElse(0), 4);
+
+        Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(account.getUserIdentifier(), pageable);
+
+        model.addAttribute("orders", ordersHistDtoList);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
+        return "order/orderHist";
+    }
+
     @PostMapping("/order")
     public @ResponseBody ResponseEntity<?> order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, @CurrentAccount Account account) {
 
@@ -50,15 +62,14 @@ public class OrderController {
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/orders", "/orders/{page}"})
-    public String orderHist(@PathVariable("page") Optional<Integer> page, @CurrentAccount Account account, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 4);
+    @PostMapping("/order/{orderId}/cancel")
+    public @ResponseBody ResponseEntity<?> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentAccount Account account) {
+        if (!orderService.validateOrder(orderId, account.getUserIdentifier())) {
+            return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
 
-        Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(account.getUserIdentifier(), pageable);
-
-        model.addAttribute("orders", ordersHistDtoList);
-        model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("maxPage", 5);
-        return "order/orderHist";
+        orderService.cancelOrder(orderId);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
+
 }

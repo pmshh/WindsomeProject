@@ -1,6 +1,7 @@
 package com.windsome.service;
 
 import com.windsome.constant.ItemSellStatus;
+import com.windsome.constant.OrderStatus;
 import com.windsome.dto.OrderDto;
 import com.windsome.entity.Account;
 import com.windsome.entity.Item;
@@ -77,5 +78,24 @@ class OrderServiceTest {
         int totalPrice = orderDto.getCount() * item.getPrice();
 
         assertEquals(totalPrice, order.getTotalPrice());
+    }
+
+    @Test
+    @DisplayName("주문 취소 테스트")
+    public void cancelOrder() {
+        Item item = saveItem();
+        Account account = saveAccount();
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCount(10);
+        orderDto.setItemId(item.getId());
+
+        Long orderId = orderService.order(orderDto, account.getUserIdentifier());
+
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+
+        orderService.cancelOrder(orderId);
+        assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
+        assertEquals(100, item.getStockNumber());
     }
 }
