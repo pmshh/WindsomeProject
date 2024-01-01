@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- cart section -->
+            <section id="cart">
+                <div class="container cart">
+                    <div class="cart_header">
+                        <h2>CART</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="cart_body mt-5">
+                        <div class="table-responsive small table_box">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10%;" scope="col" >
+                                            <input type="checkbox" id="check_all" name="check_all" onclick="checkAll()">
+                                            <label for="check_all">전체 선택</label>
+                                        </th>
+                                        <th style="width: 10%;" scope="col">이미지</th>
+                                        <th style="width: auto;" scope="col">상품정보</th>
+                                        <th style="width: 10%;" scope="col">수량</th>
+                                        <th style="width: 10%;" scope="col">상품구매금액</th>
+                                        <th style="width: 10%;" scope="col">배송비</th>
+                                        <th style="width: 10%;" scope="col">선택</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="cartItem : ${cartItems}">
+                                        <td>
+                                            <input type="checkbox" name="cart_check" th:value="${cartItem.cartItemId}">
+                                        </td>
+                                        <td class="thumb">
+                                            <a th:href="${'/item/' + cartItem.cartItemId}">
+                                                <img th:src="${cartItem.imgUrl}">
+                                            </a>
+                                        </td>
+                                        <td class="product left_top">
+                                            <strong class="name">
+                                                <a th:href="${'/item/' + cartItem.cartItemId}" th:text="${cartItem.itemNm}"></a>
+                                            </strong>
+                                            <div class="option">[옵션: 선택 X]</div>
+                                        </td>
+                                        <td>
+                                            <div class="cnt_box">
+                                                <input th:id="'count_' + ${cartItem.cartItemId}" class="order_cnt_input" type="text"
+                                                       th:data-itemId="${cartItem.cartItemId}" th:value="${cartItem.count}" onchange="changeCount(this)">
+                                                <div class="cnt_btn">
+                                                    <i th:data-id="${cartItem.cartItemId}" data-option="up" class="xi-caret-up-min" onclick="changeCountBtn(this)"></i>
+                                                    <i th:data-id="${cartItem.cartItemId}" data-option="down" class="xi-caret-down-min" onclick="changeCountBtn(this)"></i>
+                                                </div>
+                                                <span th:id="'stock_' + ${cartItem.cartItemId}" th:data-stock="${cartItem.stockNumber}"></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <strong th:id="'price_' + ${cartItem.cartItemId}" th:data-price="${cartItem.price}"
+                                                    th:text="|${#numbers.formatInteger(cartItem.price * cartItem.count, 0, 'COMMA')}원|"></strong>
+                                        </td>
+                                        <td>
+                                            무료
+                                        </td>
+                                        <td>
+                                            <button class="black_btn_w90_h30">주문하기</button>
+                                            <button th:data-id="${cartItem.cartItemId}" onclick="deleteCartItem(this)" type="button" class="white_btn_w90_h30">
+                                                삭제
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="cart_null" th:if="${#lists.isEmpty(cartItems)}">
+                            장바구니가 비어 있습니다.
+                        </div>
+                        <div class="cart_total mt-5">
+                            <div class="table-responsive small">
+                                <table class="table table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 35%;" scope="col">총 상품금액</th>
+                                        <th style="width: 35%;" scope="col">총 배송비</th>
+                                        <th style="width: 35%;" scope="col">결제예정금액</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="order_total_price">0원</span>
+                                        </td>
+                                        <td>
+                                            + 0원
+                                        </td>
+                                        <td>
+                                            = <span class="order_total_price">0원</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart_btn">
+                        <a href="" class="black_btn_w130_h40">전체상품주문</a>
+                        <a href="" class="white_btn_w130_h40">선택상품주문</a>
+                        <span>
+                            <a th:href="@{/}" class="white_btn_w130_h40">쇼핑계속하기</a>
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $("input[name=cart_check]").change(function(){
+                getOrderTotalPrice();
+            })
+        });
+
+        function checkAll() {
+            if ($("#check_all").prop("checked")) {
+                $("input[name=cart_check]").prop("checked", true);
+            } else {
+                $("input[name=cart_check]").prop("checked", false);
+            }
+            getOrderTotalPrice();
+        }
+
+        function changeCount(obj) {
+            let cartItemId = obj.id.split('_')[1];
+            let price = $("#price_" + cartItemId);
+            let stock = $("#stock_" + cartItemId);
+            let count = $('#count_' + cartItemId);
+
+            let countVal = obj.value;
+            let priceVal = price.data("price");
+            let totalPrice = countVal * priceVal;
+            let minCnt = 1;
+            let maxCnt = stock.attr("data-stock") * 1;
+
+            if (countVal < minCnt) {
+                alert('수량은 1개 이상 입력해 주세요.');
+                count.val(1);
+                price.html(priceVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+                return;
+            } else if ( countVal > maxCnt ) {
+                alert('죄송합니다. 재고가 부족합니다.');
+                count.val(maxCnt);
+            }
+
+            price.html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            getOrderTotalPrice();
+            updateCartItemCount(cartItemId, countVal);
+        }
+
+        function changeCountBtn(obj) {
+            let cartItemId = $(obj).attr("data-id");
+            let count = $("#count_" + cartItemId);
+            let price = $("#price_" + cartItemId);
+            let stock = $("#stock_" + cartItemId);
+            let option = $(obj).attr("data-option");
+
+            let countVal = Number(count.val());
+            let minCnt = 1;
+            let maxCnt = Number(stock.attr("data-stock"));
+            let priceVal = price.data("price");
+
+            if (option === 'down') {
+                countVal -= 1;
+                if (countVal < minCnt) {
+                    alert('수량은 1개 이상 입력해 주세요.');
+                    return;
+                }
+            } else if (option === 'up') {
+                countVal += 1;
+                if (countVal > maxCnt) {
+                    alert('죄송합니다. 재고가 부족합니다.');
+                    return;
+                }
+            }
+
+            let totalPrice = countVal * priceVal;
+            count.val(countVal);
+            price.html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            getOrderTotalPrice();
+            updateCartItemCount(cartItemId, countVal);
+        }
+
+        function getOrderTotalPrice() {
+            let orderTotalPrice = 0;
+            $("input[name=cart_check]:checked").each(function () {
+                let cartItemId = $(this).val();
+                let price = $("#price_" + cartItemId).attr("data-price");
+                let count = $("#count_" + cartItemId).val();
+                orderTotalPrice += price * count;
+            });
+
+            $(".order_total_price").html(orderTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+        }
+
+        function updateCartItemCount(cartItemId, count) {
+            console.log(count);
+
+            $.ajax({
+                url: "/cartItem/" + cartItemId + "?count=" + count,
+                type: "PATCH",
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    console.log("cartItem count update success");
+                },
+                error: function (jqXHR, status, error) {
+                    if (jqXHR.status === '401') {
+                        alert('로그인 후 이용해주세요.');
+                        location.href = "/login";
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+                },
+            })
+        }
+
+        function deleteCartItem(obj) {
+            let cartItemId = obj.dataset.id;
+
+            $.ajax({
+                url: "/cartItem/" + cartItemId,
+                type: "DELETE",
+                dataType: "json",
+                cache: false,
+                success: function (result, status) {
+                    location.href='/cart';
+                },
+                error: function (jqXHR, status, error) {
+                    if (jqXHR.status === '401') {
+                        alert('로그인 후 이용해주세요.');
+                        location.href = '/login';
+                    } else {
+                        alert(jqXHR.responseJSON.message);
+                    }
+                },
+            })
+        }
+    </script>
+</body>
+</html>
+

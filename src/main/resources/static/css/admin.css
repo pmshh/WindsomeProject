@@ -55,6 +55,7 @@ input:-webkit-autofill:active {
 /*  start */
 .black_btn_w130_h40,
 .black_btn_w90_h40,
+.black_btn_w90_h30,
 .black_btn_w65_h30 {
   display: inline-block;
   padding: 10px 8px 10px 8px;
@@ -68,6 +69,7 @@ input:-webkit-autofill:active {
 }
 .black_btn_w130_h40:hover,
 .black_btn_w90_h40:hover,
+.black_btn_w90_h30:hover,
 .black_btn_w65_h30:hover {
   background-color: #474747;
 }
@@ -82,6 +84,11 @@ input:-webkit-autofill:active {
   height: 40px;
 }
 
+.black_btn_w90_h30 {
+  width: 90px;
+  height: 30px;
+}
+
 .black_btn_w65_h30 {
   width: 65px;
   height: 30px;
@@ -89,6 +96,7 @@ input:-webkit-autofill:active {
 
 .white_btn_w130_h40,
 .white_btn_w90_h40,
+.white_btn_w90_h30,
 .white_btn_w65_h30 {
   display: inline-block;
   padding: 10px 8px 10px 8px;
@@ -102,6 +110,7 @@ input:-webkit-autofill:active {
 }
 .white_btn_w130_h40:hover,
 .white_btn_w90_h40:hover,
+.white_btn_w90_h30:hover,
 .white_btn_w65_h30:hover {
   border: 1px solid black;
 }
@@ -114,6 +123,11 @@ input:-webkit-autofill:active {
 .white_btn_w90_h40 {
   width: 90px;
   height: 40px;
+}
+
+.white_btn_w90_h30 {
+  width: 90px;
+  height: 30px;
 }
 
 .white_btn_w65_h30 {

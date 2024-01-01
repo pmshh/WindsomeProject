@@ -54,7 +54,8 @@
                                             </td>
                                             <td class="state">배송중</td>
                                             <td>
-                                                <button th:if="${order.orderStatus == T(com.windsome.constant.OrderStatus).ORDER}" class="black_btn_w65_h30" type="button" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                <button th:if="${order.orderStatus == T(com.windsome.constant.OrderStatus).ORDER}" class="black_btn_w65_h30" type="button"
+                                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
                                                 <div th:unless="${order.orderStatus == T(com.windsome.constant.OrderStatus).ORDER}">취소 완료</div>
                                             </td>
                                         </th:block>

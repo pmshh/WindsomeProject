@@ -1,5 +1,6 @@
 package com.windsome.service;
 
+import com.windsome.dto.CartDetailDto;
 import com.windsome.dto.CartItemDto;
 import com.windsome.entity.Account;
 import com.windsome.entity.Cart;
@@ -12,8 +13,11 @@ import com.windsome.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +49,43 @@ public class CartService {
             cartItemRepository.save(cartItem);
             return cartItem.getId();
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<CartDetailDto> getCartList(String userIdentifier) {
+        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
+
+        Account account = accountRepository.findByUserIdentifier(userIdentifier);
+        Cart cart = cartRepository.findByAccountId(account.getId());
+        if (cart == null) {
+            return cartDetailDtoList;
+        }
+
+        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
+
+        return cartDetailDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartItemId, String userIdentifier) {
+        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        Account savedAccount = cartItem.getCart().getAccount();
+
+        if (!StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void updateCartItemCount(Long cartItemId, int count) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItem.updateCount(count);
+    }
+
+    public void deleteCartItem(Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItemRepository.delete(cartItem);
     }
 }

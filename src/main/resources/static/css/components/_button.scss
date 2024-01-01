@@ -1,6 +1,7 @@
 /*  start */
 .black_btn_w130_h40,
 .black_btn_w90_h40,
+.black_btn_w90_h30,
 .black_btn_w65_h30 {
     display: inline-block;
     padding: 10px 8px 10px 8px;
@@ -27,6 +28,11 @@
     height: 40px;
 }
 
+.black_btn_w90_h30 {
+    width: 90px;
+    height: 30px;
+}
+
 .black_btn_w65_h30 {
     width: 65px;
     height: 30px;
@@ -34,6 +40,7 @@
 
 .white_btn_w130_h40,
 .white_btn_w90_h40,
+.white_btn_w90_h30,
 .white_btn_w65_h30 {
     display: inline-block;
     padding: 10px 8px 10px 8px;
@@ -58,6 +65,11 @@
 .white_btn_w90_h40 {
     width: 90px;
     height: 40px;
+}
+
+.white_btn_w90_h30 {
+    width: 90px;
+    height: 30px;
 }
 
 .white_btn_w65_h30 {

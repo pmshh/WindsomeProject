@@ -3,28 +3,6 @@
 
 <head>
     <div th:replace="/layouts/adminLayout.html :: head"></div>
-
-    <!-- custom js -->
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            $(".search_btn").on("click", function (e) {
-                e.preventDefault();
-                page(0);
-            });
-        })
-
-        function page(page) {
-            let searchDateType = $(".search_date_type").val();
-            let searchSellStatus = $(".search_sell_status").val();
-            let searchBy = $(".search_by").val();
-            let searchQuery = $(".search_query").val();
-
-            location.href = "/admin/items/" + page + "?searchDateType=" + searchDateType
-                + "&searchSellStatus=" + searchSellStatus
-                + "&searchBy=" + searchBy
-                + "&searchQuery=" + searchQuery;
-        }
-    </script>
 </head>
 
 <body>
@@ -137,4 +115,26 @@
             <div th:replace="/layouts/adminLayout.html :: footer"></div>
         </article>
     </main>
+
+    <!-- custom js -->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $(".search_btn").on("click", function (e) {
+                e.preventDefault();
+                page(0);
+            });
+        })
+
+        function page(page) {
+            let searchDateType = $(".search_date_type").val();
+            let searchSellStatus = $(".search_sell_status").val();
+            let searchBy = $(".search_by").val();
+            let searchQuery = $(".search_query").val();
+
+            location.href = "/admin/items/" + page + "?searchDateType=" + searchDateType
+                + "&searchSellStatus=" + searchSellStatus
+                + "&searchBy=" + searchBy
+                + "&searchQuery=" + searchQuery;
+        }
+    </script>
 </body>

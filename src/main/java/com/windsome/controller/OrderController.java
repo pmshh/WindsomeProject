@@ -41,7 +41,7 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public @ResponseBody ResponseEntity<?> order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, @CurrentAccount Account account) {
+    public ResponseEntity<Object> order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, @CurrentAccount Account account) {
 
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -49,27 +49,27 @@ public class OrderController {
             for (FieldError fieldError : fieldErrors) {
                 sb.append(fieldError.getDefaultMessage());
             }
-            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(sb.toString());
         }
 
         Long orderId;
         try {
             orderId = orderService.order(orderDto, account.getUserIdentifier());
         } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return ResponseEntity.ok().body(orderId);
     }
 
     @PostMapping("/order/{orderId}/cancel")
-    public @ResponseBody ResponseEntity<?> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentAccount Account account) {
+    public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentAccount Account account) {
         if (!orderService.validateOrder(orderId, account.getUserIdentifier())) {
-            return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 취소 권한이 없습니다.");
         }
 
         orderService.cancelOrder(orderId);
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return ResponseEntity.ok().body(orderId);
     }
 
 }
