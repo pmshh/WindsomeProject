@@ -85,22 +85,19 @@
                                             <span>주문 수량</span>
                                         </div>
                                         <div class="con">
-                                            <input class="order_cnt_input" type="text" value="1">
+                                            <input class="order_cnt_input" type="text" value="1" onchange="changeCount(this)">
                                             <div class="cnt_btn">
-                                                <i class="xi-caret-up-min" onclick="order_cnt('plus')"></i>
-                                                <i class="xi-caret-down-min" onclick="order_cnt('minus')"></i>
+                                                <i class="xi-caret-up-min" onclick="changeCountBtn('plus')"></i>
+                                                <i class="xi-caret-down-min" onclick="changeCountBtn('minus')"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="total_price">
-                                    <span class="total">
-                                        <strong>
-                                            <em class="total_amount"
-                                                th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
-                                        </strong>
-                                        <em class="total_order_cnt">(1개)</em>
-                                    </span>
+                                <div class="total_box">
+                                    <strong>
+                                        <em class="total_price" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
+                                    </strong>
+                                    <em class="total_order_cnt">(1개)</em>
                                 </div>
                                 <div class="btn_inner">
                                     <div class="buy_btn">
@@ -124,8 +121,10 @@
         $(document).ready(function () {
             let orderCntInput = document.querySelector('.order_cnt_input');
 
-            $('.order_cnt_input').on("propertychange change paste input", function () {
-                console.log(orderCntInput.value);
+            $('.order_cnt_input').on("change", function () {
+                if ($('.order_cnt_input').val() > [[${ item.stockNumber }]]) {
+                    alert('죄송합니다. 재고가 부족합니다.');
+                }
             });
         });
 
@@ -134,29 +133,60 @@
             fullImg.src = smallImg.src;
         }
 
-        function order_cnt(type) {
-            let min_cnt = 1;
-            let this_cnt = $('.order_cnt_input').val() * 1;
-            let max_cnt = [[${ item.stockNumber }]]; // 현재 재고
+        // "직접 수량 입력 시" 상품의 재고 확인 및 총 가격 출력
+        function changeCount(obj) {
+            let minCnt = 1;
+            let maxCnt = [[${ item.stockNumber }]]; // 현재 재고
+            let thisCnt = $('.order_cnt_input');
+            let countVal = thisCnt.val();
+
+            if (countVal < minCnt) {
+                alert('수량은 1개 이상 입력해 주세요.');
+                thisCnt.val(1);
+                getOrderTotalPrice();
+                return;
+            } else if ( countVal > maxCnt ) {
+                alert('죄송합니다. 재고가 부족합니다.');
+                thisCnt.val(maxCnt);
+                getOrderTotalPrice();
+                return;
+            }
+            getOrderTotalPrice();
+        }
+
+        // "버튼 클릭 시" 상품의 재고 확인 및 총 가격 출력
+        function changeCountBtn(type) {
+            let minCnt = 1;
+            let thisCnt = $('.order_cnt_input').val() * 1;
+            let maxCnt = [[${ item.stockNumber }]]; // 현재 재고
+            let totalPrice = [[${ item.price }]] * thisCnt;
 
             if (type === 'minus') {
-                this_cnt -= 1;
-                if (this_cnt < min_cnt) {
+                thisCnt -= 1;
+                if (this_cnt < minCnt) {
                     alert('수량은 1개 이상 입력해 주세요.');
                     return;
                 }
             } else if (type === 'plus') {
-                this_cnt += 1;
-                if (this_cnt > max_cnt) {
+                thisCnt += 1;
+                if (thisCnt > maxCnt) {
                     alert('죄송합니다. 재고가 부족합니다.');
                     return;
                 }
             }
 
-            let total_amount = [[${ item.price }]] * this_cnt;
-            $(".order_cnt_input").val(this_cnt);
-            $(".total_order_cnt").html('(' + this_cnt + '개)');
-            $(".total_amount").html(total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+            totalPrice = [[${ item.price }]] * thisCnt;
+            $(".order_cnt_input").val(thisCnt);
+            $(".total_order_cnt").html('(' + thisCnt + '개)');
+            $(".total_price").html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+        }
+
+        // 상품의 총 가격 출력
+        function getOrderTotalPrice() {
+            let countVal = $('.order_cnt_input').val();
+            let totalPrice = [[${ item.price }]] * Number(countVal);
+
+            $('.total_price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         }
 
         function order() {
