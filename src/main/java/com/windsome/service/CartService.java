@@ -51,6 +51,16 @@ public class CartService {
         }
     }
 
+    public void deleteCartItem(Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItemRepository.delete(cartItem);
+    }
+
+    public void updateCartItemCount(Long cartItemId, int count) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItem.updateCount(count);
+    }
+
     @Transactional(readOnly = true)
     public List<CartDetailDto> getCartList(String userIdentifier) {
         List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
@@ -77,15 +87,5 @@ public class CartService {
         }
 
         return true;
-    }
-
-    public void updateCartItemCount(Long cartItemId, int count) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        cartItem.updateCount(count);
-    }
-
-    public void deleteCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        cartItemRepository.delete(cartItem);
     }
 }

@@ -1,6 +1,7 @@
 package com.windsome.repository;
 
 import com.windsome.dto.CartDetailDto;
+import com.windsome.entity.Cart;
 import com.windsome.entity.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,8 +13,6 @@ import java.util.Optional;
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     CartItem findByCartIdAndItemId(Long cartId, Long itemId);
-
-    Optional<CartItem> findByItemId(Long itemId);
 
     @Query("select new com.windsome.dto.CartDetailDto(ci.id, i.id, i.itemNm, i.price, i.stockNumber, ci.count, im.imgUrl) " +
             "from CartItem ci, ItemImg im " +
