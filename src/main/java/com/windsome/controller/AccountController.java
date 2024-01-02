@@ -31,7 +31,6 @@ public class AccountController {
 
     private final SignUpDtoValidator signUpDtoValidator;
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
 
     @InitBinder("signUpForm")
@@ -64,11 +63,7 @@ public class AccountController {
     @PostMapping("/check/id")
     @ResponseBody
     public String checkId(String userId) {
-        if (accountRepository.existsByUserIdentifier(userId)) {
-            return "fail";
-        } else {
-            return "success";
-        }
+        return accountService.checkId(userId);
     }
 
     @GetMapping("/check/email")

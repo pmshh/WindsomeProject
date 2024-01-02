@@ -1,0 +1,126 @@
+
+Execute DDL : 
+
+    drop table if exists account CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists cart CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists cart_item CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists category CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists item CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists item_img CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists order_item CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists orders CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists persistent_logins CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists account CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists cart CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists cart_item CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists category CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists item CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists item_img CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists order_item CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists orders CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------
+
+Execute DDL : 
+
+    drop table if exists persistent_logins CASCADE 
+
+Execution Time: 0 ms
+----------------------------------------------------------------------------------------------------

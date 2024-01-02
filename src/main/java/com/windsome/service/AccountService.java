@@ -116,4 +116,12 @@ public class AccountService {
             return "fail";
         }
     }
+
+    public String checkId(String userId) {
+        if (accountRepository.existsByUserIdentifier(userId)) {
+            return "fail";
+        } else {
+            return "success";
+        }
+    }
 }
