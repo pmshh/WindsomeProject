@@ -80,13 +80,7 @@ class ItemServiceTest {
     }
 
     private ItemFormDto getItemFormDto(String itemNm, String itemDetail) {
-        return ItemFormDto.builder()
-                .itemNm(itemNm)
-                .itemSellStatus(ItemSellStatus.SELL)
-                .itemDetail(itemDetail)
-                .price(10000)
-                .stockNumber(100)
-                .build();
+        return new ItemFormDto(null, "test", 10000, 0.0, "test", 100, ItemSellStatus.SELL, null, null, null);
     }
 
     List<MultipartFile> createMultipartFiles(String imageNameParam) throws Exception {

@@ -38,7 +38,7 @@ public class AdminController {
 
     @GetMapping("/item")
     public String itemForm(Model model) throws Exception {
-        model.addAttribute("itemFormDto", ItemFormDto.builder().build());
+        model.addAttribute("itemFormDto", new ItemFormDto());
         model.addAttribute("categories", categoryService.getJsonCategories());
         model.addAttribute("formActionParam", "");
         return "admin/item/itemForm";
@@ -80,7 +80,7 @@ public class AdminController {
             model.addAttribute("itemFormDto", itemFormDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
-            model.addAttribute("itemFormDto", ItemFormDto.builder().build());
+            model.addAttribute("itemFormDto", new ItemFormDto());
             return "admin/item/itemForm";
         }
         return "admin/item/itemForm";

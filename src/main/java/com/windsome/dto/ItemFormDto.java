@@ -3,8 +3,10 @@ package com.windsome.dto;
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.entity.Category;
 import com.windsome.entity.Item;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.ui.Model;
 
@@ -14,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemFormDto {
 
     private Long id;
