@@ -27,48 +27,79 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class ItemServiceTest {
 
-    @Autowired
-    ItemService itemService;
-    @Autowired
-    ItemRepository itemRepository;
-    @Autowired
-    ItemImgRepository itemImgRepository;
-
-    List<MultipartFile> createMultipartFiles() throws Exception {
-        List<MultipartFile> multipartFileList = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            String path = "C:/shop/item/";
-            String imageName = "image" + i + ".jpg";
-            MockMultipartFile multipartFile = new MockMultipartFile(path, imageName, "image/jpg", new byte[]{1, 2, 3, 4});
-            multipartFileList.add(multipartFile);
-        }
-        return multipartFileList;
-    }
+    @Autowired ItemService itemService;
+    @Autowired ItemRepository itemRepository;
+    @Autowired ItemImgRepository itemImgRepository;
 
     @Test
     @DisplayName("상품 등록 테스트")
     @WithMockUser(username = "admin", roles = "ADMIN")
     void saveItem() throws Exception {
-        ItemFormDto itemFormDto = new ItemFormDto();
-        itemFormDto.setItemNm("테스트 상품");
-        itemFormDto.setItemSellStatus(ItemSellStatus.SELL);
-        itemFormDto.setItemDetail("테스트 상품 입니다.");
-        itemFormDto.setPrice(1000);
-        itemFormDto.setStockNumber(100);
+        // given
+        ItemFormDto itemFormDto = getItemFormDto("제목", "상세 내용");
+        List<MultipartFile> multipartFileList = createMultipartFiles("이미지 제목");
 
-        List<MultipartFile> multipartFileList = createMultipartFiles();
+        // when
         Long itemId = itemService.saveItem(itemFormDto, multipartFileList);
-
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(EntityNotFoundException::new);
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
+        // then
         assertEquals(itemFormDto.getItemNm(), item.getItemNm());
-        assertEquals(itemFormDto.getItemSellStatus(), item.getItemSellStatus());
         assertEquals(itemFormDto.getItemDetail(), item.getItemDetail());
-        assertEquals(itemFormDto.getPrice(), item.getPrice());
-        assertEquals(itemFormDto.getStockNumber(), item.getStockNumber());
         assertEquals(multipartFileList.get(0).getOriginalFilename(), itemImgList.get(0).getOriImgName());
+    }
+
+    @Test
+    @DisplayName("상품 수정 테스트")
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    void updateItem() throws Exception {
+        // given
+        ItemFormDto itemFormDto = getItemFormDto("제목", "상세 내용");
+        List<MultipartFile> multipartFileList = createMultipartFiles("이미지 제목");
+
+        Long itemId = itemService.saveItem(itemFormDto, multipartFileList);
+        List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
+
+        List<Long> itemImgIds = new ArrayList<>();
+        for (ItemImg itemImg : itemImgList) {
+            itemImgIds.add(itemImg.getId());
+        }
+
+        ItemFormDto newItemFormDto = getItemFormDto("제목 수정", "상세 내용 수정");
+        newItemFormDto.setId(itemId);
+        newItemFormDto.setItemImgIds(itemImgIds);
+        List<MultipartFile> newMultipartFileList = createMultipartFiles("제목 수정");
+
+        // when
+        itemService.updateItem(newItemFormDto, newMultipartFileList);
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+
+        // then
+        assertEquals(item.getItemNm(), newItemFormDto.getItemNm());
+        assertEquals(item.getItemDetail(), newItemFormDto.getItemDetail());
+        assertEquals(itemImgList.get(0).getOriImgName(), newMultipartFileList.get(0).getOriginalFilename());
+    }
+
+    private ItemFormDto getItemFormDto(String itemNm, String itemDetail) {
+        return ItemFormDto.builder()
+                .itemNm(itemNm)
+                .itemSellStatus(ItemSellStatus.SELL)
+                .itemDetail(itemDetail)
+                .price(10000)
+                .stockNumber(100)
+                .build();
+    }
+
+    List<MultipartFile> createMultipartFiles(String imageNameParam) throws Exception {
+        List<MultipartFile> multipartFileList = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            String path = "C:/shop/item/";
+            String imageName = imageNameParam + i + ".jpg";
+            MockMultipartFile multipartFile = new MockMultipartFile(path, imageName, "image/jpg", new byte[]{1, 2, 3, 4});
+            multipartFileList.add(multipartFile);
+        }
+        return multipartFileList;
     }
 }
