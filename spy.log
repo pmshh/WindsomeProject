@@ -124,3 +124,5 @@ Execute DDL :
 
 Execution Time: 0 ms
 ----------------------------------------------------------------------------------------------------
+1704252058559|0|rollback|connection 4|url jdbc:h2:mem:db||
+1704252270226|1|rollback|connection 4|url jdbc:h2:mem:db||

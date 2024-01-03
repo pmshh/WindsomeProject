@@ -47,6 +47,11 @@ public class OrderService {
         return order.getId();
     }
 
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        order.cancelOrder();
+    }
+
     public Page<OrderHistDto> getOrderList(String userIdentifier, Pageable pageable) {
         List<Order> orders = orderRepository.findOrders(userIdentifier, pageable);
         Long totalCount = orderRepository.countOrder(userIdentifier);
@@ -60,12 +65,11 @@ public class OrderService {
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
                 OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
+
                 orderHistDto.addOrderItemDto(orderItemDto);
             }
-
             orderHistDtoList.add(orderHistDto);
         }
-
         return new PageImpl<OrderHistDto>(orderHistDtoList, pageable, totalCount);
     }
 
@@ -76,10 +80,5 @@ public class OrderService {
         Account savedAccount = order.getAccount();
 
         return StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
-    }
-
-    public void cancelOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-        order.cancelOrder();
     }
 }
