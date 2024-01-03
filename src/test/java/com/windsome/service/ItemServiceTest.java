@@ -33,7 +33,6 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("상품 등록 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
     void saveItem() throws Exception {
         // given
         ItemFormDto itemFormDto = getItemFormDto("제목", "상세 내용");
@@ -52,7 +51,6 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("상품 수정 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
     void updateItem() throws Exception {
         // given
         ItemFormDto itemFormDto = getItemFormDto("제목", "상세 내용");

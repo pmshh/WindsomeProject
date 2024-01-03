@@ -29,38 +29,6 @@ class OrderTest {
     @Autowired OrderItemRepository orderItemRepository;
     @PersistenceContext EntityManager em;
 
-    public Item createItem() {
-        Item item = new Item();
-        item.setItemNm("테스트 상품");
-        item.setPrice(10000);
-        item.setItemDetail("상세 설명");
-        item.setItemSellStatus(ItemSellStatus.SELL);
-        item.setStockNumber(100);
-        return item;
-    }
-
-    public Order createOrder() {
-        Order order = new Order();
-
-        for (int i = 0; i < 3; i++) {
-            Item item = createItem();
-            itemRepository.save(item);
-            OrderItem orderItem = new OrderItem();
-            orderItem.setItem(item);
-            orderItem.setCount(10);
-            orderItem.setOrderPrice(1000);
-            orderItem.setOrder(order);
-            order.getOrderItems().add(orderItem);
-        }
-
-        Account account = new Account();
-        accountRepository.save(account);
-
-        order.setAccount(account);
-        orderRepository.save(order);
-        return order;
-    }
-
     @Test
     @DisplayName("고아객체 제거 테스트")
     public void orphanRemovalTest() {
@@ -109,4 +77,35 @@ class OrderTest {
         System.out.println(" ================================ ");
     }
 
+    public Item createItem() {
+        Item item = new Item();
+        item.setItemNm("테스트 상품");
+        item.setPrice(10000);
+        item.setItemDetail("상세 설명");
+        item.setItemSellStatus(ItemSellStatus.SELL);
+        item.setStockNumber(100);
+        return item;
+    }
+
+    public Order createOrder() {
+        Order order = new Order();
+
+        for (int i = 0; i < 3; i++) {
+            Item item = createItem();
+            itemRepository.save(item);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            order.getOrderItems().add(orderItem);
+        }
+
+        Account account = new Account();
+        accountRepository.save(account);
+
+        order.setAccount(account);
+        orderRepository.save(order);
+        return order;
+    }
 }

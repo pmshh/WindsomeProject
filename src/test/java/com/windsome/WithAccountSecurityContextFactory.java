@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 @RequiredArgsConstructor
-public class WithAccountSecurityContextFacotry implements WithSecurityContextFactory<WithAccount> {
+public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final AccountService accountService;
@@ -21,14 +21,15 @@ public class WithAccountSecurityContextFacotry implements WithSecurityContextFac
     public SecurityContext createSecurityContext(WithAccount withAccount) {
         String userIdentifier = withAccount.value();
 
-        SignUpFormDto signUpFormDto = new SignUpFormDto();
-        signUpFormDto.setUserIdentifier(userIdentifier);
-        signUpFormDto.setEmail("pms000723@gmail.com");
-        signUpFormDto.setName("홍길동");
-        signUpFormDto.setPassword("test1234");
-        signUpFormDto.setAddress1("test");
-        signUpFormDto.setAddress2("test");
-        signUpFormDto.setAddress3("test");
+        SignUpFormDto signUpFormDto = SignUpFormDto.builder()
+                .userIdentifier(userIdentifier)
+                .email("test1234@email.com")
+                .name("gildong")
+                .password("test1234")
+                .address1("test")
+                .address2("test")
+                .address3("test")
+                .build();
         accountService.processNewAccount(signUpFormDto);
 
         UserDetails principal = customUserDetailsService.loadUserByUsername(userIdentifier);

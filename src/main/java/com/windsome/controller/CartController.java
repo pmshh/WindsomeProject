@@ -26,14 +26,15 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/cart")
-    public String orderHist(@CurrentAccount Account account, Model model) {
+    public String cartHist(@CurrentAccount Account account, Model model) {
         List<CartDetailDto> cartDetailList = cartService.getCartList(account.getUserIdentifier());
         model.addAttribute("cartItems", cartDetailList);
         return "cart/cartList";
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<Object> order(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, @CurrentAccount Account account) {
+    public ResponseEntity<Object> cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult,
+                                       @CurrentAccount Account account) {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();

@@ -45,7 +45,7 @@ public class AccountController {
 
     @GetMapping("/signUp")
     public String signUpForm(Model model) {
-        model.addAttribute(new SignUpFormDto());
+        model.addAttribute(SignUpFormDto.builder().build());
         return "account/signUp";
     }
 

@@ -32,41 +32,6 @@ class CartServiceTest {
     @Autowired CartRepository cartRepository;
     @Autowired ItemImgRepository itemImgRepository;
 
-    public Item saveItem() {
-        Item item = Item.builder()
-                .itemNm("테스트 상품")
-                .price(10000)
-                .itemDetail("테스트 상품 상세 설명")
-                .itemSellStatus(ItemSellStatus.SELL)
-                .stockNumber(100)
-                .build();
-        return itemRepository.save(item);
-    }
-
-    public Account saveAccount() {
-        Account account = Account.builder()
-                .userIdentifier("gildong123")
-                .password("gildong123")
-                .name("gildong")
-                .email("gildong@naver.com")
-                .address1("test")
-                .address2("test")
-                .address3("test")
-                .build();
-        return accountRepository.save(account);
-    }
-
-    public ItemImg saveItemImg(Item item) {
-        ItemImg itemImg = ItemImg.builder()
-                .imgName("test imgName")
-                .oriImgName("test oriImgName")
-                .imgUrl("test imgUrl")
-                .repImgYn("Y")
-                .item(item)
-                .build();
-        return itemImgRepository.save(itemImg);
-    }
-
     @Test
     @DisplayName("장바구니 추가 테스트")
     public void addCart() {
@@ -154,5 +119,40 @@ class CartServiceTest {
 
         assertEquals(cartList.size(), 2);
         assertEquals(cartList.get(0).getItemId(), item2.getId());
+    }
+
+    public Item saveItem() {
+        Item item = Item.builder()
+                .itemNm("테스트 상품")
+                .price(10000)
+                .itemDetail("테스트 상품 상세 설명")
+                .itemSellStatus(ItemSellStatus.SELL)
+                .stockNumber(100)
+                .build();
+        return itemRepository.save(item);
+    }
+
+    public Account saveAccount() {
+        Account account = Account.builder()
+                .userIdentifier("gildong123")
+                .password("gildong123")
+                .name("gildong")
+                .email("gildong@naver.com")
+                .address1("test")
+                .address2("test")
+                .address3("test")
+                .build();
+        return accountRepository.save(account);
+    }
+
+    public void saveItemImg(Item item) {
+        ItemImg itemImg = ItemImg.builder()
+                .imgName("test imgName")
+                .oriImgName("test oriImgName")
+                .imgUrl("test imgUrl")
+                .repImgYn("Y")
+                .item(item)
+                .build();
+        itemImgRepository.save(itemImg);
     }
 }

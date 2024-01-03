@@ -34,14 +34,15 @@ class MainControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        SignUpFormDto signUpFormDto = new SignUpFormDto();
-        signUpFormDto.setUserIdentifier("pms000723");
-        signUpFormDto.setEmail("pms000723@gmail.com");
-        signUpFormDto.setName("홍길동");
-        signUpFormDto.setPassword("12345678");
-        signUpFormDto.setAddress1("test");
-        signUpFormDto.setAddress2("test");
-        signUpFormDto.setAddress3("test");
+        SignUpFormDto signUpFormDto = SignUpFormDto.builder()
+                .userIdentifier("test1234")
+                .email("test1234@email.com")
+                .name("gildong")
+                .password("test1234")
+                .address1("test")
+                .address2("test")
+                .address3("test")
+                .build();
         accountService.processNewAccount(signUpFormDto);
     }
 

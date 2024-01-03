@@ -51,9 +51,9 @@ class AccountControllerTest {
     @Test
     void signUpSubmit_with_wrong_input() throws Exception {
         mockMvc.perform(post("/signUp")
-                        .param("userIdentifier", "pms000723")
+                        .param("userIdentifier", "test1234")
                         .param("email", "email..")
-                        .param("name", "minsu")
+                        .param("name", "gildong")
                         .param("password", "1234")
                         .param("passwordConfirm", "test1234")
                         .param("address1", "test")
@@ -68,9 +68,9 @@ class AccountControllerTest {
     @Test
     void signUpSubmit() throws Exception {
         mockMvc.perform(post("/signUp")
-                        .param("userIdentifier", "pms000723")
+                        .param("userIdentifier", "test1234")
                         .param("email", "email@email.com")
-                        .param("name", "minsu")
+                        .param("name", "gildong")
                         .param("password", "test1234")
                         .param("passwordConfirm", "test1234")
                         .param("address1", "test")
@@ -80,13 +80,13 @@ class AccountControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        Account account = accountRepository.findByUserIdentifier("pms000723");
+        Account account = accountRepository.findByUserIdentifier("test1234");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "test1234");
     }
 
-    @WithAccount("pms000723")
-    @DisplayName("프로필 수정 폼")
+    @WithAccount("test1234")
+    @DisplayName("프로필 수정 화면 보이는지 테스트")
     @Test
     void updateProfileForm() throws Exception {
         mockMvc.perform(get("/account/profile"))
@@ -95,11 +95,11 @@ class AccountControllerTest {
                 .andExpect(model().attributeExists("profileFormDto"));
     }
 
-    @WithAccount("pms000723")
+    @WithAccount("test1234")
     @DisplayName("프로필 수정 - 입력값 정상")
     @Test
     void updateProfile() throws Exception {
-        Account account = accountRepository.findByUserIdentifier("pms000723");
+        Account account = accountRepository.findByUserIdentifier("test1234");
         mockMvc.perform(post("/account/profile")
                         .param("userIdentifier", account.getUserIdentifier())
                         .param("password", "change1234")
@@ -118,11 +118,11 @@ class AccountControllerTest {
         assertTrue(passwordEncoder.matches("change1234", account.getPassword()));
     }
 
-    @WithAccount("pms000723")
+    @WithAccount("test1234")
     @DisplayName("프로필 수정 - 입력값 에러")
     @Test
     void updateProfile_with_error() throws Exception {
-        Account account = accountRepository.findByUserIdentifier("pms000723");
+        Account account = accountRepository.findByUserIdentifier("test1234");
         mockMvc.perform(post("/account/profile")
                         .param("userIdentifier", account.getUserIdentifier())
                         .param("password", "changePassword123")
