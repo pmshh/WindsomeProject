@@ -43,7 +43,7 @@ class OrderServiceTest {
         Item item = saveItem();
         Account account = saveAccount();
 
-        OrderDto orderDto = OrderDto.builder().count(5).itemId(item.getId()).build();
+        OrderDto orderDto = new OrderDto(item.getId(), 3);
 
         // when
         Long orderId = orderService.order(orderDto, account.getUserIdentifier());
@@ -61,7 +61,7 @@ class OrderServiceTest {
         Account account = saveAccount();
         Item item = saveItem();
 
-        OrderDto orderDto = OrderDto.builder().count(5).itemId(item.getId()).build();
+        OrderDto orderDto = new OrderDto(item.getId(), 5);
 
         // when
         Long orderId = orderService.order(orderDto, account.getUserIdentifier());
@@ -83,8 +83,8 @@ class OrderServiceTest {
         saveItemImg(item1);
         saveItemImg(item2);
 
-        OrderDto orderDto1 = OrderDto.builder().count(5).itemId(item1.getId()).build();
-        OrderDto orderDto2 = OrderDto.builder().count(5).itemId(item2.getId()).build();
+        OrderDto orderDto1 = new OrderDto(item1.getId(), 5);
+        OrderDto orderDto2 = new OrderDto(item2.getId(), 5);
 
         // when
         orderService.order(orderDto1, account.getUserIdentifier());
@@ -96,17 +96,6 @@ class OrderServiceTest {
         // then
         assertEquals(orderList.getTotalElements(), 2);
         assertEquals(orderList.getSize(), 4);
-    }
-
-    private void saveItemImg(Item item) {
-        ItemImg itemImg = ItemImg.builder()
-                .item(item)
-                .oriImgName("test")
-                .imgName("test")
-                .imgUrl("test")
-                .repImgYn("Y")
-                .build();
-        itemImgRepository.save(itemImg);
     }
 
     public Item saveItem() {
@@ -131,5 +120,16 @@ class OrderServiceTest {
                 .address3("test")
                 .build();
         return accountRepository.save(account);
+    }
+
+    private void saveItemImg(Item item) {
+        ItemImg itemImg = ItemImg.builder()
+                .item(item)
+                .oriImgName("test")
+                .imgName("test")
+                .imgUrl("test")
+                .repImgYn("Y")
+                .build();
+        itemImgRepository.save(itemImg);
     }
 }

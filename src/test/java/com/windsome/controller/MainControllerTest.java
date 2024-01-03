@@ -55,12 +55,12 @@ class MainControllerTest {
     @Test
     void login() throws Exception {
         mockMvc.perform(post("/login")
-                        .param("userId", "pms000723")
-                        .param("password", "12345678")
+                        .param("userId", "test1234")
+                        .param("password", "test1234")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated().withUsername("pms000723"));
+                .andExpect(authenticated().withUsername("test1234"));
     }
 
     @DisplayName("로그인 실패 - 입력값 오류")

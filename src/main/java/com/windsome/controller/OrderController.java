@@ -42,7 +42,6 @@ public class OrderController {
 
     @PostMapping("/order")
     public ResponseEntity<Object> order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, @CurrentAccount Account account) {
-
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -71,5 +70,4 @@ public class OrderController {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().body(orderId);
     }
-
 }
