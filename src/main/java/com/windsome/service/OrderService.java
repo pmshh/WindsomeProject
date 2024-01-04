@@ -81,4 +81,21 @@ public class OrderService {
 
         return StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
     }
+
+    public Long orders(List<OrderDto> orderDtoList, String userIdentifier) {
+        Account account = accountRepository.findByUserIdentifier(userIdentifier);
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (OrderDto orderDto : orderDtoList) {
+            Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(account, orderItemList);
+        orderRepository.save(order);
+
+        return order.getId();
+    }
 }

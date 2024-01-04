@@ -327,8 +327,6 @@
     }
 }
 
-
-
 .cart_btn {
     position: relative;
     margin: 10px 0 40px;
@@ -338,5 +336,54 @@
         position: absolute;
         top: 0px;
         right: 0;
+    }
+}
+
+.user_help {
+    margin-top: 80px;
+    border: 1px solid #ddd;
+
+    h3 {
+        padding: 20px 0 20px 20px;
+        border-bottom: 1px solid #e8e7e7;
+        color: #101010;
+        font-size: 15px;
+        font-weight: bold;
+        background: #fff;
+    }
+
+    .inner {
+        padding: 5px 9px 20px;
+        font-size: 11px;
+
+        h4 {
+            margin: 20px 0 15px 10px;
+            color: #111;
+            font-size: 12px;
+        }
+
+        ol {
+            padding: 0;
+            margin: 10px 0 10px 11px;
+
+            li {
+                padding-left: 15px;
+                color: #707070;
+                line-height: 10px;
+
+                &::before {
+                    content: "";
+                    display: inline-block;
+                    width: 3px;
+                    height: 3px;
+                    margin: 2px 9px 0 -12px;
+                    vertical-align: top;
+                    border-radius: 50%;
+                    background: #6d6d6d;
+                    line-height: 10px;
+                }
+            }
+
+        }
     }
 }

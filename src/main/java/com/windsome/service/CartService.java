@@ -2,6 +2,8 @@ package com.windsome.service;
 
 import com.windsome.dto.CartDetailDto;
 import com.windsome.dto.CartItemDto;
+import com.windsome.dto.CartOrderDto;
+import com.windsome.dto.OrderDto;
 import com.windsome.entity.Account;
 import com.windsome.entity.Cart;
 import com.windsome.entity.CartItem;
@@ -28,6 +30,7 @@ public class CartService {
     private final AccountRepository accountRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderService orderService;
 
     public Long addCart(CartItemDto cartItemDto, String userIdentifier) {
         Item item = itemRepository.findById(cartItemDto.getItemId()).orElseThrow(EntityNotFoundException::new);
@@ -87,5 +90,25 @@ public class CartService {
         }
 
         return true;
+    }
+
+    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String userIdentifier) {
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+
+            OrderDto orderDto = new OrderDto();
+            orderDto.setItemId(cartItem.getItem().getId());
+            orderDto.setCount(cartItem.getCount());
+            orderDtoList.add(orderDto);
+        }
+
+        Long orderId = orderService.orders(orderDtoList, userIdentifier);
+
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+            cartItemRepository.delete(cartItem);
+        }
+        return orderId;
     }
 }

@@ -1,6 +1,8 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
+import com.windsome.constant.ItemSellStatus;
+import com.windsome.constant.OrderStatus;
 import com.windsome.dto.OrderDto;
 import com.windsome.dto.OrderHistDto;
 import com.windsome.entity.Account;
@@ -30,13 +32,13 @@ public class OrderController {
 
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, @CurrentAccount Account account, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 4);
+        Pageable pageable = PageRequest.of(page.orElse(0), 5);
 
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(account.getUserIdentifier(), pageable);
 
         model.addAttribute("orders", ordersHistDtoList);
-        model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
+        model.addAttribute("orderStatus", OrderStatus.ORDER);
         return "order/orderHist";
     }
 

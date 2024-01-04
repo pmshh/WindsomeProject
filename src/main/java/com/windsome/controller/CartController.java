@@ -3,6 +3,7 @@ package com.windsome.controller;
 import com.windsome.config.security.CurrentAccount;
 import com.windsome.dto.CartDetailDto;
 import com.windsome.dto.CartItemDto;
+import com.windsome.dto.CartOrderDto;
 import com.windsome.entity.Account;
 import com.windsome.repository.CartItemRepository;
 import com.windsome.service.CartService;
@@ -72,5 +73,23 @@ public class CartController {
         }
         cartService.deleteCartItem(cartItemId);
         return ResponseEntity.ok().body(cartItemId);
+    }
+
+    @PostMapping("/cart/orders")
+    public ResponseEntity<Object> orderCartItem(@RequestBody CartOrderDto cartOrderDto, @CurrentAccount Account account) {
+        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+
+        if (cartOrderDtoList == null || cartOrderDtoList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문할 상품을 선택해주세요.");
+        }
+
+        for (CartOrderDto cartOrder : cartOrderDtoList) {
+            if (!cartService.validateCartItem(cartOrder.getCartItemId(), account.getUserIdentifier())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 권한이 없습니다.");
+            }
+        }
+
+        Long orderId = cartService.orderCartItem(cartOrderDtoList, account.getUserIdentifier());
+        return ResponseEntity.ok(orderId);
     }
 }

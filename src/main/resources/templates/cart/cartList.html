@@ -68,10 +68,10 @@
                                                     th:text="|${#numbers.formatInteger(cartItem.price * cartItem.count, 0, 'COMMA')}원|"></strong>
                                         </td>
                                         <td>
-                                            무료
+                                            2,500원
                                         </td>
                                         <td>
-                                            <button class="black_btn_w90_h30">주문하기</button>
+                                            <button th:data-id="${cartItem.cartItemId}" class="black_btn_w90_h30" onclick="order(this)">주문하기</button>
                                             <button th:data-id="${cartItem.cartItemId}" onclick="deleteCartItem(this)" type="button" class="white_btn_w90_h30">
                                                 삭제
                                             </button>
@@ -99,10 +99,10 @@
                                             <span class="order_total_price">0원</span>
                                         </td>
                                         <td>
-                                            + 0원
+                                            <span class="order_delivery_price">+0원</span>
                                         </td>
                                         <td>
-                                            = <span class="order_total_price">0원</span>
+                                            = <span class="total_amount">0원</span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -111,11 +111,32 @@
                         </div>
                     </div>
                     <div class="cart_btn">
-                        <a href="" class="black_btn_w130_h40">전체상품주문</a>
-                        <a href="" class="white_btn_w130_h40">선택상품주문</a>
+                        <button type="button" class="black_btn_w130_h40" onclick="ordersAllItems()">전체상품주문</button>
+                        <button type="button" class="white_btn_w130_h40" onclick="orders()">선택상품주문</button>
                         <span>
                             <a th:href="@{/}" class="white_btn_w130_h40">쇼핑계속하기</a>
                         </span>
+                    </div>
+                    <div class="user_help">
+                        <h3>이용안내</h3>
+                        <div class="inner">
+                            <h4>장바구니 이용안내</h4>
+                            <ol>
+                                <li class="item1">
+                                    [쇼핑계속하기] 버튼을 누르시면 쇼핑을 계속 하실 수 있습니다.
+                                </li>
+                            </ol>
+                            <ol>
+                                <li class="item2">
+                                    장바구니를 이용하여 원하시는 상품만 주문하실 수 있습니다.
+                                </li>
+                            </ol>
+                            <ol>
+                                <li class="item3">
+                                    총 상품 주문 금액이 30,000원 이상인 경우 배송비가 무료입니다.
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -127,10 +148,38 @@
     <!-- 사용자 JS -->
     <script th:inline="javascript">
         $(document).ready(function () {
-            $("input[name=cart_check]").change(function(){
+            let checkInput = $("input[name=cart_check]");
+
+            checkInput.prop("checked", true);
+            getOrderTotalPrice();
+
+            checkInput.change(function(){
                 getOrderTotalPrice();
             })
         });
+
+        function getOrderTotalPrice() {
+            let orderTotalPrice = 0;
+            let orderDeliveryPrice = 0;
+            $("input[name=cart_check]:checked").each(function () {
+                let cartItemId = $(this).val();
+                let price = $("#price_" + cartItemId).attr("data-price");
+                let count = $("#count_" + cartItemId).val();
+                orderTotalPrice += price * count;
+            });
+
+            if (orderTotalPrice >= 30000) {
+                orderDeliveryPrice = 0;
+            } else if (orderTotalPrice === 0) {
+                orderDeliveryPrice = 0;
+            } else {
+                orderDeliveryPrice = 2500;
+            }
+
+            $(".order_total_price").html(orderTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+            $(".order_delivery_price").html('+' + orderDeliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+            $(".total_amount").html((orderDeliveryPrice + orderTotalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+        }
 
         function checkAll() {
             if ($("#check_all").prop("checked")) {
@@ -201,18 +250,6 @@
             updateCartItemCount(cartItemId, countVal);
         }
 
-        function getOrderTotalPrice() {
-            let orderTotalPrice = 0;
-            $("input[name=cart_check]:checked").each(function () {
-                let cartItemId = $(this).val();
-                let price = $("#price_" + cartItemId).attr("data-price");
-                let count = $("#count_" + cartItemId).val();
-                orderTotalPrice += price * count;
-            });
-
-            $(".order_total_price").html(orderTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
-        }
-
         function updateCartItemCount(cartItemId, count) {
             console.log(count);
 
@@ -224,12 +261,12 @@
                 success: function (result, status) {
                     console.log("cartItem count update success");
                 },
-                error: function (jqXHR, status, error) {
-                    if (jqXHR.status === '401') {
+                error: function (request, status, error) {
+                    if (request.status === '401') {
                         alert('로그인 후 이용해주세요.');
                         location.href = "/login";
                     } else {
-                        alert(jqXHR.responseJSON.message);
+                        alert(request.responseText);
                     }
                 },
             })
@@ -238,23 +275,111 @@
         function deleteCartItem(obj) {
             let cartItemId = obj.dataset.id;
 
+            if(confirm("선택하신 상품을 삭제하시겠습니까?")){
+                $.ajax({
+                    url: "/cartItem/" + cartItemId,
+                    type: "DELETE",
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        location.href='/cart';
+                    },
+                    error: function (request, status, error) {
+                        if (request.status === '401') {
+                            alert('로그인 후 이용해주세요.');
+                            location.href = '/login';
+                        } else {
+                            alert(request.responseText);
+                        }
+                    },
+                })
+            }else{
+                false;
+            }
+        }
+
+        function order(obj) {
+            if (confirm("선택하신 상품을 주문하시겠습니까?")) {
+                let cartItemId = $(obj).attr("data-id");
+                let dataList = [];
+                let data = {};
+                let paramData = {};
+                data["cartItemId"] = cartItemId;
+                dataList.push(data);
+                paramData["cartOrderDtoList"] = dataList;
+                let param = JSON.stringify(paramData);
+
+                $.ajax({
+                    url: "/cart/orders",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: param,
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        alert("주문이 완료 되었습니다.");
+                        location.href = '/orders';
+                    },
+                    error: function (request, status, error) {
+                        if (request.status === '401') {
+                            alert('로그인 후 이용해주세요.');
+                            location.href = '/login';
+                        } else {
+                            alert(request.responseText);
+                        }
+                    },
+                });
+            } else {
+                false;
+            }
+
+        }
+
+        function orders() {
+            let dataList = [];
+            let paramData = {};
+
+            $("input[name=cart_check]:checked").each(function () {
+                let data = {};
+                let cartItemId = $(this).val();
+                data["cartItemId"] = cartItemId;
+                dataList.push(data);
+            });
+
+            paramData["cartOrderDtoList"] = dataList;
+
+            let param = JSON.stringify(paramData);
+
             $.ajax({
-                url: "/cartItem/" + cartItemId,
-                type: "DELETE",
+                url: "/cart/orders",
+                type: "POST",
+                contentType: "application/json",
+                data: param,
                 dataType: "json",
                 cache: false,
                 success: function (result, status) {
-                    location.href='/cart';
+                    alert("주문이 완료 되었습니다.");
+                    location.href = '/orders';
                 },
-                error: function (jqXHR, status, error) {
-                    if (jqXHR.status === '401') {
+                error: function (request, status, error) {
+                    if (request.status === '401') {
                         alert('로그인 후 이용해주세요.');
                         location.href = '/login';
                     } else {
-                        alert(jqXHR.responseJSON.message);
+                        alert(request.responseText);
                     }
                 },
-            })
+            });
+        }
+
+        function ordersAllItems() {
+            if (confirm("전체 상품을 주문하시겠습니까?")) {
+                $("input[name=cart_check]").prop("checked", true);
+                getOrderTotalPrice();
+                orders();
+            } else {
+                false;
+            }
         }
     </script>
 </body>

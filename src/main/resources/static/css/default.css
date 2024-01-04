@@ -895,6 +895,48 @@ footer .footer_copyright {
   right: 0;
 }
 
+.user_help {
+  margin-top: 80px;
+  border: 1px solid #ddd;
+}
+.user_help h3 {
+  padding: 20px 0 20px 20px;
+  border-bottom: 1px solid #e8e7e7;
+  color: #101010;
+  font-size: 15px;
+  font-weight: bold;
+  background: #fff;
+}
+.user_help .inner {
+  padding: 5px 9px 20px;
+  font-size: 11px;
+}
+.user_help .inner h4 {
+  margin: 20px 0 15px 10px;
+  color: #111;
+  font-size: 12px;
+}
+.user_help .inner ol {
+  padding: 0;
+  margin: 10px 0 10px 11px;
+}
+.user_help .inner ol li {
+  padding-left: 15px;
+  color: #707070;
+  line-height: 10px;
+}
+.user_help .inner ol li::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  margin: 2px 9px 0 -12px;
+  vertical-align: top;
+  border-radius: 50%;
+  background: #6d6d6d;
+  line-height: 10px;
+}
+
 /* findId page start */
 .find_id_header {
   margin: 0px auto 60px;
