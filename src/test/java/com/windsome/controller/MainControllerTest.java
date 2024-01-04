@@ -43,7 +43,7 @@ class MainControllerTest {
                 .address2("test")
                 .address3("test")
                 .build();
-        accountService.processNewAccount(signUpFormDto);
+        accountService.saveNewAccount(signUpFormDto);
     }
 
     @AfterEach

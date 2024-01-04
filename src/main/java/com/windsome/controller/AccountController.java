@@ -55,7 +55,7 @@ public class AccountController {
             return "account/signUp";
         }
 
-        Account account = accountService.processNewAccount(signUpFormDto);
+        Account account = accountService.saveNewAccount(signUpFormDto);
         accountService.login(signUpFormDto.getUserIdentifier(), signUpFormDto.getPassword());
         return "redirect:/";
     }
@@ -81,7 +81,7 @@ public class AccountController {
     public @ResponseBody boolean findPassPost(String email, String name, Model model) throws MessagingException {
         boolean result = accountService.userEmailCheck(email, name);
         if (result) {
-            accountService.updatePassword(email, name);
+            accountService.findPassword(email, name);
         }
         return result;
     }

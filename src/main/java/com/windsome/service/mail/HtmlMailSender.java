@@ -19,13 +19,13 @@ public class HtmlMailSender implements EmailService {
     private final JavaMailSender javaMailSender;
 
     @Override
-    public void sendEmail(EmailMessage emailMessage) throws MessagingException {
+    public void sendEmail(EmailMessageDto emailMessageDto) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "utf-8");
-        mimeMessageHelper.setTo(emailMessage.getTo());
-        mimeMessageHelper.setSubject(emailMessage.getSubject());
-        mimeMessageHelper.setText(emailMessage.getMessage(), true);
+        mimeMessageHelper.setTo(emailMessageDto.getTo());
+        mimeMessageHelper.setSubject(emailMessageDto.getSubject());
+        mimeMessageHelper.setText(emailMessageDto.getMessage(), true);
         javaMailSender.send(mimeMessage);
-        log.info("sent email: {}", emailMessage.getMessage());
+        log.info("sent email: {}", emailMessageDto.getMessage());
     }
 }

@@ -23,14 +23,14 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
 
         SignUpFormDto signUpFormDto = SignUpFormDto.builder()
                 .userIdentifier(userIdentifier)
-                .email("test1234@email.com")
-                .name("gildong")
+                .email("pms000723@gmail.com")
+                .name("test")
                 .password("test1234")
                 .address1("test")
                 .address2("test")
                 .address3("test")
                 .build();
-        accountService.processNewAccount(signUpFormDto);
+        accountService.saveNewAccount(signUpFormDto);
 
         UserDetails principal = customUserDetailsService.loadUserByUsername(userIdentifier);
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(), principal.getAuthorities());
