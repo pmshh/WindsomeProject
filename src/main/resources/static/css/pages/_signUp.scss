@@ -72,7 +72,7 @@
                     }
 
                     input {
-                        height: 29px;
+                        height: 30px;
                         padding: 2px 4px;
                         border: 1px solid #d5d5d5;
                     }
@@ -92,43 +92,29 @@
                         font-size: 12px;
                     }
 
-                    a.send_mail,
-                    a.check_number {
-                        background-color: #FFFFFF;
-                        border: 1px solid #c5c5c5;
-                        color: black;
-                        width: 105px;
-                        height: 28px;
-                        text-align: center;
-                        padding-top: 5px;
-                        border-radius: 2px;
+                    select.mail_url_select {
+                        width: 120px;
                     }
 
-                    a.send_mail {
-                        display: inline-block;
+                    button.send_mail,
+                    button.check_number,
+                    button.find_addr {
+                        padding: 0 !important;
+                        width: 90px !important;
+                        height: 30px !important;
                     }
 
-                    a.check_number {
-                        display: none;
+                    button.send_mail,
+                    button.check_number {
+                        margin-bottom: 2px;
                     }
 
-                    a.find_addr {
-                        display: inline-block;
-                        background-color: #FFFFFF;
-                        border: 1px solid #c5c5c5;
-                        color: black;
-                        width: 80px;
-                        height: 28px;
-                        text-align: center;
-                        vertical-align: middle;
-                        padding-top: 5px;
-                        border-radius: 2px;
+                    button.send_mail {
+                        width: 55px !important;
                     }
 
-                    a.send_mail:hover,
-                    a.check_number:hover,
-                    a.find_addr:hover {
-                        border: 1px solid black;
+                    button.check_number {
+                        width: 120px !important;
                     }
                 }
             }

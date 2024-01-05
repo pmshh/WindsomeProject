@@ -230,12 +230,6 @@
                                     <li sec:authorize="!isAuthenticated()">
                                         <a th:href="@{/login}">Order Check</a>
                                     </li>
-                                    <li sec:authorize="isAuthenticated()">
-                                        <a th:href="@{/wishlist}">Wish List</a>
-                                    </li>
-                                    <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/login}">Wish List</a>
-                                    </li>
                                 </ul>
                             </div>
                         </li>

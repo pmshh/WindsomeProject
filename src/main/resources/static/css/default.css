@@ -617,7 +617,7 @@ footer .footer_copyright {
 }
 .cart_body .table_box .title h3 {
   color: #353535;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
 }
 .cart_body .table_box table {
@@ -632,7 +632,7 @@ footer .footer_copyright {
   border-right: none;
   border-left: none;
   line-height: 1.7;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0em !important;
   color: #353535;
 }
@@ -673,7 +673,7 @@ footer .footer_copyright {
   vertical-align: top;
 }
 .cart_body .table_box table tbody tr td button {
-  font-size: 11px !important;
+  font-size: 12px !important;
   padding: 0 !important;
   margin-bottom: 2px;
   height: 28px !important;
@@ -909,12 +909,12 @@ footer .footer_copyright {
 }
 .user_help .inner {
   padding: 5px 9px 20px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .user_help .inner h4 {
   margin: 20px 0 15px 10px;
   color: #111;
-  font-size: 12px;
+  font-size: 13px;
 }
 .user_help .inner ol {
   padding: 0;
@@ -2046,7 +2046,7 @@ footer .footer_copyright {
   display: none;
 }
 .signup_body form table tbody td input {
-  height: 29px;
+  height: 30px;
   padding: 2px 4px;
   border: 1px solid #d5d5d5;
 }
@@ -2075,39 +2075,25 @@ footer .footer_copyright {
   background-color: #fff;
   font-size: 12px;
 }
-.signup_body form table tbody td a.send_mail,
-.signup_body form table tbody td a.check_number {
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 105px;
-  height: 28px;
-  text-align: center;
-  padding-top: 5px;
-  border-radius: 2px;
+.signup_body form table tbody td select.mail_url_select {
+  width: 120px;
 }
-.signup_body form table tbody td a.send_mail {
-  display: inline-block;
+.signup_body form table tbody td button.send_mail,
+.signup_body form table tbody td button.check_number,
+.signup_body form table tbody td button.find_addr {
+  padding: 0 !important;
+  width: 90px !important;
+  height: 30px !important;
 }
-.signup_body form table tbody td a.check_number {
-  display: none;
+.signup_body form table tbody td button.send_mail,
+.signup_body form table tbody td button.check_number {
+  margin-bottom: 2px;
 }
-.signup_body form table tbody td a.find_addr {
-  display: inline-block;
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 80px;
-  height: 28px;
-  text-align: center;
-  vertical-align: middle;
-  padding-top: 5px;
-  border-radius: 2px;
+.signup_body form table tbody td button.send_mail {
+  width: 55px !important;
 }
-.signup_body form table tbody td a.send_mail:hover,
-.signup_body form table tbody td a.check_number:hover,
-.signup_body form table tbody td a.find_addr:hover {
-  border: 1px solid black;
+.signup_body form table tbody td button.check_number {
+  width: 120px !important;
 }
 .signup_body form .btn_box {
   padding: 10px 0;
@@ -2394,7 +2380,7 @@ footer .footer_copyright {
 }
 .order_hist_body .title h3 {
   color: #353535;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
 }
 .order_hist_body table {
@@ -2409,7 +2395,7 @@ footer .footer_copyright {
   border-right: none;
   border-left: none;
   line-height: 1.7;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0em !important;
   color: #353535;
 }
@@ -2448,7 +2434,7 @@ footer .footer_copyright {
   color: #111111;
 }
 .order_hist_body table tbody tr td button {
-  font-size: 11px !important;
+  font-size: 12px !important;
   padding: 0 !important;
 }
 .order_hist_body table tbody.center {

@@ -191,25 +191,6 @@ footer .footer_copyright {
   margin: 20px auto;
 }
 
-.box {
-  position: absolute;
-  left: 34%;
-  top: 65px;
-}
-.box ol li {
-  font-size: 11px;
-  display: inline-block;
-}
-.box ol li.link::after {
-  content: "/";
-  font-family: "fontawesome";
-  font-weight: normal;
-  padding-left: 2px;
-}
-.box ol li.current {
-  color: rgba(59, 66, 73, 0.75);
-}
-
 .add_item_body {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -290,6 +271,13 @@ footer .footer_copyright {
 }
 .add_item_body form table tbody td input:focus::placeholder {
   color: transparent;
+}
+.add_item_body form table tbody td input.fake_input {
+  width: 50% !important;
+}
+.add_item_body form table tbody td label.find_file {
+  height: 26px !important;
+  padding: 3px !important;
 }
 .add_item_body form table tbody td textarea {
   width: 100%;

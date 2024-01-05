@@ -68,7 +68,7 @@ public class AdminController {
             model.addAttribute("categories", categoryService.getJsonCategories());
             return "admin/item/itemForm";
         }
-        return "redirect:/";
+        return "redirect:/admin/items";
     }
 
     @GetMapping("/item/{itemId}")

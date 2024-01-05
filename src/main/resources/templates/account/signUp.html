@@ -89,11 +89,21 @@
                                         <td>
                                             <div class="mail_input_box mb-1">
                                                 <input class="mail_input" th:field="*{email}" type="email">
+                                                <span>@</span>
+                                                <input class="mail_url_input" placeholder="이메일을 선택하세요.">
+                                                <select class="mail_url_select">
+                                                    <option value="" disabled selected>선택</option>
+                                                    <option value="naver.com">naver.com</option>
+                                                    <option value="hanmail.net">hanmail.net</option>
+                                                    <option value="gmail.com">gmail.com</option>
+                                                    <option value="nate.com">nate.com</option>
+                                                    <option value="directly">직접 입력하기</option>
+                                                </select>
+                                                <button type="button" class="send_mail white_btn_w65_h30">전송</button>
                                             </div>
                                             <div class="mail_check_box">
                                                 <input class="mail_check_input" disabled="disabled">
-                                                <a class="send_mail">인증번호 전송</a>
-                                                <a class="check_number" onclick="confirmNumber()">인증번호 확인</a>
+                                                <button type="button" class="check_number white_btn_w65_h30" onclick="confirmNumber()">인증번호 확인</button>
                                             </div>
                                             <span class="mail_input_re_1 text-success">사용 가능한 이메일입니다.</span>
                                             <span class="mail_input_re_2 text-danger">이메일이 이미 존재합니다.</span>
@@ -107,7 +117,7 @@
                                         <td>
                                             <input th:field="*{address1}" class="address_input_1 mb-1"
                                                 readonly="readonly">
-                                            <a class="find_addr mb-1" onclick="execution_daum_address()">주소 찾기</a>
+                                            <button class="find_addr white_btn_w65_h30 mb-1" onclick="execution_daum_address()">주소 찾기</button>
                                             <div class="clearfix"></div>
                                             <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
                                                 readonly="readonly">
@@ -213,18 +223,13 @@
                     addressCheck = true;
                 }
 
-                console.log(idCheck);
-                console.log(idckCheck);
-                console.log(pwCheck);
-                console.log(pwckCheck);
-                console.log(pwckcorCheck);
-                console.log(nicknameCheck);
-                console.log(mailCheck);
-                console.log(mailnumCheck);
-                console.log(addressCheck);
+                let mailInputVal = $(".mail_input").val(); // 입력한 이메일 아이디
+                let mailUrlInputVal = $(".mail_url_input").val(); // 입력한 이메일 사이트 주소
+                let totalMail = mailInputVal + '@' + mailUrlInputVal;
 
                 /* 최종 유효성 검사 */
                 if (idCheck && idckCheck && pwCheck && pwckCheck && pwckcorCheck && nicknameCheck && mailCheck && mailnumCheck && addressCheck) {
+                    $('.mail_input').val(totalMail);
                     $('#signUpFormDto').attr("action", "/signUp");
                     $('#signUpFormDto').submit();
                 }
@@ -324,38 +329,49 @@
 
         // 이메일 전송
         $(".send_mail").click(function () {
-            let email = $(".mail_input").val(); // 입력한 이메일
             let check_input = $(".mail_check_input"); // 인증 번호 입력란
-            let send_btn = $(".send_mail"); // 인증 번호 전송 버튼
             let check_btn = $(".check_number"); // 인증 번호 확인 버튼
+            let mailInputVal = $(".mail_input").val();
+            let mailUrlInputVal = $(".mail_url_input").val();
+            let totalEmail = mailInputVal + '@' + mailUrlInputVal;
+
+            if (confirm("입력하신 이메일로 인증번호 메일을 전송하시겠습니까?")) {
+                alert("인증번호가 발송되었습니다.");
+            } else {
+                false;
+            }
 
             // 이메일 중복 체크 및 이메일 전송
             $.ajax({
                 type: "GET",
-                url: "/check/email?email=" + email,
+                url: "/check/email?email=" + totalEmail,
                 success: function (data) {
-                    alert("인증번호가 발송되었습니다.");
                     check_input.attr("disabled", false);
                     check_input.css("background-color", "white");
-                    send_btn.css("display", "none");
                     check_btn.css("display", "inline-block");
                     code = data;
                 }
             })
-
-
         })
 
         // 인증 번호 일치 여부
         function confirmNumber() {
             let check_input = $(".mail_check_input"); // 인증 번호 입력란
             let input_code = $(".mail_check_input").val(); // 사용자가 입력한 인증 번호
-            let check_result = $(".mail_input_warn"); // 비교 결과
+
+            let mailInput = $(".mail_input");
+            let mailUrlInput = $(".mail_url_input");
+            let mailUrlSelect = $(".mail_url_select");
+            let sendMailBtn = $(".send_mail");
 
             if (input_code === code) {
                 alert("인증되었습니다.");
                 check_input.attr("disabled", true);
                 check_input.css("background-color", "#fafafa");
+                mailInput.attr("disabled", true);
+                mailUrlInput.attr("disabled", true);
+                mailUrlSelect.attr("disabled", true);
+                sendMailBtn.css("display", "none");
                 mailnumCheck = true;
             } else {
                 alert("인증번호를 다시 확인해주세요.");
@@ -415,5 +431,18 @@
                 }
             }).open();
         }
+
+        $('.mail_url_select').change(function() {
+            let mailUrlInput = $('.mail_url_input');
+            let mailUrlSelect = $('.mail_url_select');
+
+            if (mailUrlSelect.val() === 'directly') {
+                mailUrlInput.attr("disabled", false);
+                mailUrlInput.val("");
+                mailUrlInput.focus();
+            } else {
+                mailUrlInput.val(mailUrlSelect.val());
+            }
+        })
     </script>
 </body>

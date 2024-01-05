@@ -16,30 +16,6 @@
     }
 }
 
-.box {
-    position: absolute;
-    left: 34%;
-    top: 65px;
-
-    ol {
-        li {
-            font-size: 11px;
-            display: inline-block;
-        }
-
-        li.link::after {
-            content: '/';
-            font-family: 'fontawesome';
-            font-weight: normal;
-            padding-left: 2px;
-        }
-
-        li.current {
-            color: rgba(59, 66, 73, 0.75);
-        }
-    }
-}
-
 .add_item_body {
     display: flex;
     justify-content: center;
@@ -109,6 +85,15 @@
                         &:focus::placeholder {
                             color: transparent;
                         }
+                    }
+
+                    input.fake_input {
+                        width: 50% !important;
+                    }
+
+                    label.find_file {
+                        height: 26px !important;
+                        padding: 3px !important;
                     }
 
                     textarea {
