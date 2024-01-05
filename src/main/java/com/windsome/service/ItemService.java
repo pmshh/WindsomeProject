@@ -33,7 +33,7 @@ public class ItemService {
     }
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
-        Item item = itemFormDto.createItem();
+        Item item = itemFormDto.toEntity();
         itemRepository.save(item);
 
         for (int i = 0; i < itemImgFileList.size(); i++) {
@@ -68,12 +68,12 @@ public class ItemService {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
         for (ItemImg itemImg : itemImgList) {
-            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+            ItemImgDto itemImgDto = ItemImgDto.toDto(itemImg);
             itemImgDtoList.add(itemImgDto);
         }
 
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-        ItemFormDto itemFormDto = ItemFormDto.of(item);
+        ItemFormDto itemFormDto = ItemFormDto.toDto(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
     }

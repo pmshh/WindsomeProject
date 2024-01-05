@@ -22,8 +22,6 @@ public class ItemDto {
 
     private double discount; // 할인율
 
-//    private Category cateCode; // 카테고리
-
     private LocalDateTime regTime; // 등록 시간
 
     private LocalDateTime updateTime; // 수정 시간

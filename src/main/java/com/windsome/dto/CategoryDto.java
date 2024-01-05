@@ -19,6 +19,9 @@ public class CategoryDto {
 
     private List<CategoryDto> children;
 
+    /**
+     * Entity -> Dto
+     */
     public CategoryDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();

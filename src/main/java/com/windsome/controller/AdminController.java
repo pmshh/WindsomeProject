@@ -3,6 +3,7 @@ package com.windsome.controller;
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.ItemFormDto;
 import com.windsome.dto.ItemSearchDto;
+import com.windsome.entity.Category;
 import com.windsome.entity.Item;
 import com.windsome.service.CategoryService;
 import com.windsome.service.ItemService;
@@ -49,23 +50,26 @@ public class AdminController {
                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
                           @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
                           @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
+        String jsonCategories = categoryService.getJsonCategories();
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryService.getJsonCategories());
+            model.addAttribute("categories", jsonCategories);
             return "admin/item/itemForm";
         }
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            model.addAttribute("categories", categoryService.getJsonCategories());
+            model.addAttribute("categories", jsonCategories);
             return "admin/item/itemForm";
         }
 
         try {
-            itemFormDto.setCategory(categoryService.getCategory(parentCateId, childCateId));
+            Category category = categoryService.getCategory(parentCateId, childCateId);
+            itemFormDto.setCategory(category);
             itemService.saveItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            model.addAttribute("categories", categoryService.getJsonCategories());
+            model.addAttribute("categories", jsonCategories);
             return "admin/item/itemForm";
         }
         return "redirect:/admin/items";

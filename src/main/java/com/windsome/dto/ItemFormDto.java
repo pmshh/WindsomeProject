@@ -44,14 +44,16 @@ public class ItemFormDto {
 
     private Category category;
 
-    // Dto -> Entity, Entity -> Dto
+    /**
+     * Dto -> Entity, Entity -> Dto
+     */
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public Item createItem() {
+    public Item toEntity() {
         return modelMapper.map(this, Item.class);
     }
 
-    public static ItemFormDto of(Item item) {
+    public static ItemFormDto toDto(Item item) {
         return modelMapper.map(item, ItemFormDto.class);
     }
 }

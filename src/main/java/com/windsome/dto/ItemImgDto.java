@@ -22,9 +22,12 @@ public class ItemImgDto {
 
     private String repImgYn;
 
+    /**
+     * Entity -> Dto
+     */
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static ItemImgDto of(ItemImg itemImg) {
+    public static ItemImgDto toDto(ItemImg itemImg) {
         return modelMapper.map(itemImg, ItemImgDto.class);
     }
 }
