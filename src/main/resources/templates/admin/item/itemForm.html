@@ -184,137 +184,146 @@
             })
 
             /* 카테고리 추가 */
-            let jsonData = JSON.parse([[${ categories }]]);
-            console.log(jsonData);
 
-            let cate1Arr = [];
-            let cate1Obj = {};
+            $.ajax({
+                url: "/admin/item/categories",
+                type: "GET",
+                success: function(res) {
+                    let jsonData = JSON.parse(res);
 
-            for (let i = 0; i < jsonData.length; i++) {
-                if (jsonData[i].tier === "1") {
-                    cate1Obj = {};
-                    cate1Obj.id = jsonData[i].id;
-                    cate1Obj.name = jsonData[i].name;
-                    cate1Arr.push(cate1Obj);
-                }
-            }
-            let cate1Select = $("select.cate1");
+                    let cate1Arr = [];
+                    let cate1Obj = {};
 
-            for (let i = 0; i < cate1Arr.length; i++) {
-                cate1Select.append("<option name='cateParent' value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
-            }
-
-            cate1Select.on("change", function () {
-                let cate2Arr = [];
-                let cate2Obj = {};
-
-                for (let i = 0; i < jsonData.length; i++) {
-                    for (let j = 0; j < jsonData[i].children.length; j++) {
-                        if (jsonData[i].children[j].tier === "2") {
-                            cate2Obj = {};
-                            cate2Obj.id = jsonData[i].children[j].id;
-                            cate2Obj.name = jsonData[i].children[j].name;
-                            cate2Obj.parent = jsonData[i].children[j].parent;
-                            cate2Arr.push(cate2Obj);
+                    for (let i = 0; i < jsonData.length; i++) {
+                        if (jsonData[i].tier === "1") {
+                            cate1Obj = {};
+                            cate1Obj.id = jsonData[i].id;
+                            cate1Obj.name = jsonData[i].name;
+                            cate1Arr.push(cate1Obj);
                         }
                     }
-                }
-                let cate2Select = $("select.cate2");
-                cate2Select.children().remove();
-                cate2Select.append("<option value=''>선택</option>");
+                    let cate1Select = $("select.cate1");
 
-                let selectVal = $(this).find("option:selected").val();
-                for (let i = 0; i < cate2Arr.length; i++) {
-                    if (selectVal === cate2Arr[i].parent.toString()) {
-                        cate2Select.append("<option name='cateChild' value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
+                    for (let i = 0; i < cate1Arr.length; i++) {
+                        cate1Select.append("<option name='cateParent' value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
                     }
-                }
-            });
 
-            /* 상품 등록 버튼 */
-            $("button").on("click", function (e) {
-                e.preventDefault();
+                    cate1Select.on("change", function () {
+                        let cate2Arr = [];
+                        let cate2Obj = {};
 
-                let itemSellStatusChk = false;
-                let categoryChk = false;
-                let itemNmChk = false;
-                let priceChk = false;
-                let discountChk = false;
-                let stockNumberChk = false;
-                let itemDetailChk = false;
+                        for (let i = 0; i < jsonData.length; i++) {
+                            for (let j = 0; j < jsonData[i].children.length; j++) {
+                                if (jsonData[i].children[j].tier === "2") {
+                                    cate2Obj = {};
+                                    cate2Obj.id = jsonData[i].children[j].id;
+                                    cate2Obj.name = jsonData[i].children[j].name;
+                                    cate2Obj.parent = jsonData[i].children[j].parent;
+                                    cate2Arr.push(cate2Obj);
+                                }
+                            }
+                        }
+                        let cate2Select = $("select.cate2");
+                        cate2Select.children().remove();
+                        cate2Select.append("<option value=''>선택</option>");
 
-                let itemSellStatus = $(".sell_status").val();
-                let category = $(".cate1").val();
-                let itemNm = $(".name_input").val();
-                let price = $(".price_input").val();
-                let discount = $(".discount_interface").val();
-                let stockNumber = $(".stock_input").val();
-                let itemDetail = $("p").html();
+                        let selectVal = $(this).find("option:selected").val();
+                        for (let i = 0; i < cate2Arr.length; i++) {
+                            if (selectVal === cate2Arr[i].parent.toString()) {
+                                cate2Select.append("<option name='cateChild' value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
+                            }
+                        }
+                    });
 
-                // 공란 체크
-                if (itemSellStatus !== 'none') {
-                    $(".sell_status_warn").css('display', 'none');
-                    itemSellStatusChk = true;
-                } else {
-                    $(".sell_status_warn").css('display', 'block');
-                    itemSellStatusChk = false;
-                }
+                    /* 상품 등록 버튼 */
+                    $("button").on("click", function (e) {
+                        e.preventDefault();
 
-                if (category !== 'none') {
-                    $(".category_warn").css('display', 'none');
-                    categoryChk = true;
-                } else {
-                    $(".category_warn").css('display', 'block');
-                    categoryChk = false;
-                }
+                        let itemSellStatusChk = false;
+                        let categoryChk = false;
+                        let itemNmChk = false;
+                        let priceChk = false;
+                        let discountChk = false;
+                        let stockNumberChk = false;
+                        let itemDetailChk = false;
 
-                if (itemNm !== "") {
-                    $(".name_warn").css('display', 'none');
-                    itemNmChk = true;
-                } else {
-                    $(".name_warn").css('display', 'block');
-                    itemNmChk = false;
-                }
+                        let itemSellStatus = $(".sell_status").val();
+                        let category = $(".cate1").val();
+                        let itemNm = $(".name_input").val();
+                        let price = $(".price_input").val();
+                        let discount = $(".discount_interface").val();
+                        let stockNumber = $(".stock_input").val();
+                        let itemDetail = $("p").html();
 
-                if (price !== "") {
-                    $(".price_warn").css('display', 'none');
-                    priceChk = true;
-                } else {
-                    $(".price_warn").css('display', 'block');
-                    priceChk = false;
-                }
+                        // 공란 체크
+                        if (itemSellStatus !== 'none') {
+                            $(".sell_status_warn").css('display', 'none');
+                            itemSellStatusChk = true;
+                        } else {
+                            $(".sell_status_warn").css('display', 'block');
+                            itemSellStatusChk = false;
+                        }
 
-                if (discount !== "" && discount < 100 && discount >= 0) {
-                    $(".discount_warn").css('display', 'none');
-                    discountChk = true;
-                } else {
-                    $(".discount_warn").css('display', 'block');
-                    discountChk = false;
-                }
+                        if (category !== 'none') {
+                            $(".category_warn").css('display', 'none');
+                            categoryChk = true;
+                        } else {
+                            $(".category_warn").css('display', 'block');
+                            categoryChk = false;
+                        }
 
-                if (stockNumber !== "") {
-                    $(".stock_warn").css('display', 'none');
-                    stockNumberChk = true;
-                } else {
-                    $(".stock_warn").css('display', 'block');
-                    stockNumberChk = false;
-                }
+                        if (itemNm !== "") {
+                            $(".name_warn").css('display', 'none');
+                            itemNmChk = true;
+                        } else {
+                            $(".name_warn").css('display', 'block');
+                            itemNmChk = false;
+                        }
 
-                if (itemDetail !== '<br data-cke-filler="true">') {
-                    $(".detail_warn").css('display', 'none');
-                    itemDetailChk = true;
-                } else {
-                    $(".detail_warn").css('display', 'block');
-                    itemDetailChk = false;
-                }
+                        if (price !== "") {
+                            $(".price_warn").css('display', 'none');
+                            priceChk = true;
+                        } else {
+                            $(".price_warn").css('display', 'block');
+                            priceChk = false;
+                        }
 
-                console.log("discountChk = " + discountChk);
+                        if (discount !== "" && discount < 100 && discount >= 0) {
+                            $(".discount_warn").css('display', 'none');
+                            discountChk = true;
+                        } else {
+                            $(".discount_warn").css('display', 'block');
+                            discountChk = false;
+                        }
 
-                if (itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk) {
-                    // $('#itemFormDto').attr("action", "/admin/item/" );
-                    $('#itemFormDto').submit();
-                } else {
-                    return false;
+                        if (stockNumber !== "") {
+                            $(".stock_warn").css('display', 'none');
+                            stockNumberChk = true;
+                        } else {
+                            $(".stock_warn").css('display', 'block');
+                            stockNumberChk = false;
+                        }
+
+                        if (itemDetail !== '<br data-cke-filler="true">') {
+                            $(".detail_warn").css('display', 'none');
+                            itemDetailChk = true;
+                        } else {
+                            $(".detail_warn").css('display', 'block');
+                            itemDetailChk = false;
+                        }
+
+                        console.log("discountChk = " + discountChk);
+
+                        if (itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk) {
+                            // $('#itemFormDto').attr("action", "/admin/item/" );
+                            $('#itemFormDto').submit();
+                        } else {
+                            return false;
+                        }
+                    })
+                },
+                error: function (request, status, error) {
+                    console.log(error);
                 }
             })
 

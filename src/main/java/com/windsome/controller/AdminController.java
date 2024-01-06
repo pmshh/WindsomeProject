@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,7 +41,6 @@ public class AdminController {
     @GetMapping("/item")
     public String itemForm(Model model) throws Exception {
         model.addAttribute("itemFormDto", new ItemFormDto());
-        model.addAttribute("categories", categoryService.getJsonCategories());
         model.addAttribute("formActionParam", "");
         return "admin/item/itemForm";
     }
@@ -50,16 +50,12 @@ public class AdminController {
                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
                           @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
                           @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
-        String jsonCategories = categoryService.getJsonCategories();
-
         if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", jsonCategories);
             return "admin/item/itemForm";
         }
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            model.addAttribute("categories", jsonCategories);
             return "admin/item/itemForm";
         }
 
@@ -69,7 +65,6 @@ public class AdminController {
             itemService.saveItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            model.addAttribute("categories", jsonCategories);
             return "admin/item/itemForm";
         }
         return "redirect:/admin/items";
@@ -77,7 +72,6 @@ public class AdminController {
 
     @GetMapping("/item/{itemId}")
     public String itemUpdateForm(@PathVariable("itemId") Long itemId, Model model) throws Exception {
-        model.addAttribute("categories", categoryService.getJsonCategories());
         model.addAttribute("formActionParam", itemId);
         try {
             ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
@@ -105,11 +99,11 @@ public class AdminController {
         }
 
         try {
-            itemFormDto.setCategory(categoryService.getCategory(parentCateId, childCateId));
+            Category category = categoryService.getCategory(parentCateId, childCateId);
+            itemFormDto.setCategory(category);
             itemService.updateItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
-            model.addAttribute("categories", categoryService.getJsonCategories());
             return "admin/item/itemForm";
         }
 
@@ -118,16 +112,21 @@ public class AdminController {
 
     @GetMapping(value = {"/items", "/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
-        model.addAttribute("sellStatus", ItemSellStatus.SELL);
-
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
-
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
 
+        model.addAttribute("sellStatus", ItemSellStatus.SELL);
         model.addAttribute("items", items);
         model.addAttribute("itemSearchDto", itemSearchDto);
         model.addAttribute("maxPage", 10);
         return "admin/item/itemMng";
     }
+
+    @GetMapping("/item/categories")
+    public ResponseEntity<Object> getItemCategories() throws Exception {
+        String jsonCategories = categoryService.getJsonCategories();
+        return ResponseEntity.ok().body(jsonCategories);
+    }
+
 }
 
