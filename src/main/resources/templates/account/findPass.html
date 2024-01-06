@@ -19,6 +19,17 @@
                         <h2>비밀번호 찾기</h2>
                         <div class="divider"></div>
                     </div>
+
+                    <div class="message_box_fail alert alert-danger alert-dismissible fade show">
+                        <i class="xi-warning me-2"></i><small class="message_fail" style="font-size: 14px;"></small>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div class="message_box_success alert alert-success alert-dismissible fade show">
+                        <i class="xi-check-min me-2"></i><small class="message_success"
+                                                                style="font-size: 14px;"></small>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
                     <div class="find_pass_body mt-5">
 
                         <form onsubmit="return false">
@@ -78,13 +89,15 @@
                     "email": email,
                     "name": name
                 },
-                success: function (result) {
-                    if (result) {
-                        alert("입력하신 이메일로 임시비밀번호가 발송되었습니다.");
-                        window.location.href = "/login";
-                    } else {
-                        alert("일치하는 정보가 없습니다.");
-                    }
+                success: function (res) {
+                    $(".message_box_success").css("display", "block");
+                    $(".message_box_fail").css("display", "none");
+                    $(".message_success").html("입력하신 이메일로 임시비밀번호가 발송되었습니다.");
+                },
+                error: function(request, status, error) {
+                    $(".message_box_fail").css("display", "block");
+                    $(".message_box_success").css("display", "none");
+                    $(".message_fail").html(request.responseText);
                 }
             })
         })

@@ -1018,6 +1018,7 @@ footer .footer_copyright {
   height: 29px;
   padding: 2px 4px;
   border: 1px solid #d5d5d5;
+  width: 200px;
 }
 .find_id_body form table tbody td input:focus::-webkit-input-placeholder {
   color: transparent;
@@ -1110,6 +1111,13 @@ footer .footer_copyright {
   margin: 20px auto;
 }
 
+.message_box_fail,
+.message_box_success {
+  width: 80%;
+  display: none;
+  margin: 45px auto 15px;
+}
+
 .find_pass_body {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1171,6 +1179,7 @@ footer .footer_copyright {
   height: 29px;
   padding: 2px 4px;
   border: 1px solid #d5d5d5;
+  width: 200px;
 }
 .find_pass_body form table tbody td input:focus::-webkit-input-placeholder {
   color: transparent;

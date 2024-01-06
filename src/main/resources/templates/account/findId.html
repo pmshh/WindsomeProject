@@ -89,15 +89,14 @@
                     "name": name
                 },
                 success: function (res) {
-                    if (res === "fail") {
-                        $(".message_box_fail").css("display", "block");
-                        $(".message_box_success").css("display", "none");
-                        $(".message_fail").html("일치하는 정보가 없습니다.");
-                    } else {
-                        $(".message_box_success").css("display", "block");
-                        $(".message_box_fail").css("display", "none");
-                        $(".message_success").html("회원님의 아이디는 " + res + " 입니다.");
-                    }
+                    $(".message_box_success").css("display", "block");
+                    $(".message_box_fail").css("display", "none");
+                    $(".message_success").html("회원님의 아이디는 " + res + " 입니다.");
+                },
+                error: function(request, status, error) {
+                    $(".message_box_fail").css("display", "block");
+                    $(".message_box_success").css("display", "none");
+                    $(".message_fail").html(request.responseText);
                 }
             })
         })

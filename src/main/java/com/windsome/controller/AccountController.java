@@ -104,11 +104,11 @@ public class AccountController {
     }
 
     @PostMapping("/find/id")
-    public @ResponseBody String findIdPost(String email, String name) {
-        if (accountService.userEmailCheck(email, name)) {
-            return accountService.findId(email, name);
+    public ResponseEntity<Object> findIdPost(String email, String name) {
+        if (!accountService.userEmailCheck(email, name)) {
+            return ResponseEntity.badRequest().body("일치하는 정보가 없습니다.");
         }
-        return "fail";
+        return ResponseEntity.ok().body(accountService.findId(email, name));
     }
 
     @GetMapping("/find/pass")
@@ -117,10 +117,11 @@ public class AccountController {
     }
 
     @PostMapping("/find/pass")
-    public @ResponseBody String findPassPost(String email, String name, Model model) throws MessagingException {
-        if (accountService.userEmailCheck(email, name)) {
-            accountService.findPassword(email, name);
+    public ResponseEntity<Object> findPassPost(String email, String name, Model model) throws Exception {
+        if (!accountService.userEmailCheck(email, name)) {
+            return ResponseEntity.badRequest().body("일치하는 정보가 없습니다.");
         }
-        return "fail";
+        accountService.sendEmailAndUpdatePassword(email, name);
+        return ResponseEntity.ok().build();
     }
 }

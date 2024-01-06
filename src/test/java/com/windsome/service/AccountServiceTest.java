@@ -119,7 +119,7 @@ class AccountServiceTest {
         String name = account.getName();
 
         // when
-        accountService.findPassword(email, name);
+        accountService.sendEmailAndUpdatePassword(email, name);
 
         // then
         assertFalse(passwordEncoder.matches("test1234", account.getPassword()));

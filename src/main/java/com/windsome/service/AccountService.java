@@ -71,7 +71,7 @@ public class AccountService {
         }
     }
 
-    public void findPassword(String email, String name) throws MessagingException {
+    public void sendEmailAndUpdatePassword(String email, String name) throws MessagingException {
         UUID uuid = UUID.randomUUID();
         String authNum = uuid.toString().substring(0, 8);
         EmailMessageDto emailMessageDto = EmailMessageDto.builder()

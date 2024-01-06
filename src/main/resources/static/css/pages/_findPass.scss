@@ -15,6 +15,13 @@
     }
 }
 
+.message_box_fail,
+.message_box_success {
+    width: 80%;
+    display: none;
+    margin: 45px auto 15px;
+}
+
 .find_pass_body {
     display: flex;
     justify-content: center;
@@ -75,6 +82,7 @@
                         height: 29px;
                         padding: 2px 4px;
                         border: 1px solid #d5d5d5;
+                        width: 200px;
                     }
 
                     input:focus::placeholder {
