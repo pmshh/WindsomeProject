@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 @Service
@@ -104,8 +105,12 @@ public class AccountService {
     public String checkId(String userId) {
         if (accountRepository.existsByUserIdentifier(userId)) {
             return "fail";
-        } else {
-            return "success";
         }
+        return "success";
+    }
+
+    public boolean validateEmail(String email) {
+        Account account = accountRepository.findByEmail(email);
+        return account == null;
     }
 }

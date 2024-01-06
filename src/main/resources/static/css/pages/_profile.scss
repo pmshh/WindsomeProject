@@ -68,7 +68,7 @@
                     span.final_id_ck,
                     span.final_pw_ck,
                     span.final_pwck_ck,
-                    span.final_nickname_ck,
+                    span.final_name_ck,
                     span.final_mail_ck,
                     span.final_addr_ck,
                     span.pwck_input_re_1,
@@ -78,9 +78,10 @@
                     }
 
                     input {
-                        height: 29px;
+                        height: 30px;
                         padding: 2px 4px;
                         border: 1px solid #d5d5d5;
+                        width: 200px;
                     }
 
                     input:focus::placeholder {
@@ -90,7 +91,7 @@
                     select {
                         width: 60px;
                         height: 30px;
-                        line-height: 29px;
+                        line-height: 30px;
                         min-height: 30px;
                         border: 1px solid #ddd;
                         padding: 0 10px 0 5px;
@@ -98,37 +99,27 @@
                         font-size: 12px;
                     }
 
-                    a.send_mail,
-                    a.check_number {
-                        background-color: #FFFFFF;
-                        border: 1px solid #c5c5c5;
-                        color: black;
-                        width: 105px;
-                        height: 28px;
-                        text-align: center;
-                        padding-top: 5px;
-                        border-radius: 2px;
+                    button.send_mail,
+                    button.check_number,
+                    button.find_addr {
+                        padding: 0;
+                        height: 30px;
+                        margin-bottom: 2px;
+                        border: 1px solid #e2e2e2;
+                        background: white;
+
+                        &:hover {
+                            border: 1px solid black;
+                        }
                     }
 
-                    a.send_mail {
-                        display: inline-block;
+                    button.send_mail,
+                    button.check_number {
+                        width: 55px;
                     }
 
-                    a.check_number {
-                        display: none;
-                    }
-
-                    a.find_addr {
-                        display: inline-block;
-                        background-color: #FFFFFF;
-                        border: 1px solid #c5c5c5;
-                        color: black;
-                        width: 80px;
-                        height: 28px;
-                        text-align: center;
-                        vertical-align: middle;
-                        padding-top: 5px;
-                        border-radius: 2px;
+                    button.find_addr {
+                        width: 90px;
                     }
                 }
             }
@@ -144,27 +135,15 @@
 }
 
 @media (max-width: 786px) {
-    main {
-        .sidebar {
-            position: fixed;
-            left: -300px;
+    .modify_body {
+        form {
             width: 100%;
 
-            &.active {
-                left: 0;
-            }
-        }
-
-        .sidebar .content {
-            padding-left: 0;
-
-            nav {
-                .menu {
-                    display: none;
-                }
-
-                .menu_toggle {
-                    display: block;
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
                 }
             }
         }

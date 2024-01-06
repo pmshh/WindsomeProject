@@ -65,7 +65,6 @@ input:-webkit-autofill:active {
   text-align: center;
   color: #fff;
   background-color: #151515;
-  border-radius: 0 !important;
 }
 .black_btn_w130_h40:hover,
 .black_btn_w90_h40:hover,
@@ -106,7 +105,6 @@ input:-webkit-autofill:active {
   text-align: center;
   color: #222;
   background-color: #fff;
-  border-radius: 0px !important;
 }
 .white_btn_w130_h40:hover,
 .white_btn_w90_h40:hover,
@@ -1880,7 +1878,7 @@ footer .footer_copyright {
 .modify_body form table tbody td span.final_id_ck,
 .modify_body form table tbody td span.final_pw_ck,
 .modify_body form table tbody td span.final_pwck_ck,
-.modify_body form table tbody td span.final_nickname_ck,
+.modify_body form table tbody td span.final_name_ck,
 .modify_body form table tbody td span.final_mail_ck,
 .modify_body form table tbody td span.final_addr_ck,
 .modify_body form table tbody td span.pwck_input_re_1,
@@ -1889,9 +1887,10 @@ footer .footer_copyright {
   display: none;
 }
 .modify_body form table tbody td input {
-  height: 29px;
+  height: 30px;
   padding: 2px 4px;
   border: 1px solid #d5d5d5;
+  width: 200px;
 }
 .modify_body form table tbody td input:focus::-webkit-input-placeholder {
   color: transparent;
@@ -1911,41 +1910,33 @@ footer .footer_copyright {
 .modify_body form table tbody td select {
   width: 60px;
   height: 30px;
-  line-height: 29px;
+  line-height: 30px;
   min-height: 30px;
   border: 1px solid #ddd;
   padding: 0 10px 0 5px;
   background-color: #fff;
   font-size: 12px;
 }
-.modify_body form table tbody td a.send_mail,
-.modify_body form table tbody td a.check_number {
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 105px;
-  height: 28px;
-  text-align: center;
-  padding-top: 5px;
-  border-radius: 2px;
+.modify_body form table tbody td button.send_mail,
+.modify_body form table tbody td button.check_number,
+.modify_body form table tbody td button.find_addr {
+  padding: 0;
+  height: 30px;
+  margin-bottom: 2px;
+  border: 1px solid #e2e2e2;
+  background: white;
 }
-.modify_body form table tbody td a.send_mail {
-  display: inline-block;
+.modify_body form table tbody td button.send_mail:hover,
+.modify_body form table tbody td button.check_number:hover,
+.modify_body form table tbody td button.find_addr:hover {
+  border: 1px solid black;
 }
-.modify_body form table tbody td a.check_number {
-  display: none;
+.modify_body form table tbody td button.send_mail,
+.modify_body form table tbody td button.check_number {
+  width: 55px;
 }
-.modify_body form table tbody td a.find_addr {
-  display: inline-block;
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 80px;
-  height: 28px;
-  text-align: center;
-  vertical-align: middle;
-  padding-top: 5px;
-  border-radius: 2px;
+.modify_body form table tbody td button.find_addr {
+  width: 90px;
 }
 .modify_body form .btn_box {
   padding: 10px 0;
@@ -1955,22 +1946,11 @@ footer .footer_copyright {
 }
 
 @media (max-width: 786px) {
-  main .sidebar {
-    position: fixed;
-    left: -300px;
+  .modify_body form {
     width: 100%;
   }
-  main .sidebar.active {
-    left: 0;
-  }
-  main .sidebar .content {
-    padding-left: 0;
-  }
-  main .sidebar .content nav .menu {
-    display: none;
-  }
-  main .sidebar .content nav .menu_toggle {
-    display: block;
+  .modify_body form table colgroup col:nth-child(1) {
+    width: 25% !important;
   }
 }
 /* signUp page start */
@@ -2038,17 +2018,19 @@ footer .footer_copyright {
 .signup_body form table tbody td span.final_id_ck,
 .signup_body form table tbody td span.final_pw_ck,
 .signup_body form table tbody td span.final_pwck_ck,
-.signup_body form table tbody td span.final_nickname_ck,
+.signup_body form table tbody td span.final_name_ck,
 .signup_body form table tbody td span.final_mail_ck,
 .signup_body form table tbody td span.final_addr_ck,
 .signup_body form table tbody td span.pwck_input_re_1,
-.signup_body form table tbody td span.pwck_input_re_2 {
+.signup_body form table tbody td span.pwck_input_re_2,
+.signup_body form table tbody td span.need_mail_check {
   display: none;
 }
 .signup_body form table tbody td input {
   height: 30px;
   padding: 2px 4px;
   border: 1px solid #d5d5d5;
+  width: 200px;
 }
 .signup_body form table tbody td input:focus::-webkit-input-placeholder {
   color: transparent;
@@ -2068,32 +2050,33 @@ footer .footer_copyright {
 .signup_body form table tbody td select {
   width: 60px;
   height: 30px;
-  line-height: 29px;
+  line-height: 30px;
   min-height: 30px;
   border: 1px solid #ddd;
   padding: 0 10px 0 5px;
   background-color: #fff;
   font-size: 12px;
 }
-.signup_body form table tbody td select.mail_url_select {
-  width: 120px;
-}
 .signup_body form table tbody td button.send_mail,
 .signup_body form table tbody td button.check_number,
 .signup_body form table tbody td button.find_addr {
-  padding: 0 !important;
-  width: 90px !important;
-  height: 30px !important;
+  padding: 0;
+  height: 30px;
+  margin-bottom: 2px;
+  border: 1px solid #e2e2e2;
+  background: white;
+}
+.signup_body form table tbody td button.send_mail:hover,
+.signup_body form table tbody td button.check_number:hover,
+.signup_body form table tbody td button.find_addr:hover {
+  border: 1px solid black;
 }
 .signup_body form table tbody td button.send_mail,
 .signup_body form table tbody td button.check_number {
-  margin-bottom: 2px;
+  width: 55px;
 }
-.signup_body form table tbody td button.send_mail {
-  width: 55px !important;
-}
-.signup_body form table tbody td button.check_number {
-  width: 120px !important;
+.signup_body form table tbody td button.find_addr {
+  width: 90px;
 }
 .signup_body form .btn_box {
   padding: 10px 0;

@@ -11,6 +11,7 @@ import com.windsome.entity.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -55,52 +56,15 @@ public class AccountController {
             return "account/signUp";
         }
 
-        Account account = accountService.saveNewAccount(signUpFormDto);
+        accountService.saveNewAccount(signUpFormDto);
         accountService.login(signUpFormDto.getUserIdentifier(), signUpFormDto.getPassword());
         return "redirect:/";
     }
 
-    @PostMapping("/check/id")
-    @ResponseBody
-    public String checkId(String userId) {
-        return accountService.checkId(userId);
-    }
-
-    @GetMapping("/check/email")
-    @ResponseBody
-    public String checkEmail(String email) throws Exception {
-        return accountService.sendSignUpConfirmEmail(email);
-    }
-
-    @GetMapping("/find/pass")
-    public String findPassGet() {
-        return "account/findPass";
-    }
-
-    @PostMapping("/find/pass")
-    public @ResponseBody boolean findPassPost(String email, String name, Model model) throws MessagingException {
-        boolean result = accountService.userEmailCheck(email, name);
-        if (result) {
-            accountService.findPassword(email, name);
-        }
-        return result;
-    }
-
-    @GetMapping("/find/id")
-    public String findIdGet() {
-        return "account/findId";
-    }
-
-    @PostMapping("/find/id")
-    public @ResponseBody String findIdPost(String email, String name) {
-        boolean userEmailCheckResult = accountService.userEmailCheck(email, name);
-        return accountService.findId(email, name);
-    }
-
     @GetMapping("/account/profile")
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
-        model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, ProfileFormDto.class));
+        model.addAttribute("email", account.getEmail());
         return "account/profile";
     }
 
@@ -115,5 +79,46 @@ public class AccountController {
         accountService.updateProfile(account, profileFormDto);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:/account/profile";
+    }
+
+    @GetMapping("/check/email")
+    public ResponseEntity<Object> checkEmail(String email) throws Exception {
+        if (!accountService.validateEmail(email)) {
+            return ResponseEntity.badRequest().body("이미 사용중인 이메일입니다.");
+        }
+        String authNum = accountService.sendSignUpConfirmEmail(email);
+        return ResponseEntity.ok().body(authNum);
+    }
+
+    @PostMapping("/check/id")
+    @ResponseBody
+    public String checkId(String userId) {
+        return accountService.checkId(userId);
+    }
+
+    @GetMapping("/find/id")
+    public String findIdGet() {
+        return "account/findId";
+    }
+
+    @PostMapping("/find/id")
+    public @ResponseBody String findIdPost(String email, String name) {
+        if (accountService.userEmailCheck(email, name)) {
+            return accountService.findId(email, name);
+        }
+        return "fail";
+    }
+
+    @GetMapping("/find/pass")
+    public String findPassGet() {
+        return "account/findPass";
+    }
+
+    @PostMapping("/find/pass")
+    public @ResponseBody String findPassPost(String email, String name, Model model) throws MessagingException {
+        if (accountService.userEmailCheck(email, name)) {
+            accountService.findPassword(email, name);
+        }
+        return "fail";
     }
 }

@@ -63,11 +63,12 @@
                     span.final_id_ck,
                     span.final_pw_ck,
                     span.final_pwck_ck,
-                    span.final_nickname_ck,
+                    span.final_name_ck,
                     span.final_mail_ck,
                     span.final_addr_ck,
                     span.pwck_input_re_1,
-                    span.pwck_input_re_2 {
+                    span.pwck_input_re_2,
+                    span.need_mail_check {
                         display: none;
                     }
 
@@ -75,6 +76,7 @@
                         height: 30px;
                         padding: 2px 4px;
                         border: 1px solid #d5d5d5;
+                        width: 200px;
                     }
 
                     input:focus::placeholder {
@@ -84,7 +86,7 @@
                     select {
                         width: 60px;
                         height: 30px;
-                        line-height: 29px;
+                        line-height: 30px;
                         min-height: 30px;
                         border: 1px solid #ddd;
                         padding: 0 10px 0 5px;
@@ -92,29 +94,27 @@
                         font-size: 12px;
                     }
 
-                    select.mail_url_select {
-                        width: 120px;
-                    }
-
                     button.send_mail,
                     button.check_number,
                     button.find_addr {
-                        padding: 0 !important;
-                        width: 90px !important;
-                        height: 30px !important;
+                        padding: 0;
+                        height: 30px;
+                        margin-bottom: 2px;
+                        border: 1px solid #e2e2e2;
+                        background: white;
+
+                        &:hover {
+                            border: 1px solid black;
+                        }
                     }
 
                     button.send_mail,
                     button.check_number {
-                        margin-bottom: 2px;
+                        width: 55px;
                     }
 
-                    button.send_mail {
-                        width: 55px !important;
-                    }
-
-                    button.check_number {
-                        width: 120px !important;
+                    button.find_addr {
+                        width: 90px;
                     }
                 }
             }

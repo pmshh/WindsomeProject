@@ -76,10 +76,10 @@
                                             <label th:for="*{name}">이름 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <div class="nickname_input_box">
-                                                <input class="nickname_input" th:field="*{name}" type="text">
+                                            <div class="name_input_box">
+                                                <input class="name_input" th:field="*{name}" type="text">
                                             </div>
-                                            <span class="final_nickname_ck text-danger">이름을 입력해주세요.</span>
+                                            <span class="final_name_ck text-danger">이름을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -89,25 +89,14 @@
                                         <td>
                                             <div class="mail_input_box mb-1">
                                                 <input class="mail_input" th:field="*{email}" type="email">
-                                                <span>@</span>
-                                                <input class="mail_url_input" placeholder="이메일을 선택하세요.">
-                                                <select class="mail_url_select">
-                                                    <option value="" disabled selected>선택</option>
-                                                    <option value="naver.com">naver.com</option>
-                                                    <option value="hanmail.net">hanmail.net</option>
-                                                    <option value="gmail.com">gmail.com</option>
-                                                    <option value="nate.com">nate.com</option>
-                                                    <option value="directly">직접 입력하기</option>
-                                                </select>
-                                                <button type="button" class="send_mail white_btn_w65_h30">전송</button>
+                                                <button type="button" class="send_mail">전송</button>
                                             </div>
                                             <div class="mail_check_box">
                                                 <input class="mail_check_input" disabled="disabled">
-                                                <button type="button" class="check_number white_btn_w65_h30" onclick="confirmNumber()">인증번호 확인</button>
+                                                <button type="button" class="check_number" onclick="confirmNumber()">확인</button>
                                             </div>
-                                            <span class="mail_input_re_1 text-success">사용 가능한 이메일입니다.</span>
-                                            <span class="mail_input_re_2 text-danger">이메일이 이미 존재합니다.</span>
                                             <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
+                                            <span class="need_mail_check text-danger">이메일 인증이 필요합니다.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -117,7 +106,7 @@
                                         <td>
                                             <input th:field="*{address1}" class="address_input_1 mb-1"
                                                 readonly="readonly">
-                                            <button class="find_addr white_btn_w65_h30 mb-1" onclick="execution_daum_address()">주소 찾기</button>
+                                            <button type="button" class="find_addr white_btn_w65_h30" onclick="execution_daum_address()">주소 찾기</button>
                                             <div class="clearfix"></div>
                                             <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
                                                 readonly="readonly">
@@ -143,93 +132,88 @@
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
-
         /* 유효성 검사 통과유무 변수 */
-        let idCheck = false;            // 아이디
-        let idckCheck = false;          // 아이디 중복 검사
-        let pwCheck = false;            // 비번
-        let pwckCheck = false;          // 비번 확인
-        let pwckcorCheck = false;       // 비번 확인 일치 확인
-        let nicknameCheck = false;      // 닉네임
-        let mailCheck = false;          // 이메일
-        let mailnumCheck = false;       // 이메일 인증번호 확인
-        let addressCheck = false        // 주소
+        let code = ""; // 이메일 전송 인증번호 저장 변수
+        let id_check = false;            // 아이디
+        let idck_check = false;          // 아이디 중복 검사
+        let pw_check = false;            // 비번
+        let pwck_check = false;          // 비번 확인
+        let pwckcor_check = false;       // 비번 확인 일치 확인
+        let name_check = false;          // 이름
+        let mail_check = false;          // 이메일
+        let mailnum_check = false;       // 이메일 인증번호 확인
+        let address_check = false        // 주소
 
-        let code = ""; // 이메일전송 인증번호 저장위한 변수
 
         $(document).ready(function () {
             //회원가입 버튼(회원가입 기능 작동)
             $(".signup_btn").click(function () {
-
                 /* 입력값 변수 */
                 let id = $('.id_input').val(); // id 입력란
                 let pw = $('.pw_input').val(); // 비밀번호 입력란
                 let pwck = $('.pwck_input').val(); // 비밀번호 확인 입력란
-                let nickname = $('.nickname_input').val(); // 닉네임 입력란
+                let name = $('.name_input').val(); // 이름 입력란
                 let mail = $('.mail_input').val(); // 이메일 입력란
                 let address = $('.address_input_3').val(); // 주소 입력란
 
                 /* 아이디 유효성검사 */
                 if (id === "") {
                     $('.final_id_ck').css('display', 'inline-block')
-                    idCheck = false;
+                    id_check = false;
                 } else {
                     $('.final_id_ck').css('display', 'none')
-                    idCheck = true;
+                    id_check = true;
                 }
 
                 /* 비밀번호 유효성 검사 */
                 if (pw === "") {
                     $('.final_pw_ck').css('display', 'inline-block')
-                    pwCheck = false;
+                    pw_check = false;
                 } else {
                     $('.final_pw_ck').css('display', 'none')
-                    pwCheck = true;
+                    pw_check = true;
                 }
 
                 /* 비밀번호 확인 유효성 검사 */
                 if (pwck === "") {
                     $('.final_pwck_ck').css('display', 'inline-block')
-                    pwckCheck = false;
+                    pwck_check = false;
                 } else {
                     $('.final_pwck_ck').css('display', 'none')
-                    pwckCheck = true;
+                    pwck_check = true;
                 }
 
                 /* 이름 유효성 검사 */
-                if (nickname === "") {
-                    $('.final_nickname_ck').css('display', 'inline-block')
-                    nicknameCheck = false;
+                if (name === "") {
+                    $('.final_name_ck').css('display', 'inline-block')
+                    name_check = false;
                 } else {
-                    $('.final_nickname_ck').css('display', 'none')
-                    nicknameCheck = true;
+                    $('.final_name_ck').css('display', 'none')
+                    name_check = true;
                 }
 
                 /* 이메일 유효성 검사 */
                 if (mail === "") {
                     $('.final_mail_ck').css('display', 'inline-block')
-                    mailCheck = false;
+                    mail_check = false;
                 } else {
                     $('.final_mail_ck').css('display', 'none')
-                    mailCheck = true;
+                    mail_check = true;
                 }
 
                 /* 주소 유효성 검사 */
                 if (address === "") {
                     $('.final_addr_ck').css('display', 'inline-block')
-                    addressCheck = false;
+                    address_check = false;
                 } else {
                     $('.final_addr_ck').css('display', 'none')
-                    addressCheck = true;
+                    address_check = true;
                 }
 
-                let mailInputVal = $(".mail_input").val(); // 입력한 이메일 아이디
-                let mailUrlInputVal = $(".mail_url_input").val(); // 입력한 이메일 사이트 주소
-                let totalMail = mailInputVal + '@' + mailUrlInputVal;
+
 
                 /* 최종 유효성 검사 */
-                if (idCheck && idckCheck && pwCheck && pwckCheck && pwckcorCheck && nicknameCheck && mailCheck && mailnumCheck && addressCheck) {
-                    $('.mail_input').val(totalMail);
+                if (id_check && idck_check && pw_check && pwck_check && pwckcor_check && name_check && mail_check && mailnum_check && address_check) {
                     $('#signUpFormDto').attr("action", "/signUp");
                     $('#signUpFormDto').submit();
                 }
@@ -242,8 +226,6 @@
             const userId = $('.id_input').val();
             const data = { userId: userId }
 
-            console.log(data);
-
             $.ajax({
                 type: "POST",
                 url: "/check/id",
@@ -253,17 +235,17 @@
                         $('.id_input_re_1').css("display", "inline-block");
                         $('.id_input_re_2').css("display", "none");
                         $('.final_id_ck').css("display", "none");
-                        idckCheck = true;
+                        idck_check = true;
                     } else if (result === 'fail' && userId.length > 4) {
                         $('.id_input_re_2').css("display", "inline-block");
                         $('.id_input_re_1').css("display", "none");
                         $('.final_id_ck').css("display", "none");
-                        idckCheck = false;
+                        idck_check = false;
                     } else {
                         $('.id_input_re_1').css("display", "none");
                         $('.id_input_re_2').css("display", "none");
                         $('.final_id_ck').css("display", "none");
-                        idckCheck = false;
+                        idck_check = false;
                     }
                 }
             })
@@ -273,20 +255,19 @@
         $('.pwck_input').on("propertychange change keyup paste input", function () {
             let pw = $('.pw_input').val();
             let pwck = $('.pwck_input').val();
-            // $('.final_pwck_ck').css('display', 'none');
 
             if (pw === pwck) {
                 $('.pwck_input_re_1').css('display', 'inline-block');
                 $('.pwck_input_re_2').css('display', 'none');
                 $('.final_pwck_ck').css('display', 'none');
                 $('.final_pw_ck').css('display', 'none');
-                pwckcorCheck = true;
+                pwckcor_check = true;
             } else {
                 $('.pwck_input_re_1').css('display', 'none');
                 $('.pwck_input_re_2').css('display', 'inline-block');
                 $('.final_pwck_ck').css('display', 'none');
                 $('.final_pw_ck').css('display', 'none');
-                pwckcorCheck = false;
+                pwckcor_check = false;
             }
         })
 
@@ -296,7 +277,6 @@
             var pwck = $(".pwck_input").val();
             var num = pw.search(/[0-9]/g);
             var eng = pw.search(/[a-z]/ig);
-            // var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
             if (pw.length < 8 || pw.length > 20) {
                 alert("8자리 ~ 20자리 이내로 입력해주세요.");
@@ -308,7 +288,6 @@
                 alert("영문,숫자를 혼합하여 입력해주세요.");
                 return false;
             } else {
-                console.log("통과");
                 return true;
             }
 
@@ -322,65 +301,59 @@
                 alert("영문,숫자를 혼합하여 입력해주세요.");
                 return false;
             } else {
-                console.log("통과");
                 return true;
             }
         }
 
         // 이메일 전송
         $(".send_mail").click(function () {
+            let email = $(".mail_input").val(); // 입력한 이메일
             let check_input = $(".mail_check_input"); // 인증 번호 입력란
-            let check_btn = $(".check_number"); // 인증 번호 확인 버튼
-            let mailInputVal = $(".mail_input").val();
-            let mailUrlInputVal = $(".mail_url_input").val();
-            let totalEmail = mailInputVal + '@' + mailUrlInputVal;
 
-            if (confirm("입력하신 이메일로 인증번호 메일을 전송하시겠습니까?")) {
-                alert("인증번호가 발송되었습니다.");
-            } else {
-                false;
-            }
-
-            // 이메일 중복 체크 및 이메일 전송
-            $.ajax({
-                type: "GET",
-                url: "/check/email?email=" + totalEmail,
-                success: function (data) {
-                    check_input.attr("disabled", false);
-                    check_input.css("background-color", "white");
-                    check_btn.css("display", "inline-block");
-                    code = data;
+            if (confirm("인증번호를 전송하시겠습니까?")) {
+                if (mail_form_check(email)) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/check/email?email=" + email,
+                        success: function (data) {
+                            check_input.css("background-color", "white");
+                            check_input.attr("disabled", false);
+                            code = data;
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+                    });
+                } else {
+                    alert("올바른 이메일을 입력해주세요.");
                 }
-            })
+            } else {
+                return false;
+            }
         })
 
         // 인증 번호 일치 여부
         function confirmNumber() {
             let check_input = $(".mail_check_input"); // 인증 번호 입력란
             let input_code = $(".mail_check_input").val(); // 사용자가 입력한 인증 번호
-
-            let mailInput = $(".mail_input");
-            let mailUrlInput = $(".mail_url_input");
-            let mailUrlSelect = $(".mail_url_select");
-            let sendMailBtn = $(".send_mail");
+            let mail_input = $(".mail_input");
+            let send_mail_btn = $(".send_mail");
 
             if (input_code === code) {
                 alert("인증되었습니다.");
-                check_input.attr("disabled", true);
                 check_input.css("background-color", "#fafafa");
-                mailInput.attr("disabled", true);
-                mailUrlInput.attr("disabled", true);
-                mailUrlSelect.attr("disabled", true);
-                sendMailBtn.css("display", "none");
-                mailnumCheck = true;
+                check_input.attr("disabled", true);
+                send_mail_btn.css("display", "none");
+                mail_input.attr("readonly", true);
+                mailnum_check = true;
             } else {
                 alert("인증번호를 다시 확인해주세요.");
-                mailnumCheck = false;
+                mailnum_check = false;
             }
         }
 
         // 입력 이메일 형식 유효성 검사
-        function mailFormCheck(email) {
+        function mail_form_check(email) {
             let form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return form.test(email);
         }
