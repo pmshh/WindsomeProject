@@ -1,7 +1,6 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
-import com.windsome.constant.ItemSellStatus;
 import com.windsome.constant.OrderStatus;
 import com.windsome.dto.OrderDto;
 import com.windsome.dto.OrderHistDto;
@@ -20,7 +19,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 

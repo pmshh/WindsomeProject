@@ -19,6 +19,7 @@ import org.thymeleaf.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.windsome.entity.QItem.*;
 import static com.windsome.entity.QItem.item;
 
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
         JPAQuery<Long> total = queryFactory
                 .select(item.count())
-                .from(QItem.item)
+                .from(item)
                 .where(regTimeAfter(itemSearchDto.getSearchDateType()),
                         searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
                         searchByLike(itemSearchDto.getSearchBy(), itemSearchDto.getSearchQuery()))
@@ -108,12 +109,12 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private BooleanBuilder itemNmLike(String searchQuery){
         BooleanBuilder builder = new BooleanBuilder();
 
-        builder.or(QItem.item.itemNm.like("%" + searchQuery + "%"));
+        builder.or(item.itemNm.like("%" + searchQuery + "%"));
         return builder;
     }
 
     private BooleanExpression searchSellStatusEq(ItemSellStatus searchSellStatus) {
-        return searchSellStatus == null ? null : QItem.item.itemSellStatus.eq(searchSellStatus);
+        return searchSellStatus == null ? null : item.itemSellStatus.eq(searchSellStatus);
     }
 
     private BooleanExpression regTimeAfter(String searchDateType) {

@@ -43,14 +43,18 @@ public class ItemImgService {
         if (!itemImgFile.isEmpty()) {
             ItemImg savedItemImg = itemImgRepository.findById(itemImgId).orElseThrow(EntityNotFoundException::new); // itemImg 조회
 
+            // 기존 이미지 삭제
             if (!StringUtils.isEmpty(savedItemImg.getImgName())) {
-                fileService.deleteFile(itemImgLocation + "/" + savedItemImg.getImgName()); // 기존 이미지 삭제
+                fileService.deleteFile(itemImgLocation + "/" + savedItemImg.getImgName());
             }
 
             String oriImgName = itemImgFile.getOriginalFilename();
-            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes()); // 새 이미지 업로드
+            // 새 이미지 서버에 업로드
+            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
             String imgUrl = "/images/item/" + imgName;
-            savedItemImg.updateItemImg(oriImgName, imgName, imgUrl); // 새 이미지 정보 update
+
+            // ItemImg 업데이트
+            savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
         }
     }
 }

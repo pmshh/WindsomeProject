@@ -20,6 +20,4 @@ public class ItemController {
         model.addAttribute("item", itemFormDto);
         return "main/item/itemDtl";
     }
-
-
 }
