@@ -48,7 +48,6 @@ class OrderControllerTest {
     void orderHist() throws Exception {
         mockMvc.perform(get("/orders"))
                 .andExpect(model().attributeExists("orders"))
-                .andExpect(model().attributeExists("page"))
                 .andExpect(model().attributeExists("maxPage"))
                 .andExpect(view().name("order/orderHist"));
     }

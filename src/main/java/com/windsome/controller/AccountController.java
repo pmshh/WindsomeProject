@@ -64,7 +64,6 @@ public class AccountController {
     @GetMapping("/account/profile")
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(modelMapper.map(account, ProfileFormDto.class));
-        model.addAttribute("email", account.getEmail());
         return "account/profile";
     }
 

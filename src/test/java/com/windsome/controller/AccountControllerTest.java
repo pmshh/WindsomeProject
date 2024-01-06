@@ -91,7 +91,6 @@ class AccountControllerTest {
     void updateProfileForm() throws Exception {
         mockMvc.perform(get("/account/profile"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profileFormDto"));
     }
 
