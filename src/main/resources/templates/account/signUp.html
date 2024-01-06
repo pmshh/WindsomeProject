@@ -210,8 +210,6 @@
                     address_check = true;
                 }
 
-
-
                 /* 최종 유효성 검사 */
                 if (id_check && idck_check && pw_check && pwck_check && pwckcor_check && name_check && mail_check && mailnum_check && address_check) {
                     $('#signUpFormDto').attr("action", "/signUp");
@@ -231,23 +229,24 @@
                 url: "/check/id",
                 data: data,
                 success: function (result) {
-                    if (result !== 'fail' && userId.length > 4) {
+                    if (result === true && userId.length > 4) {
                         $('.id_input_re_1').css("display", "inline-block");
                         $('.id_input_re_2').css("display", "none");
                         $('.final_id_ck').css("display", "none");
                         idck_check = true;
-                    } else if (result === 'fail' && userId.length > 4) {
-                        $('.id_input_re_2').css("display", "inline-block");
-                        $('.id_input_re_1').css("display", "none");
-                        $('.final_id_ck').css("display", "none");
-                        idck_check = false;
-                    } else {
-                        $('.id_input_re_1').css("display", "none");
+                    } else if (userId.length < 5) {
                         $('.id_input_re_2').css("display", "none");
+                        $('.id_input_re_1').css("display", "none");
                         $('.final_id_ck').css("display", "none");
                         idck_check = false;
                     }
-                }
+                },
+                error: function (request, status, error) {
+                    $('.id_input_re_2').css("display", "inline-block");
+                    $('.id_input_re_1').css("display", "none");
+                    $('.final_id_ck').css("display", "none");
+                    idck_check = false;
+                },
             })
         })
 

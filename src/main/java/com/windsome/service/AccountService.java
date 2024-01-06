@@ -49,18 +49,6 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public String sendSignUpConfirmEmail(String email) throws MessagingException {
-        UUID uuid = UUID.randomUUID();
-        String authNum = uuid.toString().substring(0, 6);
-        EmailMessageDto emailMessageDto = EmailMessageDto.builder()
-                .to(email)
-                .subject("윈섬, 회원 가입 인증")
-                .message("홈페이지를 방문해주셔서 감사합니다.<br>아래 인증 번호를 인증 번호 확인란에 기입하여 주세요.<br>인증 번호 : " + authNum)
-                .build();
-        emailService.sendEmail(emailMessageDto);
-        return authNum;
-    }
-
     public void login(String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(token);
@@ -96,21 +84,35 @@ public class AccountService {
         Account account = accountRepository.findByEmail(email);
         account.setPassword(passwordEncoder.encode(authNum));
     }
+    public boolean validateEmail(String email) {
+        Account account = accountRepository.findByEmail(email);
+        return account == null;
+    }
+
+    public String sendSignUpConfirmEmail(String email) throws MessagingException {
+        UUID uuid = UUID.randomUUID();
+        String authNum = uuid.toString().substring(0, 6);
+        EmailMessageDto emailMessageDto = EmailMessageDto.builder()
+                .to(email)
+                .subject("윈섬, 회원 가입 인증")
+                .message("홈페이지를 방문해주셔서 감사합니다.<br>아래 인증 번호를 인증 번호 확인란에 기입하여 주세요.<br>인증 번호 : " + authNum)
+                .build();
+        emailService.sendEmail(emailMessageDto);
+        return authNum;
+    }
+
+    public boolean validateId(String userId) {
+        Account account = accountRepository.findByUserIdentifier(userId);
+        return account == null;
+    }
+
+    public boolean checkId(String userId) {
+        return !accountRepository.existsByUserIdentifier(userId);
+    }
 
     public boolean userEmailCheck(String email, String name) {
         Account account = accountRepository.findByEmail(email);
         return account != null && account.getName().equals(name);
     }
 
-    public String checkId(String userId) {
-        if (accountRepository.existsByUserIdentifier(userId)) {
-            return "fail";
-        }
-        return "success";
-    }
-
-    public boolean validateEmail(String email) {
-        Account account = accountRepository.findByEmail(email);
-        return account == null;
-    }
 }

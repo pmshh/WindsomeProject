@@ -91,9 +91,11 @@ public class AccountController {
     }
 
     @PostMapping("/check/id")
-    @ResponseBody
-    public String checkId(String userId) {
-        return accountService.checkId(userId);
+    public ResponseEntity<Object> checkId(String userId) {
+        if (!accountService.validateId(userId)) {
+            return ResponseEntity.badRequest().body("이미 사용중인 아이디입니다.");
+        }
+        return ResponseEntity.ok().body(accountService.checkId(userId));
     }
 
     @GetMapping("/find/id")

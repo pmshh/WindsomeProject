@@ -150,10 +150,10 @@ class AccountServiceTest {
         String userIdentifier = account.getUserIdentifier();
 
         // when
-        String result = accountService.checkId(userIdentifier);
+        boolean result = accountService.checkId(userIdentifier);
 
         // then
-        assertEquals(result, "fail");
+        assertEquals(result, false);
     }
 
     private static ProfileFormDto getProfileFormDto() {
