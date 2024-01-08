@@ -32,6 +32,21 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final OrderService orderService;
 
+    @Transactional(readOnly = true)
+    public List<CartDetailDto> getCartList(String userIdentifier) {
+        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
+
+        Account account = accountRepository.findByUserIdentifier(userIdentifier);
+        Cart cart = cartRepository.findByAccountId(account.getId());
+        if (cart == null) {
+            return cartDetailDtoList;
+        }
+
+        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
+
+        return cartDetailDtoList;
+    }
+
     public Long addCart(CartItemDto cartItemDto, String userIdentifier) {
         Item item = itemRepository.findById(cartItemDto.getItemId()).orElseThrow(EntityNotFoundException::new);
         Account account = accountRepository.findByUserIdentifier(userIdentifier);
@@ -54,9 +69,13 @@ public class CartService {
         }
     }
 
-    public void deleteCartItem(Long cartItemId) {
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartItemId, String userIdentifier) {
+        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        cartItemRepository.delete(cartItem);
+        Account savedAccount = cartItem.getCart().getAccount();
+
+        return !StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
     }
 
     public void updateCartItemCount(Long cartItemId, int count) {
@@ -64,38 +83,15 @@ public class CartService {
         cartItem.updateCount(count);
     }
 
-    @Transactional(readOnly = true)
-    public List<CartDetailDto> getCartList(String userIdentifier) {
-        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
-
-        Account account = accountRepository.findByUserIdentifier(userIdentifier);
-        Cart cart = cartRepository.findByAccountId(account.getId());
-        if (cart == null) {
-            return cartDetailDtoList;
-        }
-
-        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
-
-        return cartDetailDtoList;
-    }
-
-    @Transactional(readOnly = true)
-    public boolean validateCartItem(Long cartItemId, String userIdentifier) {
-        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
+    public void deleteCartItem(Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        Account savedAccount = cartItem.getCart().getAccount();
-
-        if (!StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier())) {
-            return false;
-        }
-
-        return true;
+        cartItemRepository.delete(cartItem);
     }
 
-    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String userIdentifier) {
+    public Long orderCartItem(List<Long> cartItemIds, String userIdentifier) {
         List<OrderDto> orderDtoList = new ArrayList<>();
-        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
-            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+        for (Long cartItemId : cartItemIds) {
+            CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
 
             OrderDto orderDto = new OrderDto();
             orderDto.setItemId(cartItem.getItem().getId());
@@ -105,8 +101,8 @@ public class CartService {
 
         Long orderId = orderService.orders(orderDtoList, userIdentifier);
 
-        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
-            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+        for (Long cartItemId : cartItemIds) {
+            CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
             cartItemRepository.delete(cartItem);
         }
         return orderId;

@@ -9,7 +9,6 @@ import java.util.List;
 @Setter
 public class CartOrderDto {
 
-    private Long cartItemId;
+    private List<Long> cartItemIds;
 
-    private List<CartOrderDto> cartOrderDtoList;
 }

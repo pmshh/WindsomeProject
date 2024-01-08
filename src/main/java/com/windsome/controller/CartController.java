@@ -5,7 +5,6 @@ import com.windsome.dto.CartDetailDto;
 import com.windsome.dto.CartItemDto;
 import com.windsome.dto.CartOrderDto;
 import com.windsome.entity.Account;
-import com.windsome.repository.CartItemRepository;
 import com.windsome.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -34,8 +32,7 @@ public class CartController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<Object> cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult,
-                                       @CurrentAccount Account account) {
+    public ResponseEntity<Object> cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, @CurrentAccount Account account) {
         if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -59,7 +56,7 @@ public class CartController {
     public ResponseEntity<Object> updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, @CurrentAccount Account account) {
         if (count <= 0) {
             return ResponseEntity.badRequest().body("최소 1개 이상 담아주세요.");
-        } else if (!cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
+        } else if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
         cartService.updateCartItemCount(cartItemId, count);
@@ -68,7 +65,7 @@ public class CartController {
 
     @DeleteMapping("/cartItem/{cartItemId}")
     public ResponseEntity<Object> deleteCartItem(@PathVariable("cartItemId") Long cartItemId, @CurrentAccount Account account) {
-        if (!cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
+        if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
         cartService.deleteCartItem(cartItemId);
@@ -77,19 +74,19 @@ public class CartController {
 
     @PostMapping("/cart/orders")
     public ResponseEntity<Object> orderCartItem(@RequestBody CartOrderDto cartOrderDto, @CurrentAccount Account account) {
-        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+        List<Long> cartItemIds = cartOrderDto.getCartItemIds();
 
-        if (cartOrderDtoList == null || cartOrderDtoList.isEmpty()) {
+        if (cartItemIds == null || cartItemIds.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문할 상품을 선택해주세요.");
         }
 
-        for (CartOrderDto cartOrder : cartOrderDtoList) {
-            if (!cartService.validateCartItem(cartOrder.getCartItemId(), account.getUserIdentifier())) {
+        for (Long cartItemId : cartItemIds) {
+            if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 권한이 없습니다.");
             }
         }
 
-        Long orderId = cartService.orderCartItem(cartOrderDtoList, account.getUserIdentifier());
+        Long orderId = cartService.orderCartItem(cartItemIds, account.getUserIdentifier());
         return ResponseEntity.ok(orderId);
     }
 }

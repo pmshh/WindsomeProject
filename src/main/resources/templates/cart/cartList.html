@@ -301,12 +301,13 @@
         function order(obj) {
             if (confirm("선택하신 상품을 주문하시겠습니까?")) {
                 let cartItemId = $(obj).attr("data-id");
-                let dataList = [];
-                let data = {};
                 let paramData = {};
-                data["cartItemId"] = cartItemId;
-                dataList.push(data);
-                paramData["cartOrderDtoList"] = dataList;
+                let dataList = [];
+
+                dataList.push(cartItemId);
+
+                paramData["cartItemIds"] = dataList;
+
                 let param = JSON.stringify(paramData);
 
                 $.ajax({
@@ -336,17 +337,15 @@
         }
 
         function orders() {
-            let dataList = [];
             let paramData = {};
+            let dataList = [];
 
             $("input[name=cart_check]:checked").each(function () {
-                let data = {};
                 let cartItemId = $(this).val();
-                data["cartItemId"] = cartItemId;
-                dataList.push(data);
+                dataList.push(cartItemId);
             });
 
-            paramData["cartOrderDtoList"] = dataList;
+            paramData["cartItemIds"] = dataList;
 
             let param = JSON.stringify(paramData);
 
