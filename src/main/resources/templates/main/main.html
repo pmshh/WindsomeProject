@@ -45,7 +45,7 @@
 <!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
                             <div class="search_result" th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
                                 <div class="search_input">
-                                    <form th:action="@{/static}" method="get">
+                                    <form th:action="@{/}" method="get">
                                         <input name="searchQuery" type="search" placeholder="Search" th:value="${itemSearchDto.searchQuery}">
                                         <button type="submit"><i class="fa-solid fa-magnifying-glass icon"></i></button>
                                     </form>

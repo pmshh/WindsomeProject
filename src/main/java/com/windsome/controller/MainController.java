@@ -29,7 +29,7 @@ public class MainController {
         if (account != null) {
             model.addAttribute(account);
         }
-        Pageable pageable = PageRequest.of(page.orElse(0), 6);
+        Pageable pageable = PageRequest.of(page.orElse(0), 9);
         Page<MainItemDto> items = itemService.getMainItemPage(itemSearchDto, pageable);
 
         model.addAttribute("items", items);
