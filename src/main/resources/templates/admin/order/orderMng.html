@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/adminLayout.html :: head"></div>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='orderManagement')"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/adminLayout.html :: nav"></div>
+
+            <!-- orders section -->
+            <section id="order_mng">
+                <div class="container order_mng">
+                    <div class="order_mng_header">
+                        <h2>주문 관리</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="order_mng_body mt-5">
+                        <div class="table-responsive">
+                            <form th:action="@{'/admin/orders/' + ${orders.number}}" method="get" th:object="${orders}">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%;" scope="col">주문 번호</th>
+                                            <th style="width: 30%;" scope="col">상품명</th>
+                                            <th style="width: 10%;" scope="col">주문자 아이디</th>
+                                            <th style="width: 10%;" scope="col">주문 날짜</th>
+                                            <th style="width: 10%;" scope="col">주문 상태</th>
+                                            <th style="width: 10%;" scope="col">취소</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <th:block th:each="order, status: ${orders.getContent()}">
+
+                                        <th:block th:if="${#lists.size(order.orderItemDtoList) >= 2}">
+                                            <tr th:each="orderItem, status: ${order.orderItemDtoList}">
+
+                                                <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}" th:text="${order.orderId}"></td>
+                                                <td class="left" th:text="${orderItem.itemNm}"></td>
+                                                <td th:text="${order.createdBy}"></td>
+                                                <td th:text="${order.orderDate}"></td>
+                                                <td th:text="${order.orderStatus}"></td>
+                                                <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}">
+                                                    <button th:if="${order.orderStatus == orderStatus}" class="black_btn_w65_h30" type="button"
+                                                            th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                    <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
+                                                </td>
+                                            </tr>
+                                        </th:block>
+
+                                        <tr th:if="${#lists.size(order.orderItemDtoList) < 2}" th:each="orderItem, status: ${order.orderItemDtoList}">
+                                            <td th:text="${order.orderId}"></td>
+                                            <td class="left" th:text="${orderItem.itemNm}"></td>
+                                            <td th:text="${order.createdBy}"></td>
+                                            <td th:text="${order.orderDate}"></td>
+                                            <td th:text="${order.orderStatus}"></td>
+                                            <td>
+                                                <button th:if="${order.orderStatus == orderStatus}" class="black_btn_w65_h30" type="button"
+                                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                    </tbody>
+                                </table>
+
+                                <div class="pagination mt-3"
+                                     th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                                         end=(${(orders.totalPages == 0) ? 1 :
+                                         (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
+                                    <ul>
+                                        <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(0)'">
+                                                <i class="fa-solid fa-angle-left"></i><i
+                                                    class="fa-solid fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' +  ${orders.number - 1} + ')'">
+                                                <i class="fa-solid fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                            th:classappend="${orders.number eq page - 1} ? 'active' : ''">
+                                            <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                               th:inline="text">[[${page}]]</a>
+                                        </li>
+                                        <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' + ${orders.number + 1} + ')'">
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' + ${orders.totalPages - 1} + ')'">
+                                                <i class="fa-solid fa-angle-right"></i><i
+                                                    class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="search_box">
+                                    <input class="user_identifier" name="userIdentifier" id="userIdentifier" type="text" placeholder="주문자 아이디를 입력해주세요">
+                                    <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/adminLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/adminLayout.html :: js"></div>
+    <!-- custom js -->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $(".search_btn").on("click", function (e) {
+                e.preventDefault();
+                page(0);
+            });
+        })
+
+        function page(page) {
+            let userIdentifier = $(".user_identifier").val();
+
+            location.href = "/admin/orders/" + page + "?userIdentifier=" + userIdentifier;
+        }
+
+        function cancelOrder(orderId) {
+            if(confirm("선택하신 주문을 취소하시겠습니까?")){
+                let paramData = {
+                    orderId : orderId,
+                };
+
+                let param = JSON.stringify(paramData);
+
+                $.ajax({
+                    url : "/admin/order/" + orderId + "/cancel",
+                    type : "POST",
+                    contentType : "application/json",
+                    data : param,
+                    dataType : "json",
+                    cache : false,
+                    success: function (result, status) {
+                        alert("주문이 취소 되었습니다.");
+                        location.href = '/admin/orders';
+                    },
+                    error: function (request, status, error) {
+                        if (request.status === '401') {
+                            alert('로그인 후 이용해주세요.');
+                            location.href = '/login';
+                        } else {
+                            alert(request.responseText);
+                        }
+                    },
+                })
+            }else{
+                false;
+            }
+        }
+    </script>
+</body>

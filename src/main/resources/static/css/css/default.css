@@ -487,6 +487,64 @@ footer .footer_copyright {
   text-align: center;
 }
 
+.pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.pagination ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 20px;
+  line-height: 50px;
+  font-size: 13px;
+}
+.pagination ul li {
+  margin: 0 15px;
+}
+.pagination ul li a {
+  color: #999;
+}
+.pagination ul li.disabled {
+  pointer-events: none;
+}
+.pagination ul .page {
+  text-align: center;
+}
+.pagination ul .page:hover a {
+  color: #000;
+  font-weight: bold;
+}
+.pagination ul .page.active a {
+  color: #000;
+  font-weight: bold;
+  text-decoration-line: underline;
+}
+.pagination ul .prev,
+.pagination ul .next {
+  color: rgb(50, 50, 50);
+  font-size: 13px;
+}
+.pagination ul .prev {
+  margin-right: 20px;
+}
+.pagination ul .next {
+  margin-left: 20px;
+}
+
 /* board page start */
 .board_header {
   margin: 0px auto 60px;
@@ -2440,61 +2498,4 @@ footer .footer_copyright {
   color: #757575;
   font-weight: normal;
   font-size: 12px;
-}
-.order_hist_body .pagination {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.order_hist_body .pagination ul {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 10px 20px;
-  line-height: 50px;
-  font-size: 13px;
-}
-.order_hist_body .pagination ul li {
-  margin: 0 15px;
-}
-.order_hist_body .pagination ul li a {
-  color: #999;
-}
-.order_hist_body .pagination ul li.disabled {
-  pointer-events: none;
-}
-.order_hist_body .pagination ul .page {
-  text-align: center;
-}
-.order_hist_body .pagination ul .page:hover a {
-  color: #000;
-  font-weight: bold;
-}
-.order_hist_body .pagination ul .page.active a {
-  color: #000;
-  font-weight: bold;
-  text-decoration-line: underline;
-}
-.order_hist_body .pagination ul .prev,
-.order_hist_body .pagination ul .next {
-  color: rgb(50, 50, 50);
-  font-size: 13px;
-}
-.order_hist_body .pagination ul .prev {
-  margin-right: 20px;
-}
-.order_hist_body .pagination ul .next {
-  margin-left: 20px;
 }

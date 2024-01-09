@@ -1,3 +1,20 @@
+// base
+@import 'base/reset';
+
+// components
+@import 'components/button';
+
+// layout 
+@import 'layout/footer';
+
+// modules
+@import 'modules/pagination';
+
+// pages
+@import 'pages/admin/itemForm';
+@import 'pages/admin/itemMng';
+@import 'pages/admin/orderMng';
+
 main {
     display: flex;
 
