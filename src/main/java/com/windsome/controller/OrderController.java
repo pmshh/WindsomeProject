@@ -36,7 +36,7 @@ public class OrderController {
 
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("maxPage", 5);
-        model.addAttribute("orderStatus", OrderStatus.ORDER);
+        model.addAttribute("orderStatus", OrderStatus.READY);
         return "order/orderHist";
     }
 

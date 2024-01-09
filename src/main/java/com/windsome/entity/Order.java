@@ -44,7 +44,7 @@ public class Order extends BaseEntity {
         for (OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }
-        order.setOrderStatus(OrderStatus.ORDER);
+        order.setOrderStatus(OrderStatus.READY);
         order.setOrderDate(LocalDateTime.now());
         return order;
     }

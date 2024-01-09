@@ -17,4 +17,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select count(o) from Order o where o.account.userIdentifier = :userIdentifier")
     Long countOrder(@Param("userIdentifier") String userIdentifier);
+
+    @Query("select o from Order o where o.account.userIdentifier like concat('%',:userIdentifier,'%') order by o.orderDate desc")
+    List<Order> findOrderListForAdmin(@Param("userIdentifier") String userIdentifier, Pageable pageable);
+
+    @Query("select count(o) from Order o where o.account.userIdentifier like concat('%',:userIdentifier,'%') order by o.orderDate desc")
+    Long countOrderList(@Param("userIdentifier") String userIdentifier);
 }

@@ -15,7 +15,7 @@
     <!-- xeicon css -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <!-- custom css -->
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/css/admin.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -30,33 +30,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
             integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
-    </script>
-    <!-- common js -->
-    <script>
-        $(window).scroll(function () {
-            if ($(this).scrollTop() == 0)
-                $('nav').css('opacity', '1');
-            else
-                $('nav').css('opacity', '.6');
-        });
-
-        <!-- sidebar toggle 기능 -->
-        let toggleBtn = $('.menu_toggle');
-        let sidebar = $('.sidebar');
-        toggleBtn.click(function (e) {
-            e.preventDefault();
-            sidebar.toggleClass("active");
-        })
-    </script>
-    <!-- csrf token -->
-    <script type="application/javascript" th:inline="javascript">
-        $(function () {
-            var csrfToken = /*[[${_csrf.token}]]*/ null;
-            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-            $(document).ajaxSend(function (e, xhr, options) {
-                xhr.setRequestHeader(csrfHeader, csrfToken);
-            });
-        });
     </script>
 </th:block>
 
@@ -85,12 +58,11 @@
                         <i class="xi-cog pe-2"></i>
                         Home
                     </a>
-                    <a th:href="@{/admin/items}" class="sidebar-link"
-                        th:classappend="${currentMenu == 'productManagement'}? active">
+                    <a th:href="@{/admin/items}" class="sidebar-link" th:classappend="${currentMenu == 'productManagement'}? active">
                         <i class="xi-shop pe-2"></i>
                         상품 관리
                     </a>
-                    <a href="" class="sidebar-link" th:classappend="${currentMenu == 'orderManagement'}? active">
+                    <a th:href="@{/admin/orders}" class="sidebar-link" th:classappend="${currentMenu == 'orderManagement'}? active">
                         <i class="xi-cart-o pe-2"></i>
                         주문 관리
                     </a>
@@ -150,6 +122,36 @@
             </footer>
         </article>
     </main>
+
+    <th:block th:fragment="js">
+        <!-- common js -->
+        <script>
+            $(window).scroll(function () {
+                if ($(this).scrollTop() == 0)
+                    $('nav').css('opacity', '1');
+                else
+                    $('nav').css('opacity', '.6');
+            });
+
+            <!-- sidebar toggle 기능 -->
+            let toggleBtn = $('.menu_toggle');
+            let sidebar = $('.sidebar');
+            toggleBtn.click(function (e) {
+                e.preventDefault();
+                sidebar.toggleClass("active");
+            })
+        </script>
+        <!-- csrf token -->
+        <script type="application/javascript" th:inline="javascript">
+            $(function () {
+                var csrfToken = /*[[${_csrf.token}]]*/ null;
+                var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+                $(document).ajaxSend(function (e, xhr, options) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                });
+            });
+        </script>
+    </th:block>
 </body>
 
 </html>

@@ -1,8 +1,6 @@
 package com.windsome.service;
 
-import com.windsome.dto.OrderDto;
-import com.windsome.dto.OrderHistDto;
-import com.windsome.dto.OrderItemDto;
+import com.windsome.dto.*;
 import com.windsome.entity.*;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.ItemImgRepository;
@@ -56,11 +54,14 @@ public class OrderService {
         List<Order> orders = orderRepository.findOrders(userIdentifier, pageable);
         Long totalCount = orderRepository.countOrder(userIdentifier);
 
+        // List<Order> orders -> List<OrderHistDto> orderHistDtoList 변환
         List<OrderHistDto> orderHistDtoList = new ArrayList<>();
 
         for (Order order : orders) {
+            // Entity -> Dto 변환
             OrderHistDto orderHistDto = new OrderHistDto(order);
 
+            // orderHistDto - orderItemDtoList 필드에 값 채우기
             List<OrderItem> orderItems = order.getOrderItems();
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
@@ -68,9 +69,36 @@ public class OrderService {
 
                 orderHistDto.addOrderItemDto(orderItemDto);
             }
+            // orderHistDtoList - orderHistDto 추가
             orderHistDtoList.add(orderHistDto);
         }
         return new PageImpl<OrderHistDto>(orderHistDtoList, pageable, totalCount);
+    }
+
+    public Page<OrderMngDto> getAdminPageOrderList(String userIdentifier, Pageable pageable) {
+        List<Order> orders = orderRepository.findOrderListForAdmin(userIdentifier, pageable);
+        Long totalCount = orderRepository.countOrderList(userIdentifier);
+
+        // List<Order> orders -> List<OrderMngDto> orderMngDtoList 변환
+        List<OrderMngDto> orderMngDtoList = new ArrayList<>();
+
+        for (Order order : orders) {
+            // Entity -> Dto 변환
+            OrderMngDto orderMngDto = new OrderMngDto(order);
+
+            // orderMngDto - orderItemDtoList 필드에 값 채우기
+            List<OrderItem> orderItems = order.getOrderItems();
+            for (OrderItem orderItem : orderItems) {
+                ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
+                OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
+
+                orderMngDto.addOrderItemDto(orderItemDto);
+            }
+
+            // orderMngDtoList - orderMngDto 추가
+            orderMngDtoList.add(orderMngDto);
+        }
+        return new PageImpl<OrderMngDto>(orderMngDtoList, pageable, totalCount);
     }
 
     @Transactional(readOnly = true)
