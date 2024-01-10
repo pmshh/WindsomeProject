@@ -38,7 +38,7 @@
                                                 th:text="${items.getTotalElements() - (items.getSize() * items.getNumber()) - status.index}">
                                             </td>
                                             <td>
-                                                <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemNm}"></a>
+                                                <button class="item_dtl_btn" type="button" th:value="${item.id}" th:text="${item.itemNm}" onclick="moveItemDtlPage(this.value)"></button>
                                             </td>
                                             <td th:text="${item.itemSellStatus == sellStatus} ? '판매' : '품절'">
                                             </td>
@@ -103,13 +103,23 @@
                                     <input class="search_query" th:field="*{searchQuery}" type="text"
                                         placeholder="검색어를 입력해주세요">
                                     <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
-                                    <a class="white_btn_w90_h40 ms-2" th:href="@{/admin/item}">상품 등록</a>
+                                    <button class="white_btn_w90_h40 ms-2" type="button" onclick="moveItemEnrollPage()">상품 등록</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <form id="move_form" method="get">
+                <input type="hidden" name="page" th:value="${items.number}">
+                <input th:if="${not #strings.isEmpty(itemSearchDto.searchDateType)}" type="hidden" name="searchDateType" th:value="${itemSearchDto.searchDateType}">
+                <input th:if="${#strings.isEmpty(itemSearchDto.searchDateType)}" type="hidden" name="searchDateType" value="all">
+                <input type="hidden" name="searchSellStatus" th:value="${itemSearchDto.searchSellStatus}">
+                <input th:if="${not #strings.isEmpty(itemSearchDto.searchBy)}" type="hidden" name="searchBy" th:value="${itemSearchDto.searchBy}">
+                <input th:if="${#strings.isEmpty(itemSearchDto.searchBy)}" type="hidden" name="searchBy" value="itemNm">
+                <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
+            </form>
 
             <div th:replace="/layouts/adminLayout.html :: footer"></div>
         </article>
@@ -125,6 +135,7 @@
             });
         })
 
+        /* page 이동 */
         function page(page) {
             let searchDateType = $(".search_date_type").val();
             let searchSellStatus = $(".search_sell_status").val();
@@ -136,5 +147,19 @@
                 + "&searchBy=" + searchBy
                 + "&searchQuery=" + searchQuery;
         }
+
+        /* 상품명 클릭 시 상품 상세 화면으로 이동 */
+        function moveItemDtlPage(itemId) {
+            let moveForm = $('#move_form');
+
+            moveForm.attr("action", "/admin/itemDtl/" + itemId);
+            moveForm.submit();
+        }
+
+        /* 상품 관리 페이지로 이동 */
+        function moveItemEnrollPage() {
+            location.href = "/admin/item";
+        }
+
     </script>
 </body>

@@ -53,6 +53,12 @@
                             text-decoration: underline;
                             color: rgb(107, 107, 107);
                         }
+
+                        .item_dtl_btn {
+                            outline: none;
+                            background: white;
+                            border: none;
+                        }
                     }
 
                     td:nth-child(2) {

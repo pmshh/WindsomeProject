@@ -8,7 +8,6 @@ import com.windsome.dto.ItemSearchDto;
 import com.windsome.dto.OrderMngDto;
 import com.windsome.entity.Category;
 import com.windsome.entity.Item;
-import com.windsome.entity.Order;
 import com.windsome.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +66,103 @@ public class AdminController {
         return "admin/item/itemMng";
     }
 
+    @GetMapping("/admin/item")
+    public String saveItemForm(Model model) throws Exception {
+        model.addAttribute("itemFormDto", new ItemFormDto());
+        return "admin/item/itemEnroll";
+    }
+
+    @PostMapping("/admin/item")
+    public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
+                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                           @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
+                           @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
+        if (bindingResult.hasErrors()) {
+            return "admin/item/itemEnroll";
+        }
+
+        if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
+            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
+            return "admin/item/itemEnroll";
+        }
+
+        try {
+            Category category = categoryService.getCategory(parentCateId, childCateId);
+            itemFormDto.setCategory(category);
+            itemService.saveItem(itemFormDto, itemImgFileList);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
+            return "admin/item/itemEnroll";
+        }
+        return "redirect:/admin/items";
+    }
+
+    @GetMapping("/admin/itemDtl/{itemId}")
+    public String itemDtl(String page, ItemSearchDto itemSearchDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
+        try {
+            ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
+            model.addAttribute("itemFormDto", itemFormDto);
+            model.addAttribute("page", page);
+            model.addAttribute("itemSearchDto", itemSearchDto);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
+            model.addAttribute("itemFormDto", new ItemFormDto());
+            model.addAttribute("page", page);
+            model.addAttribute("itemSearchDto", itemSearchDto);
+            return "admin/item/itemDtl";
+        }
+        return "admin/item/itemDtl";
+    }
+
+    @GetMapping("/admin/item/{itemId}")
+    public String updateItemForm(String page, ItemSearchDto itemSearchDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
+        try {
+            ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
+            model.addAttribute("itemFormDto", itemFormDto);
+            model.addAttribute("page", page);
+            model.addAttribute("itemSearchDto", itemSearchDto);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
+            model.addAttribute("itemFormDto", new ItemFormDto());
+            model.addAttribute("page", page);
+            model.addAttribute("itemSearchDto", itemSearchDto);
+            return "admin/item/itemModify";
+        }
+        return "admin/item/itemModify";
+    }
+
+    @PostMapping("/admin/item/{itemId}")
+    public String updateItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
+                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                             @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
+                             @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
+        if (bindingResult.hasErrors()) {
+            return "admin/item/itemModify";
+        }
+
+        if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
+            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
+            return "admin/item/itemModify";
+        }
+
+        try {
+            Category category = categoryService.getCategory(parentCateId, childCateId);
+            itemFormDto.setCategory(category);
+            itemService.updateItem(itemFormDto, itemImgFileList);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
+            return "admin/item/itemModify";
+        }
+
+        return "redirect:/admin/items";
+    }
+
+    @GetMapping("/admin/item/categories")
+    public ResponseEntity<Object> getItemCategories() throws Exception {
+        String jsonCategories = categoryService.getJsonCategories();
+        return ResponseEntity.ok().body(jsonCategories);
+    }
+
     @GetMapping(value = {"/admin/orders", "/admin/orders/{page}"})
     public String orderManage(String userIdentifier, @PathVariable("page") Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
@@ -82,84 +178,6 @@ public class AdminController {
     public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().body(orderId);
-    }
-
-    @GetMapping("/admin/item")
-    public String saveItemForm(Model model) throws Exception {
-        model.addAttribute("itemFormDto", new ItemFormDto());
-        model.addAttribute("formActionParam", "");
-        return "admin/item/itemForm";
-    }
-
-    @PostMapping("/admin/item")
-    public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
-                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
-                           @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
-                           @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
-        if (bindingResult.hasErrors()) {
-            return "admin/item/itemForm";
-        }
-
-        if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
-            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            return "admin/item/itemForm";
-        }
-
-        try {
-            Category category = categoryService.getCategory(parentCateId, childCateId);
-            itemFormDto.setCategory(category);
-            itemService.saveItem(itemFormDto, itemImgFileList);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            return "admin/item/itemForm";
-        }
-        return "redirect:/admin/items";
-    }
-
-    @GetMapping("/admin/item/{itemId}")
-    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) throws Exception {
-        model.addAttribute("formActionParam", itemId);
-        try {
-            ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
-            model.addAttribute("itemFormDto", itemFormDto);
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
-            model.addAttribute("itemFormDto", new ItemFormDto());
-            return "admin/item/itemForm";
-        }
-        return "admin/item/itemForm";
-    }
-
-    @PostMapping("/admin/item/{itemId}")
-    public String updateItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
-                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
-                             @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
-                             @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
-        if (bindingResult.hasErrors()) {
-            return "admin/item/itemForm";
-        }
-
-        if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
-            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            return "admin/item/itemForm";
-        }
-
-        try {
-            Category category = categoryService.getCategory(parentCateId, childCateId);
-            itemFormDto.setCategory(category);
-            itemService.updateItem(itemFormDto, itemImgFileList);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
-            return "admin/item/itemForm";
-        }
-
-        return "redirect:/";
-    }
-
-    @GetMapping("/admin/item/categories")
-    public ResponseEntity<Object> getItemCategories() throws Exception {
-        String jsonCategories = categoryService.getJsonCategories();
-        return ResponseEntity.ok().body(jsonCategories);
     }
 }
 

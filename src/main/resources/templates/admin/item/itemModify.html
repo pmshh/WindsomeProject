@@ -15,20 +15,18 @@
             <section>
                 <div class="container">
                     <div class="add_item_header">
-                        <h2 th:if="${formActionParam == ''}">상품 등록</h2>
-                        <h2 th:if="${formActionParam != ''}">상품 수정</h2>
+                        <h2>상품 수정</h2>
                         <div class="divider"></div>
                     </div>
                     <div class="add_item_body mt-5">
-                        <form id="itemFormDto" th:action="@{'/admin/item/' + ${formActionParam}}"
-                            th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
+                        <form id="itemFormDto" th:action="@{'/admin/item/' + ${itemFormDto.id}}" th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
                             <table style="table-layout: fixed !important;">
                                 <colgroup>
                                     <col style="width:20%;">
                                     <col style="width: auto;">
                                 </colgroup>
                                 <tbody>
-                                    <input th:type="hidden" th:field="*{id}"></input>
+                                    <input th:type="hidden" th:field="*{id}">
                                     <tr>
                                         <th scope="row">
                                             <label th:for="*{itemSellStatus}">판매 상태 <span>*</span></label>
@@ -77,14 +75,13 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <label for="discount">할인율 <span>*</span></label>
+                                            <label th:for="*{discount}">할인율 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <input class="discount_interface" placeholder="할인율" maxlength="2" value="">
-                                            <input class="discount_input" type="hidden" name="discount" id="discount">
+                                            <input class="discount_interface" placeholder="할인율" maxlength="2" th:value="*{discount}">
+                                            <input class="discount_input" type="hidden" th:field="*{discount}" name="discount" id="discount">
                                             <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
-                                            <span class="discount_text">할인 가격 : <span
-                                                    class="discount_price"></span></span>
+                                            <span class="discount_text">할인 가격 : <span class="discount_price"></span></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -141,16 +138,23 @@
                                 </tbody>
                             </table>
                             <div class="btn_box">
-                                <button th:if="${#strings.isEmpty(itemFormDto.id)}"
-                                    class="black_btn_w130_h40 enroll_btn" type="submit">저장</button>
-                                <button th:unless="${#strings.isEmpty(itemFormDto.id)}" class="black_btn_w130_h40"
-                                    type="submit">수정</button>
-                                <a class="white_btn_w130_h40" th:href="@{/admin/items}">취소</a>
+                                <button class="black_btn_w130_h40 modify_btn" type="submit">저장</button>
+                                <button class="white_btn_w130_h40 cancel_btn" type="button">취소</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </section>
+
+            <form id="move_form" method="get">
+                <input type="hidden" name="page" th:value="${page}">
+                <input th:if="${not #strings.isEmpty(itemSearchDto.searchDateType)}" type="hidden" name="searchDateType" th:value="${itemSearchDto.searchDateType}">
+                <input th:if="${#strings.isEmpty(itemSearchDto.searchDateType)}" type="hidden" name="searchDateType" value="all">
+                <input type="hidden" name="searchSellStatus" th:value="${itemSearchDto.searchSellStatus}">
+                <input th:if="${not #strings.isEmpty(itemSearchDto.searchBy)}" type="hidden" name="searchBy" th:value="${itemSearchDto.searchBy}">
+                <input th:if="${#strings.isEmpty(itemSearchDto.searchBy)}" type="hidden" name="searchBy" value="itemNm">
+                <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
+            </form>
 
             <div th:replace="/layouts/adminLayout.html :: footer"></div>
         </article>
@@ -189,7 +193,6 @@
             })
 
             /* 카테고리 추가 */
-
             $.ajax({
                 url: "/admin/item/categories",
                 type: "GET",
@@ -239,96 +242,93 @@
                             }
                         }
                     });
-
-                    /* 상품 등록 버튼 */
-                    $("button").on("click", function (e) {
-                        e.preventDefault();
-
-                        let itemSellStatusChk = false;
-                        let categoryChk = false;
-                        let itemNmChk = false;
-                        let priceChk = false;
-                        let discountChk = false;
-                        let stockNumberChk = false;
-                        let itemDetailChk = false;
-
-                        let itemSellStatus = $(".sell_status").val();
-                        let category = $(".cate1").val();
-                        let itemNm = $(".name_input").val();
-                        let price = $(".price_input").val();
-                        let discount = $(".discount_interface").val();
-                        let stockNumber = $(".stock_input").val();
-                        let itemDetail = $("p").html();
-
-                        // 공란 체크
-                        if (itemSellStatus !== 'none') {
-                            $(".sell_status_warn").css('display', 'none');
-                            itemSellStatusChk = true;
-                        } else {
-                            $(".sell_status_warn").css('display', 'block');
-                            itemSellStatusChk = false;
-                        }
-
-                        if (category !== 'none') {
-                            $(".category_warn").css('display', 'none');
-                            categoryChk = true;
-                        } else {
-                            $(".category_warn").css('display', 'block');
-                            categoryChk = false;
-                        }
-
-                        if (itemNm !== "") {
-                            $(".name_warn").css('display', 'none');
-                            itemNmChk = true;
-                        } else {
-                            $(".name_warn").css('display', 'block');
-                            itemNmChk = false;
-                        }
-
-                        if (price !== "") {
-                            $(".price_warn").css('display', 'none');
-                            priceChk = true;
-                        } else {
-                            $(".price_warn").css('display', 'block');
-                            priceChk = false;
-                        }
-
-                        if (discount !== "" && discount < 100 && discount >= 0) {
-                            $(".discount_warn").css('display', 'none');
-                            discountChk = true;
-                        } else {
-                            $(".discount_warn").css('display', 'block');
-                            discountChk = false;
-                        }
-
-                        if (stockNumber !== "") {
-                            $(".stock_warn").css('display', 'none');
-                            stockNumberChk = true;
-                        } else {
-                            $(".stock_warn").css('display', 'block');
-                            stockNumberChk = false;
-                        }
-
-                        if (itemDetail !== '<br data-cke-filler="true">') {
-                            $(".detail_warn").css('display', 'none');
-                            itemDetailChk = true;
-                        } else {
-                            $(".detail_warn").css('display', 'block');
-                            itemDetailChk = false;
-                        }
-
-                        console.log("discountChk = " + discountChk);
-
-                        if (itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk) {
-                            // $('#itemFormDto').attr("action", "/admin/item/" );
-                            $('#itemFormDto').submit();
-                        } else {
-                            return false;
-                        }
-                    })
                 },
                 error: function (request, status, error) {
                     console.log(error);
+                }
+            })
+
+            /* 상품 저장 버튼 */
+            $(".modify_btn").on("click", function (e) {
+                e.preventDefault();
+
+                let itemSellStatusChk = false;
+                let categoryChk = false;
+                let itemNmChk = false;
+                let priceChk = false;
+                let discountChk = false;
+                let stockNumberChk = false;
+                let itemDetailChk = false;
+
+                let itemSellStatus = $(".sell_status").val();
+                let category = $(".cate1").val();
+                let itemNm = $(".name_input").val();
+                let price = $(".price_input").val();
+                let discount = $(".discount_interface").val();
+                let stockNumber = $(".stock_input").val();
+                let itemDetail = $("p").html();
+
+                // 공란 체크
+                if (itemSellStatus !== 'none') {
+                    $(".sell_status_warn").css('display', 'none');
+                    itemSellStatusChk = true;
+                } else {
+                    $(".sell_status_warn").css('display', 'block');
+                    itemSellStatusChk = false;
+                }
+
+                if (category !== 'none') {
+                    $(".category_warn").css('display', 'none');
+                    categoryChk = true;
+                } else {
+                    $(".category_warn").css('display', 'block');
+                    categoryChk = false;
+                }
+
+                if (itemNm !== "") {
+                    $(".name_warn").css('display', 'none');
+                    itemNmChk = true;
+                } else {
+                    $(".name_warn").css('display', 'block');
+                    itemNmChk = false;
+                }
+
+                if (price !== "") {
+                    $(".price_warn").css('display', 'none');
+                    priceChk = true;
+                } else {
+                    $(".price_warn").css('display', 'block');
+                    priceChk = false;
+                }
+
+                if (discount !== "" && discount < 100 && discount >= 0) {
+                    $(".discount_warn").css('display', 'none');
+                    discountChk = true;
+                } else {
+                    $(".discount_warn").css('display', 'block');
+                    discountChk = false;
+                }
+
+                if (stockNumber !== "") {
+                    $(".stock_warn").css('display', 'none');
+                    stockNumberChk = true;
+                } else {
+                    $(".stock_warn").css('display', 'block');
+                    stockNumberChk = false;
+                }
+
+                if (itemDetail !== '<br data-cke-filler="true">') {
+                    $(".detail_warn").css('display', 'none');
+                    itemDetailChk = true;
+                } else {
+                    $(".detail_warn").css('display', 'block');
+                    itemDetailChk = false;
+                }
+
+                if (itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk) {
+                    $('#itemFormDto').submit();
+                } else {
+                    return false;
                 }
             })
 
@@ -365,7 +365,15 @@
                 }
             });
 
+            /* 상품 관리 페이지 이동 버튼 */
+            $(".cancel_btn").on("click", function(e){
+                e.preventDefault();
 
+                let moveForm = $("#move_form");
+
+                moveForm.attr("action", "/admin/items/" + [[${page}]])
+                moveForm.submit();
+            });
         });
     </script>
 </body>

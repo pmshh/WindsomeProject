@@ -4,9 +4,8 @@
 .black_btn_w90_h30,
 .black_btn_w65_h30 {
     display: inline-block;
-    padding: 10px 8px 10px 8px;
     font-size: 13px;
-    border: 1px solid transparent;
+    border: 1px solid transparent !important;
     vertical-align: middle;
     text-align: center;
     color: #fff;
@@ -42,16 +41,15 @@
 .white_btn_w90_h30,
 .white_btn_w65_h30 {
     display: inline-block;
-    padding: 10px 8px 10px 8px;
     font-size: 13px;
-    border: 1px solid #e2e2e2;
+    border: 1px solid #e2e2e2 !important;
     vertical-align: middle;
     text-align: center;
     color: #222;
-    background-color: #fff;
+    background-color: white;
 
     &:hover {
-        border: 1px solid black;
+        border: 1px solid black !important;
     }
 }
 

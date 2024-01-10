@@ -1,0 +1,189 @@
+/* signUp page start */
+.item_dtl_header {
+    margin: 0px auto 60px;
+    position: relative;
+
+    h2 {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    .divider {
+        width: 70px;
+        height: 1px;
+        background: #aaa;
+        margin: 20px auto;
+    }
+}
+
+.item_dtl_body {
+    display: flex;
+    justify-content: center;
+
+    form {
+        width: 60%;
+
+        table {
+            width: 100%;
+            position: relative;
+            margin: 10px 0 0;
+            border: 1px solid #d7d5d5;
+            border-top: 0;
+            border-left-width: 0;
+            border-right-width: 0;
+            color: #fff;
+            line-height: 1.5;
+
+            tbody {
+                font-size: 12px;
+                color: #353535;
+
+                th {
+                    padding: 11px 0 10px 18px;
+                    border: 1px solid #dfdfdf;
+                    border-bottom-width: 0;
+                    border-left-width: 0;
+                    border-right-width: 0;
+                    font-weight: normal;
+                    vertical-align: middle;
+
+                    span {
+                        color: #008BCC;
+                    }
+                }
+
+                td {
+                    border-top: 1px solid #dfdfdf;
+                    vertical-align: middle;
+                    padding: 11px 0 10px 18px;
+
+                    .fake_input {
+                        display: inline-block;
+                        height: 26px;
+                        padding: 0 10px;
+                        vertical-align: middle;
+                        border: 1px solid #dddddd;
+                        width: 40%;
+                        color: #999999;
+                    }
+
+                    input[type="file"] {
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        padding: 0;
+                        overflow: hidden;
+                        border: 0;
+                    }
+
+                    input {
+                        width: 100%;
+                        height: 29px;
+                        padding: 2px 4px;
+                        border: 1px solid #d5d5d5;
+
+                        &:focus::placeholder {
+                            color: transparent;
+                        }
+                    }
+
+                    input.fake_input {
+                        width: 50% !important;
+                    }
+
+                    label.find_file {
+                        height: 26px !important;
+                        padding: 3px !important;
+                    }
+
+                    textarea {
+                        width: 100%;
+                        height: 400px;
+                        padding: 2px 4px;
+                        border: 1px solid #d5d5d5;
+
+                        &:focus::placeholder {
+                            color: transparent;
+                        }
+                    }
+
+                    select {
+                        height: 30px;
+                        line-height: 29px;
+                        min-height: 30px;
+                        border: 1px solid #ddd;
+                        padding: 0 10px 0 5px;
+                        background-color: #fff;
+                        font-size: 12px;
+                    }
+
+                    select.cate1,
+                    select.cate2 {
+                        width: calc(50% - 2px);
+                    }
+
+                    select.sell_status {
+                        width: calc(50% - 1px);
+                    }
+
+                    span {
+                        display: none;
+                        margin-top: 3px;
+                    }
+
+                    span.discount_price {
+                        display: inline-block;
+                    }
+
+                    span.discount_text {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .btn_box {
+            padding: 10px 0;
+            text-align: center;
+            display: block;
+            margin-top: 30px;
+
+            // .test_btn {
+            //     border: 1px solid red;
+            // }
+        }
+    }
+
+}
+
+@media (max-width: 1172px) {
+    .item_dtl_body {
+        form {
+            width: 80%;
+
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 786px) {
+    .item_dtl_body {
+        form {
+            width: 100%;
+
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
+                }
+            }
+        }
+    }
+}
