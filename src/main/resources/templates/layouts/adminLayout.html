@@ -41,12 +41,20 @@
                     <svg th:data-jdenticon-value="${#authentication.name}" width="36" height="36"></svg>
                 </div>
                 <div class="profile_name">
-                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        pms000723
+                    <button class="logout_box_toggle" type="button">
+                        pms000723 <i class="fa-solid fa-sort-down"></i>
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                    </ul>
+                    <div class="logout_box">
+                        <ul>
+                            <li sec:authorize="isAuthenticated()">
+                                <form action="#" th:action="@{/logout}" method="post">
+                                    <button type="submit">
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="sidebar_menu">
@@ -140,6 +148,13 @@
                 e.preventDefault();
                 sidebar.toggleClass("active");
             })
+
+            let logoutBtnToggle = $('.logout_box_toggle');
+            let logoutBox = $('.logout_box');
+            logoutBtnToggle.click(function (e) {
+                e.preventDefault();
+                logoutBox.slideToggle();
+            });
         </script>
         <!-- csrf token -->
         <script type="application/javascript" th:inline="javascript">
