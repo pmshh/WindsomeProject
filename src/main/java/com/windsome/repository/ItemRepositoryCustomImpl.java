@@ -1,7 +1,6 @@
 package com.windsome.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +18,6 @@ import org.thymeleaf.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.windsome.entity.QItem.*;
 import static com.windsome.entity.QItem.item;
 
 @RequiredArgsConstructor
@@ -85,6 +83,16 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .where(itemNmLike(itemSearchDto.getSearchQuery()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
+    }
+
+    @Override
+    public List<Item> getItemListForAdminPage() {
+        QItem item = QItem.item;
+        return queryFactory
+                .selectFrom(item)
+                .orderBy(item.id.desc())
+                .limit(3)
+                .fetch();
     }
 
     private BooleanBuilder itemCategoryLike(Long categoryId) {

@@ -50,8 +50,7 @@
                                 </table>
 
                                 <div class="pagination mt-3"
-                                    th:with="start=${(items.number/maxPage)*maxPage + 1},
-                                     end=(${(items.totalPages == 0) ? 1 :
+                                    th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 :
                                      (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
                                     <ul>
                                         <li class="prev" th:classappend="${items.first} ? 'disabled'">
@@ -116,6 +115,7 @@
         </article>
     </main>
 
+    <div th:replace="/layouts/adminLayout.html :: js"></div>
     <!-- custom js -->
     <script th:inline="javascript">
         $(document).ready(function () {

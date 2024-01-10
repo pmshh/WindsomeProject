@@ -2,14 +2,14 @@ package com.windsome.controller;
 
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.constant.OrderStatus;
+import com.windsome.dto.DashboardDataDto;
 import com.windsome.dto.ItemFormDto;
 import com.windsome.dto.ItemSearchDto;
 import com.windsome.dto.OrderMngDto;
 import com.windsome.entity.Category;
 import com.windsome.entity.Item;
-import com.windsome.service.CategoryService;
-import com.windsome.service.ItemService;
-import com.windsome.service.OrderService;
+import com.windsome.entity.Order;
+import com.windsome.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,9 +35,23 @@ public class AdminController {
     private final ItemService itemService;
     private final OrderService orderService;
     private final CategoryService categoryService;
+    private final AdminService adminService;
 
     @GetMapping("/admin/main")
-    public String home() {
+    public String home(Model model) {
+        String userIdentifier = "";
+        ItemSearchDto itemSearchDto = new ItemSearchDto();
+        Pageable pageable = PageRequest.of(0, 3);
+        Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
+        Page<OrderMngDto> orders = orderService.getAdminPageOrderList(userIdentifier, pageable);
+
+        DashboardDataDto dashboardData = adminService.getDashboardData();
+
+        model.addAttribute("sellStatus", ItemSellStatus.SELL);
+        model.addAttribute("orderStatus", OrderStatus.READY);
+        model.addAttribute("dashboardData", dashboardData);
+        model.addAttribute("items", items);
+        model.addAttribute("orders", orders);
         return "admin/main";
     }
 

@@ -26,7 +26,8 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10%;" scope="col">주문 번호</th>
-                                            <th style="width: 30%;" scope="col">상품명</th>
+                                            <th style="width: 10%;" scope="col">이미지</th>
+                                            <th style="width: auto;" scope="col">상품 정보</th>
                                             <th style="width: 10%;" scope="col">주문자 아이디</th>
                                             <th style="width: 10%;" scope="col">주문 날짜</th>
                                             <th style="width: 10%;" scope="col">주문 상태</th>
@@ -34,42 +35,70 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <th:block th:each="order, status: ${orders.getContent()}">
+                                        <th:block th:each="order, status: ${orders.getContent()}">
 
-                                        <th:block th:if="${#lists.size(order.orderItemDtoList) >= 2}">
-                                            <tr th:each="orderItem, status: ${order.orderItemDtoList}">
+                                            <th:block th:if="${#lists.size(order.orderItemDtoList) >= 2}">
+                                                <tr th:each="orderItem, status: ${order.orderItemDtoList}">
 
-                                                <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}" th:text="${order.orderId}"></td>
-                                                <td class="left" th:text="${orderItem.itemNm}"></td>
+                                                    <td th:if="${status.index == 0}"
+                                                        th:rowspan="${#lists.size(order.orderItemDtoList)}"
+                                                        th:text="${order.orderId}"></td>
+                                                    <td class="thumb">
+                                                        <a th:href="${'/item/' + orderItem.itemId}">
+                                                            <img th:src="${orderItem.imgUrl}">
+                                                        </a>
+                                                    </td>
+                                                    <td class="product left_top">
+                                                        <strong class="name">
+                                                            <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
+                                                        </strong>
+                                                        <div class="option">[옵션: 선택 X]</div>
+                                                    </td>
+                                                    <td th:text="${order.createdBy}"></td>
+                                                    <td th:text="${order.orderDate}"></td>
+                                                    <td th:text="${order.orderStatus}"></td>
+                                                    <td th:if="${status.index == 0}"
+                                                        th:rowspan="${#lists.size(order.orderItemDtoList)}">
+                                                        <button th:if="${order.orderStatus == orderStatus}"
+                                                            class="black_btn_w65_h30" type="button"
+                                                            th:value="${order.orderId}"
+                                                            onclick="cancelOrder(this.value)">주문 취소</button>
+                                                        <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
+                                                    </td>
+                                                </tr>
+                                            </th:block>
+
+                                            <tr th:if="${#lists.size(order.orderItemDtoList) < 2}"
+                                                th:each="orderItem, status: ${order.orderItemDtoList}">
+                                                <td th:text="${order.orderId}"></td>
+                                                <td class="thumb">
+                                                    <a th:href="${'/item/' + orderItem.itemId}">
+                                                        <img th:src="${orderItem.imgUrl}">
+                                                    </a>
+                                                </td>
+                                                <td class="product left_top">
+                                                    <strong class="name">
+                                                        <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
+                                                    </strong>
+                                                    <div class="option">[옵션: 선택 X]</div>
+                                                </td>
                                                 <td th:text="${order.createdBy}"></td>
                                                 <td th:text="${order.orderDate}"></td>
                                                 <td th:text="${order.orderStatus}"></td>
-                                                <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}">
-                                                    <button th:if="${order.orderStatus == orderStatus}" class="black_btn_w65_h30" type="button"
-                                                            th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                <td>
+                                                    <button th:if="${order.orderStatus == orderStatus}"
+                                                        class="black_btn_w65_h30" type="button"
+                                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문
+                                                        취소</button>
                                                     <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
                                                 </td>
                                             </tr>
                                         </th:block>
-
-                                        <tr th:if="${#lists.size(order.orderItemDtoList) < 2}" th:each="orderItem, status: ${order.orderItemDtoList}">
-                                            <td th:text="${order.orderId}"></td>
-                                            <td class="left" th:text="${orderItem.itemNm}"></td>
-                                            <td th:text="${order.createdBy}"></td>
-                                            <td th:text="${order.orderDate}"></td>
-                                            <td th:text="${order.orderStatus}"></td>
-                                            <td>
-                                                <button th:if="${order.orderStatus == orderStatus}" class="black_btn_w65_h30" type="button"
-                                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
-                                                <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
-                                            </td>
-                                        </tr>
-                                    </th:block>
                                     </tbody>
                                 </table>
 
                                 <div class="pagination mt-3"
-                                     th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                                    th:with="start=${(orders.number/maxPage)*maxPage + 1},
                                          end=(${(orders.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
                                     <ul>
@@ -87,7 +116,7 @@
                                         <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
                                             th:classappend="${orders.number eq page - 1} ? 'active' : ''">
                                             <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                                               th:inline="text">[[${page}]]</a>
+                                                th:inline="text">[[${page}]]</a>
                                         </li>
                                         <li class="next" th:classappend="${orders.last} ? 'disabled'">
                                             <a th:onclick="'javascript:page(' + ${orders.number + 1} + ')'">
@@ -104,7 +133,8 @@
                                 </div>
 
                                 <div class="search_box">
-                                    <input class="user_identifier" name="userIdentifier" id="userIdentifier" type="text" placeholder="주문자 아이디를 입력해주세요">
+                                    <input class="user_identifier" name="userIdentifier" id="userIdentifier" type="text"
+                                        placeholder="주문자 아이디를 입력해주세요">
                                     <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
                                 </div>
                             </form>
@@ -134,20 +164,20 @@
         }
 
         function cancelOrder(orderId) {
-            if(confirm("선택하신 주문을 취소하시겠습니까?")){
+            if (confirm("선택하신 주문을 취소하시겠습니까?")) {
                 let paramData = {
-                    orderId : orderId,
+                    orderId: orderId,
                 };
 
                 let param = JSON.stringify(paramData);
 
                 $.ajax({
-                    url : "/admin/order/" + orderId + "/cancel",
-                    type : "POST",
-                    contentType : "application/json",
-                    data : param,
-                    dataType : "json",
-                    cache : false,
+                    url: "/admin/order/" + orderId + "/cancel",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: param,
+                    dataType: "json",
+                    cache: false,
                     success: function (result, status) {
                         alert("주문이 취소 되었습니다.");
                         location.href = '/admin/orders';
@@ -161,7 +191,7 @@
                         }
                     },
                 })
-            }else{
+            } else {
                 false;
             }
         }

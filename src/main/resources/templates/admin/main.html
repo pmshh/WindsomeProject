@@ -12,12 +12,221 @@
         <article class="content">
             <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-            <section>
-                <div class="container">
-                    Admin Page에 오신 것을 환영합니다.
+            <section id="admin_main">
+                <div class="container admin_main">
+                    <div class="admin_main_header">
+                        <h2>Dashboard</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="admin_main_body mt-5">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-user"></i> 회원 수
+                                    </div>
+                                    <div class="card-body">
+                                        <span th:text="${dashboardData.totalAccount}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-cart-shopping"></i> 상품 수
+                                    </div>
+                                    <div class="card-body">
+                                        <span th:text="${dashboardData.totalItem}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-envelope"></i> 고객 문의
+                                    </div>
+                                    <div class="card-body">
+                                        준비중...
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-chart-simple"></i> 총 매출
+                                    </div>
+                                    <div class="card-body">
+                                        <span th:text="${#numbers.formatInteger(dashboardData.totalSales, 3, 'COMMA') + '원'}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-5">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-store"></i><span>상품 관리</span>
+                                        <a th:href="@{/admin/items}"><i class="fa-solid fa-bars"></i></a>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 10%;" scope="col">번호</th>
+                                                    <th style="width: 30%;" scope="col">상품명</th>
+                                                    <th style="width: 10%;" scope="col">상태</th>
+                                                    <th style="width: 10%;" scope="col">등록자</th>
+                                                    <th style="width: 20%;" scope="col">등록일</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="item, status: ${items}">
+                                                    <td th:text="${status.index + 1}">
+                                                    </td>
+                                                    <td class="left">
+                                                        <a th:href="'/admin/item/'+${item.id}"
+                                                            th:text="${item.itemNm}"></a>
+                                                    </td>
+                                                    <td th:text="${item.itemSellStatus == sellStatus} ? '판매' : '품절'">
+                                                    </td>
+                                                    <td th:text="${item.createdBy}"></td>
+                                                    <td
+                                                        th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-5">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa-solid fa-store"></i><span>주문 관리</span>
+                                        <a th:href="@{/admin/orders}"><i class="fa-solid fa-bars"></i></a>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 10%;" scope="col">주문 번호</th>
+                                                <th style="width: 10%;" scope="col">이미지</th>
+                                                <th style="width: auto;" scope="col">상품정보</th>
+                                                <th style="width: 10%;" scope="col">주문 상태</th>
+                                                <th style="width: 10%;" scope="col">주문자 아이디</th>
+                                                <th style="width: 10%;" scope="col">주문 날짜</th>
+                                                <th style="width: 10%;" scope="col">취소</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <th:block th:each="order, status: ${orders.getContent()}">
+
+                                                <th:block th:if="${#lists.size(order.orderItemDtoList) >= 2}">
+                                                    <tr th:each="orderItem, status: ${order.orderItemDtoList}">
+
+                                                        <td th:if="${status.index == 0}"
+                                                            th:rowspan="${#lists.size(order.orderItemDtoList)}"
+                                                            th:text="${order.orderId}"></td>
+                                                        <td class="thumb">
+                                                            <a th:href="${'/item/' + orderItem.itemId}">
+                                                                <img th:src="${orderItem.imgUrl}">
+                                                            </a>
+                                                        </td>
+                                                        <td class="product left_top">
+                                                            <strong class="name">
+                                                                <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
+                                                            </strong>
+                                                            <div class="option">[옵션: 선택 X]</div>
+                                                        </td>
+                                                        <td th:text="${order.orderStatus}"></td>
+                                                        <td th:text="${order.createdBy}"></td>
+                                                        <td th:text="${order.orderDate}"></td>
+                                                        <td th:if="${status.index == 0}"
+                                                            th:rowspan="${#lists.size(order.orderItemDtoList)}">
+                                                            <button th:if="${order.orderStatus == orderStatus}"
+                                                                    class="black_btn_w65_h30" type="button"
+                                                                    th:value="${order.orderId}"
+                                                                    onclick="cancelOrder(this.value)">주문 취소</button>
+                                                            <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
+                                                        </td>
+                                                    </tr>
+                                                </th:block>
+
+                                                <tr th:if="${#lists.size(order.orderItemDtoList) < 2}"
+                                                    th:each="orderItem, status: ${order.orderItemDtoList}">
+                                                    <td th:text="${order.orderId}"></td>
+                                                    <td class="thumb">
+                                                        <a th:href="${'/item/' + orderItem.itemId}">
+                                                            <img th:src="${orderItem.imgUrl}">
+                                                        </a>
+                                                    </td>
+                                                    <td class="product left_top">
+                                                        <strong class="name">
+                                                            <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
+                                                        </strong>
+                                                        <div class="option">[옵션: 선택 X]</div>
+                                                    </td>
+                                                    <td th:text="${order.orderStatus}"></td>
+                                                    <td th:text="${order.createdBy}"></td>
+                                                    <td th:text="${order.orderDate}"></td>
+                                                    <td>
+                                                        <button th:if="${order.orderStatus == orderStatus}"
+                                                                class="black_btn_w65_h30" type="button"
+                                                                th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문
+                                                            취소</button>
+                                                        <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
+                                                    </td>
+                                                </tr>
+                                            </th:block>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </section>
+
+            <div th:replace="/layouts/adminLayout.html :: footer"></div>
         </article>
     </main>
+    <div th:replace="/layouts/adminLayout.html :: js"></div>
+    <!-- custom js -->
+    <script th:inline="javascript">
+        function cancelOrder(orderId) {
+            if (confirm("선택하신 주문을 취소하시겠습니까?")) {
+                let paramData = {
+                    orderId: orderId,
+                };
+
+                let param = JSON.stringify(paramData);
+
+                $.ajax({
+                    url: "/admin/order/" + orderId + "/cancel",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: param,
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        alert("주문이 취소 되었습니다.");
+                        location.href = '/admin/main';
+                    },
+                    error: function (request, status, error) {
+                        if (request.status === '401') {
+                            alert('로그인 후 이용해주세요.');
+                            location.href = '/login';
+                        } else {
+                            alert(request.responseText);
+                        }
+                    },
+                })
+            } else {
+                false;
+            }
+        }
+    </script>
 </body>
+
 </html>

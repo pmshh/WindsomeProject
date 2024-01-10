@@ -18,7 +18,7 @@
                         <!--                    <div class="alert alert-warning" role="alert" th:if="${account != null}">-->
                         <!--                        account test-->
                         <!--                    </div>-->
-                        <div class="items_header" >
+                        <div class="items_header">
                             <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL ITEMS</h2>
                             <h2 th:if="${itemSearchDto.category == 100}">OUTER</h2>
                             <h2 th:if="${itemSearchDto.category == 101}">Pading & Jumper</h2>
@@ -42,16 +42,19 @@
                         </div>
 
                         <div class="items_body">
-<!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
-                            <div class="search_result" th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
+                            <!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
+                            <div class="search_result"
+                                th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
                                 <div class="search_input">
                                     <form th:action="@{/}" method="get">
-                                        <input name="searchQuery" type="search" placeholder="Search" th:value="${itemSearchDto.searchQuery}">
+                                        <input name="searchQuery" type="search" placeholder="Search"
+                                            th:value="${itemSearchDto.searchQuery}">
                                         <button type="submit"><i class="fa-solid fa-magnifying-glass icon"></i></button>
                                     </form>
                                 </div>
                                 <div class="search_result_msg mt-3">
-                                    <p class="content_count">총 <strong class="fw-bold" th:text="${items.getTotalElements()}"></strong>개의 상품이 검색되었습니다.</p>
+                                    <p class="content_count">총 <strong class="fw-bold"
+                                            th:text="${items.getTotalElements()}"></strong>개의 상품이 검색되었습니다.</p>
                                 </div>
                             </div>
 
@@ -66,7 +69,8 @@
                                                 <a>[[${item.itemNm}]]</a>
                                             </div>
                                             <div class="price">
-                                                <span th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                                <span
+                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -113,7 +117,6 @@
                     </div>
                 </div>
             </section>
-
             <div th:replace="/layouts/defaultLayout.html :: footer"></div>
         </article>
     </main>
