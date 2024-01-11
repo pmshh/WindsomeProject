@@ -363,8 +363,8 @@ footer .footer_copyright {
   background-color: #fff;
   font-size: 12px;
 }
-.add_item_body form table tbody td select.cate1,
-.add_item_body form table tbody td select.cate2 {
+.add_item_body form table tbody td select.parent_cate,
+.add_item_body form table tbody td select.child_cate {
   width: calc(50% - 2px);
 }
 .add_item_body form table tbody td select.sell_status {
@@ -839,8 +839,8 @@ footer .footer_copyright {
   background-color: #fff;
   font-size: 12px;
 }
-.item_dtl_body form table tbody td select.cate1,
-.item_dtl_body form table tbody td select.cate2 {
+.item_dtl_body form table tbody td select.parent_cate,
+.item_dtl_body form table tbody td select.child_cate {
   width: calc(50% - 2px);
 }
 .item_dtl_body form table tbody td select.sell_status {

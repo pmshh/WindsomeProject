@@ -147,8 +147,10 @@
             }
 
             function checkResultForUpdate(result) {
-                if (result === 'modify_ok') {
+                if (result === 'update_ok') {
                     alert("상품 정보가 수정되었습니다.");
+                } else if (result === 'update_fail') {
+                    alert("상품 수정 중 오류가 발생하였습니다.");
                 }
             }
         })

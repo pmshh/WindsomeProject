@@ -45,11 +45,11 @@
                                     <label for="parent_cate_id">카테고리 <span>*</span></label>
                                 </th>
                                 <td>
-                                    <select name="parent_cate_id" id="parent_cate_id" class="cate1">
-                                        <option selected value="none">선택</option>
+                                    <select name="parent_cate_id" id="parent_cate_id" class="parent_cate">
+                                        <option selected value="0">선택</option>
                                     </select>
-                                    <select name="child_cate_id" id="child_cate_id" class="cate2">
-                                        <option selected value="none">선택</option>
+                                    <select th:field="*{categoryId}" class="child_cate">
+                                        <option selected value="0">선택</option>
                                     </select>
                                     <span class="text-danger category_warn">카테고리를 선택해주세요.</span>
                                 </td>
@@ -78,7 +78,7 @@
                                     <label th:for="*{discount}">할인율 <span>*</span></label>
                                 </th>
                                 <td>
-                                    <input class="discount_interface" placeholder="할인율" maxlength="2" th:value="*{discount}">
+                                    <input class="discount_interface" placeholder="할인율" maxlength="2">
                                     <input class="discount_input" type="hidden" th:field="*{discount}" name="discount" id="discount">
                                     <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
                                     <span class="discount_text">할인 가격 : <span
@@ -139,7 +139,7 @@
                             </tbody>
                         </table>
                         <div class="btn_box">
-                            <button class="black_btn_w130_h40 enroll_btn" type="submit">저장</button>
+                            <button class="black_btn_w130_h40 enroll_btn" type="button">저장</button>
                             <button class="white_btn_w130_h40" type="button" onclick="moveItemMngPage()">취소</button>
                         </div>
                     </form>
@@ -196,7 +196,7 @@
             let itemDetailChk = false;
 
             let itemSellStatus = $(".sell_status").val();
-            let category = $(".cate1").val();
+            let category = $(".child_cate").val();
             let itemNm = $(".name_input").val();
             let price = $(".price_input").val();
             let discount = $(".discount_interface").val();
@@ -212,7 +212,7 @@
                 itemSellStatusChk = false;
             }
 
-            if (category !== 'none') {
+            if (category !== '0' ) {
                 $(".category_warn").css('display', 'none');
                 categoryChk = true;
             } else {
@@ -261,60 +261,109 @@
             }
 
             if (itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk) {
-                $('#itemFormDto').attr("action", "/admin/item/" );
                 $('#itemFormDto').submit();
             } else {
                 return false;
             }
         })
 
-        /* 카테고리 추가 */
+        /* 상품 등록 카테고리 */
         $.ajax({
             url: "/admin/item/categories",
             type: "GET",
             success: function (res) {
-                let jsonData = JSON.parse(res);
+                let cateList = JSON.parse(res);
 
                 let cate1Arr = [];
                 let cate1Obj = {};
+                let cate2Arr = [];
+                let cate2Obj = {};
 
-                for (let i = 0; i < jsonData.length; i++) {
-                    if (jsonData[i].tier === "1") {
+                let parentCateSelect = $(".parent_cate");
+                let childCateSelect = $(".child_cate");
+
+                for (let i = 0; i < cateList.length; i++) {
+                    if (cateList[i].tier === "1") {
                         cate1Obj = {};
-                        cate1Obj.id = jsonData[i].id;
-                        cate1Obj.name = jsonData[i].name;
+
+                        cate1Obj.id = cateList[i].id;
+                        cate1Obj.name = cateList[i].name;
+                        cate1Obj.parent = cateList[i].parent;
                         cate1Arr.push(cate1Obj);
                     }
                 }
-                let cate1Select = $("select.cate1");
 
-                for (let i = 0; i < cate1Arr.length; i++) {
-                    cate1Select.append("<option name='cateParent' value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
-                }
+                for (let i = 0; i < cateList.length; i++) {
+                    for (let j = 0; j < cateList[i].children.length; j++) {
+                        if (cateList[i].children[j].tier === "2") {
+                            cate2Obj = {};
 
-                cate1Select.on("change", function () {
-                    let cate2Arr = [];
-                    let cate2Obj = {};
-
-                    for (let i = 0; i < jsonData.length; i++) {
-                        for (let j = 0; j < jsonData[i].children.length; j++) {
-                            if (jsonData[i].children[j].tier === "2") {
-                                cate2Obj = {};
-                                cate2Obj.id = jsonData[i].children[j].id;
-                                cate2Obj.name = jsonData[i].children[j].name;
-                                cate2Obj.parent = jsonData[i].children[j].parent;
-                                cate2Arr.push(cate2Obj);
-                            }
+                            cate2Obj.id = cateList[i].children[j].id;
+                            cate2Obj.name = cateList[i].children[j].name;
+                            cate2Obj.parent = cateList[i].children[j].parent;
+                            cate2Arr.push(cate2Obj);
                         }
                     }
-                    let cate2Select = $("select.cate2");
-                    cate2Select.children().remove();
-                    cate2Select.append("<option value=''>선택</option>");
+                }
 
-                    let selectVal = $(this).find("option:selected").val();
+                for (let i = 0; i < cate1Arr.length; i++) {
+                    parentCateSelect.append("<option value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
+                }
+
+                /* 기존 카테고리 값 설정 */
+                let categoryId = [[${itemFormDto.categoryId}]];
+                let parentId = 0;
+
+                if (categoryId >= 500) {
+                    parentId = 500;
+                } else if (categoryId >= 400) {
+                    parentId = 400;
+                }else if (categoryId >= 300) {
+                    parentId = 300;
+                }else if (categoryId >= 200) {
+                    parentId = 200;
+                } else if (categoryId >= 100) {
+                    parentId = 100;
+                }
+
+                for (let i = 0; i < cate2Arr.length; i++) {
+                    if (parentId === cate2Arr[i].parent) {
+                        childCateSelect.append("<option value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
+                    }
+                }
+
+                if (categoryId >= 500) {
+                    $('.parent_cate').val('500').prop("selected", true);
+                    $('.child_cate').val(categoryId).prop("selected", true);
+                } else if (categoryId >= 400) {
+                    $('.parent_cate').val('400').prop("selected",true);
+                    $(".child_cate option:selected").val('400');
+                } else if (categoryId >= 300) {
+                    $('.parent_cate').val('300').prop("selected",true);
+                    $('.child_cate').val(categoryId).prop("selected",true);
+                } else if (categoryId >= 200) {
+                    $('.parent_cate').val('200').prop("selected",true);
+                    $('.child_cate').val(categoryId).prop("selected",true);
+                } else if (categoryId >= 100) {
+                    $('.parent_cate').val('100').prop("selected",true);
+                    $('.child_cate').val(categoryId).prop("selected",true);
+                }
+
+                /* 대분류 option 변경 시 중분류 option 추가 */
+                parentCateSelect.on("change", function () {
+                    let parentSelectVal = Number($(this).find("option:selected").val());
+
+                    if (parentSelectVal === 400) {
+                        childCateSelect.children().remove();
+                        childCateSelect.append("<option value='400'>선택</option>");
+                    } else {
+                        childCateSelect.children().remove();
+                        childCateSelect.append("<option value='0'>선택</option>");
+                    }
+
                     for (let i = 0; i < cate2Arr.length; i++) {
-                        if (selectVal === cate2Arr[i].parent.toString()) {
-                            cate2Select.append("<option name='cateChild' value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
+                        if (parentSelectVal === cate2Arr[i].parent) {
+                            childCateSelect.append("<option value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
                         }
                     }
                 });
@@ -323,6 +372,10 @@
                 console.log(error);
             }
         })
+
+        /* 할인율 */
+        let discount = Number([[${discount}]]);
+        $(".discount_interface").val(0)
 
         /* 할인율 설정 */
         $(".discount_interface").on("propertychange change keyup paste input", function () {

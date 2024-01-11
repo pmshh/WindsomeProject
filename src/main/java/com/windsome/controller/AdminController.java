@@ -72,9 +72,7 @@ public class AdminController {
 
     @PostMapping("/admin/item")
     public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
-                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
-                           @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
-                           @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
+                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) throws Exception {
         if (bindingResult.hasErrors()) {
             return "admin/item/itemEnroll";
         }
@@ -85,8 +83,6 @@ public class AdminController {
         }
 
         try {
-            Category category = categoryService.getCategory(parentCateId, childCateId);
-            itemFormDto.setCategory(category);
             itemService.saveItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
@@ -100,13 +96,12 @@ public class AdminController {
     @GetMapping("/admin/itemDtl/{itemId}")
     public String itemDtl(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
         try {
-            ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
-            model.addAttribute("itemFormDto", itemFormDto);
-            model.addAttribute("criteria", pageDto);
+            model.addAttribute("itemFormDto", itemService.getItemFormDto(itemId));
+            model.addAttribute("pageDto", pageDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            model.addAttribute("criteria", pageDto);
+            model.addAttribute("pageDto", pageDto);
             return "admin/item/itemDtl";
         }
         return "admin/item/itemDtl";
@@ -115,13 +110,12 @@ public class AdminController {
     @GetMapping("/admin/item/{itemId}")
     public String modifyItemForm(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
         try {
-            ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
-            model.addAttribute("itemFormDto", itemFormDto);
-            model.addAttribute("criteria", pageDto);
+            model.addAttribute("itemFormDto", itemService.getItemFormDto(itemId));
+            model.addAttribute("pageDto", pageDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            model.addAttribute("criteria", pageDto);
+            model.addAttribute("pageDto", pageDto);
             return "admin/item/itemUpdate";
         }
         return "admin/item/itemUpdate";
@@ -129,9 +123,7 @@ public class AdminController {
 
     @PostMapping("/admin/item/{itemId}")
     public String modifyItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
-                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
-                             @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
-                             @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
+                             @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) throws Exception {
         if (bindingResult.hasErrors()) {
             return "admin/item/itemUpdate";
         }
@@ -142,12 +134,10 @@ public class AdminController {
         }
 
         try {
-            Category category = categoryService.getCategory(parentCateId, childCateId);
-            itemFormDto.setCategory(category);
             itemService.updateItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
-            return "admin/item/itemUpdate";
+            redirectAttributes.addFlashAttribute("update_result", "update_fail");
+            return "redirect:/admin/items";
         }
 
         redirectAttributes.addFlashAttribute("update_result", "update_ok");

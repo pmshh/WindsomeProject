@@ -9,6 +9,8 @@ import java.util.List;
 @Getter @Setter
 public class ItemSearchDto {
 
+    private String page;
+
     private String searchDateType;
 
     private ItemSellStatus searchSellStatus;

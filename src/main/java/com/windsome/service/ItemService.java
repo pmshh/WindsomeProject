@@ -3,6 +3,7 @@ package com.windsome.service;
 import com.windsome.dto.*;
 import com.windsome.entity.*;
 import com.windsome.constant.ItemSellStatus;
+import com.windsome.repository.CategoryRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemImgRepository itemImgRepository;
     private final ItemImgService itemImgService;
+    private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
@@ -33,7 +35,9 @@ public class ItemService {
     }
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
+        Category category = categoryRepository.findById(itemFormDto.getCategoryId()).orElseThrow();
         Item item = itemFormDto.toEntity();
+        item.setCategory(category);
         itemRepository.save(item);
 
         for (int i = 0; i < itemImgFileList.size(); i++) {
@@ -51,7 +55,9 @@ public class ItemService {
     }
 
     public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
+        Category category = categoryRepository.findById(itemFormDto.getCategoryId()).orElseThrow();
         Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
+        item.setCategory(category);
         item.updateItem(itemFormDto);
 
         List<Long> itemImgIds = itemFormDto.getItemImgIds();
@@ -74,6 +80,7 @@ public class ItemService {
 
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
         ItemFormDto itemFormDto = ItemFormDto.toDto(item);
+        itemFormDto.setCategoryId(item.getCategory().getId());
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
     }

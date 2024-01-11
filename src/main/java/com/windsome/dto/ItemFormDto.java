@@ -42,7 +42,7 @@ public class ItemFormDto {
 
     private List<Long> itemImgIds = new ArrayList<>();
 
-    private Category category;
+    private Long categoryId;
 
     /**
      * Dto -> Entity, Entity -> Dto
