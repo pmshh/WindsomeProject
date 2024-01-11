@@ -133,6 +133,24 @@
                 e.preventDefault();
                 page(0);
             });
+
+            /* 상품 수정,등록 시 결과 창 출력 */
+            let save_result = [[${save_result}]];
+            let update_result = [[${update_result}]];
+            checkResultForSave(save_result);
+            checkResultForUpdate(update_result);
+
+            function checkResultForSave(result) {
+                if (result === 'save_ok') {
+                    alert("상품 등록이 완료되었습니다.");
+                }
+            }
+
+            function checkResultForUpdate(result) {
+                if (result === 'modify_ok') {
+                    alert("상품 정보가 수정되었습니다.");
+                }
+            }
         })
 
         /* page 이동 */

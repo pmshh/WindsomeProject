@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -70,7 +71,7 @@ public class AdminController {
     }
 
     @PostMapping("/admin/item")
-    public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
+    public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
                            @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
                            @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
                            @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
@@ -91,6 +92,8 @@ public class AdminController {
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
             return "admin/item/itemEnroll";
         }
+
+        redirectAttributes.addFlashAttribute("save_result", "save_ok");
         return "redirect:/admin/items";
     }
 
@@ -110,7 +113,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/item/{itemId}")
-    public String updateItemForm(CriteriaDto criteriaDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
+    public String modifyItemForm(CriteriaDto criteriaDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
         try {
             ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
@@ -119,23 +122,23 @@ public class AdminController {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
             model.addAttribute("criteria", criteriaDto);
-            return "admin/item/itemModify";
+            return "admin/item/itemUpdate";
         }
-        return "admin/item/itemModify";
+        return "admin/item/itemUpdate";
     }
 
     @PostMapping("/admin/item/{itemId}")
-    public String updateItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
+    public String modifyItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
                              @RequestParam(value = "parent_cate_id", required = true) Long parentCateId,
                              @RequestParam(value = "child_cate_id", required = false) Long childCateId) throws Exception {
         if (bindingResult.hasErrors()) {
-            return "admin/item/itemModify";
+            return "admin/item/itemUpdate";
         }
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            return "admin/item/itemModify";
+            return "admin/item/itemUpdate";
         }
 
         try {
@@ -144,9 +147,10 @@ public class AdminController {
             itemService.updateItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
-            return "admin/item/itemModify";
+            return "admin/item/itemUpdate";
         }
 
+        redirectAttributes.addFlashAttribute("update_result", "update_ok");
         return "redirect:/admin/items";
     }
 
