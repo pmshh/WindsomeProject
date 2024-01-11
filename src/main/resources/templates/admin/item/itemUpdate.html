@@ -147,13 +147,13 @@
             </section>
 
             <form id="move_form" method="get">
-                <input type="hidden" name="page" th:value="${criteriaDto.page}">
-                <input th:if="${not #strings.isEmpty(criteriaDto.searchDateType)}" type="hidden" name="searchDateType" th:value="${criteriaDto.searchDateType}">
-                <input th:if="${#strings.isEmpty(criteriaDto.searchDateType)}" type="hidden" name="searchDateType" value="all">
-                <input type="hidden" name="searchSellStatus" th:value="${criteriaDto.searchSellStatus}">
-                <input th:if="${not #strings.isEmpty(criteriaDto.searchBy)}" type="hidden" name="searchBy" th:value="${criteriaDto.searchBy}">
-                <input th:if="${#strings.isEmpty(criteriaDto.searchBy)}" type="hidden" name="searchBy" value="itemNm">
-                <input type="hidden" name="searchQuery" th:value="${criteriaDto.searchQuery}">
+                <input type="hidden" name="page" th:value="${pageDto.page}">
+                <input th:if="${not #strings.isEmpty(pageDto.searchDateType)}" type="hidden" name="searchDateType" th:value="${pageDto.searchDateType}">
+                <input th:if="${#strings.isEmpty(pageDto.searchDateType)}" type="hidden" name="searchDateType" value="all">
+                <input type="hidden" name="searchSellStatus" th:value="${pageDto.searchSellStatus}">
+                <input th:if="${not #strings.isEmpty(pageDto.searchBy)}" type="hidden" name="searchBy" th:value="${pageDto.searchBy}">
+                <input th:if="${#strings.isEmpty(pageDto.searchBy)}" type="hidden" name="searchBy" value="itemNm">
+                <input type="hidden" name="searchQuery" th:value="${pageDto.searchQuery}">
             </form>
 
             <div th:replace="/layouts/adminLayout.html :: footer"></div>

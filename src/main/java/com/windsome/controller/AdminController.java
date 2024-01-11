@@ -98,30 +98,30 @@ public class AdminController {
     }
 
     @GetMapping("/admin/itemDtl/{itemId}")
-    public String itemDtl(CriteriaDto criteriaDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
+    public String itemDtl(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
         try {
             ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
-            model.addAttribute("criteria", criteriaDto);
+            model.addAttribute("criteria", pageDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            model.addAttribute("criteria", criteriaDto);
+            model.addAttribute("criteria", pageDto);
             return "admin/item/itemDtl";
         }
         return "admin/item/itemDtl";
     }
 
     @GetMapping("/admin/item/{itemId}")
-    public String modifyItemForm(CriteriaDto criteriaDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
+    public String modifyItemForm(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
         try {
             ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
-            model.addAttribute("criteria", criteriaDto);
+            model.addAttribute("criteria", pageDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            model.addAttribute("criteria", criteriaDto);
+            model.addAttribute("criteria", pageDto);
             return "admin/item/itemUpdate";
         }
         return "admin/item/itemUpdate";

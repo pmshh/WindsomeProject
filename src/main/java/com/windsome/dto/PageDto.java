@@ -4,7 +4,7 @@ import com.windsome.constant.ItemSellStatus;
 import lombok.Data;
 
 @Data
-public class CriteriaDto {
+public class PageDto {
 
     private String page;
 
