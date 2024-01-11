@@ -2,10 +2,7 @@ package com.windsome.controller;
 
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.DashboardDataDto;
-import com.windsome.dto.ItemFormDto;
-import com.windsome.dto.ItemSearchDto;
-import com.windsome.dto.OrderMngDto;
+import com.windsome.dto.*;
 import com.windsome.entity.Category;
 import com.windsome.entity.Item;
 import com.windsome.service.*;
@@ -98,34 +95,30 @@ public class AdminController {
     }
 
     @GetMapping("/admin/itemDtl/{itemId}")
-    public String itemDtl(String page, ItemSearchDto itemSearchDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
+    public String itemDtl(CriteriaDto criteriaDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
         try {
             ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
-            model.addAttribute("page", page);
-            model.addAttribute("itemSearchDto", itemSearchDto);
+            model.addAttribute("criteria", criteriaDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            model.addAttribute("page", page);
-            model.addAttribute("itemSearchDto", itemSearchDto);
+            model.addAttribute("criteria", criteriaDto);
             return "admin/item/itemDtl";
         }
         return "admin/item/itemDtl";
     }
 
     @GetMapping("/admin/item/{itemId}")
-    public String updateItemForm(String page, ItemSearchDto itemSearchDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
+    public String updateItemForm(CriteriaDto criteriaDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
         try {
             ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
-            model.addAttribute("page", page);
-            model.addAttribute("itemSearchDto", itemSearchDto);
+            model.addAttribute("criteria", criteriaDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
             model.addAttribute("itemFormDto", new ItemFormDto());
-            model.addAttribute("page", page);
-            model.addAttribute("itemSearchDto", itemSearchDto);
+            model.addAttribute("criteria", criteriaDto);
             return "admin/item/itemModify";
         }
         return "admin/item/itemModify";

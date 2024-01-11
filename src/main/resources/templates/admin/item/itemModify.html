@@ -147,13 +147,13 @@
             </section>
 
             <form id="move_form" method="get">
-                <input type="hidden" name="page" th:value="${page}">
-                <input th:if="${not #strings.isEmpty(itemSearchDto.searchDateType)}" type="hidden" name="searchDateType" th:value="${itemSearchDto.searchDateType}">
-                <input th:if="${#strings.isEmpty(itemSearchDto.searchDateType)}" type="hidden" name="searchDateType" value="all">
-                <input type="hidden" name="searchSellStatus" th:value="${itemSearchDto.searchSellStatus}">
-                <input th:if="${not #strings.isEmpty(itemSearchDto.searchBy)}" type="hidden" name="searchBy" th:value="${itemSearchDto.searchBy}">
-                <input th:if="${#strings.isEmpty(itemSearchDto.searchBy)}" type="hidden" name="searchBy" value="itemNm">
-                <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">
+                <input type="hidden" name="page" th:value="${criteriaDto.page}">
+                <input th:if="${not #strings.isEmpty(criteriaDto.searchDateType)}" type="hidden" name="searchDateType" th:value="${criteriaDto.searchDateType}">
+                <input th:if="${#strings.isEmpty(criteriaDto.searchDateType)}" type="hidden" name="searchDateType" value="all">
+                <input type="hidden" name="searchSellStatus" th:value="${criteriaDto.searchSellStatus}">
+                <input th:if="${not #strings.isEmpty(criteriaDto.searchBy)}" type="hidden" name="searchBy" th:value="${criteriaDto.searchBy}">
+                <input th:if="${#strings.isEmpty(criteriaDto.searchBy)}" type="hidden" name="searchBy" value="itemNm">
+                <input type="hidden" name="searchQuery" th:value="${criteriaDto.searchQuery}">
             </form>
 
             <div th:replace="/layouts/adminLayout.html :: footer"></div>
@@ -371,7 +371,7 @@
 
                 let moveForm = $("#move_form");
 
-                moveForm.attr("action", "/admin/items/" + [[${page}]])
+                moveForm.attr("action", "/admin/items/" + [[${criteria.page}]])
                 moveForm.submit();
             });
         });
