@@ -276,7 +276,7 @@
                 }
             })
 
-            /* 상품 등록 카테고리 */
+            /* 카테고리 */
             $.ajax({
                 url: "/admin/item/categories",
                 type: "GET",
@@ -315,23 +315,24 @@
                         }
                     }
 
+                    // 대분류 option 생성
                     for (let i = 0; i < cate1Arr.length; i++) {
                         parentCateSelect.append("<option value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
                     }
 
-                    /* 기존 카테고리 값 설정 */
-                    let categoryId = [[${itemFormDto.categoryId}]];
+                    // 중분류 option 생성
+                    let childCateId = [[${itemFormDto.categoryId}]];
                     let parentId = 0;
 
-                    if (categoryId >= 500) {
+                    if (childCateId >= 500) {
                         parentId = 500;
-                    } else if (categoryId >= 400) {
+                    } else if (childCateId >= 400) {
                         parentId = 400;
-                    }else if (categoryId >= 300) {
+                    }else if (childCateId >= 300) {
                         parentId = 300;
-                    }else if (categoryId >= 200) {
+                    }else if (childCateId >= 200) {
                         parentId = 200;
-                    } else if (categoryId >= 100) {
+                    } else if (childCateId >= 100) {
                         parentId = 100;
                     }
 
@@ -341,21 +342,22 @@
                         }
                     }
 
-                    if (categoryId >= 500) {
+                    // 기존 카테고리 값 저장
+                    if (childCateId >= 500) {
                         $('.parent_cate').val('500').prop("selected", true);
-                        $('.child_cate').val(categoryId).prop("selected", true);
-                    } else if (categoryId >= 400) {
+                        $('.child_cate').val(childCateId).prop("selected", true);
+                    } else if (childCateId >= 400) {
                         $('.parent_cate').val('400').prop("selected",true);
                         $(".child_cate option:selected").val('400');
-                    } else if (categoryId >= 300) {
+                    } else if (childCateId >= 300) {
                         $('.parent_cate').val('300').prop("selected",true);
-                        $('.child_cate').val(categoryId).prop("selected",true);
-                    } else if (categoryId >= 200) {
+                        $('.child_cate').val(childCateId).prop("selected",true);
+                    } else if (childCateId >= 200) {
                         $('.parent_cate').val('200').prop("selected",true);
-                        $('.child_cate').val(categoryId).prop("selected",true);
-                    } else if (categoryId >= 100) {
+                        $('.child_cate').val(childCateId).prop("selected",true);
+                    } else if (childCateId >= 100) {
                         $('.parent_cate').val('100').prop("selected",true);
-                        $('.child_cate').val(categoryId).prop("selected",true);
+                        $('.child_cate').val(childCateId).prop("selected",true);
                     }
 
                     /* 대분류 option 변경 시 중분류 option 추가 */
@@ -382,20 +384,20 @@
                 }
             })
 
-            /* 할인율 */
+            /* 할인율 기본 값 셋팅 */
             let discount = Number([[${discount}]]);
             $(".discount_interface").val(discount)
 
-            /* 할인율 설정 */
+            /* 할인율 Input 설정 */
             $(".discount_interface").on("propertychange change keyup paste input", function () {
 
                 let userInput = $(".discount_interface");
                 let discountInput = $(".discount_input");
 
-                let discountRate = userInput.val();
-                let sendDiscountRate = discountRate / 100;
-                let itemPrice = $(".price_input").val();
-                let discountPrice = itemPrice * (1 - sendDiscountRate);
+                let discountRate = userInput.val(); // 사용자가 입력할 할인값
+                let sendDiscountRate = discountRate / 100; // 서버에 전송할 할인값
+                let itemPrice = $(".price_input").val(); // 원가
+                let discountPrice = itemPrice * (1 - sendDiscountRate); // 할인가격
 
                 if (!isNaN(discountRate)) {
                     $(".discount_price").html(discountPrice);
@@ -403,11 +405,9 @@
                 }
             });
 
-            /* 할인율 설정 */
             $(".price_input").on("propertychange change keyup paste input", function () {
 
                 let userInput = $(".discount_interface");
-                let discountInput = $(".discount_input");
 
                 let discountRate = userInput.val();
                 let sendDiscountRate = discountRate / 100;

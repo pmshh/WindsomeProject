@@ -81,8 +81,7 @@
                                     <input class="discount_interface" placeholder="할인율" maxlength="2">
                                     <input class="discount_input" type="hidden" th:field="*{discount}" name="discount" id="discount">
                                     <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
-                                    <span class="discount_text">할인 가격 : <span
-                                            class="discount_price"></span></span>
+                                    <span class="discount_text">할인 가격 : <span class="discount_price"></span></span>
                                 </td>
                             </tr>
                             <tr>
@@ -267,7 +266,7 @@
             }
         })
 
-        /* 상품 등록 카테고리 */
+        /* 카테고리 */
         $.ajax({
             url: "/admin/item/categories",
             type: "GET",
@@ -373,20 +372,19 @@
             }
         })
 
-        /* 할인율 */
-        let discount = Number([[${discount}]]);
+        /* 할인율 기본 값 0으로 셋팅 */
         $(".discount_interface").val(0)
 
-        /* 할인율 설정 */
+        /* 할인율 Input 설정 */
         $(".discount_interface").on("propertychange change keyup paste input", function () {
 
             let userInput = $(".discount_interface");
             let discountInput = $(".discount_input");
 
-            let discountRate = userInput.val();
-            let sendDiscountRate = discountRate / 100;
-            let itemPrice = $(".price_input").val();
-            let discountPrice = itemPrice * (1 - sendDiscountRate);
+            let discountRate = userInput.val(); // 사용자가 입력할 할인값
+            let sendDiscountRate = discountRate / 100; // 서버에 전송할 할인값
+            let itemPrice = $(".price_input").val(); // 원가
+            let discountPrice = itemPrice * (1 - sendDiscountRate); // 할인가격
 
             if (!isNaN(discountRate)) {
                 $(".discount_price").html(discountPrice);
@@ -394,11 +392,9 @@
             }
         });
 
-        /* 할인율 설정 */
         $(".price_input").on("propertychange change keyup paste input", function () {
 
             let userInput = $(".discount_interface");
-            let discountInput = $(".discount_input");
 
             let discountRate = userInput.val();
             let sendDiscountRate = discountRate / 100;
