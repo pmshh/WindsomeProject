@@ -21,7 +21,7 @@
                     </div>
                     <div class="item_mng_body mt-5">
                         <div class="table-responsive">
-                            <form th:action="@{'/admin/items/' + ${items.number}}" method="get" th:object="${items}">
+                            <form id="search_form" th:object="${items}">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -102,7 +102,7 @@
                                     </select>
                                     <input class="search_query" th:field="*{searchQuery}" type="text"
                                         placeholder="검색어를 입력해주세요">
-                                    <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
+                                    <button class="search_btn black_btn_w90_h40" type="button">검색</button>
                                     <button class="white_btn_w90_h40 ms-2" type="button" onclick="moveItemEnrollPage()">상품 등록</button>
                                 </div>
                             </form>
@@ -131,6 +131,12 @@
         $(document).ready(function () {
             $(".search_btn").on("click", function (e) {
                 e.preventDefault();
+
+                if (!$("#search_form").find("input[name='searchQuery']").val()) {
+                    alert("검색어를 입력해주세요.");
+                    return false;
+                }
+
                 page(0);
             });
 
