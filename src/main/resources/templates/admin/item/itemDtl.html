@@ -149,10 +149,24 @@
     </main>
 
     <div th:replace="/layouts/adminLayout.html :: js"></div>
+
+    <!-- editor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <!-- custom js -->
     <script th:inline="javascript">
         $(function () {
-            /* 상품 등록 카테고리 */
+            /* 위지웍 적용 */
+            ClassicEditor
+                .create(document.querySelector('#item_detail_textarea'))
+                .then(editor => {
+                    console.log(editor);
+                    editor.isReadOnly = true;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            /* 카테고리 */
             $.ajax({
                 url: "/admin/item/categories",
                 type: "GET",

@@ -85,16 +85,6 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
 
-    @Override
-    public List<Item> getItemListForAdminPage() {
-        QItem item = QItem.item;
-        return queryFactory
-                .selectFrom(item)
-                .orderBy(item.id.desc())
-                .limit(3)
-                .fetch();
-    }
-
     private BooleanBuilder itemCategoryLike(Long categoryId) {
         BooleanBuilder builder = new BooleanBuilder();
 
