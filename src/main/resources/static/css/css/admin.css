@@ -445,6 +445,7 @@ footer .footer_copyright {
   padding: 15px 5px 14px;
   border-top: 1px solid #e5e5e5;
   color: #353535;
+  height: 100px;
 }
 .item_mng_body form table tbody tr td a {
   width: 90px;
@@ -458,6 +459,31 @@ footer .footer_copyright {
   outline: none;
   background: white;
   border: none;
+}
+.item_mng_body form table tbody tr td .btn_box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.item_mng_body form table tbody tr td .btn_box button {
+  font-size: 12px !important;
+  margin-bottom: 2px;
+  height: 28px !important;
+  display: block;
+}
+.item_mng_body form table tbody tr td button.item_dtl_btn:hover {
+  color: rgb(80, 80, 80);
+  text-decoration: underline;
 }
 .item_mng_body form table tbody tr td:nth-child(2) {
   text-align: left;

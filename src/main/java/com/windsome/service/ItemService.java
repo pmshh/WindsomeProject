@@ -90,15 +90,11 @@ public class ItemService {
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 
-    public Item itemSave(ItemDto itemDto) {
-        Item item = Item.builder()
-                .itemNm(itemDto.getItemNm())
-                .price(itemDto.getPrice())
-                .stockNumber(itemDto.getStockNumber())
-                .itemDetail(itemDto.getItemDetail())
-                .itemSellStatus(ItemSellStatus.SELL)
-                .discount(itemDto.getDiscount())
-                .build();
-        return itemRepository.save(item);
+    public void deleteItem(Long itemId) {
+        itemImgRepository.findByItemId(itemId).orElseThrow(EntityNotFoundException::new);
+        itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+
+        itemImgRepository.deleteByItemId(itemId);
+        itemRepository.deleteById(itemId);
     }
 }

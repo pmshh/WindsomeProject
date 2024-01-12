@@ -1,8 +1,10 @@
 package com.windsome.controller;
 
+import com.windsome.config.security.CurrentAccount;
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.constant.OrderStatus;
 import com.windsome.dto.*;
+import com.windsome.entity.Account;
 import com.windsome.entity.Category;
 import com.windsome.entity.Item;
 import com.windsome.service.*;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -142,6 +145,16 @@ public class AdminController {
 
         redirectAttributes.addFlashAttribute("update_result", "update_ok");
         return "redirect:/admin/items";
+    }
+
+    @DeleteMapping("/admin/item/{itemId}")
+    public ResponseEntity<Object> deleteItem(@PathVariable("itemId") Long itemId, @CurrentAccount Account account) {
+        try {
+            itemService.deleteItem(itemId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("일치하는 상품 정보가 없습니다.");
+        }
+        return ResponseEntity.ok().body(itemId);
     }
 
     @GetMapping("/admin/item/categories")
