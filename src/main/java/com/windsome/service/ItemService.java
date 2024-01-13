@@ -8,11 +8,13 @@ import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -28,6 +30,11 @@ public class ItemService {
     private final ItemImgRepository itemImgRepository;
     private final ItemImgService itemImgService;
     private final CategoryRepository categoryRepository;
+    private final FileService fileService;
+
+    @Value("${itemImgLocation}")
+    private String itemImgLocation;
+
 
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
@@ -90,11 +97,18 @@ public class ItemService {
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 
-    public void deleteItem(Long itemId) {
-        itemImgRepository.findByItemId(itemId).orElseThrow(EntityNotFoundException::new);
+    public void deleteItem(Long itemId) throws Exception {
+        List<ItemImg> itemImgList = itemImgRepository.findByItemId(itemId).orElseThrow(EntityNotFoundException::new);
         itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
         itemImgRepository.deleteByItemId(itemId);
         itemRepository.deleteById(itemId);
+
+        for (ItemImg itemImg : itemImgList) {
+            // 기존 이미지 삭제
+            if (!StringUtils.isEmpty(itemImg.getImgName())) {
+                fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
+            }
+        }
     }
 }
