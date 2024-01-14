@@ -103,38 +103,18 @@
                                             <span class="text-danger detail_warn">상품의 상세 내용을 입력해주세요.</span>
                                         </td>
                                     </tr>
-                                    <div th:if="${#lists.isEmpty(itemFormDto.itemImgDtoList)}">
-                                        <tr th:each="num: ${#numbers.sequence(1,5)}">
-                                            <th scope="row">
-                                                <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
-                                            </th>
-                                            <td>
-                                                <input class="fake_input" type="text">
-                                                <label class="white_btn_w90_h40 find_file" th:for="${'img' + num}">파일
-                                                    찾기</label>
-                                                <input type="file" class="real_input" name="itemImgFile"
-                                                    th:id="${'img' + num}">
-                                            </td>
-                                        </tr>
-                                    </div>
-                                    <div th:if="${not #lists.isEmpty(itemFormDto.itemImgDtoList)}">
-                                        <tr th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
-                                            <th scope="row">
-                                                <label th:for="${'img' + status.index+1}"
-                                                    th:text="'상품 이미지 ' + ${status.index+1}"></label>
-                                            </th>
-                                            <td>
-                                                <input class="fake_input" type="text"
-                                                    th:value="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품 이미지 ' + ${status.index+1}">
-                                                <label class="white_btn_w90_h40 find_file"
-                                                    th:for="${'img' + status.index+1}">파일
-                                                    찾기</label>
-                                                <input type="file" class="real_input" name="itemImgFile"
-                                                    th:id="${'img' + status.index+1}">
-                                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
-                                            </td>
-                                        </tr>
-                                    </div>
+                                    <tr th:each="itemImgDto, status: ${itemFormDto.itemImgDtoList}">
+                                        <th scope="row">
+                                            <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                        </th>
+                                        <td>
+                                            <input class="fake_input" type="text"
+                                                th:value="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품 이미지 ' + ${status.index+1}">
+                                            <label class="white_btn_w90_h40 find_file" th:for="${'img' + status.index+1}">파일 찾기</label>
+                                            <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + status.index+1}">
+                                            <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <div class="btn_box">
