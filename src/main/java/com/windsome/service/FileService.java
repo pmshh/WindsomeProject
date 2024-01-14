@@ -2,6 +2,7 @@ package com.windsome.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@Transactional
 public class FileService {
 
     // 업로드 하면서 파일명 반환
