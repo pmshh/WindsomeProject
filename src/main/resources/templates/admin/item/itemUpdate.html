@@ -112,6 +112,7 @@
                                                 th:value="${not #strings.isEmpty(itemImgDto.oriImgName)} ? ${itemImgDto.oriImgName} : '상품 이미지 ' + ${status.index+1}">
                                             <label class="white_btn_w90_h40 find_file" th:for="${'img' + status.index+1}">파일 찾기</label>
                                             <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + status.index+1}">
+                                            <button class="black_btn_w90_h40 del_file" type="button" th:data-index="${status.index+1}">삭제</button>
                                             <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
                                         </td>
                                     </tr>
@@ -154,11 +155,6 @@
                 });
 
             /* 파일 유효성 검사 */
-            let errorMessage = [[${ errorMessage }]];
-            if (errorMessage != null) {
-                alert(errorMessage);
-            }
-
             $(".real_input").on("change", function () {
                 let fileName = $(this).val().split("\\").pop(); // 이미지 파일명
                 let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
@@ -171,6 +167,12 @@
 
                 $(this).siblings(".fake_input").attr('value', fileName);
             })
+
+            $(".del_file").click(function () {
+                let index = $(this).attr("data-index")
+                $(this).siblings(".fake_input").val("상품 이미지 " + index);
+                $(this).siblings(".real_input").val("");
+            });
 
             /* 상품 저장 버튼 */
             $(".modify_btn").on("click", function (e) {

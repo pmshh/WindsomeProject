@@ -123,15 +123,15 @@ public class AdminController {
     }
 
     @PostMapping("/admin/item/{itemId}")
-    public String modifyItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
+    public String modifyItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) throws Exception {
         if (bindingResult.hasErrors()) {
             return "admin/item/itemUpdate";
         }
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
-            model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 값입니다.");
-            return "admin/item/itemUpdate";
+            redirectAttributes.addFlashAttribute("update_result", "required_rep_img");
+            return "redirect:/admin/items";
         }
 
         try {

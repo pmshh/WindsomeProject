@@ -333,6 +333,11 @@ footer .footer_copyright {
   height: 26px !important;
   padding: 3px !important;
 }
+.add_item_body form table tbody td button.del_file {
+  width: 70px !important;
+  height: 26px !important;
+  padding: 3px !important;
+}
 .add_item_body form table tbody td textarea {
   width: 100%;
   height: 400px;

@@ -108,9 +108,10 @@
                                     <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
                                 </th>
                                 <td>
-                                    <input class="fake_input" type="text">
+                                    <input class="fake_input" type="text" th:value="${'상품 이미지 ' + num}">
                                     <label class="white_btn_w90_h40 find_file" th:for="${'img' + num}">파일 찾기</label>
                                     <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + num}">
+                                    <button class="black_btn_w90_h40 del_file" type="button" th:data-index="${num}">삭제</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -159,6 +160,12 @@
 
             $(this).siblings(".fake_input").attr('value', fileName);
         })
+
+        $(".del_file").click(function () {
+            let index = $(this).attr("data-index")
+            $(this).siblings(".fake_input").val("상품 이미지 " + index);
+            $(this).siblings(".real_input").val("");
+        });
 
         /* 상품 등록 버튼 */
         $(".enroll_btn").on("click", function (e) {
