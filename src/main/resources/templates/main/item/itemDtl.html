@@ -113,7 +113,7 @@
                                     <strong>
                                         <em class="total_price" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
                                     </strong>
-                                    <em class="total_order_cnt">(1개)</em>
+                                    <em class="total_order_cnt"></em>
                                 </div>
                                 <div class="btn_inner">
                                     <div class="buy_btn">
@@ -135,13 +135,7 @@
 
     <script th:inline="javascript">
         $(document).ready(function () {
-            let orderCntInput = document.querySelector('.order_cnt_input');
-
-            $('.order_cnt_input').on("change", function () {
-                if ($('.order_cnt_input').val() > [[${ item.stockNumber }]]) {
-                    alert('죄송합니다. 재고가 부족합니다.');
-                }
-            });
+            $(".total_order_cnt").html('('+ ($('.order_cnt_input').val() * 1) +'개)');
         });
 
         function myFunction(smallImg) {
@@ -155,18 +149,22 @@
             let maxCnt = [[${ item.stockNumber }]]; // 현재 재고
             let thisCnt = $('.order_cnt_input');
             let countVal = thisCnt.val();
+            let totalOrderCnt = $(".total_order_cnt");
 
             if (countVal < minCnt) {
                 alert('수량은 1개 이상 입력해 주세요.');
                 thisCnt.val(1);
+                totalOrderCnt.html('('+1+'개)');
                 getOrderTotalPrice();
                 return;
             } else if ( countVal > maxCnt ) {
                 alert('죄송합니다. 재고가 부족합니다.');
                 thisCnt.val(maxCnt);
+                totalOrderCnt.html('('+maxCnt+'개)');
                 getOrderTotalPrice();
                 return;
             }
+            totalOrderCnt.html('('+countVal+'개)');
             getOrderTotalPrice();
         }
 
@@ -179,7 +177,7 @@
 
             if (type === 'minus') {
                 thisCnt -= 1;
-                if (this_cnt < minCnt) {
+                if (thisCnt < minCnt) {
                     alert('수량은 1개 이상 입력해 주세요.');
                     return;
                 }
