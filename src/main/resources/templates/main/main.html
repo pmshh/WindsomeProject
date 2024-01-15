@@ -68,9 +68,13 @@
                                             <div class="name">
                                                 <a>[[${item.itemNm}]]</a>
                                             </div>
-                                            <div class="price">
-                                                <span
-                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                            <div class="discount" th:if="${item.discount} == 0">
+                                                <span class="item_price" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                            </div>
+                                            <div class="no_discount" th:if="${item.discount} > 0">
+                                                <span class="item_price" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                                <span class="discount_price" th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|"></span>
+                                                <span class="discount_rate" th:text="${#numbers.formatInteger(item.discount * 100, 2, 'COMMA')} + '%'"></span>
                                             </div>
                                         </div>
                                     </div>

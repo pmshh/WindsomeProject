@@ -78,7 +78,7 @@
                                             <label th:for="*{discount}">할인율 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <input class="discount_interface" placeholder="할인율" maxlength="2">
+                                            <input class="discount_interface" placeholder="할인율" maxlength="2" th:value="*{discount}">
                                             <input class="discount_input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
                                             <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
                                             <span class="discount_text">할인 가격 : <span class="discount_price"></span></span>
@@ -367,8 +367,11 @@
             })
 
             /* 할인율 기본 값 셋팅 */
-            let discount = Number([[${discount}]]);
-            $(".discount_interface").val(discount)
+            $(".discount_interface").val([[${itemFormDto.discount}]] * 100);
+            let price = [[${itemFormDto.price}]];
+            let discount = [[${itemFormDto.discount}]]
+            let discountPrice = price * (1 - discount);
+            $(".discount_price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
 
             /* 할인율 Input 설정 */
             $(".discount_interface").on("propertychange change keyup paste input", function () {
@@ -382,7 +385,7 @@
                 let discountPrice = itemPrice * (1 - sendDiscountRate); // 할인가격
 
                 if (!isNaN(discountRate)) {
-                    $(".discount_price").html(discountPrice);
+                    $(".discount_price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
                     discountInput.val(sendDiscountRate);
                 }
             });

@@ -43,14 +43,30 @@
                                 <div class="item_desc">
                                     <th:block th:utext="${item.itemDetail}"></th:block>
                                 </div>
+
                                 <div class="item_price">
-                                    <div class="title">
-                                        <span>판매가</span>
-                                    </div>
-                                    <div class="con">
-                                        <span th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
-                                    </div>
+                                        <div class="title">
+                                            <span>판매가</span>
+                                        </div>
+                                        <div class="con">
+                                            <span th:if="${item.discount == 0}" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
+                                            <span th:if="${item.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
+                                        </div>
                                 </div>
+
+                                <th:block th:if="${item.discount > 0}">
+                                    <div class="discount_price">
+                                        <div class="title">
+                                            <span>할인판매가</span>
+                                        </div>
+                                        <div class="con">
+                                            <span th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|">가격</span>
+                                        </div>
+                                        <div class="discount_rate">
+                                            <span th:text="${#numbers.formatInteger(item.discount * 100, 2, 'COMMA')} + '%'"></span>
+                                        </div>
+                                    </div>
+                                </th:block>
 
                                 <div class="item_option">
 <!--                                    <div class="item_color">-->

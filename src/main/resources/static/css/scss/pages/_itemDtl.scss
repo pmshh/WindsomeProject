@@ -70,13 +70,12 @@
 
         .item_price {
             display: flex;
-            justify-content: space-between;
 
             .title {
                 display: inline-block;
-                width: 20%;
-                vertical-align: middle;
-                font-size: 11px;
+                width: 30%;
+                font-size: 12px;
+                margin: 7px 20px 7px 0;
 
                 span {
                     font-size: 12px;
@@ -87,13 +86,54 @@
             .con {
                 display: inline-block;
                 width: auto;
-                vertical-align: middle;
-                font-size: 11px;
+                font-size: 12px;
+                margin: 7px 0;
 
                 span {
-                    font-size: 14px;
+                    font-size: 12px;
                     font-weight: bold;
                 }
+            }
+        }
+
+        .discount_price {
+            display: flex;
+
+            .title {
+                display: inline-block;
+                width: 30%;
+                font-size: 12px;
+                margin: 7px 20px 7px 0;
+
+                span {
+                    font-size: 12px;
+                    color: #333333;
+                    font-weight: bold;
+                }
+            }
+
+            .con {
+                display: inline-block;
+                font-size: 12px;
+                margin: 7px 0;
+
+                span {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+
+            .discount_rate {
+                display: inline-block;
+                font-size: 12px;
+                margin: 7px 0 0 7px;
+
+                span {
+                    font-size: 12px;
+                    color: #e06f18;
+                    font-weight: bold;
+                }
+
             }
         }
 

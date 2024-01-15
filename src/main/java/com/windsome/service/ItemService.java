@@ -62,7 +62,7 @@ public class ItemService {
     }
 
     public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
-        Category category = categoryRepository.findById(itemFormDto.getCategoryId()).orElseThrow();
+        Category category = categoryRepository.findById(itemFormDto.getCategoryId()).orElseThrow(EntityNotFoundException::new);
         Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
         item.setCategory(category);
         item.updateItem(itemFormDto);
