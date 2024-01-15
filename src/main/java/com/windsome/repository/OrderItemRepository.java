@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
-    @Query("select COALESCE(sum(oi.count * oi.orderPrice), 0) from OrderItem oi join Order o on oi.order.id = o.id where o.orderStatus = 'READY'")
+    @Query("select COALESCE(sum(oi.count * oi.price), 0) from OrderItem oi join Order o on oi.order.id = o.id where o.orderStatus = 'READY'")
     Long totalSales();
 }

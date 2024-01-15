@@ -108,13 +108,17 @@
         }
     }
 
-    p {
-        margin: -1px 0 0;
-        border-bottom: 1px solid #ddd;
-        padding: 50px 0;
+    .orders_null {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 100px;
+        padding-bottom: 80px;
         text-align: center;
-        color: #757575;
-        font-weight: normal;
-        font-size: 12px;
+        font-size: 11px;
+        color: #707070;
+        font-weight: bold;
+        border-bottom: 1px solid #e5e5e5;
     }
+
 }

@@ -13,7 +13,7 @@ public class OrderItemDto {
 
     private int count;
 
-    private int orderPrice;
+    private int price;
 
     private String imgUrl;
 
@@ -21,7 +21,7 @@ public class OrderItemDto {
         this.itemId = orderItem.getItem().getId();
         this.itemNm = orderItem.getItem().getItemNm();
         this.count = orderItem.getCount();
-        this.orderPrice = orderItem.getOrderPrice();
+        this.price = orderItem.getPrice();
         this.imgUrl = imgUrl;
     }
 }

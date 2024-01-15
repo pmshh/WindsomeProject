@@ -24,7 +24,7 @@
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%;" scope="col" >
+                                        <th style="width: 10%;" scope="col">
                                             <input type="checkbox" id="check_all" name="check_all" onclick="checkAll()">
                                             <label for="check_all">전체 선택</label>
                                         </th>
@@ -49,37 +49,49 @@
                                         </td>
                                         <td class="product left_top">
                                             <strong class="name">
-                                                <a th:href="${'/item/' + cartItem.cartItemId}" th:text="${cartItem.itemNm}"></a>
+                                                <a th:href="${'/item/' + cartItem.cartItemId}"
+                                                    th:text="${cartItem.itemNm}"></a>
                                             </strong>
                                             <div class="option">[옵션: 선택 X]</div>
                                         </td>
                                         <td class="item_price">
-                                            <span th:if="${cartItem.discount == 0}" th:text="|${#numbers.formatInteger(cartItem.price, 0, 'COMMA')}원|"></span>
-                                            <span th:if="${cartItem.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(cartItem.price, 0, 'COMMA')}원|"></span>
-                                            <strong th:if="${cartItem.discount > 0}" th:text="|${#numbers.formatInteger(cartItem.price * (1 - cartItem.discount), 0, 'COMMA')}원|"></strong>
+                                            <span th:if="${cartItem.discount == 0}"
+                                                th:text="|${#numbers.formatInteger(cartItem.price, 0, 'COMMA')}원|"></span>
+                                            <span th:if="${cartItem.discount > 0}" style="text-decoration: line-through"
+                                                th:text="|${#numbers.formatInteger(cartItem.price, 0, 'COMMA')}원|"></span>
+                                            <strong th:if="${cartItem.discount > 0}"
+                                                th:text="|${#numbers.formatInteger(cartItem.price * (1 - cartItem.discount), 0, 'COMMA')}원|"></strong>
                                         </td>
                                         <td>
                                             <div class="cnt_box">
-                                                <input th:id="'count_' + ${cartItem.cartItemId}" class="order_cnt_input" type="text"
-                                                       th:data-itemId="${cartItem.cartItemId}" th:value="${cartItem.count}" onchange="changeCount(this)">
+                                                <input th:id="'count_' + ${cartItem.cartItemId}" class="order_cnt_input"
+                                                    type="text" th:data-itemId="${cartItem.cartItemId}"
+                                                    th:value="${cartItem.count}" onchange="changeCount(this)">
                                                 <div class="cnt_btn">
-                                                    <i th:data-id="${cartItem.cartItemId}" data-option="up" class="xi-caret-up-min" onclick="changeCountBtn(this)"></i>
-                                                    <i th:data-id="${cartItem.cartItemId}" data-option="down" class="xi-caret-down-min" onclick="changeCountBtn(this)"></i>
+                                                    <i th:data-id="${cartItem.cartItemId}" data-option="up"
+                                                        class="xi-caret-up-min" onclick="changeCountBtn(this)"></i>
+                                                    <i th:data-id="${cartItem.cartItemId}" data-option="down"
+                                                        class="xi-caret-down-min" onclick="changeCountBtn(this)"></i>
                                                 </div>
-                                                <span th:id="'stock_' + ${cartItem.cartItemId}" th:data-stock="${cartItem.stockNumber}"></span>
+                                                <span th:id="'stock_' + ${cartItem.cartItemId}"
+                                                    th:data-stock="${cartItem.stockNumber}"></span>
                                             </div>
                                         </td>
                                         <td class="total_price">
-                                            <strong th:id="'price_' + ${cartItem.cartItemId}" th:data-price="${cartItem.price}" th:data-discount="${cartItem.discount}"
-                                                    th:text="|${#numbers.formatInteger((cartItem.price * (1 - cartItem.discount)) * cartItem.count, 0, 'COMMA')}원|"></strong>
+                                            <strong th:id="'price_' + ${cartItem.cartItemId}"
+                                                th:data-price="${cartItem.price}"
+                                                th:data-discount="${cartItem.discount}"
+                                                th:text="|${#numbers.formatInteger((cartItem.price * (1 - cartItem.discount)) * cartItem.count, 0, 'COMMA')}원|"></strong>
                                         </td>
                                         <td class="delivery_price">
                                             <span>2,500원</span>
                                             <span class="text">(30,000원 이상 무료)</span>
                                         </td>
                                         <td>
-                                            <button th:data-id="${cartItem.cartItemId}" class="black_btn_w90_h30" onclick="order(this)">주문하기</button>
-                                            <button th:data-id="${cartItem.cartItemId}" onclick="deleteCartItem(this)" type="button" class="white_btn_w90_h30">
+                                            <button th:data-id="${cartItem.cartItemId}" class="black_btn_w90_h30"
+                                                onclick="order(this)">주문하기</button>
+                                            <button th:data-id="${cartItem.cartItemId}" onclick="deleteCartItem(this)"
+                                                type="button" class="white_btn_w90_h30">
                                                 삭제
                                             </button>
                                         </td>
@@ -94,28 +106,28 @@
                             <div class="table-responsive small">
                                 <table class="table table-sm">
                                     <thead>
-                                    <tr>
-                                        <th style="width: 20%;" scope="col">상품 금액</th>
-                                        <th style="width: 20%;" scope="col">배송비</th>
-                                        <th style="width: 20%;" scope="col">할인 합계</th>
-                                        <th style="width: auto;" scope="col">최종 결제 금액</th>
-                                    </tr>
+                                        <tr>
+                                            <th style="width: 20%;" scope="col">상품 금액</th>
+                                            <th style="width: 20%;" scope="col">배송비</th>
+                                            <th style="width: 20%;" scope="col">할인 합계</th>
+                                            <th style="width: auto;" scope="col">최종 결제 금액</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="order_total_price">0원</span>
-                                        </td>
-                                        <td>
-                                            <span class="order_delivery_price">+ 0원</span>
-                                        </td>
-                                        <td>
-                                            <span class="order_discount_price">- 0원</span>
-                                        </td>
-                                        <td>
-                                            = <span class="total_amount">0원</span>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="order_total_price">0원</span>
+                                            </td>
+                                            <td>
+                                                <span class="order_delivery_price">+ 0원</span>
+                                            </td>
+                                            <td>
+                                                <span class="order_discount_price">- 0원</span>
+                                            </td>
+                                            <td>
+                                                = <span class="total_amount">0원</span>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -164,7 +176,7 @@
             checkInput.prop("checked", true);
             getOrderTotalPrice();
 
-            checkInput.change(function(){
+            checkInput.change(function () {
                 getOrderTotalPrice();
             })
         });
@@ -230,7 +242,7 @@
                 price.html(Math.ceil((priceVal * (1 - price.attr("data-discount")))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
                 getOrderTotalPrice();
                 return;
-            } else if ( countVal > maxCnt ) {
+            } else if (countVal > maxCnt) {
                 alert('죄송합니다. 재고가 부족합니다.');
                 count.val(maxCnt);
                 price.html(Math.ceil((priceVal * (1 - price.attr("data-discount"))) * maxCnt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
@@ -302,14 +314,14 @@
         function deleteCartItem(obj) {
             let cartItemId = obj.dataset.id;
 
-            if(confirm("선택하신 상품을 삭제하시겠습니까?")){
+            if (confirm("선택하신 상품을 삭제하시겠습니까?")) {
                 $.ajax({
                     url: "/cartItem/" + cartItemId,
                     type: "DELETE",
                     dataType: "json",
                     cache: false,
                     success: function (result, status) {
-                        location.href='/cart';
+                        location.href = '/cart';
                     },
                     error: function (request, status, error) {
                         if (request.status === '401') {
@@ -320,7 +332,7 @@
                         }
                     },
                 })
-            }else{
+            } else {
                 false;
             }
         }
@@ -405,13 +417,9 @@
 
         /* 전체 주문 */
         function ordersAllItems() {
-            if (confirm("전체 상품을 주문하시겠습니까?")) {
-                $("input[name=cart_check]").prop("checked", true);
-                getOrderTotalPrice();
-                orders();
-            } else {
-                false;
-            }
+            $("input[name=cart_check]").prop("checked", true);
+            getOrderTotalPrice();
+            orders();
         }
 
         /* 쇼핑계속하기 버튼 */
@@ -420,5 +428,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>

@@ -240,7 +240,7 @@
             $(".discount_interface").val([[${itemFormDto.discount}]] * 100);
             let price = [[${itemFormDto.price}]];
             let discount = [[${itemFormDto.discount}]]
-            let discountPrice = price * (1 - discount);
+            let discountPrice = Math.ceil(price * (1 - discount));
             $(".discount_price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
 
             let moveForm = $("#move_form");

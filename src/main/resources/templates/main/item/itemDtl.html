@@ -135,15 +135,20 @@
 
     <script th:inline="javascript">
         $(document).ready(function () {
-            $(".total_order_cnt").html('('+ ($('.order_cnt_input').val() * 1) +'개)');
+            let price = [[${ item.price }]];
+            let discount = [[${ item.discount }]];
+            let totalPrice = Math.ceil((price * (1 - discount)));
+            $('.total_price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            $(".total_order_cnt").html('(1개)');
         });
 
+        /* 상품 이미지 썸네일 */
         function myFunction(smallImg) {
             let fullImg = document.querySelector('#image_box');
             fullImg.src = smallImg.src;
         }
 
-        // "직접 수량 입력 시" 상품의 재고 확인 및 총 가격 출력
+        /* 수량 직접 입력 시 동작 */
         function changeCount(obj) {
             let minCnt = 1;
             let maxCnt = [[${ item.stockNumber }]]; // 현재 재고
@@ -168,12 +173,14 @@
             getOrderTotalPrice();
         }
 
-        // "버튼 클릭 시" 상품의 재고 확인 및 총 가격 출력
+        /* 수량 버튼 클릭 시 동작 */
         function changeCountBtn(type) {
             let minCnt = 1;
             let thisCnt = $('.order_cnt_input').val() * 1;
-            let maxCnt = [[${ item.stockNumber }]]; // 현재 재고
-            let totalPrice = [[${ item.price }]] * thisCnt;
+            let maxCnt = [[${ item.stockNumber }]];
+
+            let price = [[${ item.price }]];
+            let discount = [[${ item.discount }]];
 
             if (type === 'minus') {
                 thisCnt -= 1;
@@ -189,50 +196,57 @@
                 }
             }
 
-            totalPrice = [[${ item.price }]] * thisCnt;
+            let totalPrice = Math.ceil((price * (1 - discount)) * thisCnt);
             $(".order_cnt_input").val(thisCnt);
             $(".total_order_cnt").html('(' + thisCnt + '개)');
             $(".total_price").html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
         }
 
-        // 상품의 총 가격 출력
+        /* 상품 가격 출력 */
         function getOrderTotalPrice() {
             let countVal = $('.order_cnt_input').val();
-            let totalPrice = [[${ item.price }]] * Number(countVal);
-
+            let price = [[${ item.price }]];
+            let discount = [[${ item.discount }]];
+            let totalPrice = Math.ceil((price * (1 - discount)) * countVal);
             $('.total_price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         }
 
+        /* 상품 주문 */
         function order() {
-            let paramData = {
-                itemId: [[${ item.id }]],
-                count: $(".order_cnt_input").val()
-            };
+            if (confirm("선택하신 상품을 주문하시겠습니까?")) {
+                let paramData = {
+                    itemId: [[${ item.id }]],
+                    count: $(".order_cnt_input").val()
+                };
 
-            let param = JSON.stringify(paramData);
+                let param = JSON.stringify(paramData);
 
-            $.ajax({
-                url: "/order",
-                type: "POST",
-                contentType: "application/json",
-                data: param,
-                dataType: "json",
-                cache: false,
-                success: function (result, status) {
-                    alert("주문이 완료 되었습니다.");
-                    location.href = "/";
-                },
-                error: function (request, status, error) {
-                    if (request.status === '401') {
-                        alert("로그인 후 이용해주세요.");
-                        location.href = '/login';
-                    } else {
-                        alert(request.responseText);
-                    }
-                },
-            })
+                $.ajax({
+                    url: "/order",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: param,
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        alert("주문이 완료 되었습니다.");
+                        location.href = "/";
+                    },
+                    error: function (request, status, error) {
+                        if (request.status === '401') {
+                            alert("로그인 후 이용해주세요.");
+                            location.href = '/login';
+                        } else {
+                            alert(request.responseText);
+                        }
+                    },
+                })
+            } else {
+                return false;
+            }
         }
 
+        /* 장바구니 추가 */
         function addCart() {
             let paramData = {
                 itemId: [[${item.id}]],
@@ -249,7 +263,7 @@
                 dataType : "json",
                 cache : false,
                 success: function (result, status) {
-                    alert("상품을 장바구니에 담았습니다.");
+                    alert("장바구니에 상품이 담겼습니다.");
                     location.href = '/cart';
                 },
                 error: function (request, status, error) {

@@ -2532,12 +2532,21 @@ footer .footer_copyright {
 .order_hist_body table tbody.center {
   text-align: center;
 }
-.order_hist_body p {
-  margin: -1px 0 0;
-  border-bottom: 1px solid #ddd;
-  padding: 50px 0;
+.order_hist_body .orders_null {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 100px;
+  padding-bottom: 80px;
   text-align: center;
-  color: #757575;
-  font-weight: normal;
-  font-size: 12px;
+  font-size: 11px;
+  color: #707070;
+  font-weight: bold;
+  border-bottom: 1px solid #e5e5e5;
 }

@@ -27,6 +27,8 @@ public class Order extends BaseEntity {
 
     private LocalDateTime orderDate;
 
+    private int totalOrderPrice;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -41,6 +43,17 @@ public class Order extends BaseEntity {
     public static Order createOrder(Account account, List<OrderItem> orderItemList) {
         Order order = new Order();
         order.setAccount(account);
+
+        int totalOrderPrice = 0;
+        for (OrderItem orderItem : orderItemList) {
+            totalOrderPrice += orderItem.getPrice();
+        }
+        if (totalOrderPrice > 30000) {
+            order.setTotalOrderPrice(totalOrderPrice);
+        } else if (totalOrderPrice < 30000) {
+            order.setTotalOrderPrice(totalOrderPrice + 2500);
+        }
+
         for (OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }
