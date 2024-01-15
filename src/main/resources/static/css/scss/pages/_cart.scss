@@ -105,6 +105,25 @@
                             height: 28px !important;
                         }
 
+                        &.item_price {
+                            span {
+                                display: block;
+                            }
+                        }
+
+                        &.total_price {}
+
+                        &.delivery_price {
+                            span {
+                                display: block;
+                            }
+
+                            span.text {
+                                font-size: 11px;
+                                color: #353535;
+                            }
+                        }
+
                         .cnt_box {
                             display: flex;
                             justify-content: center;

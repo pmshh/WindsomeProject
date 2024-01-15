@@ -732,6 +732,16 @@ footer .footer_copyright {
   margin-bottom: 2px;
   height: 28px !important;
 }
+.cart_body .table_box table tbody tr td.item_price span {
+  display: block;
+}
+.cart_body .table_box table tbody tr td.delivery_price span {
+  display: block;
+}
+.cart_body .table_box table tbody tr td.delivery_price span.text {
+  font-size: 11px;
+  color: #353535;
+}
 .cart_body .table_box table tbody tr td .cnt_box {
   display: -webkit-box;
   display: -ms-flexbox;

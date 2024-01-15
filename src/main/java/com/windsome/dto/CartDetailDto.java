@@ -18,16 +18,19 @@ public class CartDetailDto {
 
     private int stockNumber;
 
+    private double discount;
+
     private int count;
 
     private String imgUrl;
 
-    public CartDetailDto(Long cartItemId, Long itemId, String itemNm, int price, int stockNumber, int count, String imgUrl) {
+    public CartDetailDto(Long cartItemId, Long itemId, String itemNm, int price, int stockNumber, double discount, int count, String imgUrl) {
         this.cartItemId = cartItemId;
         this.itemId = itemId;
         this.itemNm = itemNm;
         this.price = price;
         this.stockNumber = stockNumber;
+        this.discount = discount;
         this.count = count;
         this.imgUrl = imgUrl;
     }
