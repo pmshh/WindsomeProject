@@ -27,6 +27,11 @@ public class CartController {
     @GetMapping("/cart")
     public String cartHist(@CurrentAccount Account account, Model model) {
         List<CartDetailDto> cartDetailList = cartService.getCartList(account.getUserIdentifier());
+        Long cartItemTotalCount = null;
+        if (account != null) {
+            cartItemTotalCount = cartService.getCartItemTotalCount(account);
+        }
+        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute("cartItems", cartDetailList);
         return "cart/cartList";
     }

@@ -79,7 +79,7 @@
                         </form>
                     </li>
                     <li>
-                        <a th:href="@{/signUp}">JOIN</a>
+                        <a sec:authorize="!isAuthenticated()" th:href="@{/signUp}">JOIN</a>
                     </li>
                     <li>
                         <a th:href="@{/cart}">CART</a>
@@ -234,7 +234,10 @@
                             </div>
                         </li>
                         <li>
-                            <a th:href="@{/cart}">Cart / 0</a>
+                            <a th:href="@{/cart}">Cart /
+                                <span th:if="${not #strings.isEmpty(cartItemTotalCount)}" th:text="${cartItemTotalCount}">3</span>
+                                <span th:if="${#strings.isEmpty(cartItemTotalCount)}">0</span>
+                            </a>
                         </li>
                     </ul>
                 </div>

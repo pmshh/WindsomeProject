@@ -5,6 +5,7 @@ import com.windsome.dto.ItemSearchDto;
 import com.windsome.dto.MainItemDto;
 import com.windsome.dto.MainCategoryDto;
 import com.windsome.entity.*;
+import com.windsome.service.CartService;
 import com.windsome.service.CategoryService;
 import com.windsome.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,16 @@ public class MainController {
 
     private final ItemService itemService;
     private final CategoryService categoryService;
+    private final CartService cartService;
 
     @GetMapping("/")
-    public String home(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
+    public String home(@CurrentAccount Account account, ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 9);
+        Long cartItemTotalCount = null;
+        if (account != null) {
+            cartItemTotalCount = cartService.getCartItemTotalCount(account);
+        }
+        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute("items", itemService.getMainItemPage(itemSearchDto, pageable));
         model.addAttribute("categories", categoryService.getMainCategoryDto());
         model.addAttribute("itemSearchDto", itemSearchDto);

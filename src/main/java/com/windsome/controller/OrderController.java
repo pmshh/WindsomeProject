@@ -5,6 +5,7 @@ import com.windsome.constant.OrderStatus;
 import com.windsome.dto.OrderDto;
 import com.windsome.dto.OrderHistDto;
 import com.windsome.entity.Account;
+import com.windsome.service.CartService;
 import com.windsome.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+    private final CartService cartService;
 
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, @CurrentAccount Account account, Model model) {
@@ -34,6 +36,11 @@ public class OrderController {
 
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(account.getUserIdentifier(), pageable);
 
+        Long cartItemTotalCount = null;
+        if (account != null) {
+            cartItemTotalCount = cartService.getCartItemTotalCount(account);
+        }
+        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("maxPage", 5);
         model.addAttribute("orderStatus", OrderStatus.READY);

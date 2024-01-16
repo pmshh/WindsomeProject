@@ -93,7 +93,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private OrderSpecifier[] createOrderSpecifier(ItemSearchDto itemSearchDto) {
         List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
 
-        if (Objects.isNull(itemSearchDto.getSort()) || itemSearchDto.getSort().equals("new")) {
+        if (Objects.isNull(itemSearchDto.getSort()) || itemSearchDto.getSort().equals("new") || itemSearchDto.getSort().isEmpty()) {
             orderSpecifiers.add(new OrderSpecifier(Order.DESC, item.id));
         } else if (itemSearchDto.getSort().equals("low")) {
             orderSpecifiers.add(new OrderSpecifier(Order.ASC, item.price));

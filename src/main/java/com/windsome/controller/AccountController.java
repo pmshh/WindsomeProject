@@ -8,6 +8,7 @@ import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
 import com.windsome.dto.validator.SignUpDtoValidator;
 import com.windsome.entity.Account;
+import com.windsome.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,7 @@ public class AccountController {
 
     private final SignUpDtoValidator signUpDtoValidator;
     private final AccountService accountService;
+    private final CartService cartService;
     private final ModelMapper modelMapper;
 
     @InitBinder("signUpForm")
@@ -45,7 +47,12 @@ public class AccountController {
     }
 
     @GetMapping("/signUp")
-    public String signUpForm(Model model) {
+    public String signUpForm(@CurrentAccount Account account, Model model) {
+        Long cartItemTotalCount = null;
+        if (account != null) {
+            cartItemTotalCount = cartService.getCartItemTotalCount(account);
+        }
+        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute(SignUpFormDto.builder().build());
         return "account/signUp";
     }
@@ -63,6 +70,11 @@ public class AccountController {
 
     @GetMapping("/account/profile")
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
+        Long cartItemTotalCount = null;
+        if (account != null) {
+            cartItemTotalCount = cartService.getCartItemTotalCount(account);
+        }
+        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute(modelMapper.map(account, ProfileFormDto.class));
         return "account/profile";
     }

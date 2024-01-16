@@ -194,6 +194,7 @@ main {
   font-weight: 400;
   font-family: Arial, sans-serif;
 }
+.sidebar .sidebar_nav li button:hover,
 .sidebar .sidebar_nav li a:hover {
   color: #cccccc;
 }

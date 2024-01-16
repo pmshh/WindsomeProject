@@ -2,7 +2,6 @@ package com.windsome.service;
 
 import com.windsome.dto.CartDetailDto;
 import com.windsome.dto.CartItemDto;
-import com.windsome.dto.CartOrderDto;
 import com.windsome.dto.OrderDto;
 import com.windsome.entity.Account;
 import com.windsome.entity.Cart;
@@ -106,5 +105,10 @@ public class CartService {
             cartItemRepository.delete(cartItem);
         }
         return orderId;
+    }
+
+    public Long getCartItemTotalCount(Account account) {
+        Cart cart = cartRepository.findByAccountId(account.getId());
+        return cartItemRepository.countByCartId(cart.getId());
     }
 }
