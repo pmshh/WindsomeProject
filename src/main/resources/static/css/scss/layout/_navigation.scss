@@ -24,6 +24,11 @@ nav {
             li {
                 padding: 20px 0;
 
+                a:hover,
+                button:hover {
+                    color: #999999;
+                }
+
                 a,
                 button {
                     font-size: 13px;

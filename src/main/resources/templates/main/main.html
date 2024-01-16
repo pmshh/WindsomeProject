@@ -16,11 +16,19 @@
             <div class="section_content">
                 <div class="container-fluid items">
                     <div class="items_header">
-                        <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL</h2>
-                        <th:block th:each="category, status:${categories}">
-                            <h2 th:if="${itemSearchDto.category == category.id}" th:text="${category.name}"></h2>
-                        </th:block>
+                        <div class="title">
+                            <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL</h2>
+                            <h2 th:each="category, status:${categories}" th:if="${itemSearchDto.category == category.id}" th:text="${category.name}"></h2>
+                        </div>
                         <div class="divider"></div>
+                        <div class="little_category">
+                            <ul class="menu_category">
+                                <li th:each="category, status:${categories}"
+                                    th:if="${#strings.substring(category.id, 0, 1) == #strings.substring(itemSearchDto.category, 0, 1) && #strings.substring(category.id, 2) ne '0'}">
+                                    <a th:text="${category.name}" th:classappend="${itemSearchDto.category == category.id} ? 'active'" th:href="@{'/?category=' + ${category.id} + '&searchQuery=none'}"></a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="items_body">
@@ -38,6 +46,21 @@
                                 <p class="content_count">총 <strong class="fw-bold"
                                                                    th:text="${items.getTotalElements()}"></strong>개의 상품이
                                     검색되었습니다.</p>
+                            </div>
+                        </div>
+
+                        <div class="normal_menu">
+                            <div class="item_total">
+                                <span th:text="${items.getTotalElements()}"></span> ITEMS
+                            </div>
+                            <div class="item_filter">
+                                <ul>
+                                    <li><a>NEW</a></li>
+                                    <li><a>BEST</a></li>
+                                    <li><a>LOW</a></li>
+                                    <li><a>HIGH</a></li>
+                                    <li><a>NAME</a></li>
+                                </ul>
                             </div>
                         </div>
 
@@ -61,7 +84,7 @@
                                             <span class="discount_price"
                                                   th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|"></span>
                                             <span class="discount_rate"
-                                                  th:text="${#numbers.formatInteger(item.discount * 100, 2, 'COMMA')} + '%'"></span>
+                                                  th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
                                         </div>
                                     </div>
                                 </div>
