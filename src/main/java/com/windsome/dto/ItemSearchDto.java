@@ -11,6 +11,8 @@ public class ItemSearchDto {
 
     private String page;
 
+    private String sort = "";
+
     private String searchDateType;
 
     private ItemSellStatus searchSellStatus;

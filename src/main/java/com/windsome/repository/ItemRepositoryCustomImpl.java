@@ -1,6 +1,8 @@
 package com.windsome.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,7 +18,9 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.thymeleaf.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.windsome.entity.QItem.item;
 
@@ -71,7 +75,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .where(itemNmLike(itemSearchDto.getSearchQuery())
                         .or(itemCategoryLike(itemSearchDto.getCategory()))
                         .and(item.itemSellStatus.eq(ItemSellStatus.SELL)))
-                .orderBy(item.id.desc())
+                .orderBy(createOrderSpecifier(itemSearchDto))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -84,6 +88,21 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .where(itemNmLike(itemSearchDto.getSearchQuery()));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
+    }
+
+    private OrderSpecifier[] createOrderSpecifier(ItemSearchDto itemSearchDto) {
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+
+        if (Objects.isNull(itemSearchDto.getSort()) || itemSearchDto.getSort().equals("new")) {
+            orderSpecifiers.add(new OrderSpecifier(Order.DESC, item.id));
+        } else if (itemSearchDto.getSort().equals("low")) {
+            orderSpecifiers.add(new OrderSpecifier(Order.ASC, item.price));
+        } else if (itemSearchDto.getSort().equals("high")) {
+            orderSpecifiers.add(new OrderSpecifier(Order.DESC, item.price));
+        } else if (itemSearchDto.getSort().equals("name")) {
+            orderSpecifiers.add(new OrderSpecifier(Order.ASC, item.itemNm));
+        }
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
     }
 
     private BooleanBuilder itemCategoryLike(Long categoryId) {
