@@ -22,7 +22,13 @@ public class CartDetailDto {
 
     private int price;
 
+    private int salePrice;
+
     private int totalPrice;
+
+    private int point;
+
+    private int totalPoint;
 
     private String imgUrl;
 
@@ -34,7 +40,10 @@ public class CartDetailDto {
         this.discount = discount;
         this.count = count;
         this.price = price;
-        this.totalPrice = (int) (price * (1 - discount)) * count;
+        this.salePrice = (int) Math.floor(price * (1 - discount));
+        this.totalPrice = salePrice * count;
+        this.point = (int) Math.floor(salePrice * 0.05);
+        this.totalPoint = point * count;
         this.imgUrl = imgUrl;
     }
 }

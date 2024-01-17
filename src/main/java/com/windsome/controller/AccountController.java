@@ -20,10 +20,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @Controller
@@ -33,6 +31,7 @@ public class AccountController {
 
     private final SignUpDtoValidator signUpDtoValidator;
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
     private final CartService cartService;
     private final ModelMapper modelMapper;
 
@@ -134,5 +133,11 @@ public class AccountController {
         }
         accountService.sendEmailAndUpdatePassword(email, name);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/mypage")
+    public String mypage(@CurrentAccount Account account, Model model) {
+        model.addAttribute("myPageInfo", accountService.getMyPageInfo(account.getId()));
+        return "account/mypage";
     }
 }

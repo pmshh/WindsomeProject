@@ -20,22 +20,37 @@
     margin: 0 auto;
 
     .bank_book {
-        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-        ul {
-            li {
-                float: left;
+        .total_order,
+        .total_point {
+            padding: 30px 50px;
+            font-size: 12px;
+            color: #404040;
+        }
 
-                strong.title,
-                strong.data {
-                    font-weight: normal;
-                    font-size: 13px;
-                }
+        .total_order {
+            border: 1px solid #e5e5e5;
+            width: 50%;
+            display: flex;
+            justify-content: space-between;
 
-                span {
-                    font-weight: bold;
-                    font-size: 18px;
-                }
+            .cond {
+                font-weight: bold;
+            }
+        }
+
+        .total_point {
+            border: 1px solid #e5e5e5;
+            border-left: none !important;
+            width: 50%;
+            display: flex;
+            justify-content: space-between;
+
+            .cond {
+                font-weight: bold;
             }
         }
     }
@@ -87,7 +102,7 @@
         }
     }
 
-    .myshop_main {
+    .mypage_main {
         margin: 30px 0 0;
         overflow: hidden;
 

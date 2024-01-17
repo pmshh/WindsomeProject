@@ -1849,19 +1849,48 @@ footer .footer_copyright {
   margin: 0 auto;
 }
 .mypage_body .bank_book {
-  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
-.mypage_body .bank_book ul li {
-  float: left;
+.mypage_body .bank_book .total_order,
+.mypage_body .bank_book .total_point {
+  padding: 30px 50px;
+  font-size: 12px;
+  color: #404040;
 }
-.mypage_body .bank_book ul li strong.title,
-.mypage_body .bank_book ul li strong.data {
-  font-weight: normal;
-  font-size: 13px;
+.mypage_body .bank_book .total_order {
+  border: 1px solid #e5e5e5;
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
-.mypage_body .bank_book ul li span {
+.mypage_body .bank_book .total_order .cond {
   font-weight: bold;
-  font-size: 18px;
+}
+.mypage_body .bank_book .total_point {
+  border: 1px solid #e5e5e5;
+  border-left: none !important;
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.mypage_body .bank_book .total_point .cond {
+  font-weight: bold;
 }
 .mypage_body .order_state {
   margin: 20px 0 0;
@@ -1903,14 +1932,14 @@ footer .footer_copyright {
   font-size: 24px;
   color: #000;
 }
-.mypage_body .myshop_main {
+.mypage_body .mypage_main {
   margin: 30px 0 0;
   overflow: hidden;
 }
-.mypage_body .myshop_main ul {
+.mypage_body .mypage_main ul {
   margin: 0 -1.65% 0;
 }
-.mypage_body .myshop_main ul li {
+.mypage_body .mypage_main ul li {
   float: left;
   width: 18%;
   height: 180px;
@@ -1920,21 +1949,21 @@ footer .footer_copyright {
   text-align: center;
   letter-spacing: 0.3px;
 }
-.mypage_body .myshop_main ul li h3 {
+.mypage_body .mypage_main ul li h3 {
   position: relative;
   font-size: 12px;
   color: #333;
   font-weight: normal;
 }
-.mypage_body .myshop_main ul li h3 a {
+.mypage_body .mypage_main ul li h3 a {
   display: block;
   padding: 0 0 25px;
 }
-.mypage_body .myshop_main ul li p {
+.mypage_body .mypage_main ul li p {
   margin: 0;
   padding: 0;
 }
-.mypage_body .myshop_main ul li p a {
+.mypage_body .mypage_main ul li p a {
   font-size: 12px;
   line-height: 20px;
   color: #a5a5a5;

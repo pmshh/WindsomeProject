@@ -1,5 +1,6 @@
 package com.windsome.service;
 
+import com.windsome.dto.MyPageInfoDto;
 import com.windsome.dto.ProfileFormDto;
 import com.windsome.dto.SignUpFormDto;
 import com.windsome.entity.Account;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 @Service
@@ -115,4 +115,7 @@ public class AccountService {
         return account != null && account.getName().equals(name);
     }
 
+    public MyPageInfoDto getMyPageInfo(Long accountId) {
+        return accountRepository.getMyPageInfo(accountId);
+    }
 }

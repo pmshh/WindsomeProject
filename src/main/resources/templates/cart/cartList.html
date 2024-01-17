@@ -24,13 +24,13 @@
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%;" scope="col">
+                                        <th style="width: 8%;" scope="col">
                                             <input type="checkbox" id="check_all" name="check_all" onclick="checkAll()">
                                             <label for="check_all">전체 선택</label>
                                         </th>
                                         <th style="width: 10%;" scope="col">이미지</th>
                                         <th style="width: auto;" scope="col">상품정보</th>
-                                        <th style="width: 10%;" scope="col">판매가</th>
+                                        <th style="width: 10%;" scope="col">가격</th>
                                         <th style="width: 10%;" scope="col">수량</th>
                                         <th style="width: 10%;" scope="col">상품주문금액</th>
                                         <th style="width: 10%;" scope="col">배송비</th>
@@ -58,9 +58,9 @@
                                             <span th:if="${cartItem.discount == 0}"
                                                 th:text="|${#numbers.formatInteger(cartItem.price, 0, 'COMMA')}원|"></span>
                                             <span th:if="${cartItem.discount > 0}" style="text-decoration: line-through"
-                                                th:text="|${#numbers.formatInteger(cartItem.price, 0, 'COMMA')}원|"></span>
+                                                th:text="|${#numbers.formatInteger(cartItem.salePrice, 0, 'COMMA')}원|"></span>
                                             <strong th:if="${cartItem.discount > 0}"
-                                                th:text="|${#numbers.formatInteger(cartItem.price * (1 - cartItem.discount), 0, 'COMMA')}원|"></strong>
+                                                th:text="|${#numbers.formatInteger(cartItem.totalPrice, 0, 'COMMA')}원|"></strong>
                                         </td>
                                         <td>
                                             <div class="cnt_box">
