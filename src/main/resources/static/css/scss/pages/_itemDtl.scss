@@ -137,6 +137,34 @@
             }
         }
 
+        .point {
+            display: flex;
+
+            .title {
+                display: inline-block;
+                width: 30%;
+                font-size: 12px;
+                margin: 7px 20px 7px 0;
+
+                span {
+                    font-size: 12px;
+                    color: #555555;
+                }
+            }
+
+            .con {
+                display: inline-block;
+                width: auto;
+                font-size: 12px;
+                margin: 7px 0;
+
+                span {
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+        }
+
         .total_box {
             margin: 0;
             padding: 25px 4px 25px;

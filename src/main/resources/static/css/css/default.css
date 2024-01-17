@@ -2351,6 +2351,31 @@ footer .footer_copyright {
   color: #e06f18;
   font-weight: bold;
 }
+.item_dtl_body .info .point {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.item_dtl_body .info .point .title {
+  display: inline-block;
+  width: 30%;
+  font-size: 12px;
+  margin: 7px 20px 7px 0;
+}
+.item_dtl_body .info .point .title span {
+  font-size: 12px;
+  color: #555555;
+}
+.item_dtl_body .info .point .con {
+  display: inline-block;
+  width: auto;
+  font-size: 12px;
+  margin: 7px 0;
+}
+.item_dtl_body .info .point .con span {
+  font-size: 12px;
+  font-weight: bold;
+}
 .item_dtl_body .info .total_box {
   margin: 0;
   padding: 25px 4px 25px;

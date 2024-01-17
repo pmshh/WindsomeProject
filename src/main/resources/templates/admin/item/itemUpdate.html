@@ -370,7 +370,7 @@
             $(".discount_interface").val([[${itemFormDto.discount}]] * 100);
             let price = [[${itemFormDto.price}]];
             let discount = [[${itemFormDto.discount}]]
-            let discountPrice = Math.ceil(price * (1 - discount));
+            let discountPrice = Math.floor(price * (1 - discount));
             $(".discount_price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
 
             /* 할인율 Input 설정 */
@@ -382,7 +382,7 @@
                 let discountRate = userInput.val(); // 사용자가 입력할 할인값
                 let sendDiscountRate = discountRate / 100; // 서버에 전송할 할인값
                 let itemPrice = $(".price_input").val(); // 원가
-                let discountPrice = Math.ceil(itemPrice * (1 - sendDiscountRate)); // 할인가격
+                let discountPrice = Math.floor(itemPrice * (1 - sendDiscountRate)); // 할인가격
 
                 if (!isNaN(discountRate)) {
                     $(".discount_price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
@@ -397,7 +397,7 @@
                 let discountRate = userInput.val();
                 let sendDiscountRate = discountRate / 100;
                 let itemPrice = $(".price_input").val();
-                let discountPrice = Math.ceil(itemPrice * (1 - sendDiscountRate));
+                let discountPrice = Math.floor(itemPrice * (1 - sendDiscountRate));
 
                 if (!isNaN(discountRate)) {
                     $(".discount_price").html(discountPrice);

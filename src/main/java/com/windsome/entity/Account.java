@@ -5,6 +5,7 @@ import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
@@ -39,4 +40,14 @@ public class Account extends BaseTimeEntity {
 
     private int point;
 
+    public static Account addPoint(Account account, List<OrderItem> orderItemList) {
+        int totalOrderPrice = 0;
+        for (OrderItem orderItem : orderItemList) {
+            totalOrderPrice += orderItem.getPrice() * orderItem.getCount();
+        }
+        int curPoint = account.getPoint();
+        account.setPoint((int) (curPoint + (Math.floor((totalOrderPrice * 0.05)))));
+
+        return account;
+    }
 }

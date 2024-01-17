@@ -68,6 +68,15 @@
                                     </div>
                                 </th:block>
 
+                                <div class="point">
+                                    <div class="title">
+                                        <span>적립 포인트</span>
+                                    </div>
+                                    <div class="con">
+                                        <span class="total_point"></span>
+                                    </div>
+                                </div>
+
                                 <div class="item_option">
 <!--                                    <div class="item_color">-->
 <!--                                        <div class="title">-->
@@ -111,7 +120,7 @@
                                 </div>
                                 <div class="total_box">
                                     <strong>
-                                        <em class="total_price" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">총 가격</em>
+                                        <em class="total_price" th:text="|${#numbers.formatInteger(item.price, 1, 'COMMA')}원|">총 가격</em>
                                     </strong>
                                     <em class="total_order_cnt"></em>
                                 </div>
@@ -135,11 +144,17 @@
 
     <script th:inline="javascript">
         $(document).ready(function () {
+            /* 총 주문 결제 금액 삽입 */
             let price = [[${ item.price }]];
             let discount = [[${ item.discount }]];
-            let totalPrice = Math.ceil((price * (1 - discount)));
+            let totalPrice = Math.floor((price * (1 - discount)));
             $('.total_price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
             $(".total_order_cnt").html('(1개)');
+
+            /* 적립 포인트 출력 */
+            let salePrice = price * (1 - discount);
+            let point = Math.floor(salePrice * 0.05);
+            $(".total_point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         });
 
         /* 상품 이미지 썸네일 */
@@ -154,7 +169,6 @@
             let maxCnt = [[${ item.stockNumber }]]; // 현재 재고
             let thisCnt = $('.order_cnt_input');
             let countVal = thisCnt.val();
-            let totalOrderCnt = $(".total_order_cnt");
 
             if (countVal < minCnt) {
                 alert('수량은 1개 이상 입력해 주세요.');
@@ -169,37 +183,51 @@
                 getOrderTotalPrice();
                 return;
             }
-            totalOrderCnt.html('('+countVal+'개)');
+
+            /* 적립 포인트 출력 */
+            let price = [[${ item.price }]];
+            let discount = [[${ item.discount }]];
+            let salePrice = (price * (1 - discount)) * countVal;
+            let point = Math.floor(salePrice * 0.05);
+            $(".total_point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+
+            /* 총 주문 금액 출력 */
             getOrderTotalPrice();
+            $(".total_order_cnt").html('('+countVal+'개)');
         }
 
         /* 수량 버튼 클릭 시 동작 */
         function changeCountBtn(type) {
             let minCnt = 1;
-            let thisCnt = $('.order_cnt_input').val() * 1;
+            let thisCntVal = $('.order_cnt_input').val() * 1;
             let maxCnt = [[${ item.stockNumber }]];
 
-            let price = [[${ item.price }]];
-            let discount = [[${ item.discount }]];
-
             if (type === 'minus') {
-                thisCnt -= 1;
-                if (thisCnt < minCnt) {
+                thisCntVal -= 1;
+                if (thisCntVal < minCnt) {
                     alert('수량은 1개 이상 입력해 주세요.');
                     return;
                 }
             } else if (type === 'plus') {
-                thisCnt += 1;
-                if (thisCnt > maxCnt) {
+                thisCntVal += 1;
+                if (thisCntVal > maxCnt) {
                     alert('죄송합니다. 재고가 부족합니다.');
                     return;
                 }
             }
 
-            let totalPrice = Math.ceil((price * (1 - discount)) * thisCnt);
-            $(".order_cnt_input").val(thisCnt);
-            $(".total_order_cnt").html('(' + thisCnt + '개)');
+            /* 적립 포인트 출력 */
+            let price = [[${ item.price }]];
+            let discount = [[${ item.discount }]];
+            let salePrice = (price * (1 - discount)) * thisCntVal;
+            let point = Math.floor(salePrice * 0.05);
+            $(".total_point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+
+            /* 총 주문 금액 출력 */
+            let totalPrice = Math.floor((price * (1 - discount)) * thisCntVal);
+            $(".order_cnt_input").val(thisCntVal);
             $(".total_price").html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
+            $(".total_order_cnt").html('(' + thisCntVal + '개)');
         }
 
         /* 상품 가격 출력 */
@@ -207,7 +235,7 @@
             let countVal = $('.order_cnt_input').val();
             let price = [[${ item.price }]];
             let discount = [[${ item.discount }]];
-            let totalPrice = Math.ceil((price * (1 - discount)) * countVal);
+            let totalPrice = Math.floor((price * (1 - discount)) * countVal);
             $('.total_price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         }
 

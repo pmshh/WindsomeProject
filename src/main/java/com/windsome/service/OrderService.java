@@ -38,6 +38,34 @@ public class OrderService {
         OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
         orderItemList.add(orderItem);
 
+        // 회원 포인트 적립
+        Account saveAccount = Account.addPoint(account, orderItemList);
+        accountRepository.save(saveAccount);
+
+        // 주문 생성 및 DB 저장
+        Order order = Order.createOrder(account, orderItemList);
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
+    public Long orders(List<OrderDto> orderDtoList, String userIdentifier) {
+        // 계정 DB에서 조회
+        Account account = accountRepository.findByUserIdentifier(userIdentifier);
+
+        // 주문 상품 생성 및 저장
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (OrderDto orderDto : orderDtoList) {
+            Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        // 회원 포인트 적립
+        Account saveAccount = Account.addPoint(account, orderItemList);
+        accountRepository.save(saveAccount);
+
         // 주문 생성 및 DB 저장
         Order order = Order.createOrder(account, orderItemList);
         orderRepository.save(order);
@@ -108,22 +136,5 @@ public class OrderService {
         Account savedAccount = order.getAccount();
 
         return StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
-    }
-
-    public Long orders(List<OrderDto> orderDtoList, String userIdentifier) {
-        Account account = accountRepository.findByUserIdentifier(userIdentifier);
-
-        List<OrderItem> orderItemList = new ArrayList<>();
-        for (OrderDto orderDto : orderDtoList) {
-            Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
-
-            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
-            orderItemList.add(orderItem);
-        }
-
-        Order order = Order.createOrder(account, orderItemList);
-        orderRepository.save(order);
-
-        return order.getId();
     }
 }

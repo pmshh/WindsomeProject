@@ -81,7 +81,7 @@
                                             <strong th:id="'price_' + ${cartItem.cartItemId}"
                                                 th:data-price="${cartItem.price}"
                                                 th:data-discount="${cartItem.discount}"
-                                                th:text="|${#numbers.formatInteger((cartItem.price * (1 - cartItem.discount)) * cartItem.count, 0, 'COMMA')}원|"></strong>
+                                                th:text="|${#numbers.formatInteger(cartItem.totalPrice, 0, 'COMMA')}원|"></strong>
                                         </td>
                                         <td class="delivery_price">
                                             <span>2,500원</span>
@@ -107,10 +107,11 @@
                                 <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th style="width: 20%;" scope="col">상품 금액</th>
-                                            <th style="width: 20%;" scope="col">배송비</th>
-                                            <th style="width: 20%;" scope="col">할인 합계</th>
+                                            <th style="width: 15%;" scope="col">상품 금액</th>
+                                            <th style="width: 15%;" scope="col">배송비</th>
+                                            <th style="width: 15%;" scope="col">할인 합계</th>
                                             <th style="width: auto;" scope="col">최종 결제 금액</th>
+                                            <th style="width: 15%;" scope="col">적립 예정 금액</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -126,6 +127,9 @@
                                             </td>
                                             <td>
                                                 = <span class="total_amount">0원</span>
+                                            </td>
+                                            <td>
+                                                = <span class="total_point">0원</span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -177,8 +181,8 @@
     <!-- 사용자 JS -->
     <script th:inline="javascript">
         $(document).ready(function () {
+            /* 상품 금액, 배송비, 할인 합계, 최종 결제 금액, 적립 예정 금액 출력 */
             let checkInput = $("input[name=cart_check]");
-
             checkInput.prop("checked", true);
             getOrderTotalPrice();
 
@@ -196,12 +200,13 @@
             getOrderTotalPrice();
         }
 
-        /* 상품 금액, 배송비, 할인 합계, 최종 결제 금액 출력 */
+        /* 상품 금액, 배송비, 할인 합계, 최종 결제 금액, 적립 예정 금액 출력 */
         function getOrderTotalPrice() {
             let orderTotalPrice = 0; // 상품 금액
             let orderDeliveryPrice = 2500; // 배송비
             let orderDiscountPrice = 0; // 할인 합계
             let totalAmount = 0; // 최종 결제 금액
+            let totalPoint = 0; // 적립 예정 금액
 
             $("input[name=cart_check]:checked").each(function () {
                 let cartItemId = $(this).val();
@@ -227,6 +232,7 @@
             $(".order_delivery_price").html('+ ' + orderDeliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
             $(".order_discount_price").html('- ' + orderDiscountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원')
             $(".total_amount").html((totalAmount + orderDeliveryPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+            $(".total_point").html((Math.floor(totalAmount * 0.05)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원')
         }
 
         /* 수량 입력 시 동작 */
@@ -238,20 +244,20 @@
 
             let countVal = obj.value;
             let priceVal = price.data("price");
-            let totalPrice = Math.ceil((priceVal * (1 - price.attr("data-discount"))) * countVal);
+            let totalPrice = Math.floor((priceVal * (1 - price.attr("data-discount"))) * countVal);
             let minCnt = 1;
             let maxCnt = stock.attr("data-stock") * 1;
 
             if (countVal < minCnt) {
                 alert('수량은 1개 이상 입력해 주세요.');
                 count.val(1);
-                price.html(Math.ceil((priceVal * (1 - price.attr("data-discount")))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+                price.html(Math.floor((priceVal * (1 - price.attr("data-discount")))).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
                 getOrderTotalPrice();
                 return;
             } else if (countVal > maxCnt) {
                 alert('죄송합니다. 재고가 부족합니다.');
                 count.val(maxCnt);
-                price.html(Math.ceil((priceVal * (1 - price.attr("data-discount"))) * maxCnt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+                price.html(Math.floor((priceVal * (1 - price.attr("data-discount"))) * maxCnt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
                 getOrderTotalPrice();
                 return;
             }
@@ -288,7 +294,7 @@
                 }
             }
 
-            let totalPrice = Math.ceil((priceVal * (1 - price.attr("data-discount"))) * countVal);
+            let totalPrice = Math.floor((priceVal * (1 - price.attr("data-discount"))) * countVal);
             count.val(countVal);
             price.html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
             getOrderTotalPrice();

@@ -46,12 +46,13 @@ public class Order extends BaseEntity {
 
         int totalOrderPrice = 0;
         for (OrderItem orderItem : orderItemList) {
-            totalOrderPrice += orderItem.getPrice();
+            totalOrderPrice += orderItem.getPrice() * orderItem.getCount();
         }
-        if (totalOrderPrice > 30000) {
-            order.setTotalOrderPrice(totalOrderPrice);
-        } else if (totalOrderPrice < 30000) {
+
+        if (totalOrderPrice < 30000) {
             order.setTotalOrderPrice(totalOrderPrice + 2500);
+        } else {
+            order.setTotalOrderPrice(totalOrderPrice);
         }
 
         for (OrderItem orderItem : orderItemList) {
