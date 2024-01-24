@@ -63,7 +63,7 @@
                                             <span th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|">가격</span>
                                         </div>
                                         <div class="discount_rate">
-                                            <span th:text="${#numbers.formatInteger(item.discount * 100, 2, 'COMMA')} + '%'"></span>
+                                            <span th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
                                         </div>
                                     </div>
                                 </th:block>
@@ -138,6 +138,11 @@
                 </div>
             </section>
 
+            <form action="/order" method="get" class="order_form">
+                <input type="hidden" name="orders[0].itemId" th:value="${item.id}">
+                <input type="hidden" name="orders[0].count" value="">
+            </form>
+
             <div th:replace="/layouts/defaultLayout.html :: footer"></div>
         </article>
     </main>
@@ -156,6 +161,17 @@
             let point = Math.floor(salePrice * 0.05);
             $(".total_point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         });
+
+        /* 상품 구매 */
+        function order() {
+            if (confirm("선택하신 상품을 주문하시겠습니까?")) {
+                let count = $(".order_cnt_input").val()
+                $(".order_form").find("input[name='orders[0].count']").val(count);
+                $(".order_form").submit();
+            } else {
+                return false;
+            }
+        }
 
         /* 상품 이미지 썸네일 */
         function myFunction(smallImg) {
@@ -239,41 +255,6 @@
             $('.total_price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         }
 
-        /* 상품 주문 */
-        function order() {
-            if (confirm("선택하신 상품을 주문하시겠습니까?")) {
-                let paramData = {
-                    itemId: [[${ item.id }]],
-                    count: $(".order_cnt_input").val()
-                };
-
-                let param = JSON.stringify(paramData);
-
-                $.ajax({
-                    url: "/order",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: param,
-                    dataType: "json",
-                    cache: false,
-                    success: function (result, status) {
-                        alert("주문이 완료 되었습니다.");
-                        location.href = "/";
-                    },
-                    error: function (request, status, error) {
-                        if (request.status === '401') {
-                            alert("로그인 후 이용해주세요.");
-                            location.href = '/login';
-                        } else {
-                            alert(request.responseText);
-                        }
-                    },
-                })
-            } else {
-                return false;
-            }
-        }
-
         /* 장바구니 추가 */
         function addCart() {
             let paramData = {
@@ -295,12 +276,8 @@
                     location.href = '/cart';
                 },
                 error: function (request, status, error) {
-                    if (request.status === '401') {
-                        alert('로그인 후 이용해주세요.');
-                        location.href = '/login';
-                    } else {
-                        alert(request.responseText);
-                    }
+                    alert('로그인 후 이용해주세요.');
+                    location.href = '/login';
                 },
             })
         }

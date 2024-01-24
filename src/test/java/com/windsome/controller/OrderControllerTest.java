@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.OrderDto;
+import com.windsome.dto.OrderItemDto;
 import com.windsome.entity.Item;
 import com.windsome.repository.*;
 import com.windsome.service.OrderService;
@@ -16,6 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -53,29 +57,12 @@ class OrderControllerTest {
     }
 
     @WithAccount("test1234")
-    @DisplayName("주문 조회 테스트")
-    @Test
-    void order() throws Exception {
-        Item item = saveItem();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String content = objectMapper.writeValueAsString(new OrderDto(item.getId(), 5));
-
-        mockMvc.perform(post("/order")
-                        .content(content)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @WithAccount("test1234")
     @DisplayName("주문 취소 테스트")
     @Test
     void cancelOrder() throws Exception {
         Item item = saveItem();
 
-        OrderDto orderDto = new OrderDto(item.getId(), 5);
+        OrderDto orderDto = getOrderDto(item);
         Long orderId = orderService.order(orderDto, "test1234");
 
         mockMvc.perform(post("/order/" + orderId + "/cancel")
@@ -95,5 +82,20 @@ class OrderControllerTest {
                 .stockNumber(100)
                 .build();
         return itemRepository.save(item);
+    }
+
+    private static OrderDto getOrderDto(Item item) {
+        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setItemId(item.getId());
+        orderItemDto.setPrice(item.getPrice());
+        orderItemDto.setDiscount(item.getDiscount());
+        orderItemDto.setCount(10);
+        orderItemDtoList.add(orderItemDto);
+        orderItemDto.initPriceAndPoint();
+
+        OrderDto orderDto = new OrderDto("test", "test", "test", "test", "test", "test", orderItemDtoList, 0, 0, 10000, 500, 10000);
+        orderDto.initOrderPriceInfo();
+        return orderDto;
     }
 }

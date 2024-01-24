@@ -2,20 +2,52 @@ package com.windsome.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class OrderDto {
 
-    @NotNull(message = "상품 아이디는 필수 입력 값입니다.")
-    private Long itemId;
+    private String address1;
 
-    @Min(value = 1, message = "최소 주문 수량은 1개 입니다.")
-    @Max(value = 99, message = "최대 주문 수량은 99개 입니다.")
-    private int count;
+    private String address2;
+
+    private String address3;
+
+    private String tel;
+
+    private String email;
+
+    private String req; // 배송 메시지
+
+    private List<OrderItemDto> orders;
+
+    private int deliveryCost;
+
+    private int usePoint;
+
+    /**
+     * DB에 존재 하지 않는 데이터
+     */
+    private int orderSalePrice; // 주문 가격
+    private int orderSavePoint; // 적립 포인트
+    private int orderFinalSalePrice; // 최종 판매 비용
+
+    /**
+     * 가격 관련 정보 초기화
+     */
+    public void initOrderPriceInfo() {
+        for(OrderItemDto order : orders) {
+            orderSalePrice += order.getTotalSalePrice();
+            orderSavePoint += order.getTotalSavePoint();
+        }
+
+        if (orderSalePrice >= 30000) {
+            deliveryCost = 0;
+        } else {
+            deliveryCost = 2500;
+        }
+
+        orderFinalSalePrice = orderSalePrice + deliveryCost - usePoint;
+    }
 }

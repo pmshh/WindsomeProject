@@ -4,7 +4,6 @@ import com.windsome.config.security.CurrentAccount;
 import com.windsome.dto.ProfileFormDto;
 import com.windsome.dto.SignUpFormDto;
 import com.windsome.dto.validator.ProfileDtoValidator;
-import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
 import com.windsome.dto.validator.SignUpDtoValidator;
 import com.windsome.entity.Account;
@@ -29,22 +28,14 @@ import javax.validation.Valid;
 @Slf4j
 public class AccountController {
 
-    private final SignUpDtoValidator signUpDtoValidator;
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
     private final CartService cartService;
+    private final SignUpDtoValidator signUpDtoValidator;
     private final ModelMapper modelMapper;
 
-    @InitBinder("signUpForm")
-    public void initBinderForSignUpForm(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(signUpDtoValidator);
-    }
-
-    @InitBinder("profileForm")
-    public void initBinderForProfileForm(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(new ProfileDtoValidator());
-    }
-
+    /**
+     * 회원가입 화면
+     */
     @GetMapping("/signUp")
     public String signUpForm(@CurrentAccount Account account, Model model) {
         Long cartItemTotalCount = null;
@@ -56,6 +47,9 @@ public class AccountController {
         return "account/signUp";
     }
 
+    /**
+     * 회원가입
+     */
     @PostMapping("/signUp")
     public String signUpSubmit(@Valid SignUpFormDto signUpFormDto, Errors errors) {
         if (errors.hasErrors()) {
@@ -67,17 +61,19 @@ public class AccountController {
         return "redirect:/";
     }
 
+    /**
+     * 회원정보 수정 화면
+     */
     @GetMapping("/account/profile")
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
-        Long cartItemTotalCount = null;
-        if (account != null) {
-            cartItemTotalCount = cartService.getCartItemTotalCount(account);
-        }
-        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
+        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
         model.addAttribute(modelMapper.map(account, ProfileFormDto.class));
         return "account/profile";
     }
 
+    /**
+     * 회원정보 수정
+     */
     @PostMapping("/account/profile")
     public String updateProfile(@CurrentAccount Account account, @Valid ProfileFormDto profileFormDto, Errors errors,
                                 Model model, RedirectAttributes attributes) {
@@ -91,6 +87,9 @@ public class AccountController {
         return "redirect:/account/profile";
     }
 
+    /**
+     * 이메일 중복 체크
+     */
     @GetMapping("/check/email")
     public ResponseEntity<Object> checkEmail(String email) throws Exception {
         if (!accountService.validateEmail(email)) {
@@ -100,6 +99,9 @@ public class AccountController {
         return ResponseEntity.ok().body(authNum);
     }
 
+    /**
+     * 아이디 중복 체크
+     */
     @PostMapping("/check/id")
     public ResponseEntity<Object> checkId(String userId) {
         if (!accountService.validateId(userId)) {
@@ -108,11 +110,17 @@ public class AccountController {
         return ResponseEntity.ok().body(accountService.checkId(userId));
     }
 
+    /**
+     * 아이디 찾기 화면
+     */
     @GetMapping("/find/id")
     public String findIdGet() {
         return "account/findId";
     }
 
+    /**
+     * 아이디 찾기
+     */
     @PostMapping("/find/id")
     public ResponseEntity<Object> findIdPost(String email, String name) {
         if (!accountService.userEmailCheck(email, name)) {
@@ -121,11 +129,17 @@ public class AccountController {
         return ResponseEntity.ok().body(accountService.findId(email, name));
     }
 
+    /**
+     * 비밀번호 찾기 화면
+     */
     @GetMapping("/find/pass")
     public String findPassGet() {
         return "account/findPass";
     }
 
+    /**
+     * 비밀번호 찾기
+     */
     @PostMapping("/find/pass")
     public ResponseEntity<Object> findPassPost(String email, String name, Model model) throws Exception {
         if (!accountService.userEmailCheck(email, name)) {
@@ -135,9 +149,23 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 마이 페이지 화면
+     */
     @GetMapping("/mypage")
     public String mypage(@CurrentAccount Account account, Model model) {
+        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
         model.addAttribute("myPageInfo", accountService.getMyPageInfo(account.getId()));
         return "account/mypage";
+    }
+
+    @InitBinder("signUpForm")
+    public void initBinderForSignUpForm(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(signUpDtoValidator);
+    }
+
+    @InitBinder("profileForm")
+    public void initBinderForProfileForm(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(new ProfileDtoValidator());
     }
 }

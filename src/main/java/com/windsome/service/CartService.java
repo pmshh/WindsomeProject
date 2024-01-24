@@ -2,7 +2,6 @@ package com.windsome.service;
 
 import com.windsome.dto.CartDetailDto;
 import com.windsome.dto.CartItemDto;
-import com.windsome.dto.OrderDto;
 import com.windsome.entity.Account;
 import com.windsome.entity.Cart;
 import com.windsome.entity.CartItem;
@@ -87,28 +86,12 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
-    public Long orderCartItem(List<Long> cartItemIds, String userIdentifier) {
-        List<OrderDto> orderDtoList = new ArrayList<>();
-        for (Long cartItemId : cartItemIds) {
-            CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-
-            OrderDto orderDto = new OrderDto();
-            orderDto.setItemId(cartItem.getItem().getId());
-            orderDto.setCount(cartItem.getCount());
-            orderDtoList.add(orderDto);
-        }
-
-        Long orderId = orderService.orders(orderDtoList, userIdentifier);
-
-        for (Long cartItemId : cartItemIds) {
-            CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-            cartItemRepository.delete(cartItem);
-        }
-        return orderId;
-    }
-
     public Long getCartItemTotalCount(Account account) {
         Cart cart = cartRepository.findByAccountId(account.getId());
-        return cartItemRepository.countByCartId(cart.getId());
+        if (cart != null) {
+            return cartItemRepository.countByCartId(cart.getId());
+        } else {
+            return 0L;
+        }
     }
 }

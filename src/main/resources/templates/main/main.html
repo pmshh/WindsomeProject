@@ -136,6 +136,19 @@
     </main>
 
     <script th:inline="javascript">
+        $(document).ready(function () {
+            /* 상품 주문 결과 창 출력 */
+            let orderRes = [[${ order_result }]];
+            checkResult(orderRes);
+            function checkResult(result) {
+                if (result === 'order_ok') {
+                    alert("주문이 완료되었습니다.");
+                } else if (result === 'order_fail') {
+                    alert("상품 주문 중 오류가 발생하였습니다.");
+                }
+            }
+        });
+
         function filter(arg) {
             let searchQuery = [[${itemSearchDto.searchQuery}]];
             let category = [[${itemSearchDto.category}]];

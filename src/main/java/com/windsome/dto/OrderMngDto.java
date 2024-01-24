@@ -19,7 +19,7 @@ public class OrderMngDto {
 
     private OrderStatus orderStatus;
 
-    private String createdBy;
+    private String buyerId;
 
     private List<OrderItemDto> orderItemDtoList = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class OrderMngDto {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.orderStatus = order.getOrderStatus();
-        this.createdBy = order.getCreatedBy();
+        this.buyerId = order.getAccount().getUserIdentifier();
     }
 
     public void addOrderItemDto(OrderItemDto orderItemDto) {

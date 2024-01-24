@@ -56,11 +56,13 @@
                                                     <div class="option">[옵션: 선택 X]</div>
                                                 </td>
                                                 <td th:text="${orderItem.count}"></td>
-                                                <td>
-                                                    <strong th:text="|${#numbers.formatInteger((orderItem.price * orderItem.count), 0, 'COMMA')}원|"></strong>
+                                                <td class="item_price">
+                                                    <span th:if="${orderItem.discount == 0}" th:text="|${#numbers.formatInteger(orderItem.price, 0, 'COMMA')}원|"></span>
+                                                    <span th:if="${orderItem.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(orderItem.price, 0, 'COMMA')}원|"></span>
+                                                    <strong th:if="${orderItem.discount > 0}" th:text="|${#numbers.formatInteger(orderItem.price * (1 - orderItem.discount), 0, 'COMMA')}원|"></strong>
                                                 </td>
                                                 <td>
-                                                    <strong th:text="|${#numbers.formatInteger(((orderItem.price * orderItem.count) * 0.05), 0, 'COMMA')}원|"></strong>
+                                                    <strong th:text="|${#numbers.formatInteger(((orderItem.price * (1 - orderItem.discount) * orderItem.count) * 0.05), 0, 'COMMA')}원|"></strong>
                                                 </td>
                                                 <td class="state">
                                                     <span th:if="${order.orderStatus == orderStatus}">배송 준비중</span>
@@ -92,12 +94,15 @@
                                                 </strong>
                                                 <div class="option">[옵션: 선택 X]</div>
                                             </td>
-                                            <td th:text="${orderItem.count}"></td>
-                                            <td>
-                                                <strong th:text="|${#numbers.formatInteger((orderItem.price * orderItem.count), 0, 'COMMA')}원|"></strong>
+                                            <td th:text="${orderItem.count}">
+                                            </td>
+                                            <td class="item_price">
+                                                <span th:if="${orderItem.discount == 0}" th:text="|${#numbers.formatInteger(orderItem.price, 0, 'COMMA')}원|"></span>
+                                                <span th:if="${orderItem.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(orderItem.price, 0, 'COMMA')}원|"></span>
+                                                <strong th:if="${orderItem.discount > 0}" th:text="|${#numbers.formatInteger(orderItem.price * (1 - orderItem.discount), 0, 'COMMA')}원|"></strong>
                                             </td>
                                             <td>
-                                                <strong th:text="|${#numbers.formatInteger(((orderItem.price * orderItem.count) * 0.05), 0, 'COMMA')}원|"></strong>
+                                                <strong th:text="|${#numbers.formatInteger(((orderItem.price * (1 - orderItem.discount) * orderItem.count) * 0.05), 0, 'COMMA')}원|"></strong>
                                             </td>
                                             <td class="state">
                                                 <span th:if="${order.orderStatus == orderStatus}">배송 준비중</span>

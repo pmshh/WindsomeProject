@@ -30,6 +30,9 @@ public class MainController {
     private final CategoryService categoryService;
     private final CartService cartService;
 
+    /**
+     * 메인 화면
+     */
     @GetMapping("/")
     public String home(@CurrentAccount Account account, ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 9);
@@ -45,6 +48,9 @@ public class MainController {
         return "main/main";
     }
 
+    /**
+     * 로그인 화면
+     */
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error,
                         @RequestParam(value = "exception", required = false) String exception, Model model) {

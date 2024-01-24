@@ -2,9 +2,9 @@ package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.OrderDto;
-import com.windsome.dto.OrderHistDto;
+import com.windsome.dto.*;
 import com.windsome.entity.Account;
+import com.windsome.repository.AccountRepository;
 import com.windsome.service.CartService;
 import com.windsome.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Controller
@@ -29,45 +27,52 @@ public class OrderController {
 
     private final OrderService orderService;
     private final CartService cartService;
+    private final AccountRepository accountRepository;
 
+    /**
+     * 주문 조회 화면
+     */
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, @CurrentAccount Account account, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 5);
-
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(account.getUserIdentifier(), pageable);
 
-        Long cartItemTotalCount = null;
-        if (account != null) {
-            cartItemTotalCount = cartService.getCartItemTotalCount(account);
-        }
-        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
+        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("maxPage", 5);
         model.addAttribute("orderStatus", OrderStatus.READY);
         return "order/orderHist";
     }
 
-    @PostMapping("/order")
-    public ResponseEntity<Object> order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, @CurrentAccount Account account) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors) {
-                sb.append(fieldError.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(sb.toString());
-        }
-
-        Long orderId;
-        try {
-            orderId = orderService.order(orderDto, account.getUserIdentifier());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-        return ResponseEntity.ok().body(orderId);
+    /**
+     * 주문서 작성 화면
+     */
+    @GetMapping("/order")
+    public String orderForm(OrderPageDto orderPageDto, @CurrentAccount Account account, Model model) {
+        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
+        model.addAttribute("orders", orderService.getOrderItemsInfo(orderPageDto.getOrders()));
+        model.addAttribute("account", accountRepository.findById(account.getId()).orElseThrow(EntityNotFoundException::new));
+        return "order/orderForm";
     }
 
+    /**
+     * 상품 주문
+     */
+    @PostMapping("/order")
+    public String order(OrderDto orderDto, @CurrentAccount Account account, RedirectAttributes redirectAttributes) {
+        try {
+            orderService.order(orderDto, account.getUserIdentifier());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("order_result", "order_fail");
+            return "redirect:/";
+        }
+        redirectAttributes.addFlashAttribute("order_result", "order_ok");
+        return "redirect:/";
+    }
+
+    /**
+     * 주문 취소
+     */
     @PostMapping("/order/{orderId}/cancel")
     public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentAccount Account account) {
         if (!orderService.validateOrder(orderId, account.getUserIdentifier())) {

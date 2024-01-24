@@ -1,8 +1,8 @@
 package com.windsome.entity;
 
 import com.windsome.constant.OrderStatus;
+import com.windsome.dto.OrderDto;
 import com.windsome.entity.Auditing.BaseEntity;
-import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class Order extends BaseEntity {
+public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -29,6 +29,22 @@ public class Order extends BaseEntity {
 
     private int totalOrderPrice;
 
+    private int deliveryCost;
+
+    private int usePoint;
+
+    private String address1;
+
+    private String address2;
+
+    private String address3;
+
+    private String tel;
+
+    private String email;
+
+    private String req;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -40,21 +56,18 @@ public class Order extends BaseEntity {
         orderItem.setOrder(this);
     }
 
-    public static Order createOrder(Account account, List<OrderItem> orderItemList) {
+    public static Order createOrder(Account account, List<OrderItem> orderItemList, OrderDto orderDto) {
         Order order = new Order();
         order.setAccount(account);
-
-        int totalOrderPrice = 0;
-        for (OrderItem orderItem : orderItemList) {
-            totalOrderPrice += orderItem.getPrice() * orderItem.getCount();
-        }
-
-        if (totalOrderPrice < 30000) {
-            order.setTotalOrderPrice(totalOrderPrice + 2500);
-        } else {
-            order.setTotalOrderPrice(totalOrderPrice);
-        }
-
+        order.setTotalOrderPrice(orderDto.getOrderFinalSalePrice());
+        order.setDeliveryCost(orderDto.getDeliveryCost());
+        order.setUsePoint(orderDto.getUsePoint());
+        order.setAddress1(orderDto.getAddress1());
+        order.setAddress2(orderDto.getAddress2());
+        order.setAddress3(orderDto.getAddress3());
+        order.setTel(orderDto.getTel());
+        order.setEmail(orderDto.getEmail());
+        order.setReq(orderDto.getReq());
         for (OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }

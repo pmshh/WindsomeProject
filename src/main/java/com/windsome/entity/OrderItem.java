@@ -27,11 +27,17 @@ public class OrderItem extends BaseEntity {
 
     private int count;
 
+    private double discount;
+
+    private int savePoint; // 적립 포인트
+
     public static OrderItem createOrderItem(Item item, int count) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
+        orderItem.setPrice(item.getPrice());
         orderItem.setCount(count);
-        orderItem.setPrice((int) (item.getPrice() * (1 - item.getDiscount())));
+        orderItem.setDiscount(item.getDiscount());
+        orderItem.setSavePoint((int) (item.getPrice() * (1 - item.getDiscount()) * 0.05));
 
         item.removeStock(count);
         return orderItem;

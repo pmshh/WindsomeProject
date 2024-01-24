@@ -138,7 +138,7 @@
                                                             <div class="option">[옵션: 선택 X]</div>
                                                         </td>
                                                         <td th:text="${order.orderStatus}"></td>
-                                                        <td th:text="${order.createdBy}"></td>
+                                                        <td th:text="${order.buyerId}"></td>
                                                         <td th:text="${order.orderDate}"></td>
                                                         <td th:if="${status.index == 0}"
                                                             th:rowspan="${#lists.size(order.orderItemDtoList)}">
@@ -166,7 +166,7 @@
                                                         <div class="option">[옵션: 선택 X]</div>
                                                     </td>
                                                     <td th:text="${order.orderStatus}"></td>
-                                                    <td th:text="${order.createdBy}"></td>
+                                                    <td th:text="${order.buyerId}"></td>
                                                     <td th:text="${order.orderDate}"></td>
                                                     <td>
                                                         <button th:if="${order.orderStatus == orderStatus}"

@@ -35,6 +35,9 @@ public class AdminController {
     private final CategoryService categoryService;
     private final AdminService adminService;
 
+    /**
+     * 관리자 페이지 메인 화면
+     */
     @GetMapping("/admin/main")
     public String home(Model model) {
         String userIdentifier = "";
@@ -53,6 +56,9 @@ public class AdminController {
         return "admin/main";
     }
 
+    /**
+     * 관리자 페이지 - 상품 관리
+     */
     @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
@@ -65,12 +71,18 @@ public class AdminController {
         return "admin/item/itemMng";
     }
 
+    /**
+     * 관리자 페이지 - 상품 등록 화면
+     */
     @GetMapping("/admin/item")
     public String saveItemForm(Model model) throws Exception {
         model.addAttribute("itemFormDto", new ItemFormDto());
         return "admin/item/itemEnroll";
     }
 
+    /**
+     * 관리자 페이지 - 상품 등록
+     */
     @PostMapping("/admin/item")
     public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
                            @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) throws Exception {
@@ -94,6 +106,9 @@ public class AdminController {
         return "redirect:/admin/items";
     }
 
+    /**
+     * 관리자 페이지 - 상품 상세 화면
+     */
     @GetMapping("/admin/itemDtl/{itemId}")
     public String itemDtl(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) throws Exception  {
         try {
@@ -108,6 +123,9 @@ public class AdminController {
         return "admin/item/itemDtl";
     }
 
+    /**
+     * 관리자 페이지 - 상품 수정 화면
+     */
     @GetMapping("/admin/item/{itemId}")
     public String modifyItemForm(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) throws Exception {
         try {
@@ -122,6 +140,9 @@ public class AdminController {
         return "admin/item/itemUpdate";
     }
 
+    /**
+     * 관리자 페이지 - 상품 수정
+     */
     @PostMapping("/admin/item/{itemId}")
     public String modifyItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) throws Exception {
@@ -145,6 +166,9 @@ public class AdminController {
         return "redirect:/admin/items";
     }
 
+    /**
+     * 관리자 페이지 - 상품 삭제
+     */
     @DeleteMapping("/admin/item/{itemId}")
     public ResponseEntity<Object> deleteItem(@PathVariable("itemId") Long itemId, @CurrentAccount Account account) {
         try {
@@ -155,12 +179,18 @@ public class AdminController {
         return ResponseEntity.ok().body(itemId);
     }
 
+    /**
+     * 관리자 페이지 - 상품 카테고리 목록(JSON) 불러오기
+     */
     @GetMapping("/admin/item/categories")
     public ResponseEntity<Object> getItemCategories() throws Exception {
         String jsonCategories = categoryService.getJsonCategories();
         return ResponseEntity.ok().body(jsonCategories);
     }
 
+    /**
+     * 관리자 페이지 - 주문 관리 화면
+     */
     @GetMapping(value = {"/admin/orders", "/admin/orders/{page}"})
     public String orderManage(String userIdentifier, @PathVariable("page") Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
@@ -172,6 +202,9 @@ public class AdminController {
         return "admin/order/orderMng";
     }
 
+    /**
+     * 관리자 페이지 - 주문 취소
+     */
     @PostMapping("/admin/order/{orderId}/cancel")
     public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId) {
         orderService.cancelOrder(orderId);

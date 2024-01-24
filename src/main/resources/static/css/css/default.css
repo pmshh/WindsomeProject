@@ -747,6 +747,9 @@ footer .footer_copyright {
   font-size: 11px;
   color: #353535;
 }
+.cart_body .table_box table tbody tr td.item_price span {
+  display: block;
+}
 .cart_body .table_box table tbody tr td .cnt_box {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2610,6 +2613,7 @@ footer .footer_copyright {
 .order_hist_body table tbody tr td {
   border-top: 1px solid #e5e5e5;
   text-align: center;
+  vertical-align: middle;
   padding: 15px 0;
   height: 135px;
 }
@@ -2631,12 +2635,15 @@ footer .footer_copyright {
   text-align: left;
   vertical-align: top;
 }
-.order_hist_body table tbody tr td.state {
-  color: #111111;
+.order_hist_body table tbody tr td.item_price span {
+  display: block;
 }
-.order_hist_body table tbody tr td button {
-  font-size: 12px !important;
-  padding: 0 !important;
+.order_hist_body table tbody tr td.delivery_price span {
+  display: block;
+}
+.order_hist_body table tbody tr td.delivery_price span.text {
+  font-size: 11px;
+  color: #353535;
 }
 .order_hist_body table tbody.center {
   text-align: center;
@@ -2658,4 +2665,390 @@ footer .footer_copyright {
   color: #707070;
   font-weight: bold;
   border-bottom: 1px solid #e5e5e5;
+}
+
+/* orderForm page start */
+.order_form_header {
+  margin: 0px auto 60px;
+}
+.order_form_header h2 {
+  font-size: 15px;
+  text-align: center;
+}
+.order_form_header .divider {
+  width: 70px;
+  height: 1px;
+  background: #aaa;
+  margin: 20px auto;
+}
+
+.order_form_body .order_items_info .title,
+.order_form_body .user_info .title,
+.order_form_body .discount_box .title,
+.order_form_body .total_box .title,
+.order_form_body .btn_box .title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.order_form_body .order_items_info .title h2,
+.order_form_body .user_info .title h2,
+.order_form_body .discount_box .title h2,
+.order_form_body .total_box .title h2,
+.order_form_body .btn_box .title h2 {
+  font-size: 12px;
+  color: #353535;
+  width: 100%;
+  padding-left: 10px;
+  font-weight: bold;
+}
+.order_form_body .order_items_info {
+  margin-bottom: 40px;
+}
+.order_form_body .order_items_info .body table {
+  table-layout: fixed;
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  position: relative;
+  margin: 10px 0 0;
+  border: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
+  border-right: none;
+  border-left: none;
+  line-height: 1.7;
+  font-size: 12px;
+  letter-spacing: 0em !important;
+  color: #353535;
+}
+.order_form_body .order_items_info .body table thead tr th {
+  text-align: center;
+  padding: 15px 0 14px;
+  vertical-align: middle;
+  font-weight: normal;
+  background-color: #fff;
+}
+.order_form_body .order_items_info .body table tbody tr td {
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+  padding: 15px 0;
+  vertical-align: middle;
+  height: 135px;
+}
+.order_form_body .order_items_info .body table tbody tr td.thumb img {
+  width: 80px;
+  height: 110px;
+}
+.order_form_body .order_items_info .body table tbody tr td.product .name a {
+  color: #353535 !important;
+}
+.order_form_body .order_items_info .body table tbody tr td.product .option {
+  color: #757575;
+  margin-top: 9px;
+}
+.order_form_body .order_items_info .body table tbody tr td.left_top {
+  text-align: left;
+  vertical-align: top;
+}
+.order_form_body .order_items_info .body table tbody tr td.item_price span {
+  display: block;
+}
+.order_form_body .order_items_info .body table tbody tr td.delivery_price span {
+  display: block;
+}
+.order_form_body .order_items_info .body table tbody tr td.delivery_price span.text {
+  font-size: 11px;
+  color: #353535;
+}
+.order_form_body .order_items_info .body table tbody.center {
+  text-align: center;
+}
+.order_form_body .order_items_info .delivery_and_point {
+  margin-top: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.order_form_body .order_items_info .delivery_and_point span {
+  font-size: 12px;
+  margin-left: 20px;
+}
+.order_form_body .user_info {
+  margin-bottom: 40px;
+}
+.order_form_body .user_info .body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.order_form_body .user_info .body form {
+  width: 100%;
+}
+.order_form_body .user_info .body form table {
+  width: 100%;
+  position: relative;
+  margin: 10px 0 0;
+  border: 1px solid #d7d5d5;
+  border-top: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  color: #fff;
+  line-height: 1.5;
+}
+.order_form_body .user_info .body form table tbody {
+  font-size: 12px;
+  color: #353535;
+}
+.order_form_body .user_info .body form table tbody th {
+  padding: 11px 0 10px 18px;
+  border: 1px solid #dfdfdf;
+  border-bottom-width: 0;
+  border-left-width: 1px solid #dfdfdf;
+  border-right-width: 1px solid #dfdfdf;
+  font-weight: normal;
+  vertical-align: middle;
+  background-color: #FBFAFA;
+}
+.order_form_body .user_info .body form table tbody th span {
+  color: #008BCC;
+}
+.order_form_body .user_info .body form table tbody td {
+  border-top: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  vertical-align: middle;
+  padding: 11px 0 10px 18px;
+}
+.order_form_body .user_info .body form table tbody td span.final_name_ck,
+.order_form_body .user_info .body form table tbody td span.final_mail_ck,
+.order_form_body .user_info .body form table tbody td span.final_tel_ck,
+.order_form_body .user_info .body form table tbody td span.final_addr_ck {
+  display: none;
+}
+.order_form_body .user_info .body form table tbody td input {
+  height: 30px;
+  padding: 2px 4px;
+  border: 1px solid #d5d5d5;
+  width: 230px;
+}
+.order_form_body .user_info .body form table tbody td input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+.order_form_body .user_info .body form table tbody td input:focus::-moz-placeholder {
+  color: transparent;
+}
+.order_form_body .user_info .body form table tbody td input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+.order_form_body .user_info .body form table tbody td input:focus::-ms-input-placeholder {
+  color: transparent;
+}
+.order_form_body .user_info .body form table tbody td input:focus::placeholder {
+  color: transparent;
+}
+.order_form_body .user_info .body form table tbody td select {
+  width: 60px;
+  height: 30px;
+  line-height: 30px;
+  min-height: 30px;
+  border: 1px solid #ddd;
+  padding: 0 10px 0 5px;
+  background-color: #fff;
+  font-size: 12px;
+}
+.order_form_body .user_info .body form table tbody td button.send_mail,
+.order_form_body .user_info .body form table tbody td button.check_number,
+.order_form_body .user_info .body form table tbody td button.find_addr {
+  padding: 0;
+  height: 30px;
+  margin-bottom: 2px;
+  border: 1px solid #e2e2e2;
+  background: white;
+}
+.order_form_body .user_info .body form table tbody td button.send_mail:hover,
+.order_form_body .user_info .body form table tbody td button.check_number:hover,
+.order_form_body .user_info .body form table tbody td button.find_addr:hover {
+  border: 1px solid black;
+}
+.order_form_body .user_info .body form table tbody td button.send_mail,
+.order_form_body .user_info .body form table tbody td button.check_number {
+  width: 55px;
+}
+.order_form_body .user_info .body form table tbody td button.find_addr {
+  width: 90px;
+}
+.order_form_body .discount_box {
+  margin-bottom: 40px;
+}
+.order_form_body .discount_box .body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.order_form_body .discount_box .body table {
+  width: 100%;
+  position: relative;
+  margin: 10px 0 0;
+  border: 1px solid #d7d5d5;
+  border-top: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  color: #fff;
+  line-height: 1.5;
+}
+.order_form_body .discount_box .body table tbody {
+  font-size: 12px;
+  color: #353535;
+}
+.order_form_body .discount_box .body table tbody th {
+  padding: 11px 0 10px 18px;
+  border: 1px solid #dfdfdf;
+  border-bottom-width: 0;
+  border-left-width: 1px solid #dfdfdf;
+  border-right-width: 1px solid #dfdfdf;
+  font-weight: normal;
+  vertical-align: middle;
+  background-color: #FBFAFA;
+}
+.order_form_body .discount_box .body table tbody th span {
+  color: #008BCC;
+}
+.order_form_body .discount_box .body table tbody td {
+  border-top: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  vertical-align: middle;
+  padding: 11px 0 10px 18px;
+}
+.order_form_body .discount_box .body table tbody td input {
+  height: 30px;
+  padding: 2px 4px;
+  border: 1px solid #d5d5d5;
+  width: 230px;
+}
+.order_form_body .discount_box .body table tbody td input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+.order_form_body .discount_box .body table tbody td input:focus::-moz-placeholder {
+  color: transparent;
+}
+.order_form_body .discount_box .body table tbody td input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+.order_form_body .discount_box .body table tbody td input:focus::-ms-input-placeholder {
+  color: transparent;
+}
+.order_form_body .discount_box .body table tbody td input:focus::placeholder {
+  color: transparent;
+}
+.order_form_body .discount_box .body table tbody td select {
+  width: 60px;
+  height: 30px;
+  line-height: 30px;
+  min-height: 30px;
+  border: 1px solid #ddd;
+  padding: 0 10px 0 5px;
+  background-color: #fff;
+  font-size: 12px;
+}
+.order_form_body .discount_box .body table tbody td .coupon_input_box .coupon_btn,
+.order_form_body .discount_box .body table tbody td .coupon_input_box .point_btn,
+.order_form_body .discount_box .body table tbody td .point_input_box .coupon_btn,
+.order_form_body .discount_box .body table tbody td .point_input_box .point_btn {
+  margin-bottom: 2px;
+}
+.order_form_body .discount_box .body table tbody td .point_input_box .point_input_btn_N {
+  display: none;
+}
+.order_form_body .total_box .body {
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 60px;
+}
+.order_form_body .total_box .body table {
+  font-size: 12px;
+  text-align: center;
+  margin: 10px 0 0;
+}
+.order_form_body .total_box .body table thead {
+  vertical-align: middle;
+}
+.order_form_body .total_box .body table thead tr th {
+  padding: 15px 0 14px;
+  border: 1px solid #e5e5e5;
+  color: #353535;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #FBFAFA;
+}
+.order_form_body .total_box .body table tbody {
+  vertical-align: middle;
+}
+.order_form_body .total_box .body table tbody tr td {
+  padding: 15px 5px 14px;
+  border: 1px solid #e5e5e5;
+  color: #353535;
+  font-size: 16px;
+  font-weight: bold;
+}
+.order_form_body .total_box .body table tbody tr td span {
+  font-size: 23px;
+  font-weight: bold;
+}
+.order_form_body .total_box .body table tbody tr td a {
+  width: 90px;
+  margin: 1px 0;
+}
+.order_form_body .total_box .body table tbody tr td a.btn_submit {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: normal;
+  text-decoration: none;
+  word-spacing: -0.5px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: #fff;
+  background-color: #000;
+}
+.order_form_body .total_box .body table tbody tr td a.btn_normal {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 1px solid #e2e2e2;
+  border-radius: 0px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: normal;
+  text-decoration: none;
+  word-spacing: -0.5px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: #222;
+  background-color: #fff;
+}
+.order_form_body .total_box .body table tbody tr td.left {
+  padding-left: 20px;
+  text-align: left;
+}
+.order_form_body .btn_box {
+  padding: 10px 0;
+  text-align: center;
+  display: block;
+  margin-top: 30px;
 }

@@ -18,6 +18,9 @@ public class ItemController {
     private final ItemService itemService;
     private final CartService cartService;
 
+    /**
+     * 상품 상세 화면
+     */
     @GetMapping("/item/{itemId}")
     public String itemDetail(@CurrentAccount Account account, Model model, @PathVariable("itemId") Long itemId) {
         ItemFormDto itemFormDto = itemService.getItemFormDto(itemId);

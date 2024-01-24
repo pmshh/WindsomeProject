@@ -61,6 +61,7 @@
                 td {
                     border-top: 1px solid #e5e5e5;
                     text-align: center;
+                    vertical-align: middle;
                     padding: 15px 0;
                     height: 135px;
 
@@ -91,13 +92,21 @@
                         vertical-align: top;
                     }
 
-                    &.state {
-                        color: #111111;
+                    &.item_price {
+                        span {
+                            display: block;
+                        }
                     }
 
-                    button {
-                        font-size: 12px !important;
-                        padding: 0 !important;
+                    &.delivery_price {
+                        span {
+                            display: block;
+                        }
+
+                        span.text {
+                            font-size: 11px;
+                            color: #353535;
+                        }
                     }
                 }
             }

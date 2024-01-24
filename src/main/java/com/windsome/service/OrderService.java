@@ -2,10 +2,7 @@ package com.windsome.service;
 
 import com.windsome.dto.*;
 import com.windsome.entity.*;
-import com.windsome.repository.AccountRepository;
-import com.windsome.repository.ItemImgRepository;
-import com.windsome.repository.ItemRepository;
-import com.windsome.repository.OrderRepository;
+import com.windsome.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,57 +24,100 @@ public class OrderService {
     private final AccountRepository accountRepository;
     private final OrderRepository orderRepository;
     private final ItemImgRepository itemImgRepository;
+    private final CartItemRepository cartItemRepository;
 
-    public Long order(OrderDto orderDto, String userIdentifier) {
-        // 상품, 계정 DB에서 조회
-        Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
-        Account account = accountRepository.findByUserIdentifier(userIdentifier);
-
-        // 주문 상품 생성 및 저장
-        List<OrderItem> orderItemList = new ArrayList<>();
-        OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
-        orderItemList.add(orderItem);
-
-        // 회원 포인트 적립
-        Account saveAccount = Account.addPoint(account, orderItemList);
-        accountRepository.save(saveAccount);
-
-        // 주문 생성 및 DB 저장
-        Order order = Order.createOrder(account, orderItemList);
-        orderRepository.save(order);
-
-        return order.getId();
-    }
-
-    public Long orders(List<OrderDto> orderDtoList, String userIdentifier) {
-        // 계정 DB에서 조회
-        Account account = accountRepository.findByUserIdentifier(userIdentifier);
-
-        // 주문 상품 생성 및 저장
-        List<OrderItem> orderItemList = new ArrayList<>();
-        for (OrderDto orderDto : orderDtoList) {
+    /**
+     * 주문서 작성 페이지 - 주문 상품 정보
+     */
+    public List<OrderPageItemDto> getOrderItemsInfo(List<OrderPageItemDto> orders) {
+        List<OrderPageItemDto> orderPageItemDtoList = new ArrayList<>();
+        for (OrderPageItemDto orderDto : orders) {
             Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
+            ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(item.getId(), "Y");
 
-            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
-            orderItemList.add(orderItem);
+            OrderPageItemDto orderPageItemDto = OrderPageItemDto.createOrderPageItemDto(item, itemImg, orderDto);
+            orderPageItemDto.initPriceInfo();
+
+            orderPageItemDtoList.add(orderPageItemDto);
         }
+        return orderPageItemDtoList;
+    }
 
-        // 회원 포인트 적립
-        Account saveAccount = Account.addPoint(account, orderItemList);
+    /**
+     * 상품 주문
+     */
+    public Long order(OrderDto orderDto, String userIdentifier) {
+        // 회원 정보 DB 조회
+        Account account = accountRepository.findByUserIdentifier(userIdentifier);
+
+        // 주문 상품 List 생성
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (OrderItemDto orderItemDto : orderDto.getOrders()) {
+            Item item = itemRepository.findById(orderItemDto.getItemId()).orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderItemDto.getCount());
+            orderItemList.add(orderItem);
+
+            orderItemDto.setPrice(item.getPrice());
+            orderItemDto.setDiscount(item.getDiscount());
+            orderItemDto.initPriceAndPoint();
+        }
+        orderDto.initOrderPriceInfo();
+
+        // 포인트 적립, 포인트 차감
+        Account saveAccount = Account.addPoint(account, orderDto);
+        if (orderDto.getUsePoint() > 0) {
+            saveAccount.setPoint(saveAccount.getPoint() - orderDto.getUsePoint());
+        }
         accountRepository.save(saveAccount);
 
-        // 주문 생성 및 DB 저장
-        Order order = Order.createOrder(account, orderItemList);
+        // 상품 생성 및 DB 저장
+        Order order = Order.createOrder(account, orderItemList, orderDto);
         orderRepository.save(order);
 
+        // 장바구니 상품 삭제
+        for (OrderItem orderItem : orderItemList) {
+            CartItem cartItem = cartItemRepository.findByItemId(orderItem.getItem().getId());
+            if (cartItem != null) {
+                cartItemRepository.delete(cartItem);
+            }
+        }
         return order.getId();
     }
 
+    /**
+     * 주문 취소 위한 권한 검사
+     */
+    @Transactional(readOnly = true)
+    public boolean validateOrder(Long orderId, String userIdentifier) {
+        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        Account savedAccount = order.getAccount();
+
+        return StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
+    }
+
+    /**
+     * 주문 취소
+     */
     public void cancelOrder(Long orderId) {
+        // 주문 취소
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.cancelOrder();
+
+        // 포인트 적립 취소
+        Account findAccount = accountRepository.findById(order.getAccount().getId()).orElseThrow(EntityNotFoundException::new);
+        int curPoint = findAccount.getPoint();
+        int savePoint = 0;
+        for (OrderItem orderItem : order.getOrderItems()) {
+            savePoint += orderItem.getSavePoint();
+        }
+        findAccount.setPoint(curPoint - savePoint);
     }
 
+    /**
+     * 주문 조회 - 회원
+     */
     public Page<OrderHistDto> getOrderList(String userIdentifier, Pageable pageable) {
         List<Order> orders = orderRepository.findOrders(userIdentifier, pageable);
         Long totalCount = orderRepository.countOrder(userIdentifier);
@@ -94,7 +134,6 @@ public class OrderService {
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
                 OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
-
                 orderHistDto.addOrderItemDto(orderItemDto);
             }
             // orderHistDtoList - orderHistDto 추가
@@ -103,6 +142,9 @@ public class OrderService {
         return new PageImpl<OrderHistDto>(orderHistDtoList, pageable, totalCount);
     }
 
+    /**
+     * 주문 조회 - 관리자 페이지
+     */
     public Page<OrderMngDto> getAdminPageOrderList(String userIdentifier, Pageable pageable) {
         List<Order> orders = orderRepository.findOrderListForAdmin(userIdentifier, pageable);
         Long totalCount = orderRepository.countOrderList(userIdentifier);
@@ -119,7 +161,6 @@ public class OrderService {
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
                 OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
-
                 orderMngDto.addOrderItemDto(orderItemDto);
             }
 
@@ -127,14 +168,5 @@ public class OrderService {
             orderMngDtoList.add(orderMngDto);
         }
         return new PageImpl<OrderMngDto>(orderMngDtoList, pageable, totalCount);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean validateOrder(Long orderId, String userIdentifier) {
-        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
-        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-        Account savedAccount = order.getAccount();
-
-        return StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
     }
 }

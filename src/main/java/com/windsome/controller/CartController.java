@@ -24,18 +24,19 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+     * 장바구니 화면
+     */
     @GetMapping("/cart")
     public String cartHist(@CurrentAccount Account account, Model model) {
-        List<CartDetailDto> cartDetailList = cartService.getCartList(account.getUserIdentifier());
-        Long cartItemTotalCount = null;
-        if (account != null) {
-            cartItemTotalCount = cartService.getCartItemTotalCount(account);
-        }
-        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
-        model.addAttribute("cartItems", cartDetailList);
+        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
+        model.addAttribute("cartItems", cartService.getCartList(account.getUserIdentifier()));
         return "cart/cartList";
     }
 
+    /**
+     * 장바구니 상품 등록
+     */
     @PostMapping("/cart")
     public ResponseEntity<Object> cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, @CurrentAccount Account account) {
         if (bindingResult.hasErrors()) {
@@ -57,6 +58,9 @@ public class CartController {
         return ResponseEntity.ok().body(cartItemId);
     }
 
+    /**
+     * 장바구니 상품 개수 변경
+     */
     @PatchMapping("/cartItem/{cartItemId}")
     public ResponseEntity<Object> updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, @CurrentAccount Account account) {
         if (count <= 0) {
@@ -68,6 +72,9 @@ public class CartController {
         return ResponseEntity.ok().body(cartItemId);
     }
 
+    /**
+     * 장바구니 상품 삭제
+     */
     @DeleteMapping("/cartItem/{cartItemId}")
     public ResponseEntity<Object> deleteCartItem(@PathVariable("cartItemId") Long cartItemId, @CurrentAccount Account account) {
         if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
@@ -75,23 +82,5 @@ public class CartController {
         }
         cartService.deleteCartItem(cartItemId);
         return ResponseEntity.ok().body(cartItemId);
-    }
-
-    @PostMapping("/cart/orders")
-    public ResponseEntity<Object> orderCartItem(@RequestBody CartOrderDto cartOrderDto, @CurrentAccount Account account) {
-        List<Long> cartItemIds = cartOrderDto.getCartItemIds();
-
-        if (cartItemIds == null || cartItemIds.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문할 상품을 선택해주세요.");
-        }
-
-        for (Long cartItemId : cartItemIds) {
-            if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 권한이 없습니다.");
-            }
-        }
-
-        Long orderId = cartService.orderCartItem(cartItemIds, account.getUserIdentifier());
-        return ResponseEntity.ok(orderId);
     }
 }

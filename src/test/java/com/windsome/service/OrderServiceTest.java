@@ -4,6 +4,7 @@ import com.windsome.constant.ItemSellStatus;
 import com.windsome.constant.OrderStatus;
 import com.windsome.dto.OrderDto;
 import com.windsome.dto.OrderHistDto;
+import com.windsome.dto.OrderItemDto;
 import com.windsome.entity.*;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.ItemImgRepository;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,16 +44,16 @@ class OrderServiceTest {
         // given
         Item item = saveItem();
         Account account = saveAccount();
-
-        OrderDto orderDto = new OrderDto(item.getId(), 3);
+        OrderDto orderDto = getOrderDto(item);
 
         // when
         Long orderId = orderService.order(orderDto, account.getUserIdentifier());
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-        int totalPrice = orderDto.getCount() * item.getPrice();
 
         // then
-        assertEquals(totalPrice, order.getTotalPrice());
+        assertEquals(order.getAddress1(), orderDto.getAddress1());
+        assertEquals(order.getTotalOrderPrice(), orderDto.getOrderFinalSalePrice());
+        assertEquals(90, item.getStockNumber());
     }
 
     @Test
@@ -60,8 +62,7 @@ class OrderServiceTest {
         // given
         Account account = saveAccount();
         Item item = saveItem();
-
-        OrderDto orderDto = new OrderDto(item.getId(), 5);
+        OrderDto orderDto = getOrderDto(item);
 
         // when
         Long orderId = orderService.order(orderDto, account.getUserIdentifier());
@@ -82,9 +83,8 @@ class OrderServiceTest {
         Item item2 = saveItem();
         saveItemImg(item1);
         saveItemImg(item2);
-
-        OrderDto orderDto1 = new OrderDto(item1.getId(), 5);
-        OrderDto orderDto2 = new OrderDto(item2.getId(), 5);
+        OrderDto orderDto1 = getOrderDto(item1);
+        OrderDto orderDto2 = getOrderDto(item2);
 
         // when
         orderService.order(orderDto1, account.getUserIdentifier());
@@ -131,5 +131,20 @@ class OrderServiceTest {
                 .repImgYn("Y")
                 .build();
         itemImgRepository.save(itemImg);
+    }
+
+    private static OrderDto getOrderDto(Item item) {
+        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
+        OrderItemDto orderItemDto = new OrderItemDto();
+        orderItemDto.setItemId(item.getId());
+        orderItemDto.setPrice(item.getPrice());
+        orderItemDto.setDiscount(item.getDiscount());
+        orderItemDto.setCount(10);
+        orderItemDtoList.add(orderItemDto);
+        orderItemDto.initPriceAndPoint();
+
+        OrderDto orderDto = new OrderDto("test", "test", "test", "test", "test", "test", orderItemDtoList, 0, 0, 10000, 500, 10000);
+        orderDto.initOrderPriceInfo();
+        return orderDto;
     }
 }
