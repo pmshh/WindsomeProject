@@ -93,7 +93,8 @@
                                             </div>
                                             <div class="mail_check_box">
                                                 <input class="mail_check_input" disabled="disabled">
-                                                <button type="button" class="check_number" onclick="confirmNumber()">확인</button>
+                                                <button type="button" class="check_number"
+                                                    onclick="confirmNumber()">확인</button>
                                             </div>
                                             <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
                                             <span class="need_mail_check text-danger">이메일 인증이 필요합니다.</span>
@@ -106,7 +107,8 @@
                                         <td>
                                             <input th:field="*{address1}" class="address_input_1 mb-1"
                                                 readonly="readonly">
-                                            <button type="button" class="find_addr white_btn_w65_h30" onclick="execution_daum_address()">주소 찾기</button>
+                                            <button type="button" class="find_addr white_btn_w65_h30"
+                                                onclick="execution_daum_address()">주소 찾기</button>
                                             <div class="clearfix"></div>
                                             <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
                                                 readonly="readonly">
@@ -129,6 +131,7 @@
         </article>
     </main>
 
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
@@ -404,7 +407,7 @@
             }).open();
         }
 
-        $('.mail_url_select').change(function() {
+        $('.mail_url_select').change(function () {
             let mailUrlInput = $('.mail_url_input');
             let mailUrlSelect = $('.mail_url_select');
 

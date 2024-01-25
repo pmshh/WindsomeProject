@@ -18,14 +18,17 @@
                         <div class="items_header">
                             <div class="title">
                                 <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL</h2>
-                                <h2 th:each="category, status:${categories}" th:if="${itemSearchDto.category == category.id}" th:text="${category.name}"></h2>
+                                <h2 th:each="category, status:${categories}"
+                                    th:if="${itemSearchDto.category == category.id}" th:text="${category.name}"></h2>
                             </div>
                             <div class="divider"></div>
                             <div class="little_category">
                                 <ul class="menu_category">
                                     <li th:each="category, status:${categories}"
                                         th:if="${#strings.substring(category.id, 0, 1) == #strings.substring(itemSearchDto.category, 0, 1) && #strings.substring(category.id, 2) ne '0'}">
-                                        <a th:text="${category.name}" th:classappend="${itemSearchDto.category == category.id} ? 'active'" th:href="@{'/?category=' + ${category.id} + '&searchQuery=none'}"></a>
+                                        <a th:text="${category.name}"
+                                            th:classappend="${itemSearchDto.category == category.id} ? 'active'"
+                                            th:href="@{'/?category=' + ${category.id} + '&searchQuery=none'}"></a>
                                     </li>
                                 </ul>
                             </div>
@@ -34,17 +37,17 @@
                         <div class="items_body">
                             <!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
                             <div class="search_result"
-                                 th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
+                                th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
                                 <div class="search_input">
                                     <form th:action="@{/}" method="get">
                                         <input name="searchQuery" type="search" placeholder="Search"
-                                               th:value="${itemSearchDto.searchQuery}">
+                                            th:value="${itemSearchDto.searchQuery}">
                                         <button type="submit"><i class="fa-solid fa-magnifying-glass icon"></i></button>
                                     </form>
                                 </div>
                                 <div class="search_result_msg mt-3">
                                     <p class="content_count">총 <strong class="fw-bold"
-                                                                       th:text="${items.getTotalElements()}"></strong>개의 상품이
+                                            th:text="${items.getTotalElements()}"></strong>개의 상품이
                                         검색되었습니다.</p>
                                 </div>
                             </div>
@@ -76,15 +79,15 @@
                                             </div>
                                             <div class="discount" th:if="${item.discount} == 0">
                                                 <span class="item_price"
-                                                      th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
                                             </div>
                                             <div class="no_discount" th:if="${item.discount} > 0">
                                                 <span class="item_price"
-                                                      th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
                                                 <span class="discount_price"
-                                                      th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|"></span>
+                                                    th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|"></span>
                                                 <span class="discount_rate"
-                                                      th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
+                                                    th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -92,7 +95,7 @@
                             </div>
 
                             <div class="pagination mt-3"
-                                 th:with="start=${(items.number/maxPage)*maxPage + 1},
+                                th:with="start=${(items.number/maxPage)*maxPage + 1},
                                          end=(${(items.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
                                 <ul>
@@ -103,18 +106,18 @@
                                     </li>
                                     <li class="prev" th:classappend="${items.first} ? 'disabled'">
                                         <a
-                                                th:href="@{'/' + '?page=' + ${items.number - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
+                                            th:href="@{'/' + '?page=' + ${items.number - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
                                             <i class="fa-solid fa-angle-left"></i>
                                         </a>
                                     </li>
                                     <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
                                         th:classappend="${items.number eq page - 1} ? 'active' : ''">
                                         <a th:href="@{'/' + '?page=' + ${page - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}"
-                                           th:inline="text">[[${page}]]</a>
+                                            th:inline="text">[[${page}]]</a>
                                     </li>
                                     <li class="next" th:classappend="${items.last} ? 'disabled'">
                                         <a
-                                                th:href="@{'/' + '?page=' + ${items.number + 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
+                                            th:href="@{'/' + '?page=' + ${items.number + 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
                                             <i class="fa-solid fa-angle-right"></i>
                                         </a>
                                     </li>
@@ -135,6 +138,7 @@
         </article>
     </main>
 
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <script th:inline="javascript">
         $(document).ready(function () {
             /* 상품 주문 결과 창 출력 */
@@ -150,8 +154,8 @@
         });
 
         function filter(arg) {
-            let searchQuery = [[${itemSearchDto.searchQuery}]];
-            let category = [[${itemSearchDto.category}]];
+            let searchQuery = [[${ itemSearchDto.searchQuery }]];
+            let category = [[${ itemSearchDto.category }]];
             if (category !== null) {
                 location.href = '/?category=' + category + '&searchQuery=' + searchQuery + '&sort=' + arg;
             } else if (searchQuery !== '') {
@@ -162,4 +166,5 @@
         }
     </script>
 </body>
+
 </html>

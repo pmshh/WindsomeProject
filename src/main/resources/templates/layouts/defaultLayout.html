@@ -28,33 +28,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
         integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- common js -->
-    <script>
-        $(window).scroll(function () {
-            if ($(this).scrollTop() == 0)
-                $('nav').css('opacity', '1');
-            else
-                $('nav').css('opacity', '.6');
-        });
-
-        <!-- sidebar toggle 기능 -->
-        let toggleBtn = $('.menu_toggle');
-        let sidebar = $('.sidebar');
-        toggleBtn.click(function (e) {
-            e.preventDefault();
-            sidebar.toggleClass("active");
-        })
-    </script>
-    <!-- csrf token -->
-    <script type="application/javascript" th:inline="javascript">
-        $(function () {
-            var csrfToken = /*[[${_csrf.token}]]*/ null;
-            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-            $(document).ajaxSend(function (e, xhr, options) {
-                xhr.setRequestHeader(csrfHeader, csrfToken);
-            });
-        });
-    </script>
 </th:block>
 
 <body>
@@ -235,7 +208,8 @@
                         </li>
                         <li>
                             <a th:href="@{/cart}">Cart /
-                                <span th:if="${not #strings.isEmpty(cartItemTotalCount)}" th:text="${cartItemTotalCount}">3</span>
+                                <span th:if="${not #strings.isEmpty(cartItemTotalCount)}"
+                                    th:text="${cartItemTotalCount}">3</span>
                                 <span th:if="${#strings.isEmpty(cartItemTotalCount)}">0</span>
                             </a>
                         </li>
@@ -274,5 +248,35 @@
         </article>
     </main>
 </body>
+
+<th:block th:fragment="commonJs">
+    <!-- common js -->
+    <script>
+        $(window).scroll(function () {
+            if ($(this).scrollTop() == 0)
+                $('nav').css('opacity', '1');
+            else
+                $('nav').css('opacity', '.6');
+        });
+
+        <!-- sidebar toggle 기능 -->
+        let toggleBtn = $('.menu_toggle');
+        let sidebar = $('.sidebar');
+        toggleBtn.click(function (e) {
+            e.preventDefault();
+            sidebar.toggleClass("active");
+        })
+    </script>
+    <!-- csrf token -->
+    <script type="application/javascript" th:inline="javascript">
+        $(function () {
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+        });
+    </script>
+</th:block>
 
 </html>

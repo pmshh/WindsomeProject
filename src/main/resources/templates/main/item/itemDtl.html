@@ -45,13 +45,15 @@
                                 </div>
 
                                 <div class="item_price">
-                                        <div class="title">
-                                            <span>판매가</span>
-                                        </div>
-                                        <div class="con">
-                                            <span th:if="${item.discount == 0}" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
-                                            <span th:if="${item.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
-                                        </div>
+                                    <div class="title">
+                                        <span>판매가</span>
+                                    </div>
+                                    <div class="con">
+                                        <span th:if="${item.discount == 0}"
+                                            th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
+                                        <span th:if="${item.discount > 0}" style="text-decoration: line-through"
+                                            th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|">가격</span>
+                                    </div>
                                 </div>
 
                                 <th:block th:if="${item.discount > 0}">
@@ -60,10 +62,12 @@
                                             <span>할인판매가</span>
                                         </div>
                                         <div class="con">
-                                            <span th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|">가격</span>
+                                            <span
+                                                th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|">가격</span>
                                         </div>
                                         <div class="discount_rate">
-                                            <span th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
+                                            <span
+                                                th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
                                         </div>
                                     </div>
                                 </th:block>
@@ -78,39 +82,40 @@
                                 </div>
 
                                 <div class="item_option">
-<!--                                    <div class="item_color">-->
-<!--                                        <div class="title">-->
-<!--                                            <span>색상</span>-->
-<!--                                        </div>-->
-<!--                                        <div class="con">-->
-<!--                                            <select>-->
-<!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
-<!--                                                <option value="1">블랙</option>-->
-<!--                                                <option value="2">챠콜</option>-->
-<!--                                                <option value="3">그레이</option>-->
-<!--                                            </select>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="item_size">-->
-<!--                                        <div class="title">-->
-<!--                                            <span>사이즈</span>-->
-<!--                                        </div>-->
-<!--                                        <div class="con">-->
-<!--                                            <select>-->
-<!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
-<!--                                                <option value="1">S</option>-->
-<!--                                                <option value="2">M</option>-->
-<!--                                                <option value="3">L</option>-->
-<!--                                                <option value="4">XL</option>-->
-<!--                                            </select>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <!--                                    <div class="item_color">-->
+                                    <!--                                        <div class="title">-->
+                                    <!--                                            <span>색상</span>-->
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="con">-->
+                                    <!--                                            <select>-->
+                                    <!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
+                                    <!--                                                <option value="1">블랙</option>-->
+                                    <!--                                                <option value="2">챠콜</option>-->
+                                    <!--                                                <option value="3">그레이</option>-->
+                                    <!--                                            </select>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+                                    <!--                                    <div class="item_size">-->
+                                    <!--                                        <div class="title">-->
+                                    <!--                                            <span>사이즈</span>-->
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="con">-->
+                                    <!--                                            <select>-->
+                                    <!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
+                                    <!--                                                <option value="1">S</option>-->
+                                    <!--                                                <option value="2">M</option>-->
+                                    <!--                                                <option value="3">L</option>-->
+                                    <!--                                                <option value="4">XL</option>-->
+                                    <!--                                            </select>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
                                     <div class="item_cnt">
                                         <div class="title">
                                             <span>주문 수량</span>
                                         </div>
                                         <div class="con">
-                                            <input class="order_cnt_input" type="text" value="1" onchange="changeCount(this)">
+                                            <input class="order_cnt_input" type="text" value="1"
+                                                onchange="changeCount(this)">
                                             <div class="cnt_btn">
                                                 <i class="xi-caret-up-min" onclick="changeCountBtn('plus')"></i>
                                                 <i class="xi-caret-down-min" onclick="changeCountBtn('minus')"></i>
@@ -120,7 +125,8 @@
                                 </div>
                                 <div class="total_box">
                                     <strong>
-                                        <em class="total_price" th:text="|${#numbers.formatInteger(item.price, 1, 'COMMA')}원|">총 가격</em>
+                                        <em class="total_price"
+                                            th:text="|${#numbers.formatInteger(item.price, 1, 'COMMA')}원|">총 가격</em>
                                     </strong>
                                     <em class="total_order_cnt"></em>
                                 </div>
@@ -147,6 +153,7 @@
         </article>
     </main>
 
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <script th:inline="javascript">
         $(document).ready(function () {
             /* 총 주문 결제 금액 삽입 */
@@ -189,13 +196,13 @@
             if (countVal < minCnt) {
                 alert('수량은 1개 이상 입력해 주세요.');
                 thisCnt.val(1);
-                totalOrderCnt.html('('+1+'개)');
+                totalOrderCnt.html('(' + 1 + '개)');
                 getOrderTotalPrice();
                 return;
-            } else if ( countVal > maxCnt ) {
+            } else if (countVal > maxCnt) {
                 alert('죄송합니다. 재고가 부족합니다.');
                 thisCnt.val(maxCnt);
-                totalOrderCnt.html('('+maxCnt+'개)');
+                totalOrderCnt.html('(' + maxCnt + '개)');
                 getOrderTotalPrice();
                 return;
             }
@@ -209,7 +216,7 @@
 
             /* 총 주문 금액 출력 */
             getOrderTotalPrice();
-            $(".total_order_cnt").html('('+countVal+'개)');
+            $(".total_order_cnt").html('(' + countVal + '개)');
         }
 
         /* 수량 버튼 클릭 시 동작 */
@@ -258,19 +265,19 @@
         /* 장바구니 추가 */
         function addCart() {
             let paramData = {
-                itemId: [[${item.id}]],
-                count : $(".order_cnt_input").val()
+                itemId: [[${ item.id }]],
+                count: $(".order_cnt_input").val()
             };
 
             let param = JSON.stringify(paramData);
 
             $.ajax({
-                url : "/cart",
-                type : "POST",
-                contentType : "application/json",
-                data : param,
-                dataType : "json",
-                cache : false,
+                url: "/cart",
+                type: "POST",
+                contentType: "application/json",
+                data: param,
+                dataType: "json",
+                cache: false,
                 success: function (result, status) {
                     alert("장바구니에 상품이 담겼습니다.");
                     location.href = '/cart';
