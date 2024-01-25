@@ -40,6 +40,8 @@ public class Account extends BaseTimeEntity {
 
     private int point;
 
+    private int totalOrderPrice;
+
     public static Account addPoint(Account account, OrderDto orderDto) {
         int curPoint = account.getPoint();
         account.setPoint((int) (curPoint + (Math.floor(orderDto.getOrderSalePrice() * 0.05))));

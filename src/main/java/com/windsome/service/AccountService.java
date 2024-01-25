@@ -1,6 +1,5 @@
 package com.windsome.service;
 
-import com.windsome.dto.MyPageInfoDto;
 import com.windsome.dto.ProfileFormDto;
 import com.windsome.dto.SignUpFormDto;
 import com.windsome.entity.Account;
@@ -113,9 +112,5 @@ public class AccountService {
     public boolean userEmailCheck(String email, String name) {
         Account account = accountRepository.findByEmail(email);
         return account != null && account.getName().equals(name);
-    }
-
-    public MyPageInfoDto getMyPageInfo(Long accountId) {
-        return accountRepository.getMyPageInfo(accountId);
     }
 }

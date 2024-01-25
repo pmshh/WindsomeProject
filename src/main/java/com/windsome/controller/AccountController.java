@@ -4,6 +4,7 @@ import com.windsome.config.security.CurrentAccount;
 import com.windsome.dto.ProfileFormDto;
 import com.windsome.dto.SignUpFormDto;
 import com.windsome.dto.validator.ProfileDtoValidator;
+import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
 import com.windsome.dto.validator.SignUpDtoValidator;
 import com.windsome.entity.Account;
@@ -29,6 +30,7 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
     private final CartService cartService;
     private final SignUpDtoValidator signUpDtoValidator;
     private final ModelMapper modelMapper;
@@ -155,7 +157,7 @@ public class AccountController {
     @GetMapping("/mypage")
     public String mypage(@CurrentAccount Account account, Model model) {
         model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
-        model.addAttribute("myPageInfo", accountService.getMyPageInfo(account.getId()));
+        model.addAttribute("account", accountRepository.findByUserIdentifier(account.getUserIdentifier()));
         return "account/mypage";
     }
 

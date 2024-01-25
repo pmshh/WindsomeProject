@@ -64,11 +64,13 @@ public class OrderService {
         }
         orderDto.initOrderPriceInfo();
 
-        // 포인트 적립, 포인트 차감
+        // 회원 포인트 적립, 사용 포인트 차감, 주문 금액 저장
         Account saveAccount = Account.addPoint(account, orderDto);
         if (orderDto.getUsePoint() > 0) {
             saveAccount.setPoint(saveAccount.getPoint() - orderDto.getUsePoint());
         }
+        int curTotalOrderPrice = saveAccount.getTotalOrderPrice();
+        saveAccount.setTotalOrderPrice(curTotalOrderPrice + orderDto.getOrderFinalSalePrice());
         accountRepository.save(saveAccount);
 
         // 상품 생성 및 DB 저장
@@ -113,6 +115,10 @@ public class OrderService {
             savePoint += orderItem.getSavePoint();
         }
         findAccount.setPoint(curPoint - savePoint);
+
+        // 주문 금액 복구
+        int curTotalOrderPrice = findAccount.getTotalOrderPrice();
+        findAccount.setTotalOrderPrice(curTotalOrderPrice - order.getTotalOrderPrice());
     }
 
     /**

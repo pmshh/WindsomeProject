@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="cond">
                                     <span
-                                        th:text="|${#numbers.formatInteger(myPageInfo.totalOrderPrice, 0, 'COMMA')}원|"></span>
+                                        th:text="|${#numbers.formatInteger(account.totalOrderPrice, 0, 'COMMA')}원|"></span>
                                 </div>
                             </div>
                             <div class="total_point">
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="cond">
                                     <span
-                                        th:text="|${#numbers.formatInteger(myPageInfo.totalPoint, 0, 'COMMA')}원|"></span>
+                                        th:text="|${#numbers.formatInteger(account.point, 0, 'COMMA')}원|"></span>
                                 </div>
                             </div>
                         </div>
