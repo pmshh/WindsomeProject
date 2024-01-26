@@ -1,0 +1,32 @@
+/* admin_main start */
+main.admin_main {
+    display: flex;
+}
+
+@media (max-width: 786px) {
+    main.admin_main {
+        .admin_sidebar {
+            position: fixed;
+            left: -264px;
+            width: 100%;
+        }
+
+        .admin_sidebar.active {
+            left: 0;
+        }
+
+        .admin_content {
+            padding-left: 0;
+
+            nav {
+                .menu {
+                    display: none;
+                }
+
+                .menu_toggle {
+                    display: block;
+                }
+            }
+        }
+    }
+}

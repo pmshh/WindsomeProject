@@ -15,7 +15,7 @@
     <!-- xeicon css -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <!-- custom css -->
-    <link rel="stylesheet" href="/css/css/default.css">
+    <link rel="stylesheet" href="/css/css/style.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -131,7 +131,7 @@
                             <a href="board.html">Q&A</a>
                         </li>
                         <li>
-                            <a href="board.html">REVIEW</a>
+                            <a th:href="@{/review}">REVIEW</a>
                         </li>
                     </ul>
                 </div>
@@ -164,7 +164,7 @@
         <!-- content -->
         <article class="content">
             <!-- nav -->
-            <nav th:fragment="nav">
+            <nav th:fragment="nav" class="nav">
                 <div class="menu">
                     <ul class="menu_link">
                         <li sec:authorize="hasRole('ADMIN')">

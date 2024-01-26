@@ -15,7 +15,7 @@
     <!-- xeicon css -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <!-- custom css -->
-    <link rel="stylesheet" href="/css/css/admin.css">
+    <link rel="stylesheet" href="/css/css/style.css">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -29,13 +29,13 @@
         integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
-            integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
-    </script>
+        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+        </script>
 </th:block>
 
 <body>
-    <main>
-        <aside class="sidebar" th:fragment="sidebar (currentMenu)">
+    <main class="admin_main">
+        <aside class="admin_sidebar" th:fragment="sidebar (currentMenu)">
             <div class="sidebar_logo">
                 <div class="profile_img">
                     <svg th:data-jdenticon-value="${#authentication.name}" width="36" height="36"></svg>
@@ -66,11 +66,13 @@
                         <i class="xi-cog pe-2"></i>
                         Home
                     </a>
-                    <a th:href="@{/admin/items}" class="sidebar-link" th:classappend="${currentMenu == 'productManagement'}? active">
+                    <a th:href="@{/admin/items}" class="sidebar-link"
+                        th:classappend="${currentMenu == 'productManagement'}? active">
                         <i class="xi-shop pe-2"></i>
                         상품 관리
                     </a>
-                    <a th:href="@{/admin/orders}" class="sidebar-link" th:classappend="${currentMenu == 'orderManagement'}? active">
+                    <a th:href="@{/admin/orders}" class="sidebar-link"
+                        th:classappend="${currentMenu == 'orderManagement'}? active">
                         <i class="xi-cart-o pe-2"></i>
                         주문 관리
                     </a>
@@ -86,9 +88,9 @@
             </div>
         </aside>
 
-        <article class="content">
+        <article class="admin_content">
             <!-- navigation -->
-            <nav th:fragment="nav">
+            <nav th:fragment="nav" class="admin_nav">
                 <div class="menu">
                     <ul class="menu_link">
                         <li>

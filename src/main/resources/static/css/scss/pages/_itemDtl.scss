@@ -1,19 +1,4 @@
-.item_dtl_header {
-    margin: 0px auto 60px;
-
-    h2 {
-        font-size: 15px;
-        text-align: center;
-    }
-
-    .divider {
-        width: 70px;
-        height: 1px;
-        background: #aaa;
-        margin: 20px auto;
-    }
-}
-
+/* itemDtl page start */
 .item_dtl_body {
     margin: 0 auto;
 
@@ -323,5 +308,81 @@
                 }
             }
         }
+    }
+}
+
+.item_review_box {
+    margin: 100px auto 0;
+
+    .board {
+        h3 {
+            padding: 0 10px 0 9px;
+            font-size: 17px;
+            color: #222222;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .item_review {
+            table {
+                table-layout: fixed;
+                width: 100%;
+                border-spacing: 0;
+                border-collapse: collapse;
+                position: relative;
+                margin: 10px 0 0;
+                border: 1px solid #e5e5e5;
+                border-top: 1px solid #e5e5e5;
+                border-right: none;
+                border-left: none;
+                line-height: 1.7;
+                font-size: 12px;
+                letter-spacing: 0.0em !important;
+                color: #353535;
+
+                thead {
+                    tr {
+                        th {
+                            text-align: center;
+                            padding: 15px 0 14px;
+                            vertical-align: middle;
+                            font-weight: normal;
+                            background-color: #fff;
+                        }
+                    }
+                }
+
+                tbody {
+                    tr {
+                        td {
+                            border-top: 1px solid #e5e5e5;
+                            text-align: center;
+                            vertical-align: middle;
+                            padding: 15px 0;
+
+                            &.left_top {
+                                text-align: left;
+                                vertical-align: top;
+                            }
+                        }
+
+                        &.center {
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .btn_box {
+            margin: 20px 0;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+
+            button {}
+        }
+
     }
 }

@@ -17,7 +17,7 @@
             <!-- item_dtl section -->
             <section id="item_dtl">
                 <div class="container item_dtl">
-                    <div class="item_dtl_header">
+                    <div class="section_header">
                         <h2>ITEM DETAIL</h2>
                         <div class="divider"></div>
                     </div>
@@ -137,6 +137,81 @@
                                     <div class="cart_btn">
                                         <button type="button" onclick="addCart()">CART</button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item_review_box">
+                        <div class="board">
+                            <h3>Review</h3>
+                            <div class="item_review">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%;" scope="col">번호</th>
+                                            <th style="width: auto;" scope="col">제목</th>
+                                            <th style="width: 10%;" scope="col">작성자</th>
+                                            <th style="width: 10%;" scope="col">작성일</th>
+                                            <th style="width: 10%;" scope="col">조회</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="center">
+                                        <tr th:each="review, status: ${reviews.getContent()}">
+                                            <td>
+                                                <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
+                                            </td>
+                                            <td class="left_top">
+                                                <span th:text="${review.title}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:text="${review.account.name}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:text="${review.regDate}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:text="${review.hits}"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="btn_box">
+                                    <button class="white_btn_w65_h30 write_btn">WRITE</button>
+                                </div>
+
+                                <div class="pagination mt-3"
+                                     th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
+                                     (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
+                                    <ul>
+                                        <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(0)'">
+                                                <i class="fa-solid fa-angle-left"></i><i
+                                                    class="fa-solid fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' +  ${reviews.number - 1} + ')'">
+                                                <i class="fa-solid fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                            th:classappend="${reviews.number eq page - 1} ? 'active' : ''">
+                                            <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                               th:inline="text">[[${page}]]</a>
+                                        </li>
+                                        <li class="next" th:classappend="${reviews.last} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'">
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        <li class="next" th:classappend="${reviews.last} ? 'disabled'">
+                                            <a th:onclick="'javascript:page(' + ${reviews.totalPages - 1} + ')'">
+                                                <i class="fa-solid fa-angle-right"></i><i
+                                                    class="fa-solid fa-angle-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -288,6 +363,17 @@
                 },
             })
         }
+
+        /* page 이동 */
+        function page(page) {
+            location.href = "/item/" + [[${item.id}]] + "?page=" + page;
+        }
+
+        /* 리뷰 작성 버튼 */
+        $(".write_btn").click(function () {
+            let itemId = [[${item.id}]];
+            location.href = "/review/enroll?itemId=" + itemId;
+        });
 
     </script>
 </body>

@@ -1,22 +1,5 @@
-.admin_main_header {
-    margin: 0px auto 60px;
-    position: relative;
-
-    h2 {
-        font-size: 15px;
-        text-align: center;
-    }
-
-    .divider {
-        width: 70px;
-        height: 1px;
-        background: #aaa;
-        margin: 20px auto;
-    }
-}
-
+/* admin_main page start */
 .admin_main_body {
-
     .card-header {
         position: relative;
 
@@ -106,5 +89,4 @@
             }
         }
     }
-
 }

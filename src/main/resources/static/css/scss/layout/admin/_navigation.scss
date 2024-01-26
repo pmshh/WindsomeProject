@@ -1,5 +1,6 @@
-/* navigation start */
-.nav {
+/* admin_nav start */
+.admin_nav {
+    background-color: white;
     position: fixed;
     top: 0;
     left: 0;
@@ -7,10 +8,9 @@
     display: flex;
     justify-content: end;
     align-items: center;
-    padding: 20px 5%;
-    background-color: #fff;
+    padding: 20px 3%;
     height: 70px;
-    z-index: 99;
+    z-index: 5;
 
     .menu {
         display: flex;
@@ -24,11 +24,6 @@
             li {
                 padding: 20px 0;
 
-                a:hover,
-                button:hover {
-                    color: #999999;
-                }
-
                 a,
                 button {
                     font-size: 13px;
@@ -41,7 +36,6 @@
                 }
 
                 .account_menu {
-                    position: absolute;
                     display: none;
                     width: 140px;
                     background-color: #fff;
@@ -73,11 +67,6 @@
 
             li.account_menu {
                 cursor: pointer;
-                position: relative;
-            }
-
-            li.account_menu:hover .account_menu {
-                display: block;
             }
         }
     }
