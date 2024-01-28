@@ -1,0 +1,171 @@
+/* reviews page start */
+.reviews_body {
+    width: 90%;
+    margin: 0 auto;
+
+    .table_wrap {
+        table {
+            table-layout: fixed;
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+            position: relative;
+            margin: 10px auto 0;
+            border: 1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
+            border-right: none;
+            border-left: none;
+            line-height: 1.7;
+            font-size: 12px;
+            letter-spacing: 0.0em !important;
+            color: #353535;
+
+            thead {
+                tr {
+                    th {
+                        text-align: center;
+                        padding: 15px 0 14px;
+                        vertical-align: middle;
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        border-top: 1px solid #e5e5e5;
+                        text-align: center;
+                        vertical-align: middle;
+                        padding: 15px 0;
+
+                        &.thumb {
+                            img {
+                                width: 60px;
+                                height: 80px;
+                            }
+                        }
+
+                        &.left_top {
+                            text-align: left;
+                            vertical-align: top;
+                        }
+
+                        &.left {
+                            text-align: left;
+                        }
+
+                        &.title {
+                            padding-left: 20px;
+                        }
+
+                        &.itemNm {
+                            padding-right: 5px;
+
+                            a {
+                                color: #b5b5b5;
+
+                                &:hover {
+                                    color: #555555;
+                                }
+                            }
+                        }
+
+                        &.createdBy {
+                            color: #353535;
+                        }
+
+                        &.regDate {
+                            font-size: 11px;
+                            color: #939393;
+                        }
+
+
+                    }
+
+                    &.center {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+
+    .message_wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 110px 0;
+        text-align: center;
+        border-bottom: 1px solid #e5e5e5;
+
+        .message {
+            font-size: 11px;
+            color: #707070;
+            font-weight: bold;
+        }
+    }
+
+    .btn_box {
+        width: 100%;
+        margin: 20px auto 0;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .search_box {
+        width: 100%;
+        margin: 40px auto 0;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+        select {
+            border: 1px solid #d3d3d3;
+            font-size: 12px;
+            margin-right: 2px;
+            height: 40px;
+        }
+
+        input {
+            width: 240px;
+            border: none;
+            height: 40px;
+            border: 1px solid #d3d3d3;
+            padding-left: 10px;
+            font-size: 12px;
+            margin-right: 2px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input:focus::placeholder {
+            opacity: 0;
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .reviews_body {
+        table {
+            thead {
+                tr {
+                    th:nth-child(1) {
+                        width: 20px !important;
+                    }
+
+                    th:nth-child(2),
+                    th:nth-child(3),
+                    th:nth-child(4),
+                    th:nth-child(5),
+                    th:nth-child(6) {
+                        width: 50px !important;
+                    }
+                }
+            }
+        }
+    }
+}

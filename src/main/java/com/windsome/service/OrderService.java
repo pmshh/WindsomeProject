@@ -1,6 +1,6 @@
 package com.windsome.service;
 
-import com.windsome.dto.*;
+import com.windsome.dto.order.*;
 import com.windsome.entity.*;
 import com.windsome.repository.*;
 import lombok.RequiredArgsConstructor;

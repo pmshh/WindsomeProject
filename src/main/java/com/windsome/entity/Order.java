@@ -1,8 +1,7 @@
 package com.windsome.entity;
 
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.OrderDto;
-import com.windsome.entity.Auditing.BaseEntity;
+import com.windsome.dto.order.OrderDto;
 import lombok.*;
 
 import javax.persistence.*;

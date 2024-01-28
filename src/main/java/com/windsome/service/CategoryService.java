@@ -2,8 +2,8 @@ package com.windsome.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.windsome.dto.CategoryDto;
-import com.windsome.dto.MainCategoryDto;
+import com.windsome.dto.category.CategoryDto;
+import com.windsome.dto.category.MainCategoryDto;
 import com.windsome.entity.Category;
 import com.windsome.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;

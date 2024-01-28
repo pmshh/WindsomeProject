@@ -1,25 +1,19 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
-import com.windsome.dto.ItemSearchDto;
-import com.windsome.dto.MainItemDto;
-import com.windsome.dto.MainCategoryDto;
+import com.windsome.dto.item.ItemSearchDto;
 import com.windsome.entity.*;
 import com.windsome.service.CartService;
 import com.windsome.service.CategoryService;
 import com.windsome.service.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Controller

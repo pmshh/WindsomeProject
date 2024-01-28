@@ -1,6 +1,6 @@
 package com.windsome;
 
-import com.windsome.dto.SignUpFormDto;
+import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.service.AccountService;
 import com.windsome.config.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;

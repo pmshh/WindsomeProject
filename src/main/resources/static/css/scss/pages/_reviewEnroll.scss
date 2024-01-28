@@ -1,0 +1,175 @@
+/* reviewEnroll page start */
+.review_enroll_body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .item_info_wrap {
+        width: 70%;
+        display: table;
+        table-layout: fixed;
+        padding: 50px 0 35px;
+        border: none;
+        border-top: 1px solid #e8e8e8;
+
+        .thumbnail {
+            display: table-cell;
+            padding: 0 20px;
+            vertical-align: middle;
+            width: 190px;
+
+            img.no_img {
+                width: 150px;
+            }
+
+            img.item_img {
+                width: 150px;
+                height: 190px;
+            }
+        }
+
+        .information {
+            display: table-cell;
+            padding: 0 20px 0 0;
+            vertical-align: bottom;
+
+            h3 {
+                margin: 0 0 5px;
+                font-size: 14px;
+                color: #333;
+                max-width: 600px;
+                letter-spacing: 0.01em;
+                word-break: keep-all;
+
+            }
+
+            .price {
+                margin-bottom: 20px;
+
+                span.price {
+                    font-size: 12px;
+                    color: #666666;
+                }
+
+                span.beforePrice {
+                    font-size: 12px;
+                    color: #666666;
+                    text-decoration: line-through;
+                }
+
+                span.salePrice {
+                    font-size: 12px;
+                    color: #333333;
+                    font-weight: bold;
+                    margin-left: 5px;
+                }
+            }
+
+            button {
+                font-size: 12px;
+                color: #222222;
+                height: 30px !important;
+                display: block;
+            }
+        }
+    }
+
+    .review_form_wrap {
+        display: flex;
+        justify-content: center;
+
+        form {
+            width: 70%;
+
+            table {
+                table-layout: fixed;
+                width: 100%;
+                position: relative;
+                margin: 10px 0 0;
+                border: 1px solid #d7d5d5;
+                border-top: 0;
+                border-left-width: 0;
+                border-right-width: 0;
+                color: #fff;
+                line-height: 1.5;
+
+                tbody {
+                    font-size: 12px;
+                    color: #353535;
+
+                    th {
+                        padding: 11px 0 10px 18px;
+                        border: 1px solid #dfdfdf;
+                        border-bottom-width: 0;
+                        border-left-width: 0;
+                        border-right-width: 0;
+                        font-weight: normal;
+                        vertical-align: middle;
+
+                        span {
+                            color: #008BCC;
+                        }
+                    }
+
+                    td {
+                        border-top: 1px solid #dfdfdf;
+                        vertical-align: middle;
+                        padding: 11px 0 10px 18px;
+
+                        .fake_input {
+                            display: inline-block;
+                            height: 26px;
+                            padding: 0 10px;
+                            vertical-align: middle;
+                            border: 1px solid #dddddd;
+                            width: 40%;
+                            color: #999999;
+                        }
+
+                        input {
+                            width: 100%;
+                            height: 29px;
+                            padding: 2px 4px;
+                            border: 1px solid #d5d5d5;
+
+                            &:focus::placeholder {
+                                color: transparent;
+                            }
+                        }
+
+                        select {
+                            width: 10%;
+                        }
+
+                        textarea {
+                            width: 100%;
+                            height: 400px;
+                            padding: 2px 4px;
+                            border: 1px solid #d5d5d5;
+
+                            &:focus::placeholder {
+                                color: transparent;
+                            }
+                        }
+
+                        .password_input {
+                            width: 30%;
+                        }
+
+                        span {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .btn_box {
+                padding: 10px 0;
+                text-align: center;
+                display: block;
+                margin-top: 50px;
+            }
+        }
+    }
+}

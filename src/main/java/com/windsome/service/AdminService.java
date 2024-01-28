@@ -1,6 +1,6 @@
 package com.windsome.service;
 
-import com.windsome.dto.DashboardDataDto;
+import com.windsome.dto.admin.DashboardDataDto;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.ItemRepository;
 import com.windsome.repository.OrderItemRepository;

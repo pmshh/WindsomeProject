@@ -2,7 +2,7 @@ package com.windsome.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
-import com.windsome.dto.CartItemDto;
+import com.windsome.dto.cart.CartItemDto;
 import com.windsome.entity.Item;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.CartItemRepository;

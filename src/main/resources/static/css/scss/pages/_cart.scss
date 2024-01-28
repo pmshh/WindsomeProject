@@ -229,16 +229,19 @@
         }
     }
 
-    .cart_null {
+    .message_wrap {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 100px;
-        margin-bottom: 80px;
+        padding: 110px 0;
         text-align: center;
-        font-size: 11px;
-        color: #707070;
-        font-weight: bold;
+        border-bottom: 1px solid #e5e5e5;
+
+        .message {
+            font-size: 11px;
+            color: #707070;
+            font-weight: bold;
+        }
     }
 
     .cart_total {

@@ -1,11 +1,13 @@
 package com.windsome.entity;
 
 import com.windsome.constant.Role;
-import com.windsome.dto.OrderDto;
+import com.windsome.dto.order.OrderDto;
 import com.windsome.entity.Auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
@@ -41,6 +43,9 @@ public class Account extends BaseTimeEntity {
     private int point;
 
     private int totalOrderPrice;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public static Account addPoint(Account account, OrderDto orderDto) {
         int curPoint = account.getPoint();

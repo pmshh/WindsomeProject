@@ -1,7 +1,7 @@
 package com.windsome.service;
 
-import com.windsome.dto.CartDetailDto;
-import com.windsome.dto.CartItemDto;
+import com.windsome.dto.cart.CartDetailDto;
+import com.windsome.dto.cart.CartItemDto;
 import com.windsome.entity.Account;
 import com.windsome.entity.Cart;
 import com.windsome.entity.CartItem;

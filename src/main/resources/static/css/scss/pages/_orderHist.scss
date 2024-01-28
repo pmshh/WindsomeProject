@@ -1,6 +1,6 @@
 /* orderHist page start */
 .order_hist_body {
-    width: 100%;
+    width: 90%;
     margin: 0 auto;
 
     .title {
@@ -13,105 +13,117 @@
         }
     }
 
-    table {
-        table-layout: fixed;
+    .table_wrap {
         width: 100%;
-        border-spacing: 0;
-        border-collapse: collapse;
-        position: relative;
-        margin: 10px 0 0;
-        border: 1px solid #e5e5e5;
-        border-top: 1px solid #e5e5e5;
-        border-right: none;
-        border-left: none;
-        line-height: 1.7;
-        font-size: 12px;
-        letter-spacing: 0.0em !important;
-        color: #353535;
+        overflow-x: auto;
 
-        thead {
-            tr {
-                th {
-                    text-align: center;
-                    padding: 15px 0 14px;
-                    vertical-align: middle;
-                    font-weight: normal;
-                    background-color: #fff;
-                }
-            }
-        }
+        table.order_hist_table {
+            width: 100%;
+            min-width: 768px;
+            table-layout: fixed;
+            border-spacing: 0;
+            border-collapse: collapse;
+            border: 1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
+            border-right: none;
+            border-left: none;
+            line-height: 1.7;
+            font-size: 12px;
+            letter-spacing: 0.0em !important;
+            color: #353535;
 
-        tbody {
-            tr {
-                td {
-                    border-top: 1px solid #e5e5e5;
-                    text-align: center;
-                    vertical-align: middle;
-                    padding: 15px 0;
-                    height: 135px;
-
-                    &.order_date {
-                        letter-spacing: -0.5px;
-                    }
-
-                    &.thumb {
-                        img {
-                            width: 80px;
-                            height: 110px;
-                        }
-                    }
-
-                    &.product {
-                        .name a {
-                            color: #353535 !important;
-                        }
-
-                        .option {
-                            color: #757575;
-                            margin-top: 9px;
-                        }
-                    }
-
-                    &.left_top {
-                        text-align: left;
-                        vertical-align: top;
-                    }
-
-                    &.item_price {
-                        span {
-                            display: block;
-                        }
-                    }
-
-                    &.delivery_price {
-                        span {
-                            display: block;
-                        }
-
-                        span.text {
-                            font-size: 11px;
-                            color: #353535;
-                        }
+            thead {
+                tr {
+                    th {
+                        text-align: center;
+                        padding: 15px 0 14px;
+                        vertical-align: middle;
+                        font-weight: normal;
+                        background-color: #fff;
                     }
                 }
             }
 
-            &.center {
-                text-align: center;
+            tbody {
+                tr {
+                    td {
+                        border-top: 1px solid #e5e5e5;
+                        text-align: center;
+                        vertical-align: middle;
+                        padding: 15px 0;
+                        height: 135px;
+
+                        &.order_date {
+                            letter-spacing: -0.5px;
+                        }
+
+                        &.thumb {
+                            img {
+                                width: 80px;
+                                height: 110px;
+                            }
+                        }
+
+                        &.product {
+                            padding-left: 20px;
+
+                            .name a {
+                                color: #353535 !important;
+                            }
+
+                            .option {
+                                color: #757575;
+                                margin-top: 9px;
+                            }
+                        }
+
+                        &.left_top {
+                            text-align: left;
+                            vertical-align: top;
+                        }
+
+                        &.item_price {
+                            span {
+                                display: block;
+                            }
+                        }
+
+                        &.delivery_price {
+                            span {
+                                display: block;
+                            }
+
+                            span.text {
+                                font-size: 11px;
+                                color: #353535;
+                            }
+                        }
+
+                        button {
+                            font-size: 12px;
+                        }
+                    }
+                }
+
+                &.center {
+                    text-align: center;
+                }
             }
         }
     }
 
-    .orders_null {
+    .message_wrap {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-top: 100px;
-        padding-bottom: 80px;
+        padding: 110px 0;
         text-align: center;
-        font-size: 11px;
-        color: #707070;
-        font-weight: bold;
         border-bottom: 1px solid #e5e5e5;
+
+        .message {
+            font-size: 11px;
+            color: #707070;
+            font-weight: bold;
+        }
     }
 }

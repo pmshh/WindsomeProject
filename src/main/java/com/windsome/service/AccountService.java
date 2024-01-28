@@ -1,7 +1,7 @@
 package com.windsome.service;
 
-import com.windsome.dto.ProfileFormDto;
-import com.windsome.dto.SignUpFormDto;
+import com.windsome.dto.account.ProfileFormDto;
+import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.entity.Account;
 import com.windsome.constant.Role;
 import com.windsome.service.mail.EmailMessageDto;

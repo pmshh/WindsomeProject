@@ -140,7 +140,7 @@
 
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <script th:inline="javascript">
-        $(document).ready(function () {
+        $(function() {
             /* 상품 주문 결과 창 출력 */
             let orderRes = [[${ order_result }]];
             checkResult(orderRes);

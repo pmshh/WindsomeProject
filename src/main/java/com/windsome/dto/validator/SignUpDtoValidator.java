@@ -1,6 +1,6 @@
 package com.windsome.dto.validator;
 
-import com.windsome.dto.SignUpFormDto;
+import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

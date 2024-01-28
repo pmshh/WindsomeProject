@@ -63,7 +63,6 @@
         .category,
         .boardinfo {
             width: 50%;
-
         }
 
         .category>h2,
@@ -91,8 +90,8 @@
             }
         }
 
-        .category>ul>li:hover,
-        .boardinfo>ul>li:hover {
+        .category ul li a:hover,
+        .boardinfo ul li a:hover {
             color: #cccccc;
         }
 
@@ -135,6 +134,8 @@
         .category ul li:hover .sub_category {
             display: block;
         }
+
+
     }
 
     .search_form {
@@ -174,8 +175,7 @@
     }
 }
 
-@media (max-width: 786px) {
-
+@media (max-width: 1200px) {
     .sidebar {
         position: fixed;
         left: -300px;

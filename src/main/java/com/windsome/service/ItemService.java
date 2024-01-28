@@ -1,8 +1,10 @@
 package com.windsome.service;
 
-import com.windsome.dto.*;
+import com.windsome.dto.item.ItemFormDto;
+import com.windsome.dto.item.ItemImgDto;
+import com.windsome.dto.item.ItemSearchDto;
+import com.windsome.dto.item.MainItemDto;
 import com.windsome.entity.*;
-import com.windsome.constant.ItemSellStatus;
 import com.windsome.repository.CategoryRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;

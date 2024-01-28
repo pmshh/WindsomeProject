@@ -20,6 +20,7 @@
                         <div class="divider"></div>
                     </div>
                     <div class="order_form_body mt-5">
+
                         <!-- order_items_info start -->
                         <div class="order_items_info">
                             <div class="title">
@@ -247,9 +248,10 @@
                         <!-- btn_box start -->
                         <div class="btn_box">
                             <button class="order_btn black_btn_w130_h40" type="button">결제하기</button>
-                            <button class="cancel_btn white_btn_w130_h40" type="button" onclick="goBack();">취소</button>
+                            <button class="cancel_btn white_btn_w130_h40" type="button">취소</button>
                         </div>
                         <!-- btn_box end -->
+
                     </div>
                 </div>
             </section>
@@ -275,90 +277,209 @@
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script th:inline="javascript">
-        $(document).ready(function () {
+        $(function() {
             setTotalInfo();
-        });
 
-        /* 주문 요청 */
-        $(".order_btn").on("click", function(){
-            /* 유효성 검사 통과 유무 변수 */
-            let name_check = false;          // 이름
-            let address_check = false        // 주소
-            let tel_check = false            // 휴대 전화
-            let mail_check = false           // 이메일
+            /* 주문 요청 */
+            $(".order_btn").on("click", function(){
+                /* 유효성 검사 통과 유무 변수 */
+                let name_check = false;          // 이름
+                let address_check = false        // 주소
+                let tel_check = false            // 휴대 전화
+                let mail_check = false           // 이메일
 
-            /* 입력값 변수 */
-            let name = $('.name_input').val();          // 이름 입력란
-            let address = $('.address_input_3').val();  // 주소 입력란
-            let tel = $('.tel_input').val();            // 휴대 전화 입력란
-            let mail = $('.mail_input').val();          // 이메일 입력란
+                /* 입력값 변수 */
+                let name = $('.name_input').val();          // 이름 입력란
+                let address = $('.address_input_3').val();  // 주소 입력란
+                let tel = $('.tel_input').val();            // 휴대 전화 입력란
+                let mail = $('.mail_input').val();          // 이메일 입력란
 
-            /* 이름 유효성 검사 */
-            if (name === "") {
-                $('.final_name_ck').css('display', 'inline-block')
-                name_check = false;
-            } else {
-                $('.final_name_ck').css('display', 'none')
-                name_check = true;
-            }
-
-            /* 주소 유효성 검사 */
-            if (address === "") {
-                $('.final_addr_ck').css('display', 'inline-block');
-                address_check = false;
-            } else {
-                $('.final_addr_ck').css('display', 'none');
-                address_check = true;
-            }
-
-            /* 휴대 전화 유효성 검사 */
-            if (tel === "") {
-                $('.final_tel_ck').css('display', 'inline-block')
-                tel_check = false;
-            } else {
-                $('.final_tel_ck').css('display', 'none')
-                tel_check = true;
-            }
-
-            /* 이메일 유효성 검사 */
-            if (mail === "") {
-                $('.final_mail_ck').css('display', 'inline-block')
-                mail_check = false;
-            } else {
-                $('.final_mail_ck').css('display', 'none')
-                mail_check = true;
-            }
-
-            /* 최종 유효성 검사 */
-            if (name_check && address_check && tel_check && mail_check) {
-                $("input[name='address1']").val($(".address_input_1").val());
-                $("input[name='address2']").val($(".address_input_2").val());
-                $("input[name='address3']").val($(".address_input_3").val());
-                $("input[name='tel']").val($(".tel_input").val());
-                $("input[name='email']").val($(".mail_input").val());
-                $("input[name='req']").val($(".req_input").val());
-                if ($(".point_input").val() === '') {
-                    $("input[name='usePoint']").val(0);
+                /* 이름 유효성 검사 */
+                if (name === "") {
+                    $('.final_name_ck').css('display', 'inline-block')
+                    name_check = false;
                 } else {
-                    $("input[name='usePoint']").val($(".point_input").val());
+                    $('.final_name_ck').css('display', 'none')
+                    name_check = true;
                 }
 
-                /* 상품정보 */
-                let form_contents = '';
-                $(".total_price").each(function(index, element){
-                    let itemId = $(element).find('.info').attr("data-id");
-                    let count = $(element).find('.info').attr("data-count");
-                    let itemId_input = "<input name='orders[" + index + "].itemId' type='hidden' value='" + itemId + "'>";
-                    form_contents += itemId_input;
-                    let count_input = "<input name='orders[" + index + "].count' type='hidden' value='" + count + "'>";
-                    form_contents += count_input;
+                /* 주소 유효성 검사 */
+                if (address === "") {
+                    $('.final_addr_ck').css('display', 'inline-block');
+                    address_check = false;
+                } else {
+                    $('.final_addr_ck').css('display', 'none');
+                    address_check = true;
+                }
+
+                /* 휴대 전화 유효성 검사 */
+                if (tel === "") {
+                    $('.final_tel_ck').css('display', 'inline-block')
+                    tel_check = false;
+                } else {
+                    $('.final_tel_ck').css('display', 'none')
+                    tel_check = true;
+                }
+
+                /* 이메일 유효성 검사 */
+                if (mail === "") {
+                    $('.final_mail_ck').css('display', 'inline-block')
+                    mail_check = false;
+                } else {
+                    $('.final_mail_ck').css('display', 'none')
+                    mail_check = true;
+                }
+
+                /* 최종 유효성 검사 */
+                if (name_check && address_check && tel_check && mail_check) {
+                    $("input[name='address1']").val($(".address_input_1").val());
+                    $("input[name='address2']").val($(".address_input_2").val());
+                    $("input[name='address3']").val($(".address_input_3").val());
+                    $("input[name='tel']").val($(".tel_input").val());
+                    $("input[name='email']").val($(".mail_input").val());
+                    $("input[name='req']").val($(".req_input").val());
+                    if ($(".point_input").val() === '') {
+                        $("input[name='usePoint']").val(0);
+                    } else {
+                        $("input[name='usePoint']").val($(".point_input").val());
+                    }
+
+                    /* 상품정보 */
+                    let form_contents = '';
+                    $(".total_price").each(function(index, element){
+                        let itemId = $(element).find('.info').attr("data-id");
+                        let count = $(element).find('.info').attr("data-count");
+                        let itemId_input = "<input name='orders[" + index + "].itemId' type='hidden' value='" + itemId + "'>";
+                        form_contents += itemId_input;
+                        let count_input = "<input name='orders[" + index + "].count' type='hidden' value='" + count + "'>";
+                        form_contents += count_input;
+                    });
+
+                    $(".order_form").append(form_contents);
+                    $(".order_form").submit();
+                } else {
+                    return false;
+                }
+            });
+
+            /* 포인트 입력 유효성 검사 */
+            $(".point_input").on("propertychange change keyup paste input", function(){
+                const maxPoint = parseInt([[${account.point}]]);
+                let inputVal = parseInt($(this).val());
+                let orderTotalPrice = 0; // 상품 금액
+                let orderDeliveryPrice = 2500; // 배송비
+                let orderDiscountPrice = 0; // 할인 합계
+                let totalAmount = 0; // 최종 결제 금액
+
+                if (inputVal < 0) {
+                    $(this).val(0);
+                } else if (inputVal > maxPoint) {
+                    $(this).val(maxPoint);
+                }
+
+                $(".total_price").each(function () {
+                    let itemId = $(this).find(".info").attr("data-id");
+                    let price = $("#price_" + itemId);
+                    let priceVal = price.attr("data-price");
+                    let countVal = $("#count_" + itemId).val();
+
+                    orderTotalPrice += priceVal * countVal;
+                    orderDiscountPrice += (price.attr("data-price") * (price.attr("data-discount"))) * countVal;
                 });
 
-                $(".order_form").append(form_contents);
-                $(".order_form").submit();
-            } else {
-                return false;
-            }
+                /* 최종 결제 금액 3만원 이상 배송비 무료 */
+                totalAmount = orderTotalPrice - orderDiscountPrice;
+                if (totalAmount >= 30000) {
+                    orderDeliveryPrice = 0;
+                } else if (totalAmount === 0) {
+                    orderDeliveryPrice = 0;
+                } else {
+                    orderDeliveryPrice = 2500;
+                }
+
+                /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
+                let afterPoint;
+                if (inputVal > maxPoint) {
+                    afterPoint = 0;
+                } else if (inputVal > (totalAmount + orderDeliveryPrice)) {
+                    afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
+                    $(this).val(totalAmount + orderDeliveryPrice);
+                } else if (inputVal >= 0) {
+                    afterPoint = maxPoint - inputVal;
+                } else {
+                    afterPoint = maxPoint;
+                }
+                $(".point").html('보유 잔액: '+ afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+
+                setTotalInfo();
+            });
+
+            /* 포인트 사용, 취소 버튼 */
+            $(".point_input_btn").on("click", function(){
+                const maxPoint = parseInt([[${account.point}]]);
+                let state = $(this).data("state");
+                let orderTotalPrice = 0; // 상품 금액
+                let orderDeliveryPrice = 2500; // 배송비
+                let orderDiscountPrice = 0; // 할인 합계
+                let totalAmount = 0; // 최종 결제 금액
+
+                $(".total_price").each(function () {
+                    let itemId = $(this).find(".info").attr("data-id");
+                    let price = $("#price_" + itemId);
+                    let priceVal = price.attr("data-price");
+                    let countVal = $("#count_" + itemId).val();
+
+                    orderTotalPrice += priceVal * countVal;
+                    orderDiscountPrice += (price.attr("data-price") * (price.attr("data-discount"))) * countVal;
+                });
+
+                // 최종 결제 금액 3만원 이상 배송비 무료
+                totalAmount = orderTotalPrice - orderDiscountPrice;
+                if (totalAmount >= 30000) {
+                    orderDeliveryPrice = 0;
+                } else if (totalAmount === 0) {
+                    orderDeliveryPrice = 0;
+                } else {
+                    orderDeliveryPrice = 2500;
+                }
+
+                if(state === 'N'){
+                    $(".point_input").val(0);
+                    $(".point").html('보유 잔액: ' + maxPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+                    $(".point_input_btn_N").css("display", "none");
+                    $(".point_input_btn_Y").css("display", "inline-block");
+                } else if(state === 'Y'){
+                    $('.point_input').val(maxPoint);
+
+                    /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
+                    let afterPoint;
+                    let pointVal = $('.point_input').val();
+                    if (pointVal > (totalAmount + orderDeliveryPrice)) {
+                        afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
+                        $(".point").html('보유 잔액: ' + afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+                        $(".point_input").val(totalAmount + orderDeliveryPrice);
+                        $(".point_input_btn_N").css("display", "inline-block");
+                        $(".point_input_btn_Y").css("display", "none");
+                    } else {
+                        $(".point").html('보유 잔액: 0원');
+                        $(".point_input").val(maxPoint);
+                        $(".point_input_btn_N").css("display", "inline-block");
+                        $(".point_input_btn_Y").css("display", "none");
+                    }
+                }
+                setTotalInfo();
+            });
+
+            /* 휴대 전화 입력란 숫자 입력만 허용 */
+            $(".tel_input").on("keyup", function () {
+                let inputVal = $(this).val();
+                $(this).val(inputVal.replace(/[^0-9]/gi,''));
+            });
+
+            /* 취소 버튼 */
+            $(".cancel_btn").on("click", function () {
+                window.history.back();
+            });
         });
 
         /* 상품 금액, 배송비, 할인/부가결제, 최종 결제 금액, 적립 예정 금액 출력 */
@@ -407,120 +528,6 @@
             }
         }
 
-        /* 포인트 입력 유효성 검사 */
-        $(".point_input").on("propertychange change keyup paste input", function(){
-            const maxPoint = parseInt([[${account.point}]]);
-            let inputVal = parseInt($(this).val());
-            let orderTotalPrice = 0; // 상품 금액
-            let orderDeliveryPrice = 2500; // 배송비
-            let orderDiscountPrice = 0; // 할인 합계
-            let totalAmount = 0; // 최종 결제 금액
-
-            if (inputVal < 0) {
-                $(this).val(0);
-            } else if (inputVal > maxPoint) {
-                $(this).val(maxPoint);
-            }
-
-            $(".total_price").each(function () {
-                let itemId = $(this).find(".info").attr("data-id");
-                let price = $("#price_" + itemId);
-                let priceVal = price.attr("data-price");
-                let countVal = $("#count_" + itemId).val();
-
-                orderTotalPrice += priceVal * countVal;
-                orderDiscountPrice += (price.attr("data-price") * (price.attr("data-discount"))) * countVal;
-            });
-
-            /* 최종 결제 금액 3만원 이상 배송비 무료 */
-            totalAmount = orderTotalPrice - orderDiscountPrice;
-            if (totalAmount >= 30000) {
-                orderDeliveryPrice = 0;
-            } else if (totalAmount === 0) {
-                orderDeliveryPrice = 0;
-            } else {
-                orderDeliveryPrice = 2500;
-            }
-
-            /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
-            let afterPoint;
-            if (inputVal > maxPoint) {
-                afterPoint = 0;
-            } else if (inputVal > (totalAmount + orderDeliveryPrice)) {
-                afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
-                $(this).val(totalAmount + orderDeliveryPrice);
-            } else if (inputVal >= 0) {
-                afterPoint = maxPoint - inputVal;
-            } else {
-                afterPoint = maxPoint;
-            }
-            $(".point").html('보유 잔액: '+ afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
-
-            setTotalInfo();
-        });
-
-        /* 포인트 사용, 취소 버튼 */
-        $(".point_input_btn").on("click", function(){
-            const maxPoint = parseInt([[${account.point}]]);
-            let state = $(this).data("state");
-            let orderTotalPrice = 0; // 상품 금액
-            let orderDeliveryPrice = 2500; // 배송비
-            let orderDiscountPrice = 0; // 할인 합계
-            let totalAmount = 0; // 최종 결제 금액
-
-            $(".total_price").each(function () {
-                let itemId = $(this).find(".info").attr("data-id");
-                let price = $("#price_" + itemId);
-                let priceVal = price.attr("data-price");
-                let countVal = $("#count_" + itemId).val();
-
-                orderTotalPrice += priceVal * countVal;
-                orderDiscountPrice += (price.attr("data-price") * (price.attr("data-discount"))) * countVal;
-            });
-
-            // 최종 결제 금액 3만원 이상 배송비 무료
-            totalAmount = orderTotalPrice - orderDiscountPrice;
-            if (totalAmount >= 30000) {
-                orderDeliveryPrice = 0;
-            } else if (totalAmount === 0) {
-                orderDeliveryPrice = 0;
-            } else {
-                orderDeliveryPrice = 2500;
-            }
-
-            if(state === 'N'){
-                $(".point_input").val(0);
-                $(".point").html('보유 잔액: ' + maxPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
-                $(".point_input_btn_N").css("display", "none");
-                $(".point_input_btn_Y").css("display", "inline-block");
-            } else if(state === 'Y'){
-                $('.point_input').val(maxPoint);
-
-                /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
-                let afterPoint;
-                let pointVal = $('.point_input').val();
-                if (pointVal > (totalAmount + orderDeliveryPrice)) {
-                    afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
-                    $(".point").html('보유 잔액: ' + afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
-                    $(".point_input").val(totalAmount + orderDeliveryPrice);
-                    $(".point_input_btn_N").css("display", "inline-block");
-                    $(".point_input_btn_Y").css("display", "none");
-                } else {
-                    $(".point").html('보유 잔액: 0원');
-                    $(".point_input").val(maxPoint);
-                    $(".point_input_btn_N").css("display", "inline-block");
-                    $(".point_input_btn_Y").css("display", "none");
-                }
-            }
-            setTotalInfo();
-        });
-
-        /* 휴대 전화 입력란 숫자 입력만 허용 */
-        $(".tel_input").keyup(function (e) {
-            let inputVal = $(this).val();
-            $(this).val(inputVal.replace(/[^0-9]/gi,''));
-        });
-
         /* 다음 주소 연동 */
         function execution_daum_address() {
             new daum.Postcode({
@@ -566,11 +573,6 @@
                     $(".address_input_3").focus();
                 }
             }).open();
-        }
-
-        /* 주문 취소 버튼 */
-        function goBack() {
-            window.history.back();
         }
     </script>
 </body>

@@ -2,7 +2,9 @@ package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.*;
+import com.windsome.dto.order.OrderDto;
+import com.windsome.dto.order.OrderHistDto;
+import com.windsome.dto.order.OrderPageDto;
 import com.windsome.entity.Account;
 import com.windsome.repository.AccountRepository;
 import com.windsome.service.CartService;
@@ -11,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,9 +76,9 @@ public class OrderController {
      */
     @PostMapping("/order/{orderId}/cancel")
     public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentAccount Account account) {
-        if (!orderService.validateOrder(orderId, account.getUserIdentifier())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 취소 권한이 없습니다.");
-        }
+//        if (!orderService.validateOrder(orderId, account.getUserIdentifier())) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 취소 권한이 없습니다.");
+//        }
 
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().body(orderId);

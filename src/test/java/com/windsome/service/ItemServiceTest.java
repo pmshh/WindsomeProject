@@ -1,7 +1,7 @@
 package com.windsome.service;
 
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.ItemFormDto;
+import com.windsome.dto.item.ItemFormDto;
 import com.windsome.entity.Item;
 import com.windsome.entity.ItemImg;
 import com.windsome.repository.ItemImgRepository;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

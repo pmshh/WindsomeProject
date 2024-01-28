@@ -1,30 +1,24 @@
 package com.windsome.service;
 
 import com.windsome.WithAccount;
-import com.windsome.dto.ProfileFormDto;
-import com.windsome.dto.SignUpFormDto;
+import com.windsome.dto.account.ProfileFormDto;
+import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.entity.Account;
 import com.windsome.repository.AccountRepository;
-import com.windsome.service.mail.ConsoleEmailService;
-import com.windsome.service.mail.HtmlMailSender;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.then;
 
 
 @SpringBootTest

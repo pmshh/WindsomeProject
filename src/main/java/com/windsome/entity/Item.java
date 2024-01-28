@@ -1,14 +1,13 @@
 package com.windsome.entity;
 
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.ItemFormDto;
+import com.windsome.dto.item.ItemFormDto;
 import com.windsome.entity.Auditing.BaseEntity;
-import com.windsome.entity.Auditing.BaseTimeEntity;
-import com.windsome.exception.OutOfStockException;
 import lombok.*;
-import org.hibernate.annotations.Subselect;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
@@ -41,6 +40,9 @@ public class Item extends BaseEntity {
     private Category category;
 
     private double discount;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public void updateItem(ItemFormDto itemFormDto) {
         this.itemNm = itemFormDto.getItemNm();

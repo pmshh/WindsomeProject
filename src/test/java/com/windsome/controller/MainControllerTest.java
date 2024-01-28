@@ -1,6 +1,6 @@
 package com.windsome.controller;
 
-import com.windsome.dto.SignUpFormDto;
+import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
 import org.junit.jupiter.api.AfterEach;

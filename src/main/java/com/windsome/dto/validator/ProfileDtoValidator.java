@@ -1,6 +1,6 @@
 package com.windsome.dto.validator;
 
-import com.windsome.dto.ProfileFormDto;
+import com.windsome.dto.account.ProfileFormDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

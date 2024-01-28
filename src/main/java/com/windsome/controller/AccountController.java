@@ -1,8 +1,8 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
-import com.windsome.dto.ProfileFormDto;
-import com.windsome.dto.SignUpFormDto;
+import com.windsome.dto.account.ProfileFormDto;
+import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.dto.validator.ProfileDtoValidator;
 import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;

@@ -1,8 +1,7 @@
 package com.windsome.controller;
 
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.ItemFormDto;
-import com.windsome.repository.CategoryRepository;
+import com.windsome.dto.item.ItemFormDto;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import com.windsome.service.ItemService;

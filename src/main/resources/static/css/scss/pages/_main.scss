@@ -1,169 +1,165 @@
 /* main page start */
-#items {
-    overflow: hidden;
+.items_header {
+    margin: 40px auto 40px;
 
-    .items_header {
-        margin: 0px auto 40px;
-
-        h2 {
-            font-size: 15px;
-            text-align: center;
-        }
-
-        .divider {
-            width: 70px;
-            height: 1px;
-            background: #aaa;
-            margin: 20px auto;
-        }
-
-        .little_category {
-            .menu_category {
-                text-align: center;
-                font-size: 13px;
-                width: 100%;
-                margin: 30px 0;
-                letter-spacing: 0.04em;
-
-                li {
-                    display: inline-block;
-                    margin: 0 18px 15px 18px;
-
-                    a {
-                        color: #999;
-                        text-decoration: none;
-
-                        &.active,
-                        &:hover {
-                            color: #111;
-                            text-decoration: underline;
-                        }
-                    }
-                }
-            }
-        }
+    h2 {
+        font-size: 15px;
+        text-align: center;
     }
 
-    .items_body {
-        width: 80%;
-        margin: 0 auto;
+    .divider {
+        width: 70px;
+        height: 1px;
+        background: #aaa;
+        margin: 20px auto;
+    }
 
-        .normal_menu {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-
-            .item_total,
-            .item_filter {
-                font-size: 11px;
-                line-height: 25px;
-                color: #aaa;
-                letter-spacing: 0.02em;
-            }
-
-            .item_total {
-                span {
-                    font-weight: bold;
-                    color: #000;
-                }
-            }
-
-            .item_filter {
-                li {
-                    display: inline-block;
-                    margin-left: 12px;
-
-                    a:hover {
-                        color: #000;
-                        font-weight: bold;
-                    }
-                }
-            }
-        }
-
-        .search_result {
-            padding: 50px;
+    .little_category {
+        .menu_category {
             text-align: center;
-            font-size: 12px;
+            font-size: 13px;
+            width: 100%;
+            margin: 30px 0;
+            letter-spacing: 0.04em;
 
-            .search_input {
-                position: relative;
-                width: 400px;
+            li {
                 display: inline-block;
-                padding: 0 36px 5px 0;
-                border-bottom: 2px solid #444;
+                margin: 0 18px 15px 18px;
 
-                input {
-                    border: 0;
-                    font-size: 17px;
-                    padding: 0 10px;
-                    width: 100%;
-                    outline: 0;
-                    background: #fff;
-                }
+                a {
+                    color: #999;
+                    text-decoration: none;
 
-                button {
-                    position: absolute;
-                    top: -10px;
-                    right: 5px;
-                    outline: 0;
-                    background: none;
-                    border: none;
-
-                    .icon {
-                        font-size: 25px;
-                        color: #333;
-                        margin: 5px 5px 0 0;
-                    }
-                }
-            }
-
-            .content_count {
-                font-size: 12px;
-            }
-        }
-
-        .img_box {
-            margin-bottom: 7%;
-
-            .desc {
-                padding: 10px 0;
-                background-color: #fff;
-                color: #000;
-
-                .name {
-                    font-size: 12px;
-                    color: #222222;
-                }
-
-                .discount,
-                .no_discount {
-                    .item_price {
-                        font-size: 12px;
-                        color: #000000;
-                    }
-
-                    .discount_price {
-                        font-size: 12px;
-                        color: #333333;
-                        font-weight: bold;
-                    }
-
-                    .discount_rate {
-                        font-size: 12px;
-                        color: #e06f18;
-                        font-weight: bold;
-                    }
-                }
-
-                .no_discount {
-                    .item_price {
-                        text-decoration: line-through;
+                    &.active,
+                    &:hover {
+                        color: #111;
+                        text-decoration: underline;
                     }
                 }
             }
         }
-
     }
+}
+
+.items_body {
+    width: 80%;
+    margin: 0 auto;
+
+    .normal_menu {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .item_total,
+        .item_filter {
+            font-size: 11px;
+            line-height: 25px;
+            color: #aaa;
+            letter-spacing: 0.02em;
+        }
+
+        .item_total {
+            span {
+                font-weight: bold;
+                color: #000;
+            }
+        }
+
+        .item_filter {
+            li {
+                display: inline-block;
+                margin-left: 12px;
+
+                a:hover {
+                    color: #000;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .search_result {
+        padding: 50px;
+        text-align: center;
+        font-size: 12px;
+
+        .search_input {
+            position: relative;
+            width: 400px;
+            display: inline-block;
+            padding: 0 36px 5px 0;
+            border-bottom: 2px solid #444;
+
+            input {
+                border: 0;
+                font-size: 17px;
+                padding: 0 10px;
+                width: 100%;
+                outline: 0;
+                background: #fff;
+            }
+
+            button {
+                position: absolute;
+                top: -10px;
+                right: 5px;
+                outline: 0;
+                background: none;
+                border: none;
+
+                .icon {
+                    font-size: 25px;
+                    color: #333;
+                    margin: 5px 5px 0 0;
+                }
+            }
+        }
+
+        .content_count {
+            font-size: 12px;
+        }
+    }
+
+    .img_box {
+        margin-bottom: 7%;
+
+        .desc {
+            padding: 10px 0;
+            background-color: #fff;
+            color: #000;
+
+            .name {
+                font-size: 12px;
+                color: #222222;
+            }
+
+            .discount,
+            .no_discount {
+                .item_price {
+                    font-size: 12px;
+                    color: #000000;
+                }
+
+                .discount_price {
+                    font-size: 12px;
+                    color: #333333;
+                    font-weight: bold;
+                }
+
+                .discount_rate {
+                    font-size: 12px;
+                    color: #e06f18;
+                    font-weight: bold;
+                }
+            }
+
+            .no_discount {
+                .item_price {
+                    text-decoration: line-through;
+                }
+            }
+        }
+    }
+
 }

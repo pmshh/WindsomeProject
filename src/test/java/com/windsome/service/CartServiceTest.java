@@ -1,8 +1,8 @@
 package com.windsome.service;
 
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.CartDetailDto;
-import com.windsome.dto.CartItemDto;
+import com.windsome.dto.cart.CartDetailDto;
+import com.windsome.dto.cart.CartItemDto;
 import com.windsome.entity.*;
 import com.windsome.repository.*;
 import org.junit.jupiter.api.DisplayName;

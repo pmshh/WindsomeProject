@@ -58,13 +58,13 @@
                                                 class="itemId_hidden_input" th:value="${cartItem.itemId}">
                                         </td>
                                         <td class="thumb">
-                                            <a th:href="${'/item/' + cartItem.cartItemId}">
+                                            <a th:href="${'/item/' + cartItem.itemId}">
                                                 <img th:src="${cartItem.imgUrl}">
                                             </a>
                                         </td>
                                         <td class="product left_top">
                                             <strong class="name">
-                                                <a th:href="${'/item/' + cartItem.cartItemId}"
+                                                <a th:href="${'/item/' + cartItem.itemId}"
                                                     th:text="${cartItem.itemNm}"></a>
                                             </strong>
                                             <div class="option">[옵션: 선택 X]</div>
@@ -112,9 +112,11 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="cart_null" th:if="${#lists.isEmpty(cartItems)}">
-                            장바구니가 비어 있습니다.
+
+                        <div class="message_wrap" th:if="${#lists.isEmpty(cartItems)}">
+                            <span class="message">장바구니가 비어있습니다.</span>
                         </div>
+
                         <div class="cart_total mt-5">
                             <div class="table-responsive small">
                                 <table class="table table-sm">
@@ -198,7 +200,7 @@
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script th:inline="javascript">
-        $(document).ready(function () {
+        $(function() {
             /* 상품 금액, 배송비, 할인 합계, 최종 결제 금액, 적립 예정 금액 출력 */
             let checkInput = $("input[name=cart_check]");
             checkInput.prop("checked", true);
@@ -424,7 +426,7 @@
                             alert('로그인 후 이용해주세요.');
                             location.href = '/login';
                         } else {
-                            alert(request.responseText);
+                            alert(error.responseText);
                         }
                     },
                 })
