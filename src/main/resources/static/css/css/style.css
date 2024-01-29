@@ -3298,6 +3298,11 @@ main.admin_main {
   height: 30px !important;
   display: block;
 }
+.review_enroll_body .item_info_wrap .information .itemId_warn_msg {
+  display: none;
+  font-size: 12px;
+  margin-top: 2px;
+}
 .review_enroll_body .review_form_wrap {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3401,6 +3406,7 @@ main.admin_main {
 }
 .review_enroll_body .review_form_wrap form table tbody td span {
   display: none;
+  margin-top: 2px;
 }
 .review_enroll_body .review_form_wrap form .btn_box {
   padding: 10px 0;

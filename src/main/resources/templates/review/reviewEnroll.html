@@ -23,22 +23,24 @@
 
                         <!-- item_info_wrap start -->
                         <div class="item_info_wrap" th:if="${#strings.isEmpty(review)}">
-                                <span class="thumbnail">
-                                    <a class="item_link" style="pointer-events: none">
-                                        <img class="no_img" src="/imgs/no_image.jpg">
-                                    </a>
-                                </span>
+                            <input type="hidden" class="hiddenItemId" value="0">
+                            <span class="thumbnail">
+                                <a class="item_link" style="pointer-events: none">
+                                    <img class="no_img" src="/imgs/no_image.jpg">
+                                </a>
+                            </span>
                             <div class="information">
                                 <button id="test" class="white_btn_w90_h40 find_item_btn">상품정보선택</button>
+                                <span class="itemId_warn_msg text-danger">상품을 선택해주세요.</span>
                             </div>
                         </div>
                         <div class="item_info_wrap" th:if="${not #strings.isEmpty(review)}">
                             <input type="hidden" class="hiddenItemId" th:value="${review.itemId}">
                             <span class="thumbnail">
-                                    <a th:href="${'/item/' + review.itemId}">
-                                        <img class="item_img" th:src="${review.imgUrl}">
-                                    </a>
-                                </span>
+                                <a th:href="${'/item/' + review.itemId}">
+                                    <img class="item_img" th:src="${review.imgUrl}">
+                                </a>
+                            </span>
                             <div class="information">
                                 <h3>
                                     <a th:href="${'/item/' + review.itemId}" th:text="${review.itemNm}"></a>
@@ -71,7 +73,7 @@
                                         </th>
                                         <td>
                                             <input class="title_input" type="text" th:field="*{title}">
-                                            <span class="text-danger title_warn">제목을 입력해주세요.</span>
+                                            <span class="text-danger title_warn_msg">제목을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -91,7 +93,6 @@
                                                 <option value="4.5">4.5</option>
                                                 <option value="5.0">5.0</option>
                                             </select>
-                                            <span class="text-danger title_warn">평점을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -100,7 +101,7 @@
                                         </th>
                                         <td>
                                             <textarea class="content_input" th:field="*{content}"></textarea>
-                                            <span class="text-danger content_warn">내용을 입력해주세요.</span>
+                                            <span class="text-danger content_warn_msg">내용을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -109,7 +110,7 @@
                                         </th>
                                         <td>
                                             <input class="password_input" th:field="*{password}" type="password">
-                                            <span class="text-danger password_warn">비밀번호를 입력해주세요.</span>
+                                            <span class="text-danger password_warn_msg">비밀번호를 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -117,7 +118,7 @@
 
                                 <div class="btn_box">
                                     <button class="black_btn_w130_h40 enroll_btn" type="button">등록</button>
-                                    <button class="white_btn_w130_h40 del_btn" type="button">취소</button>
+                                    <button class="white_btn_w130_h40 cancel_btn" type="button">취소</button>
                                 </div>
                             </form>
                         </div>
@@ -156,37 +157,89 @@
 
             /* 리뷰 등록 버튼 */
             $(".enroll_btn").on("click", function () {
-                let itemId = $(".hiddenItemId").val();
+                /* 유효성 검사 통과유무 변수 */
+                let titleCheck = false;     // 제목 체크
+                let contentCheck = false;   // 내용 체크
+                let passwordCheck = false;  // 비밀번호 체크
+                let itemIdCheck = false;    // 상품정보선택 체크
 
-                let param = {
-                    itemId: itemId,
-                    title: $(".title_input").val(),
-                    rating: $(".rating_select").val(),
-                    content: $(".content_input").val(),
-                    password: $(".password_input").val()
+                /* 입력값 변수 */
+                let titleVal = $('.title_input').val(); // 제목 입력란
+                let contentVal = $('.content_input').val(); // 내용 입력란
+                let passwordVal = $('.password_input').val(); // 비밀번호 입력란
+                let itemIdVal = $('.hiddenItemId').val(); // 비밀번호 입력란
+
+                /* 제목 유효성 검사 */
+                if (titleVal === "") {
+                    $('.title_warn_msg').css('display', 'block')
+                    titleCheck = false;
+                } else {
+                    $('.title_warn_msg').css('display', 'none')
+                    titleCheck = true;
                 }
-                let paramData = JSON.stringify(param);
 
-                $.ajax({
-                    url: "/review/enroll",
-                    type: "POST",
-                    contentType: "application/json",
-                    dataType: "text",
-                    cache: false,
-                    data: paramData,
-                    success: function (result, status) {
-                        alert(result);
-                        location.href = '/reviews';
-                    },
-                    error: function (request, status, error) {
-                        if (request.status === '401') {
-                            alert('로그인 후 이용해주세요.');
-                            location.href = '/login';
-                        } else {
-                            alert(request.responseText);
-                        }
-                    },
-                });
+                /* 내용 유효성 검사 */
+                if (contentVal === "") {
+                    $('.content_warn_msg').css('display', 'block')
+                    contentCheck = false;
+                } else {
+                    $('.content_warn_msg').css('display', 'none')
+                    contentCheck = true;
+                }
+
+                /* 비밀번호 유효성 검사 */
+                if (passwordVal === "") {
+                    $('.password_warn_msg').css('display', 'block')
+                    passwordCheck = false;
+                } else {
+                    $('.password_warn_msg').css('display', 'none')
+                    passwordCheck = true;
+                }
+
+                /* 상품정보선택 유효성 검사 */
+                if (itemIdVal === "0") {
+                    $('.itemId_warn_msg').css('display', 'block')
+                    itemIdCheck = false;
+                } else {
+                    $('.itemId_warn_msg').css('display', 'none')
+                    itemIdCheck = true;
+                }
+
+                /* 최종 유효성 검사 */
+                if (titleCheck && contentCheck && passwordCheck && itemIdCheck) {
+                    let itemId = $(".hiddenItemId").val();
+
+                    let param = {
+                        itemId: itemId,
+                        title: $(".title_input").val(),
+                        rating: $(".rating_select").val(),
+                        content: $(".content_input").val(),
+                        password: $(".password_input").val()
+                    }
+                    let paramData = JSON.stringify(param);
+
+                    $.ajax({
+                        url: "/review/enroll",
+                        type: "POST",
+                        contentType: "application/json",
+                        dataType: "text",
+                        cache: false,
+                        data: paramData,
+                        success: function (result, status) {
+                            alert(result);
+                            location.href = '/reviews';
+                        },
+                        error: function (request, status, error) {
+                            if (request.status === '401') {
+                                alert('로그인 후 이용해주세요.');
+                                location.href = '/login';
+                            } else {
+                                alert(request.responseText);
+                            }
+                        },
+                    });
+                }
+                return false;
             });
 
             /* 취소 버튼 */

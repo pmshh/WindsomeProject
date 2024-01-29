@@ -72,6 +72,12 @@
                 height: 30px !important;
                 display: block;
             }
+
+            .itemId_warn_msg {
+                display: none;
+                font-size: 12px;
+                margin-top: 2px;
+            }
         }
     }
 
@@ -159,6 +165,7 @@
 
                         span {
                             display: none;
+                            margin-top: 2px;
                         }
                     }
                 }
