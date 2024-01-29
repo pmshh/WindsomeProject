@@ -64,18 +64,18 @@
                                             <label th:for="*{rating}">평점 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <select th:field="*{rating}" class="rating_select">
-                                                <option value="0.5">0.5</option>
-                                                <option value="1.0">1.0</option>
-                                                <option value="1.5">1.5</option>
-                                                <option value="2.0">2.0</option>
-                                                <option value="2.5">2.5</option>
-                                                <option value="3.0">3.0</option>
-                                                <option value="3.5">3.5</option>
-                                                <option value="4.0">4.0</option>
-                                                <option value="4.5">4.5</option>
-                                                <option value="5.0">5.0</option>
-                                            </select>
+                                            <fieldset class="rateForUpdateForm">
+                                                <input type="radio" id="rating10" name="rating" value="5"><label for="rating10"></label>
+                                                <input type="radio" id="rating9" name="rating" value="4.5"><label for="rating9" class="half" ></label>
+                                                <input type="radio" id="rating8" name="rating" value="4"><label for="rating8"></label>
+                                                <input type="radio" id="rating7" name="rating" value="3.5"><label for="rating7" class="half" ></label>
+                                                <input type="radio" id="rating6" name="rating" value="3"><label for="rating6"></label>
+                                                <input type="radio" id="rating5" name="rating" value="2.5"><label for="rating5" class="half" ></label>
+                                                <input type="radio" id="rating4" name="rating" value="2"><label for="rating4"></label>
+                                                <input type="radio" id="rating3" name="rating" value="1.5"><label for="rating3" class="half" ></label>
+                                                <input type="radio" id="rating2" name="rating" value="1"><label for="rating2"></label>
+                                                <input type="radio" id="rating1" name="rating" value="0.5"><label for="rating1" class="half" ></label>
+                                            </fieldset>
                                         </td>
                                     </tr>
                                     <tr>
@@ -125,10 +125,12 @@
 
                 /* 유효성 검사 통과유무 변수 */
                 let titleCheck = false;     // 제목 체크
+                let ratingCheck = false;    // 평점 체크
                 let contentCheck = false;   // 내용 체크
 
                 /* 입력값 변수 */
                 let titleVal = $('.title_input').val(); // 제목 입력란
+                let ratingVal = $("input[name='rating']:checked").val(); // 제목 입력란
                 let contentVal = $('.content_input').val(); // 내용 입력란
 
                 /* 제목 유효성 검사 */
@@ -138,6 +140,15 @@
                 } else {
                     $('.title_warn_msg').css('display', 'none')
                     titleCheck = true;
+                }
+
+                /* 평점 유효성 검사 */
+                if (!ratingVal >= 1) {
+                    $('.rating_warn_msg').css('display', 'block')
+                    ratingCheck = false;
+                } else {
+                    $('.rating_warn_msg').css('display', 'none')
+                    ratingCheck = true;
                 }
 
                 /* 내용 유효성 검사 */
@@ -150,18 +161,19 @@
                 }
 
                 /* 최종 유효성 검사 */
-                if (titleCheck && contentCheck) {
+                if (titleCheck && ratingCheck && contentCheck) {
                     if (confirm("리뷰를 수정하시겠습니까?")) {
                         if ($(".password_input").val() === '') {
                             alert("비밀번호를 입력하세요.");
                         } else if ($(".password_input").val() === password) {
                             let title = $(".title_input").val();
-                            let rating = $(".rating_select").val();
+                            let rating = $("input[name='rating']:checked").val();
                             let content = $(".content_input").val();
                             let password = $(".password_input").val();
 
                             param = {
                                 reviewId: reviewId,
+                                itemId: [[${review.itemId}]],
                                 title: title,
                                 rating: rating,
                                 content: content,
@@ -202,6 +214,16 @@
             /* 취소 버튼 */
             $(".cancel_btn").on("click", function () {
                 location.href = "/reviews";
+            });
+
+            /* 평점 값 설정 */
+            $("input:radio[name=rating]").each(function() {
+                let reviewRating = [[${review.rating}]]; // 2.5
+                let ratingVal = Number($(this).val());
+
+                if (ratingVal === reviewRating) {
+                    $(this).prop("checked", true);
+                }
             });
         });
     </script>

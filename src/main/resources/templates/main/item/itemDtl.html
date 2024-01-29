@@ -157,6 +157,7 @@
                                             <tr>
                                                 <th style="width: 10%;" scope="col">번호</th>
                                                 <th style="width: auto;" scope="col">제목</th>
+                                                <th style="width: 150px;" scope="col">평점</th>
                                                 <th style="width: 10%;" scope="col">작성자</th>
                                                 <th style="width: 10%;" scope="col">작성일</th>
                                                 <th style="width: 10%;" scope="col">조회</th>
@@ -167,10 +168,24 @@
                                                 <td>
                                                     <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
                                                 </td>
-                                                <td class="left_top">
+                                                <td class="left">
                                                     <a th:href="@{'/review/' + ${review.reviewId}}">
                                                         <span th:text="${review.title}"></span>
                                                     </a>
+                                                </td>
+                                                <td>
+                                                    <fieldset class="rate" th:data-rating="${review.rating}">
+                                                        <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;"><label th:for="${review.createdBy + 1}" ></label>
+                                                        <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;"><label th:for="${review.createdBy + 2}" class="half" ></label>
+                                                        <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;"><label th:for="${review.createdBy + 3}"></label>
+                                                        <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;"><label th:for="${review.createdBy + 4}" class="half" ></label>
+                                                        <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;"><label th:for="${review.createdBy + 5}"></label>
+                                                        <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;"><label th:for="${review.createdBy + 6}" class="half" ></label>
+                                                        <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;"><label th:for="${review.createdBy + 7}"></label>
+                                                        <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;"><label th:for="${review.createdBy + 8}" class="half" ></label>
+                                                        <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;"><label th:for="${review.createdBy + 9}"></label>
+                                                        <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;"><label th:for="${review.createdBy + 10}" class="half" ></label>
+                                                    </fieldset>
                                                 </td>
                                                 <td>
                                                     <span th:text="${review.createdBy}"></span>
@@ -256,6 +271,17 @@
             let salePrice = price * (1 - discount);
             let point = Math.floor(salePrice * 0.05);
             $(".total_point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+
+            /* 평점 값 설정 */
+            $(".rate").each(function () {
+
+                let rating = $(this).attr("data-rating");
+                $(this).find('input').each(function (index, element) {
+                    if ($(element).val() === rating) {
+                        $(element).prop("checked", true);
+                    }
+                });
+            });
         });
 
         /* 상품 구매 */

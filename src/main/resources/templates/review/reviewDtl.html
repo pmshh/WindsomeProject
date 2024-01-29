@@ -64,19 +64,18 @@
                                             <label th:for="*{rating}">평점 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <select th:field="*{rating}" disabled>
-                                                <option value="0.5">0.5</option>
-                                                <option value="1.0">1.0</option>
-                                                <option value="1.5">1.5</option>
-                                                <option value="2.0">2.0</option>
-                                                <option value="2.5">2.5</option>
-                                                <option value="3.0">3.0</option>
-                                                <option value="3.5">3.5</option>
-                                                <option value="4.0">4.0</option>
-                                                <option value="4.5">4.5</option>
-                                                <option value="5.0">5.0</option>
-                                            </select>
-                                            <span class="text-danger title_warn">평점을 입력해주세요.</span>
+                                            <fieldset class="rateForDtlForm">
+                                                <input type="radio" id="rating10" name="rating" value="5" onclick="return false;"><label for="rating10"></label>
+                                                <input type="radio" id="rating9" name="rating" value="4.5" onclick="return false;"><label for="rating9" class="half" ></label>
+                                                <input type="radio" id="rating8" name="rating" value="4" onclick="return false;"><label for="rating8"></label>
+                                                <input type="radio" id="rating7" name="rating" value="3.5" onclick="return false;"><label for="rating7" class="half" ></label>
+                                                <input type="radio" id="rating6" name="rating" value="3" onclick="return false;"><label for="rating6"></label>
+                                                <input type="radio" id="rating5" name="rating" value="2.5" onclick="return false;"><label for="rating5" class="half" ></label>
+                                                <input type="radio" id="rating4" name="rating" value="2" onclick="return false;"><label for="rating4"></label>
+                                                <input type="radio" id="rating3" name="rating" value="1.5" onclick="return false;"><label for="rating3" class="half" ></label>
+                                                <input type="radio" id="rating2" name="rating" value="1" onclick="return false;"><label for="rating2"></label>
+                                                <input type="radio" id="rating1" name="rating" value="0.5" onclick="return false;"><label for="rating1" class="half" ></label>
+                                            </fieldset>
                                         </td>
                                     </tr>
                                     <tr>
@@ -139,15 +138,15 @@
             $(".del_btn").on("click", function () {
                 let reviewId = [[${review.reviewId}]];
                 let password = [[${review.password}]];
+                let itemId = [[${review.itemId}]];
                 let passwordVal = $(".password_input").val();
 
-                if (confirm("리뷰를 삭제하시겠습니까?")) {
-
-                    if (passwordVal === '') {
-                        alert("비밀번호를 입력하세요.");
-                    } else if (passwordVal === password) {
+                if (passwordVal === '') {
+                    alert("비밀번호를 입력하세요.");
+                } else if (passwordVal === password) {
+                    if (confirm("리뷰를 삭제하시겠습니까?")) {
                         $.ajax({
-                            url: "/review/delete/" + reviewId,
+                            url: "/review/delete/" + reviewId + "?itemId=" + itemId,
                             type: "DELETE",
                             dataType: "text",
                             cache: false,
@@ -165,16 +164,26 @@
                             },
                         });
                     } else {
-                        alert("비밀번호가 일치하지 않습니다.");
+                        false;
                     }
                 } else {
-                    false;
+                    alert("비밀번호가 일치하지 않습니다.");
                 }
             });
 
             /* 취소 버튼 */
             $(".cancel_btn").on("click", function () {
                 window.history.back();
+            });
+
+            /* 평점 값 설정 */
+            $("input:radio[name=rating]").each(function() {
+                let reviewRating = [[${review.rating}]]; // 2.5
+                let ratingVal = Number($(this).val());
+
+                if (ratingVal === reviewRating) {
+                    $(this).prop("checked", true);
+                }
             });
         });
     </script>

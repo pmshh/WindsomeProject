@@ -6,6 +6,7 @@ import com.windsome.entity.Auditing.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,9 @@ public class Item extends BaseEntity {
     private Category category;
 
     private double discount;
+
+    @Column(precision =3, scale = 2)
+    private BigDecimal ratingAvg;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();

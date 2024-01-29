@@ -2703,13 +2703,38 @@ main.admin_main {
   vertical-align: middle;
   padding: 15px 0;
 }
-.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td.left_top {
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td.left {
   text-align: left;
-  vertical-align: top;
 }
 .item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td a:hover {
   text-decoration: underline;
   color: #555555;
+}
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td .rate {
+  display: inline-block;
+}
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td .rate input {
+  display: none;
+}
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td .rate label {
+  float: right;
+  color: #ddd;
+}
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td .rate label:before {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  cursor: pointer;
+  font-family: FontAwesome;
+  content: "\f005";
+}
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td .rate .half:before {
+  content: "\f089";
+  position: absolute;
+}
+.item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr td .rate input:checked ~ label {
+  color: #f73c32 !important;
 }
 .item_dtl_body .item_additional .item_review_warp .item_review_body .review_table tbody tr.center {
   text-align: center;
@@ -2753,14 +2778,6 @@ main.admin_main {
 .order_hist_body {
   width: 90%;
   margin: 0 auto;
-}
-.order_hist_body .title {
-  margin: 40px 0 10px 10px;
-}
-.order_hist_body .title h3 {
-  color: #353535;
-  font-size: 13px;
-  font-weight: bold;
 }
 .order_hist_body .table_wrap {
   width: 100%;
@@ -3404,9 +3421,37 @@ main.admin_main {
 .review_enroll_body .review_form_wrap form table tbody td .password_input {
   width: 30%;
 }
-.review_enroll_body .review_form_wrap form table tbody td span {
+.review_enroll_body .review_form_wrap form table tbody td span.text-danger {
   display: none;
   margin-top: 2px;
+}
+.review_enroll_body .review_form_wrap form table tbody td .rate {
+  display: inline-block;
+}
+.review_enroll_body .review_form_wrap form table tbody td .rate input {
+  display: none;
+}
+.review_enroll_body .review_form_wrap form table tbody td .rate label {
+  float: right;
+  color: #ddd;
+}
+.review_enroll_body .review_form_wrap form table tbody td .rate label:before {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  cursor: pointer;
+  font-family: FontAwesome;
+  content: "\f005";
+}
+.review_enroll_body .review_form_wrap form table tbody td .rate .half:before {
+  content: "\f089";
+  position: absolute;
+}
+.review_enroll_body .review_form_wrap form table tbody td .rate input:checked ~ label,
+.review_enroll_body .review_form_wrap form table tbody td .rate label:hover,
+.review_enroll_body .review_form_wrap form table tbody td .rate label:hover ~ label {
+  color: #f73c32 !important;
 }
 .review_enroll_body .review_form_wrap form .btn_box {
   padding: 10px 0;
@@ -3420,9 +3465,14 @@ main.admin_main {
   width: 90%;
   margin: 0 auto;
 }
-.reviews_body .table_wrap table {
-  table-layout: fixed;
+.reviews_body .table_wrap {
   width: 100%;
+  overflow-x: auto;
+}
+.reviews_body .table_wrap table {
+  width: 100%;
+  min-width: 768px;
+  table-layout: fixed;
   border-spacing: 0;
   border-collapse: collapse;
   position: relative;
@@ -3477,6 +3527,31 @@ main.admin_main {
 .reviews_body .table_wrap table tbody tr td.regDate {
   font-size: 11px;
   color: #939393;
+}
+.reviews_body .table_wrap table tbody tr td .rate {
+  display: inline-block;
+}
+.reviews_body .table_wrap table tbody tr td .rate input {
+  display: none;
+}
+.reviews_body .table_wrap table tbody tr td .rate label {
+  float: right;
+  color: #ddd;
+}
+.reviews_body .table_wrap table tbody tr td .rate label:before {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  font-family: FontAwesome;
+  content: "\f005";
+}
+.reviews_body .table_wrap table tbody tr td .rate .half:before {
+  content: "\f089";
+  position: absolute;
+}
+.reviews_body .table_wrap table tbody tr td .rate input:checked ~ label {
+  color: #f73c32 !important;
 }
 .reviews_body .table_wrap table tbody tr.center {
   text-align: center;
@@ -3735,8 +3810,61 @@ main.admin_main {
 .review_form_body .review_form_wrap form table tbody td .password_input {
   width: 30%;
 }
-.review_form_body .review_form_wrap form table tbody td span {
+.review_form_body .review_form_wrap form table tbody td span.text-danger {
   display: none;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm {
+  display: inline-block;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm input {
+  display: none;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm label {
+  float: right;
+  color: #ddd;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm label:before {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  cursor: pointer;
+  font-family: FontAwesome;
+  content: "\f005";
+}
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm .half:before {
+  content: "\f089";
+  position: absolute;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm input:checked ~ label,
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm label:hover,
+.review_form_body .review_form_wrap form table tbody td .rateForUpdateForm label:hover ~ label {
+  color: #f73c32 !important;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForDtlForm {
+  display: inline-block;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForDtlForm input {
+  display: none;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForDtlForm label {
+  float: right;
+  color: #ddd;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForDtlForm label:before {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  font-family: FontAwesome;
+  content: "\f005";
+}
+.review_form_body .review_form_wrap form table tbody td .rateForDtlForm .half:before {
+  content: "\f089";
+  position: absolute;
+}
+.review_form_body .review_form_wrap form table tbody td .rateForDtlForm input:checked ~ label {
+  color: #f73c32 !important;
 }
 .review_form_body .review_form_wrap form .btn_box {
   padding: 10px 0;
@@ -3751,21 +3879,21 @@ main.admin_main {
 }
 
 @media (max-width: 1200px) {
-  .review_dtl_body .item_info_wrap {
+  .review_form_body .item_info_wrap {
     width: 90%;
   }
-  .review_dtl_body .review_form_wrap form {
+  .review_form_body .review_form_wrap form {
     width: 90%;
   }
 }
 @media (max-width: 992px) {
-  .review_dtl_body .item_info_wrap {
+  .review_form_body .item_info_wrap {
     width: 100%;
   }
-  .review_dtl_body .review_form_wrap form {
+  .review_form_body .review_form_wrap form {
     width: 100%;
   }
-  .review_dtl_body .review_form_wrap form .btn_box button.del_btn {
+  .review_form_body .review_form_wrap form .btn_box button.del_btn {
     width: 50px;
   }
 }

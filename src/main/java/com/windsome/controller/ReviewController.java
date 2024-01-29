@@ -90,6 +90,7 @@ public class ReviewController {
     public ResponseEntity<String> enrollReview(@RequestBody ReviewEnrollDto reviewEnrollDto, @CurrentAccount Account account) {
         try {
             reviewService.enrollReview(reviewEnrollDto, account);
+            reviewService.setRatingAvg(reviewEnrollDto.getItemId());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("리뷰 등록 중 오류가 발생하였습니다.");
         }
@@ -114,6 +115,7 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
         reviewService.updateReview(reviewUpdateDto);
+        reviewService.setRatingAvg(reviewUpdateDto.getItemId());
         return ResponseEntity.ok().body("리뷰가 수정되었습니다.");
     }
 
@@ -121,11 +123,12 @@ public class ReviewController {
      * 리뷰 삭제
      */
     @DeleteMapping("/review/delete/{reviewId}")
-    public ResponseEntity<String> deleteReview(@PathVariable(value = "reviewId") Long reviewId, @CurrentAccount Account account) {
+    public ResponseEntity<String> deleteReview(@PathVariable(value = "reviewId") Long reviewId, Long itemId, @CurrentAccount Account account) {
         if (reviewService.validateReview(reviewId, account.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
         }
         reviewService.deleteReview(reviewId);
+        reviewService.setRatingAvg(itemId);
         return ResponseEntity.ok().body("리뷰가 삭제되었습니다.");
     }
 }

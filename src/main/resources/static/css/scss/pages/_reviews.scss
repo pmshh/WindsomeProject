@@ -4,9 +4,13 @@
     margin: 0 auto;
 
     .table_wrap {
+        width: 100%;
+        overflow-x: auto;
+
         table {
-            table-layout: fixed;
             width: 100%;
+            min-width: 768px;
+            table-layout: fixed;
             border-spacing: 0;
             border-collapse: collapse;
             position: relative;
@@ -80,7 +84,36 @@
                             color: #939393;
                         }
 
+                        .rate {
+                            display: inline-block;
 
+                            input {
+                                display: none;
+                            }
+
+                            label {
+                                float: right;
+                                color: #ddd;
+
+                                &:before {
+                                    display: inline-block;
+                                    font-size: 1rem;
+                                    padding: .3rem .2rem;
+                                    margin: 0;
+                                    font-family: FontAwesome;
+                                    content: "\f005 ";
+                                }
+                            }
+
+                            .half:before {
+                                content: "\f089 ";
+                                position: absolute;
+                            }
+
+                            input:checked~label {
+                                color: #f73c32 !important;
+                            }
+                        }
                     }
 
                     &.center {

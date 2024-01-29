@@ -16,6 +16,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,5 +122,14 @@ public class ReviewService {
         Long totalCount = reviewRepository.countByItemId(itemId);
 
         return new PageImpl<ItemDtlPageReviewDto>(itemDtlPageReviewDtoList, pageable, totalCount);
+    }
+
+    /**
+     * 상품 리뷰 평균 평점
+     */
+    public void setRatingAvg(Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        item.setRatingAvg(reviewRepository.getRatingAvg(itemId));
+        itemRepository.save(item);
     }
 }

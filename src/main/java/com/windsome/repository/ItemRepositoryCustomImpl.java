@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.item.ItemSearchDto;
 import com.windsome.dto.item.MainItemDto;
-import com.windsome.dto.QMainItemDto;
+import com.windsome.dto.item.QMainItemDto;
 import com.windsome.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

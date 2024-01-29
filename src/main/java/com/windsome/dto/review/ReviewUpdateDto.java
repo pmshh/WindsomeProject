@@ -12,6 +12,8 @@ public class ReviewUpdateDto {
 
     private Long reviewId;
 
+    private Long itemId;
+
     private String title;
 
     private BigDecimal rating;

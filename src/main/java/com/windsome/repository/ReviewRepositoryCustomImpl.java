@@ -3,7 +3,7 @@ package com.windsome.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.windsome.dto.QReviewPageDto;
+import com.windsome.dto.review.QReviewListDto;
 import com.windsome.dto.review.ReviewListDto;
 import com.windsome.dto.review.ReviewSearchDto;
 import com.windsome.entity.QItemImg;
@@ -30,9 +30,10 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
         List<ReviewListDto> content = queryFactory
                 .select(
-                        new QReviewPageDto(
+                        new QReviewListDto(
                                 review.id,
                                 review.title,
+                                review.rating,
                                 review.account.name,
                                 review.regDate,
                                 review.hits,
