@@ -83,7 +83,7 @@ class OrderControllerTest {
         return itemRepository.save(item);
     }
 
-    private static OrderDto getOrderDto(Item item) {
+    public OrderDto getOrderDto(Item item) {
         List<OrderItemDto> orderItemDtoList = new ArrayList<>();
         OrderItemDto orderItemDto = new OrderItemDto();
         orderItemDto.setItemId(item.getId());

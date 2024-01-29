@@ -16,4 +16,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, QuerydslP
 
     Page<Review> findAll(Pageable pageable);
 
+    Review findByItemId(Long itemId);
 }

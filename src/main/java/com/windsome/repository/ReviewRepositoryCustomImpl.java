@@ -59,8 +59,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .join(itemImg)
                 .on(itemImg.item.id.eq(review.item.id))
                 .where(itemImg.repImgYn.eq("Y"))
-                .where(like(reviewSearchDto))
-                .orderBy(review.id.desc());
+                .where(like(reviewSearchDto));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }

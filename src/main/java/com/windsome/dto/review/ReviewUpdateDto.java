@@ -1,11 +1,13 @@
 package com.windsome.dto.review;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewUpdateDto {
 
     private Long reviewId;

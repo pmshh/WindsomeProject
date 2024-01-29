@@ -24,7 +24,7 @@ class AdminControllerTest {
     @DisplayName("상품 등록 페이지 - 일반 회원 접근")
     @WithMockUser(username = "user", roles = "USER")
     public void itemFormUserTest() throws Exception {
-        mockMvc.perform(get("/admin/main"))
+        mockMvc.perform(get("/admin/item"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
@@ -33,7 +33,7 @@ class AdminControllerTest {
     @DisplayName("상품 등록 페이지 - 관리자 접근")
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void itemFormAdminTest() throws Exception {
-        mockMvc.perform(get("/admin/main"))
+        mockMvc.perform(get("/admin/item"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

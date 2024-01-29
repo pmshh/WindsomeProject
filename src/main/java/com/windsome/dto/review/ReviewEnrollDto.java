@@ -1,10 +1,16 @@
 package com.windsome.dto.review;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewEnrollDto {
 
     private Long itemId; // 상품 id
@@ -16,4 +22,5 @@ public class ReviewEnrollDto {
     private String content; // 내용
 
     private String password; // 비밀번호
+
 }

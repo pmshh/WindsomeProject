@@ -2,8 +2,10 @@ package com.windsome.service;
 
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.item.ItemFormDto;
+import com.windsome.entity.Category;
 import com.windsome.entity.Item;
 import com.windsome.entity.ItemImg;
+import com.windsome.repository.CategoryRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -29,12 +31,17 @@ class ItemServiceTest {
     @Autowired ItemService itemService;
     @Autowired ItemRepository itemRepository;
     @Autowired ItemImgRepository itemImgRepository;
+    @Autowired CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("상품 등록 테스트")
     void saveItem() throws Exception {
         // given
+        Category category = new Category();
+        categoryRepository.save(category);
+
         ItemFormDto itemFormDto = getItemFormDto("제목", "상세 내용");
+        itemFormDto.setCategoryId(category.getId());
         List<MultipartFile> multipartFileList = createMultipartFiles("이미지 제목");
 
         // when
@@ -52,7 +59,11 @@ class ItemServiceTest {
     @DisplayName("상품 수정 테스트")
     void updateItem() throws Exception {
         // given
+        Category category = new Category();
+        categoryRepository.save(category);
+
         ItemFormDto itemFormDto = getItemFormDto("제목", "상세 내용");
+        itemFormDto.setCategoryId(category.getId());
         List<MultipartFile> multipartFileList = createMultipartFiles("이미지 제목");
 
         Long itemId = itemService.saveItem(itemFormDto, multipartFileList);
@@ -66,6 +77,7 @@ class ItemServiceTest {
         ItemFormDto newItemFormDto = getItemFormDto("제목 수정", "상세 내용 수정");
         newItemFormDto.setId(itemId);
         newItemFormDto.setItemImgIds(itemImgIds);
+        newItemFormDto.setCategoryId(category.getId());
         List<MultipartFile> newMultipartFileList = createMultipartFiles("제목 수정");
 
         // when

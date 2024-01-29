@@ -147,7 +147,7 @@
                         <div class="item_additional">
 
                             <!-- item_review start -->
-                            <div class="item_review_warp">
+                            <div class="item_review_warp" id="review">
                                 <div class="item_review_header">
                                     <h3>Review</h3>
                                 </div>
@@ -380,7 +380,7 @@
 
         /* page 이동 */
         function page(page) {
-            location.href = "/item/" + [[${item.id}]] + "?page=" + page;
+            location.href = "/item/" + [[${item.id}]] + "?page=" + page + "#review";
         }
 
         /* 리뷰 작성 버튼 */

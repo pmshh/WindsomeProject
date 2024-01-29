@@ -38,7 +38,7 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰 등록 화면 - 상품 검색
+     * 리뷰 등록 화면 - 상품 검색(상품 리스트 조회)
      */
     public PageImpl<ItemListDto> getItemList(ItemSearchDto searchDto, Pageable pageable) {
         List<ItemListDto> content = itemRepository.getReviewPageItemList(searchDto.getSearchQuery(), pageable);

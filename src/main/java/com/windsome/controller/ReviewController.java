@@ -52,7 +52,7 @@ public class ReviewController {
     @GetMapping("/review/{reviewId}")
     public String reviewDtl(@PathVariable(value = "reviewId") Long reviewId, Model model) {
         model.addAttribute("review", reviewService.getReviewDtl(reviewId));
-        return "/review/reviewDtl";
+        return "review/reviewDtl";
     }
 
     /**

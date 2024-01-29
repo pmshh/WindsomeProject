@@ -2,6 +2,8 @@ package com.windsome.controller;
 
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.item.ItemFormDto;
+import com.windsome.entity.Category;
+import com.windsome.repository.CategoryRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
 import com.windsome.service.ItemService;
@@ -31,12 +33,19 @@ class ItemControllerTest {
     @Autowired ItemRepository itemRepository;
     @Autowired ItemImgRepository itemImgRepository;
     @Autowired ItemService itemService;
+    @Autowired CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("아이템 상세 화면 보이는지 테스트")
     public void cartHist() throws Exception {
+        Category category = new Category();
+        categoryRepository.save(category);
+
         ItemFormDto itemFormDto = getItemFormDto();
+        itemFormDto.setCategoryId(category.getId());
+
         List<MultipartFile> multipartFiles = createMultipartFiles();
+
         Long itemId = itemService.saveItem(itemFormDto, multipartFiles);
 
         mockMvc.perform(get("/item/" + itemId))
