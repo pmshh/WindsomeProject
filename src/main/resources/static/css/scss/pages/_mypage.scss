@@ -4,37 +4,57 @@
     margin: 0 auto;
 
     .bank_book {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        position: relative;
+        padding: 20px 0;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid #e5e5e5;
+        color: #404040;
 
-        .total_order,
-        .total_point {
-            padding: 30px 50px;
-            font-size: 12px;
-            color: #404040;
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            display: block;
+            content: "";
+            width: 1px;
+            height: 100%;
+            background-color: #e6e6e6;
         }
 
-        .total_order {
-            border: 1px solid #e5e5e5;
-            width: 50%;
-            display: flex;
-            justify-content: space-between;
-
-            .cond {
-                font-weight: bold;
-            }
+        &::after {
+            content: "";
+            display: block;
+            clear: both;
         }
 
-        .total_point {
-            border: 1px solid #e5e5e5;
-            border-left: none !important;
-            width: 50%;
-            display: flex;
-            justify-content: space-between;
+        ul {
+            li {
+                float: left;
+                margin: 5px 0;
+                padding: 0 70px;
+                width: 50%;
+                height: 20px;
+                font-size: 12px;
+                line-height: 1.6;
+                vertical-align: top;
 
-            .cond {
-                font-weight: bold;
+                strong.title {
+                    float: left;
+                    width: 50%;
+                    font-weight: normal;
+                }
+
+                strong.use {
+                    color: #151515;
+                }
+
+                strong.data {
+                    float: left;
+                    width: 47%;
+                    padding: 0 10px;
+                    text-align: right;
+                }
             }
         }
     }

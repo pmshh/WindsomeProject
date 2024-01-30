@@ -42,6 +42,10 @@ public class Account extends BaseTimeEntity {
 
     private int point;
 
+    private int totalPoint;
+
+    private int totalUsePoint;
+
     private int totalOrderPrice;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)

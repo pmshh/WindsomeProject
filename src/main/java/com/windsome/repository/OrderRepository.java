@@ -1,6 +1,6 @@
 package com.windsome.repository;
 
-import com.windsome.entity.Item;
+import com.windsome.constant.OrderStatus;
 import com.windsome.entity.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,6 +25,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("select count(o) from Order o where o.account.userIdentifier like concat('%',:userIdentifier,'%') order by o.orderDate desc")
     Long countOrderList(@Param("userIdentifier") String userIdentifier);
 
-    @Query("select o from Order o order by o.id desc")
-    List<Order> getOrderListForAdminPage();
+    Long countByAccountIdAndOrderStatus(Long id, OrderStatus orderStatus);
 }

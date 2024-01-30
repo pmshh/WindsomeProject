@@ -1983,48 +1983,51 @@ main.admin_main {
   margin: 0 auto;
 }
 .mypage_body .bank_book {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.mypage_body .bank_book .total_order,
-.mypage_body .bank_book .total_point {
-  padding: 30px 50px;
-  font-size: 12px;
+  position: relative;
+  padding: 20px 0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e5e5e5;
   color: #404040;
 }
-.mypage_body .bank_book .total_order {
-  border: 1px solid #e5e5e5;
+.mypage_body .bank_book::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: block;
+  content: "";
+  width: 1px;
+  height: 100%;
+  background-color: #e6e6e6;
+}
+.mypage_body .bank_book::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.mypage_body .bank_book ul li {
+  float: left;
+  margin: 5px 0;
+  padding: 0 70px;
   width: 50%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1.6;
+  vertical-align: top;
 }
-.mypage_body .bank_book .total_order .cond {
-  font-weight: bold;
-}
-.mypage_body .bank_book .total_point {
-  border: 1px solid #e5e5e5;
-  border-left: none !important;
+.mypage_body .bank_book ul li strong.title {
+  float: left;
   width: 50%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  font-weight: normal;
 }
-.mypage_body .bank_book .total_point .cond {
-  font-weight: bold;
+.mypage_body .bank_book ul li strong.use {
+  color: #151515;
+}
+.mypage_body .bank_book ul li strong.data {
+  float: left;
+  width: 47%;
+  padding: 0 10px;
+  text-align: right;
 }
 .mypage_body .order_state {
   margin: 20px 0 0;

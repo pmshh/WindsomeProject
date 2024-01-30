@@ -1,9 +1,12 @@
 package com.windsome.service;
 
+import com.windsome.constant.OrderStatus;
+import com.windsome.dto.account.MyPageInfoDto;
 import com.windsome.dto.account.ProfileFormDto;
 import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.entity.Account;
 import com.windsome.constant.Role;
+import com.windsome.repository.OrderRepository;
 import com.windsome.service.mail.EmailMessageDto;
 import com.windsome.service.mail.EmailService;
 import com.windsome.repository.AccountRepository;
@@ -29,6 +32,7 @@ import java.util.UUID;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
@@ -112,5 +116,13 @@ public class AccountService {
     public boolean userEmailCheck(String email, String name) {
         Account account = accountRepository.findByEmail(email);
         return account != null && account.getName().equals(name);
+    }
+
+    public MyPageInfoDto getMyPageInfo(Account account) {
+        return accountRepository.getMyPageInfo(account.getUserIdentifier());
+    }
+
+    public Long getUserOrderCount(Account account) {
+        return orderRepository.countByAccountIdAndOrderStatus(account.getId(), OrderStatus.READY);
     }
 }

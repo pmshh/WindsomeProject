@@ -21,24 +21,24 @@
                     </div>
                     <div class="mypage_body mt-5">
                         <div class="bank_book">
-                            <div class="total_order">
-                                <div class="title">
-                                    총 주문 금액
-                                </div>
-                                <div class="cond">
-                                    <span
-                                        th:text="|${#numbers.formatInteger(account.totalOrderPrice, 0, 'COMMA')}원|"></span>
-                                </div>
-                            </div>
-                            <div class="total_point">
-                                <div class="title">
-                                    총 적립 금액
-                                </div>
-                                <div class="cond">
-                                    <span
-                                        th:text="|${#numbers.formatInteger(account.point, 0, 'COMMA')}원|"></span>
-                                </div>
-                            </div>
+                            <ul>
+                                <li>
+                                    <strong class="title">가용 적립금</strong>
+                                    <strong class="data use"><span class="avail_point" th:text="|${#numbers.formatInteger(myPageInfo.point, 0, 'COMMA')}원|"></span></strong>
+                                </li>
+                                <li>
+                                    <strong class="title">총 적립금</strong>
+                                    <strong class="data"><span class="total_point" th:text="|${#numbers.formatInteger(myPageInfo.totalPoint, 0, 'COMMA')}원|"></span></strong>
+                                </li>
+                                <li>
+                                    <strong class="title">사용 적립금</strong>
+                                    <strong class="data"><span class="used_point" th:text="|${#numbers.formatInteger(myPageInfo.totalUsePoint, 0, 'COMMA')}원|"></span></strong>
+                                </li>
+                                <li>
+                                    <strong class="title">총 주문금액</strong>
+                                    <strong class="data"><span class="order_price" th:text="|${#numbers.formatInteger(myPageInfo.totalOrderPrice, 0, 'COMMA')}원|"></span></strong>
+                                </li>
+                            </ul>
                         </div>
                         <div class="order_state">
                             <div class="title">
@@ -48,19 +48,19 @@
                                 <ul>
                                     <li>
                                         <strong>입금전</strong>
-                                        <a href="">0</a>
+                                        <a style="cursor: default;">0</a>
                                     </li>
                                     <li>
                                         <strong>배송준비중</strong>
-                                        <a href="">0</a>
+                                        <a style="cursor: default;" th:text="${userOrderCount}">0</a>
                                     </li>
                                     <li>
                                         <strong>배송중</strong>
-                                        <a href="">0</a>
+                                        <a style="cursor: default;">0</a>
                                     </li>
                                     <li>
                                         <strong>배송완료</strong>
-                                        <a href="">0</a>
+                                        <a style="cursor: default;">0</a>
                                     </li>
                                 </ul>
                             </div>
@@ -92,10 +92,10 @@
                                     </li>
                                     <li>
                                         <h3>
-                                            <a href=""><span>게시물 관리</span></a>
+                                            <a href="" class="mng_board"><span>게시물 관리</span></a>
                                         </h3>
                                         <p>
-                                            <a href="">고객님께서 작성하신 게시물을 관리하는 공간입니다.</a>
+                                            <a href="" class="mng_board">고객님께서 작성하신 게시물을 관리하는 공간입니다.</a>
                                         </p>
                                     </li>
                                 </ul>
@@ -112,5 +112,9 @@
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script>
+        $(".mng_board").on("click", function () {
+            alert("해당 기능은 준비중입니다.");
+            return false;
+        });
     </script>
 </body>

@@ -64,13 +64,14 @@ public class OrderService {
         }
         orderDto.initOrderPriceInfo();
 
-        // 회원 포인트 적립, 사용 포인트 차감, 주문 금액 저장
-        Account saveAccount = Account.addPoint(account, orderDto);
+        // 회원 포인트 적립, 총 주문 금액 저장, 사용 포인트 차감, 총 사용 포인트 저장, 총 적립 포인트 저장
+        Account saveAccount = Account.addPoint(account, orderDto); // 회원 포인트 적립
+        saveAccount.setTotalOrderPrice(saveAccount.getTotalOrderPrice() + orderDto.getOrderFinalSalePrice()); // 주문 금액 저장
         if (orderDto.getUsePoint() > 0) {
-            saveAccount.setPoint(saveAccount.getPoint() - orderDto.getUsePoint());
+            saveAccount.setPoint(saveAccount.getPoint() - orderDto.getUsePoint()); // 사용 포인트 차감
+            saveAccount.setTotalUsePoint(saveAccount.getTotalUsePoint() + orderDto.getUsePoint()); // 총 사용 포인트 저장
         }
-        int curTotalOrderPrice = saveAccount.getTotalOrderPrice();
-        saveAccount.setTotalOrderPrice(curTotalOrderPrice + orderDto.getOrderFinalSalePrice());
+        saveAccount.setTotalPoint(saveAccount.getTotalPoint() + orderDto.getOrderSavePoint()); // 총 적립 포인트 저장
         accountRepository.save(saveAccount);
 
         // 상품 생성 및 DB 저장
@@ -107,18 +108,20 @@ public class OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.cancelOrder();
 
-        // 포인트 적립 취소
+        // 회원 포인트 복구, 총 주문 금액 복구, 현재 포인트 복구, 총 적립 포인트 복구, 총 사용 포인트 복구
         Account findAccount = accountRepository.findById(order.getAccount().getId()).orElseThrow(EntityNotFoundException::new);
-        int curPoint = findAccount.getPoint();
         int savePoint = 0;
         for (OrderItem orderItem : order.getOrderItems()) {
             savePoint += orderItem.getSavePoint();
         }
-        findAccount.setPoint(curPoint - savePoint);
+        findAccount.setPoint(findAccount.getPoint() - savePoint); // 회원 포인트 복구
+        findAccount.setTotalOrderPrice(findAccount.getTotalOrderPrice() - order.getTotalOrderPrice()); // 총 주문 금액 복구
 
-        // 주문 금액 복구
-        int curTotalOrderPrice = findAccount.getTotalOrderPrice();
-        findAccount.setTotalOrderPrice(curTotalOrderPrice - order.getTotalOrderPrice());
+        if (order.getUsePoint() >= 1) {
+            findAccount.setPoint(findAccount.getPoint() + order.getUsePoint()); // 현재 포인트 복구
+            findAccount.setTotalUsePoint(findAccount.getTotalUsePoint() - order.getUsePoint()); // 총 사용 포인트 복구
+        }
+        findAccount.setTotalPoint(findAccount.getTotalPoint() - savePoint); // 총 적립 포인트 복구
     }
 
     /**

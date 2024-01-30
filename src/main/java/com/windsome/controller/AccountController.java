@@ -157,7 +157,8 @@ public class AccountController {
     @GetMapping("/mypage")
     public String mypage(@CurrentAccount Account account, Model model) {
         model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
-        model.addAttribute("account", accountRepository.findByUserIdentifier(account.getUserIdentifier()));
+        model.addAttribute("myPageInfo", accountService.getMyPageInfo(account));
+        model.addAttribute("userOrderCount", accountService.getUserOrderCount(account));
         return "account/mypage";
     }
 
