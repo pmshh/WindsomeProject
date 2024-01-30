@@ -132,4 +132,11 @@ public class ReviewService {
         item.setRatingAvg(reviewRepository.getRatingAvg(itemId));
         itemRepository.save(item);
     }
+
+    /**
+     * 리뷰 존재 여부 반환
+     */
+    public boolean existsByItemIdAndAccountId(Long itemId, Long accountId) {
+        return reviewRepository.existsByItemIdAndAccountId(itemId, accountId);
+    }
 }

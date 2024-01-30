@@ -221,35 +221,46 @@
                 if (titleCheck && ratingCheck && contentCheck && passwordCheck && itemIdCheck) {
                     let itemId = $(".hiddenItemId").val();
 
-                    let param = {
-                        itemId: itemId,
-                        title: $(".title_input").val(),
-                        rating: $("input[name='rating']:checked").val(),
-                        content: $(".content_input").val(),
-                        password: $(".password_input").val()
-                    }
-                    let paramData = JSON.stringify(param);
-
                     $.ajax({
-                        url: "/review/enroll",
+                        url: "/review/check/" + itemId,
                         type: "POST",
-                        contentType: "application/json",
                         dataType: "text",
                         cache: false,
-                        data: paramData,
                         success: function (result, status) {
-                            alert(result);
-                            location.href = '/reviews';
+                            let param = {
+                                itemId: itemId,
+                                title: $(".title_input").val(),
+                                rating: $("input[name='rating']:checked").val(),
+                                content: $(".content_input").val(),
+                                password: $(".password_input").val()
+                            }
+                            let paramData = JSON.stringify(param);
+
+                            $.ajax({
+                                url: "/review/enroll",
+                                type: "POST",
+                                contentType: "application/json",
+                                dataType: "text",
+                                cache: false,
+                                data: paramData,
+                                success: function (result, status) {
+                                    alert(result);
+                                    location.href = '/reviews';
+                                },
+                                error: function (request, status, error) {
+                                    if (request.status === '401') {
+                                        alert('로그인 후 이용해주세요.');
+                                        location.href = '/login';
+                                    } else {
+                                        alert(request.responseText);
+                                    }
+                                },
+                            });
                         },
                         error: function (request, status, error) {
-                            if (request.status === '401') {
-                                alert('로그인 후 이용해주세요.');
-                                location.href = '/login';
-                            } else {
-                                alert(request.responseText);
-                            }
+                            alert(request.responseText);
                         },
-                    });
+                    })
                 }
                 return false;
             });

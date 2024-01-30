@@ -3,6 +3,7 @@ package com.windsome.controller;
 import com.windsome.config.security.CurrentAccount;
 import com.windsome.dto.review.*;
 import com.windsome.entity.Account;
+import com.windsome.repository.ReviewRepository;
 import com.windsome.service.CartService;
 import com.windsome.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -130,5 +131,16 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
         reviewService.setRatingAvg(itemId);
         return ResponseEntity.ok().body("리뷰가 삭제되었습니다.");
+    }
+
+    /**
+     * 리뷰 체크
+     */
+    @PostMapping("/review/check/{itemId}")
+    public ResponseEntity<String> checkReview(@PathVariable("itemId") Long itemId, @CurrentAccount Account account) {
+        if (reviewService.existsByItemIdAndAccountId(itemId, account.getId())) {
+            return ResponseEntity.badRequest().body("이미 등록된 리뷰가 존재합니다.");
+        }
+        return ResponseEntity.ok().build();
     }
 }

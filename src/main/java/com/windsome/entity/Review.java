@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-//@Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueNumberAndStatus", columnNames={"item", "account"}) })
+@Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueNumberAndStatus", columnNames={"item_id", "account_id"}) })
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString

@@ -229,11 +229,11 @@
             <footer th:fragment="footer">
                 <div class="footer_header">
                     <ul>
-                        <li><a href="../index.html">HOME</a></li>
-                        <li><a href="../index.html">COMPANY</a></li>
-                        <li><a href="../index.html">AGREEMENT</a></li>
-                        <li><a href="../index.html">PRIVACY</a></li>
-                        <li><a href="../index.html">GUIDE</a></li>
+                        <li><a class="footer_header_link">HOME</a></li>
+                        <li><a class="footer_header_link">COMPANY</a></li>
+                        <li><a class="footer_header_link">AGREEMENT</a></li>
+                        <li><a class="footer_header_link">PRIVACY</a></li>
+                        <li><a class="footer_header_link">GUIDE</a></li>
                     </ul>
                 </div>
                 <div class="footer_address">
@@ -248,35 +248,34 @@
         </article>
     </main>
 </body>
-
-<th:block th:fragment="commonJs">
-    <!-- common js -->
-    <script>
-        $(window).scroll(function () {
-            if ($(this).scrollTop() == 0)
-                $('nav').css('opacity', '1');
-            else
-                $('nav').css('opacity', '.6');
-        });
-
-        <!-- sidebar toggle 기능 -->
-        let toggleBtn = $('.menu_toggle');
-        let sidebar = $('.sidebar');
-        toggleBtn.click(function (e) {
-            e.preventDefault();
-            sidebar.toggleClass("active");
-        })
-    </script>
-    <!-- csrf token -->
-    <script type="application/javascript" th:inline="javascript">
+    <script th:inline="javascript" th:fragment="commonJs">
         $(function () {
+            /* csrf token */
             var csrfToken = /*[[${_csrf.token}]]*/ null;
             var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
             $(document).ajaxSend(function (e, xhr, options) {
                 xhr.setRequestHeader(csrfHeader, csrfToken);
             });
+
+            /* 스크롤 시 navbar 투명 */
+            $(window).scroll(function () {
+                if ($(this).scrollTop() == 0)
+                    $('nav').css('opacity', '1');
+                else
+                    $('nav').css('opacity', '.6');
+            });
+
+            /* sidebar toggle 기능 */
+            let toggleBtn = $('.menu_toggle');
+            let sidebar = $('.sidebar');
+            toggleBtn.click(function (e) {
+                e.preventDefault();
+                sidebar.toggleClass("active");
+            })
+
+            $(".footer_header_link").on("click", function () {
+                alert("준비중입니다.");
+            });
         });
     </script>
-</th:block>
-
 </html>

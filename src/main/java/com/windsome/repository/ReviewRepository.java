@@ -23,4 +23,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, QuerydslP
 
     @Query(value = "select avg(r.rating) from Review r where r.item.id = :itemId")
     BigDecimal getRatingAvg(@Param("itemId") Long itemId);
+
+    boolean existsByItemIdAndAccountId(Long itemId, Long accountId);
 }

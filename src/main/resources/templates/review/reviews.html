@@ -68,7 +68,7 @@
                                     </fieldset>
                                 </td>
                                 <td class="createdBy">
-                                    <span th:text="${review.createdBy}"></span>
+                                    <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
                                 </td>
                                 <td class="regDate">
                                     <span th:text="${review.regDate}"></span>
