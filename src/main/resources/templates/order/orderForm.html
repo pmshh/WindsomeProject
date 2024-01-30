@@ -338,7 +338,8 @@
                     $("input[name='tel']").val($(".tel_input").val());
                     $("input[name='email']").val($(".mail_input").val());
                     $("input[name='req']").val($(".req_input").val());
-                    if ($(".point_input").val() === '') {
+
+                    if ($(".point_input").val() === '' || $(".point_input").val() < 0) {
                         $("input[name='usePoint']").val(0);
                     } else {
                         $("input[name='usePoint']").val($(".point_input").val());
@@ -449,22 +450,26 @@
                     $(".point_input_btn_N").css("display", "none");
                     $(".point_input_btn_Y").css("display", "inline-block");
                 } else if(state === 'Y'){
-                    $('.point_input').val(maxPoint);
-
-                    /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
-                    let afterPoint;
-                    let pointVal = $('.point_input').val();
-                    if (pointVal > (totalAmount + orderDeliveryPrice)) {
-                        afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
-                        $(".point").html('보유 잔액: ' + afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
-                        $(".point_input").val(totalAmount + orderDeliveryPrice);
-                        $(".point_input_btn_N").css("display", "inline-block");
-                        $(".point_input_btn_Y").css("display", "none");
+                    if (maxPoint < 0) {
+                        alert("사용 가능한 적립금이 없습니다.");
                     } else {
-                        $(".point").html('보유 잔액: 0원');
-                        $(".point_input").val(maxPoint);
-                        $(".point_input_btn_N").css("display", "inline-block");
-                        $(".point_input_btn_Y").css("display", "none");
+                        $('.point_input').val(maxPoint);
+
+                        /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
+                        let afterPoint;
+                        let pointVal = $('.point_input').val();
+                        if (pointVal > (totalAmount + orderDeliveryPrice)) {
+                            afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
+                            $(".point").html('보유 잔액: ' + afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원');
+                            $(".point_input").val(totalAmount + orderDeliveryPrice);
+                            $(".point_input_btn_N").css("display", "inline-block");
+                            $(".point_input_btn_Y").css("display", "none");
+                        } else {
+                            $(".point").html('보유 잔액: 0원');
+                            $(".point_input").val(maxPoint);
+                            $(".point_input_btn_N").css("display", "inline-block");
+                            $(".point_input_btn_Y").css("display", "none");
+                        }
                     }
                 }
                 setTotalInfo();
