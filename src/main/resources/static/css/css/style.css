@@ -40,6 +40,10 @@ button:focus {
   outline: none;
 }
 
+.display_none {
+  display: none;
+}
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px transparent inset;
   -webkit-text-fill-color: #000;
@@ -824,6 +828,72 @@ main.admin_main {
 }
 .pagination ul .next {
   margin-left: 20px;
+}
+
+table.form_table {
+  width: 100%;
+  position: relative;
+  margin: 10px 0 0;
+  border: 1px solid #d7d5d5;
+  border-top: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  color: #fff;
+  line-height: 1.5;
+}
+table.form_table tbody {
+  font-size: 12px;
+  color: #353535;
+}
+table.form_table tbody th {
+  padding: 11px 0 10px 18px;
+  border: 1px solid #dfdfdf;
+  border-bottom-width: 0;
+  border-left-width: 1px solid #dfdfdf;
+  border-right-width: 1px solid #dfdfdf;
+  font-weight: normal;
+  vertical-align: middle;
+  background-color: #FBFAFA;
+}
+table.form_table tbody th span {
+  color: #008BCC;
+}
+table.form_table tbody td {
+  border-top: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  vertical-align: middle;
+  padding: 11px 0 10px 18px;
+}
+table.form_table tbody td input {
+  height: 30px;
+  padding: 2px 4px;
+  border: 1px solid #d5d5d5;
+  width: 230px;
+}
+table.form_table tbody td input:focus::-webkit-input-placeholder {
+  color: transparent;
+}
+table.form_table tbody td input:focus::-moz-placeholder {
+  color: transparent;
+}
+table.form_table tbody td input:focus:-ms-input-placeholder {
+  color: transparent;
+}
+table.form_table tbody td input:focus::-ms-input-placeholder {
+  color: transparent;
+}
+table.form_table tbody td input:focus::placeholder {
+  color: transparent;
+}
+table.form_table tbody td select {
+  width: 60px;
+  height: 30px;
+  line-height: 30px;
+  min-height: 30px;
+  border: 1px solid #ddd;
+  padding: 0 10px 0 5px;
+  background-color: #fff;
+  font-size: 12px;
 }
 
 /* 5. pages */
@@ -2123,83 +2193,11 @@ main.admin_main {
 .modify_body form {
   width: 80%;
 }
-.modify_body form table {
-  width: 100%;
-  position: relative;
-  margin: 10px 0 0;
-  border: 1px solid #d7d5d5;
-  border-top: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  color: #fff;
-  line-height: 1.5;
+.modify_body form table tbody td span {
+  margin-top: 2px;
 }
-.modify_body form table tbody {
-  font-size: 12px;
-  color: #353535;
-}
-.modify_body form table tbody th {
-  padding: 11px 0 10px 18px;
-  border: 1px solid #dfdfdf;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  font-weight: normal;
-  vertical-align: middle;
-}
-.modify_body form table tbody th span {
-  color: #008BCC;
-}
-.modify_body form table tbody td {
-  border-top: 1px solid #dfdfdf;
-  vertical-align: middle;
-  padding: 11px 0 10px 18px;
-}
-.modify_body form table tbody td span.id_input_re_1,
-.modify_body form table tbody td span.id_input_re_2,
-.modify_body form table tbody td span.mail_input_re_1,
-.modify_body form table tbody td span.mail_input_re_2,
-.modify_body form table tbody td span.final_id_ck,
-.modify_body form table tbody td span.final_pw_ck,
-.modify_body form table tbody td span.final_pwck_ck,
-.modify_body form table tbody td span.final_name_ck,
-.modify_body form table tbody td span.final_mail_ck,
-.modify_body form table tbody td span.final_addr_ck,
-.modify_body form table tbody td span.pwck_input_re_1,
-.modify_body form table tbody td span.pwck_input_re_2,
-.modify_body form table tbody td span.need_mail_check {
-  display: none;
-}
-.modify_body form table tbody td input {
-  height: 30px;
-  padding: 2px 4px;
-  border: 1px solid #d5d5d5;
-  width: 200px;
-}
-.modify_body form table tbody td input:focus::-webkit-input-placeholder {
-  color: transparent;
-}
-.modify_body form table tbody td input:focus::-moz-placeholder {
-  color: transparent;
-}
-.modify_body form table tbody td input:focus:-ms-input-placeholder {
-  color: transparent;
-}
-.modify_body form table tbody td input:focus::-ms-input-placeholder {
-  color: transparent;
-}
-.modify_body form table tbody td input:focus::placeholder {
-  color: transparent;
-}
-.modify_body form table tbody td select {
-  width: 60px;
-  height: 30px;
-  line-height: 30px;
-  min-height: 30px;
-  border: 1px solid #ddd;
-  padding: 0 10px 0 5px;
-  background-color: #fff;
-  font-size: 12px;
+.modify_body form table tbody td select.mail_select {
+  width: 125px;
 }
 .modify_body form table tbody td button.send_mail,
 .modify_body form table tbody td button.check_number,
@@ -2216,9 +2214,7 @@ main.admin_main {
   border: 1px solid black;
 }
 .modify_body form table tbody td button.send_mail,
-.modify_body form table tbody td button.check_number {
-  width: 55px;
-}
+.modify_body form table tbody td button.check_number,
 .modify_body form table tbody td button.find_addr {
   width: 90px;
 }
@@ -2229,6 +2225,11 @@ main.admin_main {
   margin-top: 30px;
 }
 
+@media (max-width: 1100px) {
+  .modify_body form {
+    width: 100%;
+  }
+}
 @media (max-width: 786px) {
   .modify_body form {
     width: 100%;
@@ -2238,7 +2239,7 @@ main.admin_main {
   }
 }
 /* signUp page start */
-.signup_body {
+.signup_body .form_wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2246,109 +2247,110 @@ main.admin_main {
       -ms-flex-pack: center;
           justify-content: center;
 }
-.signup_body form {
-  width: 80%;
-}
-.signup_body form table {
+.signup_body .form_wrap form {
   width: 100%;
-  position: relative;
-  margin: 10px 0 0;
-  border: 1px solid #d7d5d5;
-  border-top: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  color: #fff;
-  line-height: 1.5;
 }
-.signup_body form table tbody {
-  font-size: 12px;
-  color: #353535;
+.signup_body .form_wrap form table tbody td span {
+  margin-top: 2px;
 }
-.signup_body form table tbody th {
-  padding: 11px 0 10px 18px;
-  border: 1px solid #dfdfdf;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  font-weight: normal;
-  vertical-align: middle;
+.signup_body .form_wrap form table tbody td select.mail_select {
+  width: 125px;
 }
-.signup_body form table tbody th span {
-  color: #008BCC;
-}
-.signup_body form table tbody td {
-  border-top: 1px solid #dfdfdf;
-  vertical-align: middle;
-  padding: 11px 0 10px 18px;
-}
-.signup_body form table tbody td span.id_input_re_1,
-.signup_body form table tbody td span.id_input_re_2,
-.signup_body form table tbody td span.mail_input_re_1,
-.signup_body form table tbody td span.mail_input_re_2,
-.signup_body form table tbody td span.final_id_ck,
-.signup_body form table tbody td span.final_pw_ck,
-.signup_body form table tbody td span.final_pwck_ck,
-.signup_body form table tbody td span.final_name_ck,
-.signup_body form table tbody td span.final_mail_ck,
-.signup_body form table tbody td span.final_addr_ck,
-.signup_body form table tbody td span.pwck_input_re_1,
-.signup_body form table tbody td span.pwck_input_re_2,
-.signup_body form table tbody td span.need_mail_check {
-  display: none;
-}
-.signup_body form table tbody td input {
-  height: 30px;
-  padding: 2px 4px;
-  border: 1px solid #d5d5d5;
-  width: 200px;
-}
-.signup_body form table tbody td input:focus::-webkit-input-placeholder {
-  color: transparent;
-}
-.signup_body form table tbody td input:focus::-moz-placeholder {
-  color: transparent;
-}
-.signup_body form table tbody td input:focus:-ms-input-placeholder {
-  color: transparent;
-}
-.signup_body form table tbody td input:focus::-ms-input-placeholder {
-  color: transparent;
-}
-.signup_body form table tbody td input:focus::placeholder {
-  color: transparent;
-}
-.signup_body form table tbody td select {
-  width: 60px;
-  height: 30px;
-  line-height: 30px;
-  min-height: 30px;
-  border: 1px solid #ddd;
-  padding: 0 10px 0 5px;
-  background-color: #fff;
-  font-size: 12px;
-}
-.signup_body form table tbody td button.send_mail,
-.signup_body form table tbody td button.check_number,
-.signup_body form table tbody td button.find_addr {
+.signup_body .form_wrap form table tbody td button.send_mail,
+.signup_body .form_wrap form table tbody td button.check_number,
+.signup_body .form_wrap form table tbody td button.find_addr {
   padding: 0;
   height: 30px;
   margin-bottom: 2px;
   border: 1px solid #e2e2e2;
   background: white;
 }
-.signup_body form table tbody td button.send_mail:hover,
-.signup_body form table tbody td button.check_number:hover,
-.signup_body form table tbody td button.find_addr:hover {
+.signup_body .form_wrap form table tbody td button.send_mail:hover,
+.signup_body .form_wrap form table tbody td button.check_number:hover,
+.signup_body .form_wrap form table tbody td button.find_addr:hover {
   border: 1px solid black;
 }
-.signup_body form table tbody td button.send_mail,
-.signup_body form table tbody td button.check_number {
-  width: 55px;
-}
-.signup_body form table tbody td button.find_addr {
+.signup_body .form_wrap form table tbody td button.send_mail,
+.signup_body .form_wrap form table tbody td button.check_number,
+.signup_body .form_wrap form table tbody td button.find_addr {
   width: 90px;
 }
-.signup_body form .btn_box {
+.signup_body .form_wrap form .agree_wrap {
+  margin-top: 30px;
+}
+.signup_body .form_wrap form .agree_wrap .check_all {
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #e5e5e5;
+  color: #404040;
+  background-color: #fbfafa;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.signup_body .form_wrap form .agree_wrap .check_all input {
+  width: 14px;
+  height: 14px;
+}
+.signup_body .form_wrap form .agree_wrap .check_all label {
+  font-size: 16px;
+  color: #353535;
+  line-height: 24px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.signup_body .form_wrap form .agree_wrap .agree {
+  border: 1px solid #e5e5e5;
+  border-top: none;
+  background-color: #fbfafa;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.signup_body .form_wrap form .agree_wrap .agree h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #353535;
+  font-weight: bold;
+}
+.signup_body .form_wrap form .agree_wrap .agree .content {
+  overflow: auto;
+  height: 110px;
+  padding: 20px;
+  border: 1px solid #fff;
+  background: #fff;
+}
+.signup_body .form_wrap form .agree_wrap .agree .content p {
+  padding: 0 0 17px;
+  margin: 0;
+  line-height: 1.8;
+  font-size: 12px;
+  color: #747474;
+}
+.signup_body .form_wrap form .agree_wrap .agree .check {
+  padding: 20px 0 0 0;
+  color: #202020;
+  font-size: 13px;
+  line-height: 24px;
+  margin: 0;
+}
+.signup_body .form_wrap form .agree_wrap .agree .check input {
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  margin: 5px 0 0 2px;
+  width: 13px;
+  height: 13px;
+  border: 0;
+}
+.signup_body .form_wrap form .agree_wrap .agree .check label {
+  margin: 0 4px 0 2px;
+}
+.signup_body .form_wrap form .btn_box {
   padding: 10px 0;
   text-align: center;
   display: block;
@@ -2987,76 +2989,14 @@ main.admin_main {
 .order_form_body .user_info .body form {
   width: 100%;
 }
-.order_form_body .user_info .body form table {
-  width: 100%;
-  position: relative;
-  margin: 10px 0 0;
-  border: 1px solid #d7d5d5;
-  border-top: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  color: #fff;
-  line-height: 1.5;
+.order_form_body .user_info .body form table tbody td select.mail_select {
+  width: 125px;
 }
-.order_form_body .user_info .body form table tbody {
-  font-size: 12px;
-  color: #353535;
-}
-.order_form_body .user_info .body form table tbody th {
-  padding: 11px 0 10px 18px;
-  border: 1px solid #dfdfdf;
-  border-bottom-width: 0;
-  border-left-width: 1px solid #dfdfdf;
-  border-right-width: 1px solid #dfdfdf;
-  font-weight: normal;
-  vertical-align: middle;
-  background-color: #FBFAFA;
-}
-.order_form_body .user_info .body form table tbody th span {
-  color: #008BCC;
-}
-.order_form_body .user_info .body form table tbody td {
-  border-top: 1px solid #dfdfdf;
-  border-right: 1px solid #dfdfdf;
-  vertical-align: middle;
-  padding: 11px 0 10px 18px;
-}
-.order_form_body .user_info .body form table tbody td span.final_name_ck,
-.order_form_body .user_info .body form table tbody td span.final_mail_ck,
-.order_form_body .user_info .body form table tbody td span.final_tel_ck,
-.order_form_body .user_info .body form table tbody td span.final_addr_ck {
+.order_form_body .user_info .body form table tbody td span.final_check_name,
+.order_form_body .user_info .body form table tbody td span.final_check_mail,
+.order_form_body .user_info .body form table tbody td span.final_check_address,
+.order_form_body .user_info .body form table tbody td span.final_check_tel {
   display: none;
-}
-.order_form_body .user_info .body form table tbody td input {
-  height: 30px;
-  padding: 2px 4px;
-  border: 1px solid #d5d5d5;
-  width: 230px;
-}
-.order_form_body .user_info .body form table tbody td input:focus::-webkit-input-placeholder {
-  color: transparent;
-}
-.order_form_body .user_info .body form table tbody td input:focus::-moz-placeholder {
-  color: transparent;
-}
-.order_form_body .user_info .body form table tbody td input:focus:-ms-input-placeholder {
-  color: transparent;
-}
-.order_form_body .user_info .body form table tbody td input:focus::-ms-input-placeholder {
-  color: transparent;
-}
-.order_form_body .user_info .body form table tbody td input:focus::placeholder {
-  color: transparent;
-}
-.order_form_body .user_info .body form table tbody td select {
-  width: 60px;
-  height: 30px;
-  line-height: 30px;
-  min-height: 30px;
-  border: 1px solid #ddd;
-  padding: 0 10px 0 5px;
-  background-color: #fff;
-  font-size: 12px;
 }
 .order_form_body .user_info .body form table tbody td button.send_mail,
 .order_form_body .user_info .body form table tbody td button.check_number,
@@ -3073,9 +3013,7 @@ main.admin_main {
   border: 1px solid black;
 }
 .order_form_body .user_info .body form table tbody td button.send_mail,
-.order_form_body .user_info .body form table tbody td button.check_number {
-  width: 55px;
-}
+.order_form_body .user_info .body form table tbody td button.check_number,
 .order_form_body .user_info .body form table tbody td button.find_addr {
   width: 90px;
 }
@@ -3089,71 +3027,6 @@ main.admin_main {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-}
-.order_form_body .discount_box .body table {
-  width: 100%;
-  position: relative;
-  margin: 10px 0 0;
-  border: 1px solid #d7d5d5;
-  border-top: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  color: #fff;
-  line-height: 1.5;
-}
-.order_form_body .discount_box .body table tbody {
-  font-size: 12px;
-  color: #353535;
-}
-.order_form_body .discount_box .body table tbody th {
-  padding: 11px 0 10px 18px;
-  border: 1px solid #dfdfdf;
-  border-bottom-width: 0;
-  border-left-width: 1px solid #dfdfdf;
-  border-right-width: 1px solid #dfdfdf;
-  font-weight: normal;
-  vertical-align: middle;
-  background-color: #FBFAFA;
-}
-.order_form_body .discount_box .body table tbody th span {
-  color: #008BCC;
-}
-.order_form_body .discount_box .body table tbody td {
-  border-top: 1px solid #dfdfdf;
-  border-right: 1px solid #dfdfdf;
-  vertical-align: middle;
-  padding: 11px 0 10px 18px;
-}
-.order_form_body .discount_box .body table tbody td input {
-  height: 30px;
-  padding: 2px 4px;
-  border: 1px solid #d5d5d5;
-  width: 230px;
-}
-.order_form_body .discount_box .body table tbody td input:focus::-webkit-input-placeholder {
-  color: transparent;
-}
-.order_form_body .discount_box .body table tbody td input:focus::-moz-placeholder {
-  color: transparent;
-}
-.order_form_body .discount_box .body table tbody td input:focus:-ms-input-placeholder {
-  color: transparent;
-}
-.order_form_body .discount_box .body table tbody td input:focus::-ms-input-placeholder {
-  color: transparent;
-}
-.order_form_body .discount_box .body table tbody td input:focus::placeholder {
-  color: transparent;
-}
-.order_form_body .discount_box .body table tbody td select {
-  width: 60px;
-  height: 30px;
-  line-height: 30px;
-  min-height: 30px;
-  border: 1px solid #ddd;
-  padding: 0 10px 0 5px;
-  background-color: #fff;
-  font-size: 12px;
 }
 .order_form_body .discount_box .body table tbody td .coupon_input_box .coupon_btn,
 .order_form_body .discount_box .body table tbody td .coupon_input_box .point_btn,

@@ -134,68 +134,18 @@
                 width: 100%;
 
                 table {
-                    width: 100%;
-                    position: relative;
-                    margin: 10px 0 0;
-                    border: 1px solid #d7d5d5;
-                    border-top: 0;
-                    border-left-width: 0;
-                    border-right-width: 0;
-                    color: #fff;
-                    line-height: 1.5;
-
                     tbody {
-                        font-size: 12px;
-                        color: #353535;
-
-                        th {
-                            padding: 11px 0 10px 18px;
-                            border: 1px solid #dfdfdf;
-                            border-bottom-width: 0;
-                            border-left-width: 1px solid #dfdfdf;
-                            border-right-width: 1px solid #dfdfdf;
-                            font-weight: normal;
-                            vertical-align: middle;
-                            background-color: #FBFAFA;
-
-                            span {
-                                color: #008BCC;
-                            }
-                        }
-
                         td {
-                            border-top: 1px solid #dfdfdf;
-                            border-right: 1px solid #dfdfdf;
-                            vertical-align: middle;
-                            padding: 11px 0 10px 18px;
 
-                            span.final_name_ck,
-                            span.final_mail_ck,
-                            span.final_tel_ck,
-                            span.final_addr_ck {
+                            select.mail_select {
+                                width: 125px;
+                            }
+
+                            span.final_check_name,
+                            span.final_check_mail,
+                            span.final_check_address,
+                            span.final_check_tel {
                                 display: none;
-                            }
-
-                            input {
-                                height: 30px;
-                                padding: 2px 4px;
-                                border: 1px solid #d5d5d5;
-                                width: 230px;
-                            }
-
-                            input:focus::placeholder {
-                                color: transparent;
-                            }
-
-                            select {
-                                width: 60px;
-                                height: 30px;
-                                line-height: 30px;
-                                min-height: 30px;
-                                border: 1px solid #ddd;
-                                padding: 0 10px 0 5px;
-                                background-color: #fff;
-                                font-size: 12px;
                             }
 
                             button.send_mail,
@@ -213,10 +163,7 @@
                             }
 
                             button.send_mail,
-                            button.check_number {
-                                width: 55px;
-                            }
-
+                            button.check_number,
                             button.find_addr {
                                 width: 90px;
                             }
@@ -236,62 +183,8 @@
             justify-content: center;
 
             table {
-                width: 100%;
-                position: relative;
-                margin: 10px 0 0;
-                border: 1px solid #d7d5d5;
-                border-top: 0;
-                border-left-width: 0;
-                border-right-width: 0;
-                color: #fff;
-                line-height: 1.5;
-
                 tbody {
-                    font-size: 12px;
-                    color: #353535;
-
-                    th {
-                        padding: 11px 0 10px 18px;
-                        border: 1px solid #dfdfdf;
-                        border-bottom-width: 0;
-                        border-left-width: 1px solid #dfdfdf;
-                        border-right-width: 1px solid #dfdfdf;
-                        font-weight: normal;
-                        vertical-align: middle;
-                        background-color: #FBFAFA;
-
-                        span {
-                            color: #008BCC;
-                        }
-                    }
-
                     td {
-                        border-top: 1px solid #dfdfdf;
-                        border-right: 1px solid #dfdfdf;
-                        vertical-align: middle;
-                        padding: 11px 0 10px 18px;
-
-                        input {
-                            height: 30px;
-                            padding: 2px 4px;
-                            border: 1px solid #d5d5d5;
-                            width: 230px;
-                        }
-
-                        input:focus::placeholder {
-                            color: transparent;
-                        }
-
-                        select {
-                            width: 60px;
-                            height: 30px;
-                            line-height: 30px;
-                            min-height: 30px;
-                            border: 1px solid #ddd;
-                            padding: 0 10px 0 5px;
-                            background-color: #fff;
-                            font-size: 12px;
-                        }
 
                         .coupon_input_box,
                         .point_input_box {

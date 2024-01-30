@@ -94,7 +94,7 @@
                             </div>
                             <div class="body">
                                 <form th:action="@{/order/orderForm}" th:object="${account}" method="post">
-                                    <table>
+                                    <table class="form_table">
                                         <colgroup>
                                             <col style="width:15%;">
                                             <col style="width:auto;">
@@ -108,7 +108,7 @@
                                                 <div class="name_input_box">
                                                     <input class="name_input" th:field="*{name}" type="text">
                                                 </div>
-                                                <span class="final_name_ck text-danger">받으시는 분을 입력해주세요.</span>
+                                                <span class="final_check_name text-danger">받으시는 분을 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -125,7 +125,7 @@
                                                        readonly="readonly">
                                                 <input th:field="*{address3}" class="address_input_3 d-block w-50 mb-1"
                                                        readonly="readonly">
-                                                <span class="final_addr_ck text-danger">주소를 입력해주세요.</span>
+                                                <span class="final_check_address text-danger">주소를 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -134,9 +134,9 @@
                                             </th>
                                             <td>
                                                 <div>
-                                                    <input type="tel" class="tel_input" maxlength="11" placeholder="'-'을 제외한 휴대전화를 입력해 주세요.">
+                                                    <input type="text" class="tel_input" maxlength="13">
                                                 </div>
-                                                <span class="final_tel_ck text-danger">휴대전화를 입력해주세요.</span>
+                                                <span class="final_check_tel text-danger">휴대전화를 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -145,9 +145,27 @@
                                             </th>
                                             <td>
                                                 <div class="mail_input_box mb-1">
-                                                    <input class="mail_input" th:field="*{email}" type="email">
+                                                    <input class="mail_input" th:field="*{email}" type="text">
+                                                    @
+                                                    <input class="mail_input2" type="text">
+                                                    <select class="mail_select" name="mail_select">
+                                                        <option value="1" selected>직접입력</option>
+                                                        <option value="naver.com">naver.com</option>
+                                                        <option value="hanmail.net">hanmail.net</option>
+                                                        <option value="hotmail.com">hotmail.com</option>
+                                                        <option value="nate.com">nate.com</option>
+                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                        <option value="empas.com">empas.com</option>
+                                                        <option value="dreamwiz.com">dreamwiz.com</option>
+                                                        <option value="freechal.com">freechal.com</option>
+                                                        <option value="lycos.co.kr">lycos.co.kr</option>
+                                                        <option value="korea.com">korea.com</option>
+                                                        <option value="gmail.com">gmail.com</option>
+                                                        <option value="hanmir.com">hanmir.com</option>
+                                                        <option value="paran.com">paran.com</option>
+                                                    </select>
                                                 </div>
-                                                <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
+                                                <span class="final_check_mail text-danger">이메일을 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -173,7 +191,7 @@
                                 <h2>할인/부가결제</h2>
                             </div>
                             <div class="body">
-                                <table>
+                                <table class="form_table">
                                     <colgroup>
                                         <col style="width:15%;">
                                         <col style="width:auto;">
@@ -283,84 +301,96 @@
             /* 주문 요청 */
             $(".order_btn").on("click", function(){
                 /* 유효성 검사 통과 유무 변수 */
-                let name_check = false;          // 이름
-                let address_check = false        // 주소
-                let tel_check = false            // 휴대 전화
-                let mail_check = false           // 이메일
+                let checkName = false;          // 이름
+                let checkAddress = false        // 주소
+                let checkTel = false            // 휴대 전화
+                let checkMail = false           // 이메일
 
                 /* 입력값 변수 */
-                let name = $('.name_input').val();          // 이름 입력란
-                let address = $('.address_input_3').val();  // 주소 입력란
-                let tel = $('.tel_input').val();            // 휴대 전화 입력란
-                let mail = $('.mail_input').val();          // 이메일 입력란
+                let nameVal = $('.name_input').val();          // 이름 입력란
+                let addressVal = $('.address_input_3').val();  // 주소 입력란
+                let telVal = $('.tel_input').val();            // 휴대 전화 입력란
+                let reqVal = $('.req_input').val();            // 배송 메시지 입력란
+                let mailVal1 = $(".mail_input").val();                                  // 이메일 앞부분
+                let mailVal2 = $(".mail_input2").val();                                 // 이메일 뒷부분
+                let fullEmail = mailVal1 + "@" + mailVal2;                              // full 이메일
 
                 /* 이름 유효성 검사 */
-                if (name === "") {
-                    $('.final_name_ck').css('display', 'inline-block')
-                    name_check = false;
+                if (nameVal === "") {
+                    $('.final_check_name').css('display', 'inline-block')
+                    checkName = false;
                 } else {
-                    $('.final_name_ck').css('display', 'none')
-                    name_check = true;
+                    $('.final_check_name').css('display', 'none')
+                    checkName = true;
                 }
 
                 /* 주소 유효성 검사 */
-                if (address === "") {
-                    $('.final_addr_ck').css('display', 'inline-block');
-                    address_check = false;
+                if (addressVal === "") {
+                    $('.final_check_address').css('display', 'inline-block');
+                    checkAddress = false;
                 } else {
-                    $('.final_addr_ck').css('display', 'none');
-                    address_check = true;
+                    $('.final_check_address').css('display', 'none');
+                    checkAddress = true;
                 }
 
                 /* 휴대 전화 유효성 검사 */
-                if (tel === "") {
-                    $('.final_tel_ck').css('display', 'inline-block')
-                    tel_check = false;
+                if (telVal === "") {
+                    $('.final_check_tel').css('display', 'inline-block')
+                    checkTel = false;
                 } else {
-                    $('.final_tel_ck').css('display', 'none')
-                    tel_check = true;
+                    $('.final_check_tel').css('display', 'none')
+                    checkTel = true;
                 }
 
                 /* 이메일 유효성 검사 */
-                if (mail === "") {
-                    $('.final_mail_ck').css('display', 'inline-block')
-                    mail_check = false;
+                if (mailVal1 === '' || mailVal2 === '') {
+                    $(".final_check_mail").css("display", "inline-block");
+                    checkMail = false;
                 } else {
-                    $('.final_mail_ck').css('display', 'none')
-                    mail_check = true;
+                    $(".final_check_mail").css("display", "none");
+                    checkMail = true;
                 }
 
                 /* 최종 유효성 검사 */
-                if (name_check && address_check && tel_check && mail_check) {
-                    $("input[name='address1']").val($(".address_input_1").val());
-                    $("input[name='address2']").val($(".address_input_2").val());
-                    $("input[name='address3']").val($(".address_input_3").val());
-                    $("input[name='tel']").val($(".tel_input").val());
-                    $("input[name='email']").val($(".mail_input").val());
-                    $("input[name='req']").val($(".req_input").val());
+                if (checkName && checkAddress && checkTel && checkMail) {
+                    let form = $(".order_form");
+                    let addressVal1 = $(".address_input_1").val();
+                    let addressVal2 = $(".address_input_2").val();
+                    let addressVal3 = $(".address_input_3").val();
+                    let pointVal = $(".point_input").val();
 
-                    if ($(".point_input").val() === '' || $(".point_input").val() < 0) {
+                    /* 서버로 전송할 form data 채우기 */
+                    $("input[name='address1']").val(addressVal1);
+                    $("input[name='address2']").val(addressVal2);
+                    $("input[name='address3']").val(addressVal3);
+                    $("input[name='tel']").val(telVal);
+                    $("input[name='email']").val(fullEmail);
+                    $("input[name='req']").val(reqVal);
+
+                    /* 사용한 포인트 값 담긴 input 태그 동적 생성 */
+                    if (pointVal === '' || pointVal < 0) {
                         $("input[name='usePoint']").val(0);
                     } else {
-                        $("input[name='usePoint']").val($(".point_input").val());
+                        $("input[name='usePoint']").val(pointVal);
                     }
 
-                    /* 상품정보 */
+                    /* 구매 상품 정보 담긴 input 태그 동적 생성 */
                     let form_contents = '';
                     $(".total_price").each(function(index, element){
                         let itemId = $(element).find('.info').attr("data-id");
                         let count = $(element).find('.info').attr("data-count");
+
                         let itemId_input = "<input name='orders[" + index + "].itemId' type='hidden' value='" + itemId + "'>";
                         form_contents += itemId_input;
+
                         let count_input = "<input name='orders[" + index + "].count' type='hidden' value='" + count + "'>";
                         form_contents += count_input;
                     });
 
-                    $(".order_form").append(form_contents);
-                    $(".order_form").submit();
-                } else {
-                    return false;
+                    form.append(form_contents);
+                    form.submit();
                 }
+                return false;
             });
 
             /* 포인트 입력 유효성 검사 */
@@ -475,15 +505,63 @@
                 setTotalInfo();
             });
 
-            /* 휴대 전화 입력란 숫자 입력만 허용 */
-            $(".tel_input").on("keyup", function () {
-                let inputVal = $(this).val();
-                $(this).val(inputVal.replace(/[^0-9]/gi,''));
-            });
-
             /* 취소 버튼 */
             $(".cancel_btn").on("click", function () {
                 window.history.back();
+            });
+
+            /* 휴대전화 공백 제거, 하이픈 추가 */
+            $(".tel_input").on("keyup", function(){
+                let telVal = $(this).val().trim(); // 공백 제거
+                let addTrimTel = telVal.replace(/[^0-9]/g, ''); // 숫자만 입력 가능
+                let addHyphenTel = '';
+
+                if (addTrimTel.length < 4) {
+                    $(this).val(addTrimTel);
+                    return false;
+                } else if (addTrimTel.length < 7) {
+                    addHyphenTel += addTrimTel.substring(0, 3);
+                    addHyphenTel += '-';
+                    addHyphenTel += addTrimTel.substring(3);
+                    $(this).val(addHyphenTel);
+                    return false;
+                } else if (addTrimTel.length < 11) {
+                    addHyphenTel += addTrimTel.substring(0, 3);
+                    addHyphenTel += '-';
+                    addHyphenTel += addTrimTel.substring(3, 6);
+                    addHyphenTel += '-';
+                    addHyphenTel += addTrimTel.substring(6);
+                    $(this).val(addHyphenTel);
+                    return false;
+                } else {
+                    addHyphenTel += addTrimTel.substring(0, 3);
+                    addHyphenTel += '-';
+                    addHyphenTel += addTrimTel.substring(3, 7);
+                    addHyphenTel += '-';
+                    addHyphenTel += addTrimTel.substring(7);
+                    $(this).val(addHyphenTel);
+                    return false;
+                }
+            });
+
+            /* 회원 이메일 값 출력 */
+            let email = [[${account.email}]];
+            let emailArr = email.split("@");
+
+            $(".mail_input").val(emailArr[0]);
+            $(".mail_input2").val(emailArr[1]);
+
+            /* 이메일 입력 방식 선택 */
+            $('.mail_select').on("change", function () {
+                $(".mail_select option:selected").each(function () {
+                    if ($(this).val() === '1') {
+                        $(".mail_input2").val('');
+                        $(".mail_input2").attr("disabled",false);
+                    } else {
+                        $(".mail_input2").val($(this).text());
+                        $(".mail_input2").attr("disabled",true);
+                    }
+                });
             });
         });
 

@@ -14,7 +14,7 @@
 
             <!-- modify section -->
             <section id="modify">
-                <div class="container modify">
+                <div class="container-fluid modify">
                     <div class="section_header">
                         <h2>MODIFY</h2>
                         <div class="divider"></div>
@@ -24,9 +24,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                     <div class="modify_body mt-5">
-                        <form id="profileFormDto" th:action="@{/account/profile}" th:object="${profileFormDto}"
-                            method="post" onsubmit="return chkPW()">
-                            <table>
+
+                        <form id="profileForm" th:action="@{/account/profile}" th:object="${profileFormDto}" method="post">
+                            <table class="form_table">
                                 <colgroup>
                                     <col style="width:15%;">
                                     <col style="width:auto;">
@@ -40,11 +40,7 @@
                                             <div class="id_input_box">
                                                 <input class="id_input" th:field="*{userIdentifier}" type="text"
                                                     minlength="5" maxlength="20" readonly="readonly">
-                                                (영문 소문자/숫자, 5~20자)
                                             </div>
-                                            <span class="id_input_re_1 text-success">사용 가능한 아이디입니다.</span>
-                                            <span class="id_input_re_2 text-danger">아이디가 이미 존재합니다.</span>
-                                            <span class="final_id_ck text-danger">아이디를 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -53,11 +49,9 @@
                                         </th>
                                         <td>
                                             <div class="password_input_box">
-                                                <input class="pw_input" th:field="*{password}" type="password"
-                                                    minlength="8" maxlength="20">
-                                                (영문 대소문자/숫자, 8~20자)
+                                                <input class="password_input" th:field="*{password}" type="password" minlength="8" maxlength="20"> (영문, 숫자, 특수문자 8~20자)
                                             </div>
-                                            <span class="final_pw_ck text-danger">비밀번호를 입력해주세요.</span>
+                                            <span class="password_warn_msg text-danger display_none">숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -66,13 +60,11 @@
                                         </th>
                                         <td>
                                             <div class="password_confirm_input_box">
-                                                <input class="pwck_input" th:field="*{passwordConfirm}" type="password"
-                                                    minlength="8" maxlength="20">
-                                                (영문 대소문자/숫자, 8~20자)
+                                                <input class="password_confirm_input" th:field="*{passwordConfirm}"
+                                                       type="password" minlength="8" maxlength="20">
                                             </div>
-                                            <span class="pwck_input_re_1 text-success">비밀번호가 일치합니다.</span>
-                                            <span class="pwck_input_re_2 text-danger">비밀번호가 일치하지 않습니다.</span>
-                                            <span class="final_pwck_ck text-danger">비밀번호 확인을 입력해주세요.</span>
+                                            <span class="password_confirm_success_msg text-success display_none">비밀번호가 일치합니다.</span>
+                                            <span class="password_confirm_warn_msg text-danger display_none">비밀번호가 일치하지 않습니다.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -83,7 +75,6 @@
                                             <div class="name_input_box">
                                                 <input class="name_input" th:field="*{name}" type="text">
                                             </div>
-                                            <span class="final_name_ck text-danger">이름을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -92,16 +83,31 @@
                                         </th>
                                         <td>
                                             <div class="mail_input_box mb-1">
-                                                <input class="mail_input" th:field="*{email}" type="email">
-                                                <button type="button" class="send_mail">전송</button>
+                                                <input class="mail_input" th:field="*{email}" type="text">
+                                                 @
+                                                <input class="mail_input2" type="text">
+                                                <select class="mail_select" name="mail_select">
+                                                    <option value="1" selected>직접입력</option>
+                                                    <option value="naver.com">naver.com</option>
+                                                    <option value="hanmail.net">hanmail.net</option>
+                                                    <option value="hotmail.com">hotmail.com</option>
+                                                    <option value="nate.com">nate.com</option>
+                                                    <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                    <option value="empas.com">empas.com</option>
+                                                    <option value="dreamwiz.com">dreamwiz.com</option>
+                                                    <option value="freechal.com">freechal.com</option>
+                                                    <option value="lycos.co.kr">lycos.co.kr</option>
+                                                    <option value="korea.com">korea.com</option>
+                                                    <option value="gmail.com">gmail.com</option>
+                                                    <option value="hanmir.com">hanmir.com</option>
+                                                    <option value="paran.com">paran.com</option>
+                                                </select>
+                                                <button type="button" class="send_mail">인증번호 발송</button>
                                             </div>
                                             <div class="mail_check_box">
-                                                <input class="mail_check_input" disabled="disabled">
-                                                <button type="button" class="check_number"
-                                                    onclick="confirmNumber()">확인</button>
+                                                <input class="mail_confirm_input" disabled="disabled">
+                                                <button type="button" class="check_number" onclick="confirmNumber()">인증번호 확인</button>
                                             </div>
-                                            <span class="final_mail_ck text-danger">이메일을 입력해주세요.</span>
-                                            <span class="need_mail_check text-danger">이메일 인증이 필요합니다.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -112,15 +118,13 @@
                                             <input th:field="*{address1}" class="address_input_1 mb-1"
                                                 readonly="readonly">
                                             <button type="button" class="find_addr white_btn_w65_h30"
-                                                onclick="execution_daum_address()">주소 찾기</button>
+                                                onclick="addressAPI()">주소 찾기</button>
                                             <div class="clearfix"></div>
                                             <input th:field="*{address2}" class="address_input_2 d-block w-50 mb-1"
                                                 readonly="readonly">
                                             <input th:field="*{address3}" class="address_input_3 d-block w-50 mb-1"
                                                 readonly="readonly">
-                                            <span class="final_addr_ck text-danger">주소를 입력해주세요.</span>
                                         </td>
-
                                     </tr>
                                 </tbody>
                             </table>
@@ -140,198 +144,266 @@
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-        $(function() {
-            /* 유효성 검사 통과유무 변수 */
-            let code = ""; // 이메일 전송 인증번호 저장 변수
-            let before_email = $('.mail_input').val(); // 기존 이메일
-            let pw_check = false;            // 비번
-            let pwck_check = false;          // 비번 확인
-            let pwckcor_check = false;       // 비번 확인 일치 확인
-            let name_check = false;          // 이름
-            let mail_check = false;          // 이메일
-            let mailnum_check = false;       // 이메일 인증번호 확인
-            let address_check = false        // 주소
+    <script th:inline="javascript">
 
-            //회원정보수정 버튼(회원정보수정 기능 작동)
+        /* 유효성 검사 통과유무 변수 */
+        let code = "";                                                              // 이메일 인증번호 저장 변수
+        let checkPassword = false;                                                  // 비번
+        let checkPasswordConfirm = false;                                           // 비번 확인
+        let checkPasswordMatch = false;                                             // 비번 일치 확인
+        let checkName = false;                                                      // 이름
+        let checkMail = false;                                                      // 이메일
+        let checkMailConfirm = false;                                               // 이메일 인증번호 확인
+        let checkAddress = false                                                    // 주소
+        let beforeEmail = [[${profileFormDto.email}]];                              // 기존 이메일
+
+        $(function () {
+
+            /* 회원 이메일 값 셋팅 */
+            let email = [[${profileFormDto.email}]];
+            let emailArr = email.split("@");
+
+            $(".mail_input").val(emailArr[0]);
+            $(".mail_input2").val(emailArr[1]);
+
+            /* 회원 정보 수정 */
             $(".modify_btn").click(function () {
                 /* 입력값 변수 */
-                let pw = $('.pw_input').val(); // 비밀번호 입력란
-                let pwck = $('.pwck_input').val(); // 비밀번호 확인 입력란
-                let name = $('.name_input').val(); // 이름 입력란
-                let mail = $('.mail_input').val(); // 이메일 입력란
-                let address = $('.address_input_3').val(); // 주소 입력란
+                let passwordVal = $('.password_input').val();                           // 비밀번호
+                let passwordConfirmVal = $('.password_confirm_input').val();            // 비밀번호 확인
+                let nameVal = $('.name_input').val();                                   // 이름
+                let mailVal1 = $(".mail_input").val();                                  // 이메일 앞부분
+                let mailVal2 = $(".mail_input2").val();                                 // 이메일 뒷부분
+                let fullEmail = mailVal1 + '@' + mailVal2;
+                let addressVal = $('.address_input_3').val();                           // 주소
+                let form = $("#profileForm");
 
-                /* 비밀번호 유효성 검사 */
-                if (pw === "") {
-                    $('.final_pw_ck').css('display', 'inline-block')
-                    pw_check = false;
-                } else {
-                    $('.final_pw_ck').css('display', 'none')
-                    pw_check = true;
+                /* 비밀번호 빈값 검사 */
+                if (passwordVal === "") {
+                    alert("비밀번호를 입력하세요.");
+                    $('.password_input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 }
 
-                /* 비밀번호 확인 유효성 검사 */
-                if (pwck === "") {
-                    $('.final_pwck_ck').css('display', 'inline-block')
-                    pwck_check = false;
-                } else {
-                    $('.final_pwck_ck').css('display', 'none')
-                    pwck_check = true;
+                /* 비밀번호 확인 빈값 검사 */
+                if (passwordConfirmVal === "") {
+                    alert("비밀번호 확인을 입력하세요.");
+                    $('.password_confirm_input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 }
 
-                /* 이름 유효성 검사 */
-                if (name === "") {
-                    $('.final_name_ck').css('display', 'inline-block')
-                    name_check = false;
-                } else {
-                    $('.final_name_ck').css('display', 'none')
-                    name_check = true;
+                /* 비밀번호 공백 존재 여부 검사 */
+                if (hasBlank(passwordVal) || hasBlank(passwordConfirmVal)) {
+                    alert("비밀번호는 공백 없이 입력해주세요.");
+                    $('.password_input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 }
 
-                /* 이메일 유효성 검사 */
-                if (mail === "") {
-                    $('.final_mail_ck').css('display', 'inline-block')
-                    mail_check = false;
+                /* 이름 빈값 검사 */
+                if (nameVal === "") {
+                    alert("이름을 입력하세요.");
+                    $('.name_input').focus();
+                    window.scrollTo(0, 0);
+                    checkName = false;
+                    return false;
                 } else {
-                    $('.final_mail_ck').css('display', 'none')
-                    mail_check = true;
+                    checkName = true;
                 }
 
-                /* 이메일 변경 X = 유효성 검사 통과 */
-                if (before_email === mail) {
-                    mailnum_check = true;
+                /* 이메일 빈값 검사 */
+                if (mailVal1 === '' || mailVal2 === '') {
+                    alert("이메일을 입력하세요.");
+                    $('.mail_input').focus();
+                    window.scrollTo(0, 0);
+                    checkMail = false;
+                    return false;
+                } else {
+                    checkMail = true;
                 }
 
-                /* 주소 유효성 검사 */
-                if (address === "") {
-                    $('.final_addr_ck').css('display', 'inline-block');
-                    address_check = false;
+                /* 주소 빈값 검사 */
+                if (addressVal === "") {
+                    alert("주소를 입력하세요.");
+                    $('.address_input_1').focus();
+                    window.scrollTo(0, 0);
+                    checkAddress = false;
+                    return false;
                 } else {
-                    $('.final_addr_ck').css('display', 'none');
-                    address_check = true;
+                    checkAddress = true;
+                }
+
+                /* 이메일 변경 검사 */
+                if (beforeEmail === fullEmail) {
+                    checkMailConfirm = true;
+                    finalEmail = beforeEmail; // 이메일을 변경하지 않을 경우 기존 이메일 값을 그대로 서버에 전송
+                } else if (checkMailConfirm === false && beforeEmail !== fullEmail) {
+                    alert("이메일을 인증해주세요.");
+                    $('.mail_input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 이메일 인증 여부 검사 */
+                if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
+                    alert("이메일을 인증해주세요.");
+                    $('.mail_input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 }
 
                 /* 최종 유효성 검사 */
-                if (pw_check && pwck_check && pwckcor_check && mail_check && mailnum_check && name_check && address_check) {
-                    $('#profileFormDto').attr("action", "/account/profile");
-                    $('#profileFormDto').submit();
-                } else if (!mailnum_check) {
-                    $('.need_mail__check').css('display', 'inline-block');
+                if (checkPassword && checkPasswordConfirm && checkMail && checkMailConfirm && checkName && checkAddress) {
+                    $(".mail_input").val(finalEmail);
+                    form.attr("action", "/account/profile");
+                    form.submit();
                 }
                 return false;
             });
+
+            // 이메일 전송
+            $(".send_mail").click(function () {
+                let mailVal1 = $(".mail_input").val();
+                let mailVal2 = $(".mail_input2").val();
+                let fullEmail = mailVal1 + "@" + mailVal2;
+                let mailConfirmInput = $(".mail_confirm_input"); // 인증 번호 입력란
+
+                if (confirm("인증번호를 전송하시겠습니까?")) {
+                    if (checkMailForm(fullEmail)) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/check/email?email=" + fullEmail,
+                            success: function (data) {
+                                mailConfirmInput.css("background-color", "white");
+                                mailConfirmInput.attr("disabled", false);
+                                code = data;
+                            },
+                            error: function (request, status, error) {
+                                alert(request.responseText);
+                            }
+                        });
+                    } else {
+                        alert("올바른 이메일을 입력해주세요.");
+                    }
+                } else {
+                    return false;
+                }
+            })
+
+            /* 비밀번호 유효성 검사 */
+            $('.password_input').on("propertychange change keyup paste input", function () {
+                let passwordVal = $('.password_input').val();
+                let passwordConfirmVal = $('.password_confirm_input').val();
+
+                // 값을 입력한 경우
+                if (passwordVal.length !== 0) {
+                    if (strongPassword(passwordVal)) {
+                        $(".password_warn_msg").css("display","none"); // 실패 메시지가 가려져야 함
+                        checkPassword = true;
+                        if (isMatch(passwordVal, passwordConfirmVal)) { // 비밀번호 확인을 먼저 입력하고 비밀번호를 입력하는 경우 실패 메시지 뜨는 것 방지
+                            $(".password_confirm_success_msg").css("display", "inline-block");
+                            $(".password_confirm_warn_msg").css("display","none");
+                            $(".password_confirm_warn_msg2").css("display","none");
+                        }
+                    }
+                    else {
+                        $(".password_warn_msg").css("display","inline-block"); // 실패 메시지가 보여야 함
+                        checkPassword = false;
+                    }
+                }
+                    // 값을 입력하지 않은 경우 (지웠을 때)
+                // 모든 메시지를 가린다.
+                else {
+                    $(".password_warn_msg").css("display","none");
+                }
+            })
+
+            /* 비밀번호 일치 검사 */
+            $(".password_confirm_input").on("keyup", function () {
+                let passwordVal = $('.password_input').val();
+                let passwordConfirmVal = $('.password_confirm_input').val();
+
+                if (passwordConfirmVal.length !== 0) { // 사용자가 값을 입력했을 때 동작
+                    if(strongPassword(passwordConfirmVal)) { // 글자 입력 제한 검사를 통과한 경우
+                        if (isMatch(passwordVal, passwordConfirmVal)) { // (비밀번호, 비밀번호 확인) 값이 일치하는 경우
+                            $(".password_confirm_success_msg").css("display", "inline-block"); // 성공 메시지가 보여야 함 ('비밀번호가 일치합니다.')
+                            $(".password_confirm_warn_msg").css("display","none");
+                            $(".password_confirm_warn_msg2").css("display","none");
+                            checkPasswordConfirm = true;
+                        }
+                        else { // (비밀번호,비밀번호 확인) 값이 일치하지 않는 경우
+                            $(".password_confirm_success_msg").css("display", "none");
+                            $(".password_confirm_warn_msg").css("display","inline-block"); // 실패 메시지가 보여야 함 ('비밀번호가 일치하지 않습니다.')
+                            $(".password_confirm_warn_msg2").css("display","none");
+                            checkPasswordConfirm = false;
+                        }
+                    } else { // 글자 입력 제한 검사를 통과하지 못한 경우
+                        $(".password_confirm_success_msg").css("display", "none");
+                        $(".password_confirm_warn_msg").css("display", "none");
+                        $(".password_confirm_warn_msg2").css("display", "inline-block"); // 실패 메시지가 보여야 함 ('숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.')
+                        checkPasswordMatch = false;
+                    }
+                } else { // 사용자가 값을 모두 지웠을 때 동작 (모든 메시지를 가림)
+                    $(".password_confirm_success_msg").css("display", "none");
+                    $(".password_confirm_warn_msg").css("display","none");
+                    $(".password_confirm_warn_msg2").css("display","none");
+                    checkPasswordMatch = false;
+                }
+            });
+
+            /* 이메일 입력 방식 선택 */
+            $('.mail_select').on("change", function () {
+                $(".mail_select option:selected").each(function () {
+                    if ($(this).val() === '1') {
+                        $(".mail_input2").val('');
+                        $(".mail_input2").attr("disabled",false);
+                    } else {
+                        $(".mail_input2").val($(this).text());
+                        $(".mail_input2").attr("disabled",true);
+                    }
+                });
+            });
         });
 
-        /* 비밀번호 유효성 검사 */
-        function chkPW() {
-            var pw = $(".pw_input").val();
-            var pwck = $(".pwck_input").val();
-            var num = pw.search(/[0-9]/g);
-            var eng = pw.search(/[a-z]/ig);
-
-            if (pw.length < 8 || pw.length > 20) {
-                alert("8자리 ~ 20자리 이내로 입력해주세요.");
-                return false;
-            } else if (pw.search(/\s/) != -1) {
-                alert("비밀번호는 공백 없이 입력해주세요.");
-                return false;
-            } else if (num < 0 || eng < 0) {
-                alert("영문,숫자를 혼합하여 입력해주세요.");
-                return false;
-            } else {
-                return true;
-            }
-
-            if (pwck.length < 8 || pwck.length > 20) {
-                alert("8자리 ~ 20자리 이내로 입력해주세요.");
-                return false;
-            } else if (pw.search(/\s/) != -1) {
-                alert("비밀번호는 공백 없이 입력해주세요.");
-                return false;
-            } else if (num < 0 || eng < 0) {
-                alert("영문,숫자를 혼합하여 입력해주세요.");
-                return false;
-            } else {
-                return true;
-            }
+        /* 비밀번호 : 8글자 이상, 영문, 숫자, 특수문자 사용 */
+        function strongPassword (str) {
+            return /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/.test(str);
         }
 
-        /* 비밀번호 확인 일치 유효성 검사 */
-        $('.pwck_input').on("propertychange change keyup paste input", function () {
-            let pw = $('.pw_input').val();
-            let pwck = $('.pwck_input').val();
+        /* 비밀번호 확인 : 비밀번호와 비밀번호 확인 일치 */
+        function isMatch (password1, password2) {
+            return password1 === password2;
+        }
 
-            if (pw === pwck) {
-                $('.pwck_input_re_1').css('display', 'inline-block');
-                $('.pwck_input_re_2').css('display', 'none');
-                $('.final_pwck_ck').css('display', 'none');
-                $('.final_pw_ck').css('display', 'none');
-                pwckcor_check = true;
-            } else {
-                $('.pwck_input_re_1').css('display', 'none');
-                $('.pwck_input_re_2').css('display', 'inline-block');
-                $('.final_pwck_ck').css('display', 'none');
-                $('.final_pw_ck').css('display', 'none');
-                pwckcor_check = false;
-            }
-        })
+        /* 비밀번호, 비밀번호 확인 : 공백 입력 X */
+        function hasBlank (str) {
+            return /[a-z]/ig.test(str);
+        }
 
-        // 이메일 전송
-        $(".send_mail").click(function () {
-            let email = $(".mail_input").val(); // 입력한 이메일
-            let check_input = $(".mail_check_input"); // 인증 번호 입력란
-
-            if (confirm("인증번호를 전송하시겠습니까?")) {
-                if (mail_form_check(email)) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/check/email?email=" + email,
-                        success: function (data) {
-                            check_input.css("background-color", "white");
-                            check_input.attr("disabled", false);
-                            code = data;
-                        },
-                        error: function (request, status, error) {
-                            alert(request.responseText);
-                        }
-                    });
-                } else {
-                    alert("올바른 이메일을 입력해주세요.");
-                }
-            } else {
-                return false;
-            }
-        })
-
-        // 인증 번호 일치 여부
+        /* 인증 번호 일치 여부 */
         function confirmNumber() {
-            let check_input = $(".mail_check_input"); // 인증 번호 입력란
-            let input_code = $(".mail_check_input").val(); // 사용자가 입력한 인증 번호
-            let mail_input = $(".mail_input");
-            let send_mail_btn = $(".send_mail");
+            let mailConfirmInputVal = $(".mail_confirm_input").val(); // 사용자가 입력한 인증 번호
 
-            if (input_code === code) {
+            if (mailConfirmInputVal === code) {
                 alert("인증되었습니다.");
-                check_input.css("background-color", "#fafafa");
-                check_input.attr("disabled", true);
-                send_mail_btn.css("display", "none");
-                mail_input.attr("readonly", true);
-                mailnum_check = true;
+                finalEmail = $(".mail_input").val() + '@' + $(".mail_input2").val();
+                checkMailConfirm = true;
             } else {
                 alert("인증번호를 다시 확인해주세요.");
-                mailnum_check = false;
+                checkMailConfirm = false;
             }
         }
 
-        // 입력 이메일 형식 유효성 검사
-        function mail_form_check(email) {
+        /* 입력 이메일 형식 유효성 검사 */
+        function checkMailForm(email) {
             let form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return form.test(email);
         }
 
-        // 다음 주소 연동
-        function execution_daum_address() {
+        /* 다음 주소 연동 API */
+        function addressAPI() {
             new daum.Postcode({
                 oncomplete: function (data) {
                     // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
@@ -377,6 +449,7 @@
             }).open();
         }
 
+        /* 취소 버튼 */
         function cancelBtn() {
             location.href = "/";
         }
