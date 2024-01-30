@@ -2788,7 +2788,7 @@ main.admin_main {
 }
 .order_hist_body .table_wrap table.order_hist_table {
   width: 100%;
-  min-width: 768px;
+  min-width: 964px;
   table-layout: fixed;
   border-spacing: 0;
   border-collapse: collapse;

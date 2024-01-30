@@ -95,6 +95,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
         if (Objects.isNull(itemSearchDto.getSort()) || itemSearchDto.getSort().equals("new") || itemSearchDto.getSort().isEmpty()) {
             orderSpecifiers.add(new OrderSpecifier(Order.DESC, item.id));
+        } else if (itemSearchDto.getSort().equals("best")) {
+            orderSpecifiers.add(new OrderSpecifier(Order.DESC, item.ratingAvg));
         } else if (itemSearchDto.getSort().equals("low")) {
             orderSpecifiers.add(new OrderSpecifier(Order.ASC, item.price));
         } else if (itemSearchDto.getSort().equals("high")) {
