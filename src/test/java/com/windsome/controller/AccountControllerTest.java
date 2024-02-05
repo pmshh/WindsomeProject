@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -140,5 +141,129 @@ class AccountControllerTest {
 
         assertNotEquals("닉네임을 길게 입력해서 에러를 발생시키자", account.getName());
         assertFalse(passwordEncoder.matches("changePassword123", account.getPassword()));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("이메일 중복 체크 후 이메일 인증 - 성공")
+    @Test
+    void confirmEmail() throws Exception {
+        mockMvc.perform(get("/check/email")
+                        .param("email", "newemail@test.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("이메일 중복 체크 후 이메일 인증 - 실패")
+    @Test
+    void confirmEmailFail() throws Exception {
+        Account account = accountRepository.findByUserIdentifier("test1234");
+        mockMvc.perform(get("/check/email")
+                        .param("email", account.getEmail()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("이미 사용중인 이메일입니다."));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("아이디 중복 체크 - 성공")
+    @Test
+    void duplicateCheckEmail() throws Exception {
+        mockMvc.perform(post("/check/id")
+                        .param("userId", "test12345678")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("사용 가능한 아이디입니다."));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("아이디 중복 체크 - 실패")
+    @Test
+    void duplicateCheckEmailFail() throws Exception {
+        Account account = accountRepository.findByUserIdentifier("test1234");
+        mockMvc.perform(post("/check/id")
+                        .param("userId", account.getUserIdentifier())
+                        .with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("이미 사용중인 아이디입니다."));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("아이디/비밀번호 찾기 화면 보이는지 테스트")
+    @Test
+    void findAccount() throws Exception {
+        mockMvc.perform(get("/find/account")
+                        .param("type", "findId"))
+                .andExpect(model().attributeExists("type"))
+                .andExpect(view().name("account/findAccount"));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("아이디 찾기 화면 (쿼리 파라미터 숨기기 위한 용도) 보이는지 테스트")
+    @Test
+    void findIdRedirect() throws Exception {
+        mockMvc.perform(get("/find/id.do")
+                        .param("name", "test")
+                        .param("email", "test@naver.com"))
+                .andExpect(redirectedUrl("/find/id"));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("아이디 찾기 화면 보이는지 테스트")
+    @Test
+    void findId() throws Exception {
+        mockMvc.perform(get("/find/id"))
+                .andExpect(view().name("account/findId"));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("비밀번호 변경 화면 (쿼리 파라미터 숨기기 위한 용도) 보이는지 테스트")
+    @Test
+    void updatePwRedirect() throws Exception {
+        mockMvc.perform(get("/update/pw.do")
+                        .param("userIdentifier", "test")
+                        .param("name", "test")
+                        .param("email", "test@naver.com"))
+                .andExpect(redirectedUrl("/update/pw"));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("비밀번호 변경 화면 보이는지 테스트")
+    @Test
+    void updatePwForm() throws Exception {
+        mockMvc.perform(get("/update/pw"))
+                .andExpect(view().name("account/updatePw"));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("비밀번호 변경 테스트")
+    @Test
+    void updatePw() throws Exception {
+        mockMvc.perform(post("/update/pw")
+                        .param("userIdentifier", "test1234")
+                        .param("password", "testtest1234@")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("비밀번호가 변경되었습니다."));
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("아이디/비밀번호 찾기 화면 - 이메일 인증 테스트")
+    @Test
+    void findIdPwEmailConfirm() throws Exception {
+        mockMvc.perform(post("/find/sendEmail")
+                        .param("email", "test1234@email.com")
+                        .with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    @WithAccount("test1234")
+    @DisplayName("마이 페이지 화면 보이는지 테스트")
+    @Test
+    void mypage() throws Exception {
+        mockMvc.perform(get("/mypage"))
+                .andExpect(model().attributeExists("cartItemTotalCount"))
+                .andExpect(model().attributeExists("myPageInfo"))
+                .andExpect(model().attributeExists("userOrderCount"))
+                .andExpect(view().name("account/mypage"));
     }
 }
