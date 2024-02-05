@@ -49,7 +49,7 @@
                                         </th>
                                         <td>
                                             <div class="password_input_box">
-                                                <input class="password_input" th:field="*{password}" type="password" minlength="8" maxlength="20"> (영문, 숫자, 특수문자 8~20자)
+                                                <input class="password_input" th:field="*{password}" type="password" minlength="8" maxlength="20"> 8~20자의 영문대소문자,숫자,특수문자 사용
                                             </div>
                                             <span class="password_warn_msg text-danger display_none">숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.</span>
                                         </td>
@@ -65,6 +65,7 @@
                                             </div>
                                             <span class="password_confirm_success_msg text-success display_none">비밀번호가 일치합니다.</span>
                                             <span class="password_confirm_warn_msg text-danger display_none">비밀번호가 일치하지 않습니다.</span>
+                                            <span class="password_confirm_warn_msg2 text-danger display_none">숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -130,7 +131,7 @@
                             </table>
                             <div class="btn_box">
                                 <button class="modify_btn black_btn_w130_h40" type="submit">회원정보수정</button>
-                                <button class="white_btn_w130_h40" type="button" onclick="cancelBtn()">취소</button>
+                                <button class="white_btn_w130_h40" type="button" onclick="location.href='/'">취소</button>
                             </div>
                         </form>
                     </div>
@@ -332,6 +333,7 @@
                             $(".password_confirm_warn_msg").css("display","none");
                             $(".password_confirm_warn_msg2").css("display","none");
                             checkPasswordConfirm = true;
+                            checkPasswordMatch = true;
                         }
                         else { // (비밀번호,비밀번호 확인) 값이 일치하지 않는 경우
                             $(".password_confirm_success_msg").css("display", "none");
@@ -379,7 +381,7 @@
 
         /* 비밀번호, 비밀번호 확인 : 공백 입력 X */
         function hasBlank (str) {
-            return /[a-z]/ig.test(str);
+            return /\s/g.test(str);
         }
 
         /* 인증 번호 일치 여부 */
@@ -447,11 +449,6 @@
                     $(".address_input_3").focus();
                 }
             }).open();
-        }
-
-        /* 취소 버튼 */
-        function cancelBtn() {
-            location.href = "/";
         }
     </script>
 </body>

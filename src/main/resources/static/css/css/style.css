@@ -1333,132 +1333,8 @@ table.form_table tbody td select {
   line-height: 10px;
 }
 
-/* findId page start */
-.message_box_fail,
-.message_box_success {
-  width: 80%;
-  display: none;
-  margin: 45px auto 15px;
-}
-
-.find_id_body {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-.find_id_body form {
-  width: 80%;
-}
-.find_id_body form table {
-  width: 100%;
-  position: relative;
-  margin: 10px 0 0;
-  border: 1px solid #d7d5d5;
-  border-top: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  color: #fff;
-  line-height: 1.5;
-}
-.find_id_body form table tbody {
-  font-size: 12px;
-  color: #353535;
-}
-.find_id_body form table tbody th {
-  padding: 11px 0 10px 18px;
-  border: 1px solid #dfdfdf;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  font-weight: normal;
-  vertical-align: middle;
-}
-.find_id_body form table tbody th span {
-  color: #008BCC;
-}
-.find_id_body form table tbody td {
-  border-top: 1px solid #dfdfdf;
-  vertical-align: middle;
-  padding: 11px 0 10px 18px;
-}
-.find_id_body form table tbody td span.id_input_re_1,
-.find_id_body form table tbody td span.id_input_re_2,
-.find_id_body form table tbody td span.mail_input_re_1,
-.find_id_body form table tbody td span.mail_input_re_2,
-.find_id_body form table tbody td span.final_id_ck,
-.find_id_body form table tbody td span.final_pw_ck,
-.find_id_body form table tbody td span.final_pwck_ck,
-.find_id_body form table tbody td span.final_nickname_ck,
-.find_id_body form table tbody td span.final_mail_ck,
-.find_id_body form table tbody td span.final_addr_ck,
-.find_id_body form table tbody td span.pwck_input_re_1,
-.find_id_body form table tbody td span.pwck_input_re_2 {
-  display: none;
-}
-.find_id_body form table tbody td input {
-  height: 29px;
-  padding: 2px 4px;
-  border: 1px solid #d5d5d5;
-  width: 200px;
-}
-.find_id_body form table tbody td input:focus::-webkit-input-placeholder {
-  color: transparent;
-}
-.find_id_body form table tbody td input:focus::-moz-placeholder {
-  color: transparent;
-}
-.find_id_body form table tbody td input:focus:-ms-input-placeholder {
-  color: transparent;
-}
-.find_id_body form table tbody td input:focus::-ms-input-placeholder {
-  color: transparent;
-}
-.find_id_body form table tbody td input:focus::placeholder {
-  color: transparent;
-}
-.find_id_body form table tbody td select {
-  width: 60px;
-  height: 30px;
-  line-height: 29px;
-  min-height: 30px;
-  border: 1px solid #ddd;
-  padding: 0 10px 0 5px;
-  background-color: #fff;
-  font-size: 12px;
-}
-.find_id_body form table tbody td a.send_mail,
-.find_id_body form table tbody td a.check_number {
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 105px;
-  height: 28px;
-  text-align: center;
-  padding-top: 5px;
-  border-radius: 2px;
-}
-.find_id_body form table tbody td a.send_mail {
-  display: inline-block;
-}
-.find_id_body form table tbody td a.check_number {
-  display: none;
-}
-.find_id_body form table tbody td a.find_addr {
-  display: inline-block;
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 80px;
-  height: 28px;
-  text-align: center;
-  vertical-align: middle;
-  padding-top: 5px;
-  border-radius: 2px;
-}
-.find_id_body form .find_id_result {
+/* findAccount page start */
+.find_account_body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1468,148 +1344,257 @@ table.form_table tbody td select {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 20px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
-.find_id_body form .find_id_result small {
-  display: none;
+.find_account_body .tab_box {
+  width: 80%;
+  margin-bottom: 30px;
 }
-.find_id_body form .btn_box {
+.find_account_body .tab_box ul li {
+  float: left;
+  width: 50%;
+  text-align: center;
+  border: 1px solid #e2e2e2;
+  cursor: pointer;
+  margin: 0;
+  line-height: 50px;
+  font-size: 16px;
+}
+.find_account_body .tab_box ul li.active {
+  color: #fff;
+  background-color: #12A19A;
+  border: 1px solid transparent;
+}
+.find_account_body .tab_box ul li.active:hover {
+  background-color: #0c6460;
+  border: 1px solid transparent;
+}
+.find_account_body .content_box {
+  width: 80%;
+}
+.find_account_body .content_box .find_id_form_box,
+.find_account_body .content_box .find_pw_form_box {
+  width: 100%;
+}
+.find_account_body .content_box .find_id_form_box .little_text_box,
+.find_account_body .content_box .find_pw_form_box .little_text_box {
+  padding: 10px 0;
+}
+.find_account_body .content_box .find_id_form_box .little_text_box .info_text,
+.find_account_body .content_box .find_pw_form_box .little_text_box .info_text {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  color: rgb(85, 85, 85);
+}
+.find_account_body .content_box .find_id_form_box form,
+.find_account_body .content_box .find_pw_form_box form {
+  width: 100%;
+}
+.find_account_body .content_box .find_id_form_box form table tbody td span,
+.find_account_body .content_box .find_pw_form_box form table tbody td span {
+  margin-top: 2px;
+}
+.find_account_body .content_box .find_id_form_box form table tbody td select.find_pw_email_select,
+.find_account_body .content_box .find_id_form_box form table tbody td select.find_id_email_select,
+.find_account_body .content_box .find_pw_form_box form table tbody td select.find_pw_email_select,
+.find_account_body .content_box .find_pw_form_box form table tbody td select.find_id_email_select {
+  width: 125px;
+}
+.find_account_body .content_box .find_id_form_box form table tbody td button.send_mail,
+.find_account_body .content_box .find_id_form_box form table tbody td button.check_number,
+.find_account_body .content_box .find_pw_form_box form table tbody td button.send_mail,
+.find_account_body .content_box .find_pw_form_box form table tbody td button.check_number {
+  padding: 0;
+  height: 30px;
+  margin-bottom: 2px;
+  border: 1px solid #e2e2e2;
+  background: white;
+}
+.find_account_body .content_box .find_id_form_box form table tbody td button.send_mail:hover,
+.find_account_body .content_box .find_id_form_box form table tbody td button.check_number:hover,
+.find_account_body .content_box .find_pw_form_box form table tbody td button.send_mail:hover,
+.find_account_body .content_box .find_pw_form_box form table tbody td button.check_number:hover {
+  border: 1px solid black;
+}
+.find_account_body .content_box .find_id_form_box form table tbody td button.send_mail,
+.find_account_body .content_box .find_id_form_box form table tbody td button.check_number,
+.find_account_body .content_box .find_pw_form_box form table tbody td button.send_mail,
+.find_account_body .content_box .find_pw_form_box form table tbody td button.check_number {
+  width: 90px;
+}
+.find_account_body .content_box .find_id_form_box .big_text_box,
+.find_account_body .content_box .find_pw_form_box .big_text_box {
+  padding: 20px 0;
+}
+.find_account_body .content_box .find_id_form_box .big_text_box .info_text,
+.find_account_body .content_box .find_pw_form_box .big_text_box .info_text {
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+  color: rgb(85, 85, 85);
+}
+.find_account_body .content_box .find_id_form_box .btn_box,
+.find_account_body .content_box .find_pw_form_box .btn_box {
   padding: 10px 0;
   text-align: center;
   display: block;
   margin-top: 30px;
 }
-
-/* findPass page start */
-.message_box_fail,
-.message_box_success {
-  width: 80%;
+.find_account_body .content_box .find_pw_form_box {
   display: none;
-  margin: 45px auto 15px;
 }
 
-.find_pass_body {
+.find_id_body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 30px;
+  border: 1px solid #dddddd;
+  width: 80%;
+  margin: 0 auto;
 }
-.find_pass_body form {
+.find_id_body .message_box {
+  font-size: 28px;
+  text-align: center;
+  line-height: 64px;
+  color: #1d1d1d;
+  font-weight: 300;
+}
+.find_id_body .message_box p svg {
+  color: #12A19A;
+  font-size: 56px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.find_id_body .message_box p span {
+  color: #12A19A;
+  font-weight: 400;
+}
+.find_id_body .btn_box {
+  margin: 0 auto;
+  padding: 30px;
+}
+.find_id_body .btn_box button {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.7px;
+  line-height: 46px;
+  text-align: center;
+  vertical-align: middle;
+  word-spacing: 0px;
+  height: 50px;
+  width: 216px;
+  border: 1px solid #dddddd;
+  margin: 0.3px 0.3px;
+  background-color: #F5F5F5;
+}
+.find_id_body .btn_box button:hover {
+  background-color: #ffffff;
+}
+
+.update_pw_body .result_success {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.update_pw_body .result_success form {
   width: 80%;
 }
-.find_pass_body form table {
-  width: 100%;
-  position: relative;
-  margin: 10px 0 0;
-  border: 1px solid #d7d5d5;
-  border-top: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  color: #fff;
-  line-height: 1.5;
+.update_pw_body .result_success form table tbody td .pw_input_box {
+  color: #d43301;
 }
-.find_pass_body form table tbody {
-  font-size: 12px;
-  color: #353535;
+.update_pw_body .result_success form table tbody td .pw_input_box .pw_result_text {
+  margin-left: 4px;
 }
-.find_pass_body form table tbody th {
-  padding: 11px 0 10px 18px;
-  border: 1px solid #dfdfdf;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  font-weight: normal;
-  vertical-align: middle;
+.update_pw_body .result_success form table tbody td .pw_confirm_input_box .pw_confirm_result_text {
+  margin-left: 4px;
 }
-.find_pass_body form table tbody th span {
-  color: #008BCC;
-}
-.find_pass_body form table tbody td {
-  border-top: 1px solid #dfdfdf;
-  vertical-align: middle;
-  padding: 11px 0 10px 18px;
-}
-.find_pass_body form table tbody td span.id_input_re_1,
-.find_pass_body form table tbody td span.id_input_re_2,
-.find_pass_body form table tbody td span.mail_input_re_1,
-.find_pass_body form table tbody td span.mail_input_re_2,
-.find_pass_body form table tbody td span.final_id_ck,
-.find_pass_body form table tbody td span.final_pw_ck,
-.find_pass_body form table tbody td span.final_pwck_ck,
-.find_pass_body form table tbody td span.final_nickname_ck,
-.find_pass_body form table tbody td span.final_mail_ck,
-.find_pass_body form table tbody td span.final_addr_ck,
-.find_pass_body form table tbody td span.pwck_input_re_1,
-.find_pass_body form table tbody td span.pwck_input_re_2 {
-  display: none;
-}
-.find_pass_body form table tbody td input {
-  height: 29px;
-  padding: 2px 4px;
-  border: 1px solid #d5d5d5;
-  width: 200px;
-}
-.find_pass_body form table tbody td input:focus::-webkit-input-placeholder {
-  color: transparent;
-}
-.find_pass_body form table tbody td input:focus::-moz-placeholder {
-  color: transparent;
-}
-.find_pass_body form table tbody td input:focus:-ms-input-placeholder {
-  color: transparent;
-}
-.find_pass_body form table tbody td input:focus::-ms-input-placeholder {
-  color: transparent;
-}
-.find_pass_body form table tbody td input:focus::placeholder {
-  color: transparent;
-}
-.find_pass_body form table tbody td select {
-  width: 60px;
-  height: 30px;
-  line-height: 29px;
-  min-height: 30px;
-  border: 1px solid #ddd;
-  padding: 0 10px 0 5px;
-  background-color: #fff;
-  font-size: 12px;
-}
-.find_pass_body form table tbody td a.send_mail,
-.find_pass_body form table tbody td a.check_number {
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 105px;
-  height: 28px;
-  text-align: center;
-  padding-top: 5px;
-  border-radius: 2px;
-}
-.find_pass_body form table tbody td a.send_mail {
-  display: inline-block;
-}
-.find_pass_body form table tbody td a.check_number {
-  display: none;
-}
-.find_pass_body form table tbody td a.find_addr {
-  display: inline-block;
-  background-color: #FFFFFF;
-  border: 1px solid #c5c5c5;
-  color: black;
-  width: 80px;
-  height: 28px;
-  text-align: center;
-  vertical-align: middle;
-  padding-top: 5px;
-  border-radius: 2px;
-}
-.find_pass_body form .btn_box {
+.update_pw_body .result_success .btn_box {
   padding: 10px 0;
   text-align: center;
   display: block;
   margin-top: 30px;
+}
+.update_pw_body .result_fail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 30px;
+  border: 1px solid #dddddd;
+  width: 100%;
+  margin: 0 auto;
+}
+.update_pw_body .result_fail .message_box {
+  font-size: 28px;
+  text-align: center;
+  line-height: 64px;
+  color: #1d1d1d;
+  font-weight: 300;
+}
+.update_pw_body .result_fail .message_box p svg {
+  color: #12A19A;
+  font-size: 56px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.update_pw_body .result_fail .message_box p span {
+  color: #12A19A;
+  font-weight: 400;
+}
+.update_pw_body .result_fail .btn_box {
+  margin: 0 auto;
+  padding: 30px;
+}
+.update_pw_body .result_fail .btn_box button {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.7px;
+  line-height: 46px;
+  text-align: center;
+  vertical-align: middle;
+  word-spacing: 0px;
+  height: 50px;
+  width: 216px;
+  border: 1px solid #dddddd;
+  margin: 0.3px 0.3px;
+  background-color: #F5F5F5;
+}
+.update_pw_body .result_fail .btn_box button:hover {
+  background-color: #ffffff;
 }
 
 /* main page start */
@@ -1951,6 +1936,9 @@ table.form_table tbody td select {
   border-radius: 0;
   font-size: 14px;
 }
+.login_body .login_form button[type=submit]:hover {
+  background-color: #474747;
+}
 .login_body .login_find {
   padding: 20px 0 35px;
   text-align: center;
@@ -1965,7 +1953,10 @@ table.form_table tbody td select {
   border-left: 1px solid #ddd;
 }
 .login_body .login_find .txt a {
-  color: #555;
+  color: #000;
+}
+.login_body .login_find .txt a:hover {
+  color: #ccc;
 }
 .login_body .login_find .txt:nth-child(1) {
   border-left-width: 0;
@@ -1977,8 +1968,11 @@ table.form_table tbody td select {
   line-height: 11px;
 }
 .login_body .login_find .join_txt a {
-  color: #111;
+  color: #000;
   font-weight: bold;
+}
+.login_body .login_find .join_txt a:hover {
+  color: #ccc;
 }
 
 .sns_login {

@@ -1,6 +1,7 @@
 package com.windsome.service;
 
 import com.windsome.constant.OrderStatus;
+import com.windsome.dto.account.UpdatePasswordDto;
 import com.windsome.dto.account.MyPageInfoDto;
 import com.windsome.dto.account.ProfileFormDto;
 import com.windsome.dto.account.SignUpFormDto;
@@ -38,6 +39,9 @@ public class AccountService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
+    /**
+     * 회원 가입
+     */
     public Account saveNewAccount(SignUpFormDto signUpFormDto) {
         Account account = Account.builder()
                 .userIdentifier(signUpFormDto.getUserIdentifier())
@@ -52,6 +56,9 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    /**
+     * 로그인
+     */
     public void login(String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(token);
@@ -59,39 +66,34 @@ public class AccountService {
         context.setAuthentication(authentication);
     }
 
+    /**
+     * 프로필 수정
+     */
     public void updateProfile(Account account, ProfileFormDto profileFormDto) {
         modelMapper.map(profileFormDto, account);
         account.setPassword(passwordEncoder.encode(profileFormDto.getPassword()));
         accountRepository.save(account);
     }
 
-    public String findId(String email, String name) {
-        Account account = accountRepository.findByEmail(email);
-        if (account != null && account.getName().equals(name)) {
-            return account.getUserIdentifier();
-        } else {
-            return "fail";
-        }
+    /**
+     * 회원 가입 - 아이디 중복 검사
+     */
+    public boolean duplicateCheckId(String userId) {
+        Account account = accountRepository.findByUserIdentifier(userId);
+        return account == null;
     }
 
-    public void sendEmailAndUpdatePassword(String email, String name) throws MessagingException {
-        UUID uuid = UUID.randomUUID();
-        String authNum = uuid.toString().substring(0, 8);
-        EmailMessageDto emailMessageDto = EmailMessageDto.builder()
-                .to(email)
-                .subject("윈섬, 임시 비밀번호 안내")
-                .message("안녕하세요. 윈섬 임시비밀번호 안내 관련 이메일 입니다." + "[" + name + "]" +"님의 임시 비밀번호는 "
-                        + authNum + " 입니다.")
-                .build();
-        emailService.sendEmail(emailMessageDto);
-        Account account = accountRepository.findByEmail(email);
-        account.setPassword(passwordEncoder.encode(authNum));
-    }
-    public boolean validateEmail(String email) {
+    /**
+     * 회원 가입/프로필 수정 - 이메일 중복 검사
+     */
+    public boolean duplicateCheckEmail(String email) {
         Account account = accountRepository.findByEmail(email);
         return account == null;
     }
 
+    /**
+     * 회원 가입/프로필 수정 - 이메일 인증
+     */
     public String sendSignUpConfirmEmail(String email) throws MessagingException {
         UUID uuid = UUID.randomUUID();
         String authNum = uuid.toString().substring(0, 6);
@@ -104,24 +106,64 @@ public class AccountService {
         return authNum;
     }
 
-    public boolean validateId(String userId) {
-        Account account = accountRepository.findByUserIdentifier(userId);
-        return account == null;
+    /**
+     * 아이디/비밀번호 찾기 - 이메일 인증
+     */
+    public String sendEmail(String email) throws MessagingException {
+        UUID uuid = UUID.randomUUID();
+        String authNum = uuid.toString().substring(0, 6);
+        EmailMessageDto emailMessageDto = EmailMessageDto.builder()
+                .to(email)
+                .subject("윈섬, 이메일 인증")
+                .message("홈페이지를 방문해주셔서 감사합니다.<br>아래 인증 번호를 인증 번호 확인란에 기입하여 주세요.<br>인증 번호 : " + authNum)
+                .build();
+        emailService.sendEmail(emailMessageDto);
+        return authNum;
     }
 
-    public boolean checkId(String userId) {
-        return !accountRepository.existsByUserIdentifier(userId);
+    /**
+     * 아이디 찾기 - 회원 아이디 조회
+     */
+    public String findId(String name, String email) {
+        Account account = accountRepository.findByNameAndEmail(name, email);
+        if (account != null) {
+            return account.getUserIdentifier();
+        } else {
+            return null;
+        }
     }
 
-    public boolean userEmailCheck(String email, String name) {
-        Account account = accountRepository.findByEmail(email);
-        return account != null && account.getName().equals(name);
+    /**
+     * 비밀번호 찾기 - 회원 정보 조회
+     */
+    public String validateUserIdentifier(UpdatePasswordDto updatePasswordDto) {
+        Account account = accountRepository.findByUserIdentifierAndNameAndEmail(updatePasswordDto.getUserIdentifier(), updatePasswordDto.getName(), updatePasswordDto.getEmail());
+        if (account != null) {
+            return account.getUserIdentifier();
+        } else {
+            return null;
+        }
     }
 
+    /**
+     * 비밀번호 분실 - 비밀번호 초기화
+     */
+    public void resetPassword(UpdatePasswordDto updatePasswordDto) {
+        Account account = accountRepository.findByUserIdentifier(updatePasswordDto.getUserIdentifier());
+        account.setPassword(passwordEncoder.encode(updatePasswordDto.getPassword()));
+        accountRepository.save(account);
+    }
+
+    /**
+     * 마이 페이지 - 회원 정보 조회
+     */
     public MyPageInfoDto getMyPageInfo(Account account) {
         return accountRepository.getMyPageInfo(account.getUserIdentifier());
     }
 
+    /**
+     * 마이 페이지 - 회원 총 주문 수 조회
+     */
     public Long getUserOrderCount(Account account) {
         return orderRepository.countByAccountIdAndOrderStatus(account.getId(), OrderStatus.READY);
     }

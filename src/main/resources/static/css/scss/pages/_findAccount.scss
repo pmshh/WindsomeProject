@@ -1,0 +1,119 @@
+/* findAccount page start */
+.find_account_body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .tab_box {
+        width: 80%;
+        margin-bottom: 30px;
+
+        ul {
+            li {
+                // display: inline-block;
+                float: left;
+                width: 50%;
+                text-align: center;
+                border: 1px solid #e2e2e2;
+                cursor: pointer;
+                margin: 0;
+                line-height: 50px;
+                font-size: 16px;
+            }
+
+            li.active {
+                color: #fff;
+                background-color: #12A19A;
+                border: 1px solid transparent;
+
+                &:hover {
+                    background-color: #0c6460;
+                    border: 1px solid transparent;
+                }
+            }
+        }
+    }
+
+    .content_box {
+        width: 80%;
+
+        .find_id_form_box,
+        .find_pw_form_box {
+            width: 100%;
+
+            .little_text_box {
+                padding: 10px 0;
+
+                .info_text {
+                    font-size: 14px;
+                    margin: 0;
+                    padding: 0;
+                    color: rgb(85, 85, 85);
+                }
+            }
+
+            form {
+                width: 100%;
+
+                table {
+
+                    tbody {
+
+                        td {
+
+                            span {
+                                margin-top: 2px;
+                            }
+
+                            select.find_pw_email_select,
+                            select.find_id_email_select {
+                                width: 125px;
+                            }
+
+                            button.send_mail,
+                            button.check_number {
+                                padding: 0;
+                                height: 30px;
+                                margin-bottom: 2px;
+                                border: 1px solid #e2e2e2;
+                                background: white;
+
+                                &:hover {
+                                    border: 1px solid black;
+                                }
+                            }
+
+                            button.send_mail,
+                            button.check_number {
+                                width: 90px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .big_text_box {
+                padding: 20px 0;
+
+                .info_text {
+                    font-size: 13px;
+                    margin: 0;
+                    padding: 0;
+                    color: rgb(85, 85, 85);
+                }
+            }
+
+            .btn_box {
+                padding: 10px 0;
+                text-align: center;
+                display: block;
+                margin-top: 30px;
+            }
+        }
+
+        .find_pw_form_box {
+            display: none;
+        }
+    }
+}

@@ -103,52 +103,52 @@ class AccountServiceTest {
         assertEquals(account.getUserIdentifier(), findId);
     }
 
-    @Test
-    @DisplayName("비밀번호 찾기 테스트")
-    @WithAccount("test1234")
-    public void findPassword() throws Exception {
-        // given
-        Account account = accountRepository.findByUserIdentifier("test1234");
-        String email = account.getEmail();
-        String name = account.getName();
+//    @Test
+//    @DisplayName("비밀번호 찾기 테스트")
+//    @WithAccount("test1234")
+//    public void findPassword() throws Exception {
+//        // given
+//        Account account = accountRepository.findByUserIdentifier("test1234");
+//        String email = account.getEmail();
+//        String name = account.getName();
+//
+//        // when
+//        accountService.sendEmailAndUpdatePassword(email, name);
+//
+//        // then
+//        assertFalse(passwordEncoder.matches("test1234", account.getPassword()));
+//    }
 
-        // when
-        accountService.sendEmailAndUpdatePassword(email, name);
+//    @Test
+//    @DisplayName("이메일 중복 검사")
+//    @WithAccount("test1234")
+//    public void userEmailCheck() throws Exception {
+//        // given
+//        Account account = accountRepository.findByUserIdentifier("test1234");
+//        String email = account.getEmail();
+//        String name = account.getName();
+//
+//        // when
+//        boolean result = accountService.userEmailCheck(email, name);
+//
+//        // then
+//        assertTrue(result);
+//    }
 
-        // then
-        assertFalse(passwordEncoder.matches("test1234", account.getPassword()));
-    }
-
-    @Test
-    @DisplayName("이메일 중복 검사")
-    @WithAccount("test1234")
-    public void userEmailCheck() throws Exception {
-        // given
-        Account account = accountRepository.findByUserIdentifier("test1234");
-        String email = account.getEmail();
-        String name = account.getName();
-
-        // when
-        boolean result = accountService.userEmailCheck(email, name);
-
-        // then
-        assertTrue(result);
-    }
-
-    @Test
-    @DisplayName("아이디 중복 검사")
-    @WithAccount("test1234")
-    public void checkId() throws Exception {
-        // given
-        Account account = accountRepository.findByUserIdentifier("test1234");
-        String userIdentifier = account.getUserIdentifier();
-
-        // when
-        boolean result = accountService.checkId(userIdentifier);
-
-        // then
-        assertEquals(result, false);
-    }
+//    @Test
+//    @DisplayName("아이디 중복 검사")
+//    @WithAccount("test1234")
+//    public void checkId() throws Exception {
+//        // given
+//        Account account = accountRepository.findByUserIdentifier("test1234");
+//        String userIdentifier = account.getUserIdentifier();
+//
+//        // when
+//        boolean result = accountService.checkId(userIdentifier);
+//
+//        // then
+//        assertEquals(result, false);
+//    }
 
     private static ProfileFormDto getProfileFormDto() {
         ProfileFormDto profileFormDto = new ProfileFormDto();

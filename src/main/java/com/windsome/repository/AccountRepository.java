@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
@@ -20,4 +23,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "select new com.windsome.dto.account.MyPageInfoDto(a.id, a.name, a.totalOrderPrice, a.point, a.totalPoint, a.totalUsePoint) from Account a where a.userIdentifier = :userIdentifier")
     MyPageInfoDto getMyPageInfo(@Param("userIdentifier") String userIdentifier);
+
+    Account findByNameAndEmail(String name, String email);
+
+    Account findByUserIdentifierAndNameAndEmail(String userIdentifier, String name, String email);
 }

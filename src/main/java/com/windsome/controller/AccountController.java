@@ -1,10 +1,10 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
+import com.windsome.dto.account.UpdatePasswordDto;
 import com.windsome.dto.account.ProfileFormDto;
 import com.windsome.dto.account.SignUpFormDto;
 import com.windsome.dto.validator.ProfileDtoValidator;
-import com.windsome.repository.AccountRepository;
 import com.windsome.service.AccountService;
 import com.windsome.dto.validator.SignUpDtoValidator;
 import com.windsome.entity.Account;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @Controller
@@ -89,11 +90,11 @@ public class AccountController {
     }
 
     /**
-     * 이메일 중복 체크
+     * 이메일 중복 체크 후 이메일 인증
      */
     @GetMapping("/check/email")
-    public ResponseEntity<Object> checkEmail(String email) throws Exception {
-        if (!accountService.validateEmail(email)) {
+    public ResponseEntity<Object> confirmEmail(String email) throws Exception {
+        if (!accountService.duplicateCheckEmail(email)) {
             return ResponseEntity.badRequest().body("이미 사용중인 이메일입니다.");
         }
         String authNum = accountService.sendSignUpConfirmEmail(email);
@@ -104,50 +105,73 @@ public class AccountController {
      * 아이디 중복 체크
      */
     @PostMapping("/check/id")
-    public ResponseEntity<Object> checkId(String userId) {
-        if (!accountService.validateId(userId)) {
+    public ResponseEntity<Object> duplicateCheckId(String userId) {
+        if (!accountService.duplicateCheckId(userId)) {
             return ResponseEntity.badRequest().body("이미 사용중인 아이디입니다.");
         }
-        return ResponseEntity.ok().body(accountService.checkId(userId));
+        return ResponseEntity.ok().body("사용 가능한 아이디입니다.");
+    }
+
+    /**
+     * 아이디/비밀번호 찾기 화면
+     */
+    @GetMapping("/find/account")
+    public String findAccount(String type, Model model) {
+        model.addAttribute("type", type);
+        return "account/findAccount";
+    }
+
+    /**
+     * 아이디 찾기 화면 (쿼리 파라미터 숨기기 위한 용도)
+     */
+    @GetMapping("/find/id.do")
+    public String findIdRedirect(String name, String email, RedirectAttributes redirectAttr) {
+        String result = accountService.findId(name, email);
+        redirectAttr.addFlashAttribute("result", result);
+        return "redirect:/find/id";
     }
 
     /**
      * 아이디 찾기 화면
      */
     @GetMapping("/find/id")
-    public String findIdGet() {
+    public String findId() {
         return "account/findId";
     }
 
     /**
-     * 아이디 찾기
+     * 비밀번호 변경 화면 (쿼리 파라미터 숨기기 위한 용도)
      */
-    @PostMapping("/find/id")
-    public ResponseEntity<Object> findIdPost(String email, String name) {
-        if (!accountService.userEmailCheck(email, name)) {
-            return ResponseEntity.badRequest().body("일치하는 정보가 없습니다.");
-        }
-        return ResponseEntity.ok().body(accountService.findId(email, name));
+    @GetMapping("/update/pw.do")
+    public String updatePwRedirect(UpdatePasswordDto updatePasswordDto, RedirectAttributes redirectAttr) {
+        String result = accountService.validateUserIdentifier(updatePasswordDto);
+        redirectAttr.addFlashAttribute("result", result);
+        return "redirect:/update/pw";
     }
 
     /**
-     * 비밀번호 찾기 화면
+     * 비밀번호 변경 화면
      */
-    @GetMapping("/find/pass")
-    public String findPassGet() {
-        return "account/findPass";
+    @GetMapping("/update/pw")
+    public String updatePw() {
+        return "account/updatePw";
     }
 
     /**
-     * 비밀번호 찾기
+     * 비밀번호 변경
      */
-    @PostMapping("/find/pass")
-    public ResponseEntity<Object> findPassPost(String email, String name, Model model) throws Exception {
-        if (!accountService.userEmailCheck(email, name)) {
-            return ResponseEntity.badRequest().body("일치하는 정보가 없습니다.");
-        }
-        accountService.sendEmailAndUpdatePassword(email, name);
-        return ResponseEntity.ok().build();
+    @PostMapping("/update/pw")
+    public ResponseEntity<String> updatePw(UpdatePasswordDto updatePasswordDto) {
+        accountService.resetPassword(updatePasswordDto);
+        return ResponseEntity.ok().body("비밀번호가 변경되었습니다.");
+    }
+
+    /**
+     * 아이디/비밀번호 찾기 화면 - 이메일 인증
+     */
+    @PostMapping("/find/sendEmail")
+    public ResponseEntity<String> findIdPwEmailConfirm(String email) throws MessagingException {
+        return ResponseEntity.ok().body(accountService.sendEmail(email));
     }
 
     /**

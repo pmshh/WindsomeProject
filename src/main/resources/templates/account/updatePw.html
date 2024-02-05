@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- updatePw section -->
+            <section id="update_pw">
+                <div class="container update_pw">
+                    <div class="section_header">
+                        <h2>비밀번호 변경</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="update_pw_body mt-5">
+                        <div class="result_success" th:if="${not #strings.isEmpty(result) && result != 'fail'}">
+                            <form id="updatePwForm" th:action="@{/update/pw}" method="post">
+                                <table class="form_table">
+                                    <colgroup>
+                                        <col style="width:15%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="pw">새 비밀번호 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="pw_input_box">
+                                                <input class="pw_input" name="pw" id="pw" type="password" minlength="8" maxlength="20"><span class="pw_result_text">8~20자의 영문대소문자,숫자,특수문자 사용</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label for="pw_confirm">새 비밀번호 확인 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="pw_confirm_input_box">
+                                                <input class="pw_confirm_input" name="pw_confirm" id="pw_confirm" type="password" minlength="8" maxlength="20"><span class="pw_confirm_result_text">*패스워드를 한번 더 입력하시기 바랍니다.</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </form>
+
+                            <div class="btn_box">
+                                <button class="update_pw_btn black_btn_w130_h40" type="button">비밀번호 변경</button>
+                                <button class="white_btn_w130_h40" type="button" onclick="location='/'">취소</button>
+                            </div>
+                        </div>
+
+                        <div class="result_fail" th:if="${#strings.isEmpty(result)}">
+                            <div class="message_box">
+                                <p><i class="fa-solid fa-circle-user"></i>등록된 아이디가 없습니다.</p>
+                            </div>
+
+                            <div class="btn_box">
+                                <button type="button" onclick="location.href='/find/account?type=findPw'">비밀번호 찾기</button>
+                                <button type="button" onclick="location.href='/'">취소</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <input type="hidden" th:value="${result}">
+
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과유무 변수 */
+        let checkPw = false;                                                  // 비번
+        let checkPwConfirm = false;                                           // 비번 확인
+        let checkPwMatch = false;                                             // 비번 일치 확인
+        let userIdentifier = [[${result}]];                                   // 계정 찾기 화면에서 넘어온 회원 아이디
+
+        $(function () {
+
+            /* 비밀번호 변경 버튼 */
+            $(".update_pw_btn").click(function () {
+                /* 입력값 변수 */
+                let pwVal = $(".pw_input").val();
+                let pwConfirmVal = $(".pw_confirm_input").val();
+
+                /* 새 비밀번호 빈값 검사 */
+                if (pwVal === "") {
+                    alert("새 비밀번호를 입력하세요.");
+                    $('.pw_input').focus();
+                    window.scrollTo(0, 0);
+                    checkPw = false;
+                    return false;
+                } else {
+                    checkPw = true;
+                }
+
+                /* 새 비밀번호 확인 빈값 검사 */
+                if (pwConfirmVal === "") {
+                    alert("새 비밀번호 확인을 입력하세요.");
+                    $('.pw_confirm_input').focus();
+                    window.scrollTo(0, 0);
+                    checkPwConfirm = false;
+                    return false;
+                } else {
+                    checkPwConfirm = true;
+                }
+
+                /* 비밀번호 공백 존재 여부 검사 */
+                if (hasBlank(pwVal) || hasBlank(pwConfirmVal)) {
+                    alert("비밀번호는 공백 없이 입력해주세요.");
+                    $('.pw_input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkPw && checkPwConfirm && checkPwMatch) {
+                    $.ajax({
+                        url: '/update/pw',
+                        method: 'post',
+                        dataType: "text",
+                        data: {
+                            userIdentifier: userIdentifier,
+                            password: pwConfirmVal
+                        },
+                        success: function (result) {
+                            alert(result + '\n변경된 비밀번호로 로그인해주세요.');
+                            location.href = '/login';
+                        },
+                        error: function (request) {
+                            alert(request.responseText);
+                        }
+                    })
+                }
+                return false;
+            });
+
+            /* 비밀번호 유효성 검사 */
+            $('.pw_input').on("propertychange change keyup paste input", function () {
+                let pwVal = $('.pw_input').val();
+                let pwConfirmVal = $('.pw_confirm_input').val();
+                let pwResultText = $('.pw_result_text');
+                let pwConfirmResultText = $('.pw_confirm_result_text');
+
+                // 값을 입력한 경우
+                if (pwVal.length !== 0) {
+                    if (strongPassword(pwVal)) {
+                        pwResultText.css("color", "#0000ff");
+                        pwResultText.html("사용 가능한 비밀번호입니다.");
+                        checkPw = true;
+
+                        if (isMatch(pwVal, pwConfirmVal)) { // 비밀번호 확인을 먼저 입력하고 비밀번호를 입력하는 경우 실패 메시지 뜨는 것 방지
+                            pwConfirmResultText.css("color", "#0000ff");
+                            pwConfirmResultText.html("비밀번호가 일치합니다.")
+                        }
+                    }
+                    else {
+                        pwResultText.css("color", "#d43301");
+                        pwResultText.html("숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.");
+                        checkPw = false;
+                    }
+                }
+                // 값을 입력하지 않은 경우 (지웠을 때)
+                // 모든 메시지를 가린다.
+                else {
+                    pwResultText.css("color", "#d43301");
+                    pwResultText.html("8~20자의 영문대소문자,숫자,특수문자 사용");
+                    checkPw = false;
+                }
+            })
+
+            /* 비밀번호 일치 검사 */
+            $(".pw_confirm_input").on("keyup", function () {
+                let pwVal = $('.pw_input').val();
+                let pwConfirmVal = $('.pw_confirm_input').val();
+                let pwConfirmResultText = $('.pw_confirm_result_text');
+
+                if (pwConfirmVal.length !== 0) { // 사용자가 값을 입력했을 때 동작
+                    if(strongPassword(pwConfirmVal)) { // 글자 입력 제한 검사를 통과한 경우
+                        if (isMatch(pwVal, pwConfirmVal)) { // (비밀번호, 비밀번호 확인) 값이 일치하는 경우
+                            pwConfirmResultText.css("color", "#0000ff");
+                            pwConfirmResultText.html("비밀번호가 일치합니다.")
+                            checkPwConfirm = true;
+                            checkPwMatch = true;
+                        }
+                        else { // (비밀번호,비밀번호 확인) 값이 일치하지 않는 경우
+                            pwConfirmResultText.css("color", "#d43301");
+                            pwConfirmResultText.html("비밀번호가 일치하지 않습니다.")
+                            checkPwConfirm = false;
+                        }
+                    } else { // 글자 입력 제한 검사를 통과하지 못한 경우
+                        pwConfirmResultText.css("color", "#d43301");
+                        pwConfirmResultText.html("숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.")
+                        checkPwMatch = false;
+                    }
+                } else { // 사용자가 값을 모두 지웠을 때 동작 (모든 메시지를 가림)
+                    pwConfirmResultText.css("color", "black");
+                    pwConfirmResultText.html("*패스워드를 한번 더 입력하시기 바랍니다.");
+                    checkPwMatch = false;
+                }
+            });
+
+        });
+
+        /* 비밀번호 : 8글자 이상, 영문, 숫자, 특수문자 사용 */
+        function strongPassword (str) {
+            return /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/.test(str);
+        }
+
+        /* 비밀번호 확인 : 비밀번호와 비밀번호 확인 일치 */
+        function isMatch (password1, password2) {
+            return password1 === password2;
+        }
+
+        /* 비밀번호, 비밀번호 확인 : 공백 입력 X */
+        function hasBlank (str) {
+            return /\s/g.test(str);
+        }
+
+    </script>
+</body>
