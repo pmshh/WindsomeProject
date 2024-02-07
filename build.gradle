@@ -11,6 +11,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.4'
 	// 2. querydsl plugins 추가
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id "com.moowork.node" version "1.3.1" // npm plugin
 }
 
 group = 'com.windsome'
@@ -28,6 +29,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	gradlePluginPortal() // https://plugins.gradle.org/m2/
 }
 
 dependencies {
@@ -53,6 +55,9 @@ dependencies {
 	// 3. querydsl dependencies 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// npm
+	implementation "com.moowork.gradle:gradle-node-plugin:1.3.1"
 }
 
 tasks.named('bootBuildImage') {
@@ -87,4 +92,23 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 	querydsl.extendsFrom compileClasspath
+}
+
+/**
+ * npm install start
+ */
+
+apply plugin: "com.moowork.node"
+// npm using on gradle project
+tasks.register("npm-Install") {
+	group = "application"
+	description = "Installs dependencies from package.json"
+	tasks.appNpmInstall.exec();
+}
+
+task appNpmInstall(type: NpmTask) {
+	// src/main/resources/static
+	description = "Installs dependencies from package.json"
+	workingDir = file("/src/main/resources/static")
+	args = ['install']
 }
