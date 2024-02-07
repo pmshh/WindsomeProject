@@ -12,14 +12,14 @@
         <article class="content">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- review_enroll section -->
-            <section id="review_enroll">
-                <div class="container-fluid review_enroll">
+            <!-- review_form section -->
+            <section id="review_form">
+                <div class="container-fluid review_form">
                     <div class="section_header">
                         <h2>리뷰 등록</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="review_enroll_body mt-5">
+                    <div class="review_form_body mt-5">
 
                         <!-- item_info_wrap start -->
                         <div class="item_info_wrap" th:if="${#strings.isEmpty(review)}">
@@ -59,7 +59,7 @@
 
                         <!-- review_form_wrap start -->
                         <div class="review_form_wrap">
-                            <form id="reviewEnrollForm" th:action="@{'/review/enroll'}" th:object="${reviewDto}"
+                            <form id="reviewEnrollForm" th:action="@{'/board/review/enroll'}" th:object="${reviewDto}"
                                   method="post">
                                 <table>
                                     <colgroup>
@@ -71,9 +71,9 @@
                                         <th scope="row">
                                             <label th:for="*{title}">제목 <span>*</span></label>
                                         </th>
-                                        <td>
-                                            <input class="title_input" type="text" th:field="*{title}">
-                                            <span class="text-danger title_warn_msg">제목을 입력해주세요.</span>
+                                        <td class="title">
+                                            <input class="title_input" type="text" th:field="*{title}" maxlength="50" placeholder="제목을 입력하세요.">
+                                            <span class="title_text_count">0자/50자</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -93,16 +93,15 @@
                                                 <input type="radio" id="rating2" name="rating" value="1"><label for="rating2"></label>
                                                 <input type="radio" id="rating1" name="rating" value="0.5"><label for="rating1" class="half" ></label>
                                             </fieldset>
-                                            <span class="text-danger rating_warn_msg">평점을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <label th:for="*{content}">내용 <span>*</span></label>
                                         </th>
-                                        <td>
-                                            <textarea class="content_input" th:field="*{content}"></textarea>
-                                            <span class="text-danger content_warn_msg">내용을 입력해주세요.</span>
+                                        <td class="content">
+                                            <textarea class="content_input" th:field="*{content}" maxlength="200" placeholder="내용을 입력하세요."></textarea>
+                                            <span class="content_text_count">0자/200자</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -111,7 +110,6 @@
                                         </th>
                                         <td>
                                             <input class="password_input" th:field="*{password}" type="password">
-                                            <span class="text-danger password_warn_msg">비밀번호를 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -123,7 +121,6 @@
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -135,12 +132,19 @@
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script th:inline="javascript">
+        /* 유효성 검사 통과유무 변수 */
+        let titleCheck = false;     // 제목 체크
+        let ratingCheck = false;    // 평점 체크
+        let contentCheck = false;   // 내용 체크
+        let passwordCheck = false;  // 비밀번호 체크
+        let itemIdCheck = false;    // 상품정보선택 체크
+
         $(function () {
             /* 상품 검색 버튼 */
             $(".find_item_btn").on("click", function (e) {
                 e.preventDefault();
 
-                let popUrl = "/review/itemList";
+                let popUrl = "/board/review/itemList";
                 let popOption = "width=600px, height=500px,top=300px, left=300px, scrollbars=yes";
 
                 window.open(popUrl, "findItem", popOption);
@@ -150,7 +154,7 @@
             $(document).on("click", ".new_find_item_btn", function (e) {
                 e.preventDefault();
 
-                let popUrl = "/review/itemList";
+                let popUrl = "/board/review/itemList";
                 let popOption = "width=600px, height=500px,top=300px, left=300px, scrollbars=yes";
 
                 window.open(popUrl, "findItem", popOption);
@@ -158,13 +162,6 @@
 
             /* 리뷰 등록 버튼 */
             $(".enroll_btn").on("click", function () {
-                /* 유효성 검사 통과유무 변수 */
-                let titleCheck = false;     // 제목 체크
-                let ratingCheck = false;    // 평점 체크
-                let contentCheck = false;   // 내용 체크
-                let passwordCheck = false;  // 비밀번호 체크
-                let itemIdCheck = false;    // 상품정보선택 체크
-
                 /* 입력값 변수 */
                 let titleVal = $('.title_input').val(); // 제목 입력란
                 let ratingVal = $("input[name='rating']:checked").val(); // 제목 입력란
@@ -172,49 +169,52 @@
                 let passwordVal = $('.password_input').val(); // 비밀번호 입력란
                 let itemIdVal = $('.hiddenItemId').val(); // 비밀번호 입력란
 
-                /* 제목 유효성 검사 */
-                if (titleVal === "") {
-                    $('.title_warn_msg').css('display', 'block')
-                    titleCheck = false;
+                /* 상품정보선택 빈값 검사 */
+                if (itemIdVal === "0") {
+                    alert("상품정보를 선택하세요.");
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.title_warn_msg').css('display', 'none')
+                    itemIdCheck = true;
+                }
+
+                /* 제목 빈값 검사 */
+                if (titleVal === '') {
+                    alert("제목을 입력하세요.");
+                    $(".title_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
                     titleCheck = true;
                 }
 
-                /* 평점 유효성 검사 */
+                /* 평점 빈값 검사 */
                 if (!ratingVal >= 1) {
-                    $('.rating_warn_msg').css('display', 'block')
-                    ratingCheck = false;
+                    alert("평점을 입력하세요.");
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.rating_warn_msg').css('display', 'none')
                     ratingCheck = true;
                 }
 
-                /* 내용 유효성 검사 */
+                /* 내용 빈값 검사 */
                 if (contentVal === "") {
-                    $('.content_warn_msg').css('display', 'block')
-                    contentCheck = false;
+                    alert("내용을 입력하세요.");
+                    $(".content_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.content_warn_msg').css('display', 'none')
                     contentCheck = true;
                 }
 
-                /* 비밀번호 유효성 검사 */
+                /* 비밀번호 빈값 검사 */
                 if (passwordVal === "") {
-                    $('.password_warn_msg').css('display', 'block')
-                    passwordCheck = false;
+                    alert("비밀번호를 입력하세요.");
+                    $(".password_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.password_warn_msg').css('display', 'none')
                     passwordCheck = true;
-                }
-
-                /* 상품정보선택 유효성 검사 */
-                if (itemIdVal === "0") {
-                    $('.itemId_warn_msg').css('display', 'block')
-                    itemIdCheck = false;
-                } else {
-                    $('.itemId_warn_msg').css('display', 'none')
-                    itemIdCheck = true;
                 }
 
                 /* 최종 유효성 검사 */
@@ -222,7 +222,7 @@
                     let itemId = $(".hiddenItemId").val();
 
                     $.ajax({
-                        url: "/review/check/" + itemId,
+                        url: "/board/review/check/" + itemId,
                         type: "POST",
                         dataType: "text",
                         cache: false,
@@ -237,17 +237,17 @@
                             let paramData = JSON.stringify(param);
 
                             $.ajax({
-                                url: "/review/enroll",
+                                url: "/board/review/enroll",
                                 type: "POST",
                                 contentType: "application/json",
                                 dataType: "text",
                                 cache: false,
                                 data: paramData,
-                                success: function (result, status) {
+                                success: function (result) {
                                     alert(result);
-                                    location.href = '/reviews';
+                                    location.href = '/board/review';
                                 },
-                                error: function (request, status, error) {
+                                error: function (request) {
                                     if (request.status === '401') {
                                         alert('로그인 후 이용해주세요.');
                                         location.href = '/login';
@@ -257,7 +257,7 @@
                                 },
                             });
                         },
-                        error: function (request, status, error) {
+                        error: function (request) {
                             alert(request.responseText);
                         },
                     })
@@ -267,9 +267,48 @@
 
             /* 취소 버튼 */
             $(".cancel_btn").on("click", function () {
-                window.history.back();
+                location.href = '/board/review';
             });
 
+            /* 제목 입력란 글자 수 제한 */
+            $(".title_input").on("propertychange change keyup paste input", function () {
+                let titleInputVal = $(this).val();
+
+                // 글자 수 세기
+                if (titleInputVal.length === 0 || titleInputVal === '') {
+                    $(".title_text_count").text("0자/50자");
+                } else {
+                    $(".title_text_count").text(titleInputVal.length + '자/50자');
+                }
+
+                // 글자 수 제한
+                if (titleInputVal.length > 50) {
+                    // 50자 부터는 타이핑 되지 않도록
+                    $(this).val($(this).val().substring(0, 50));
+                    // 50자 넘으면 알림창 뜨도록
+                    alert('제목은 50자까지 입력 가능합니다.');
+                }
+            });
+
+            /* 내용 입력란 글자 수 제한 */
+            $(".content_input").on("propertychange change keyup paste input", function () {
+                let contentInputVal = $(this).val();
+
+                // 글자 수 세기
+                if (contentInputVal.length === 0 || contentInputVal === '') {
+                    $(".content_text_count").text("0자/200자");
+                } else {
+                    $(".content_text_count").text(contentInputVal.length + '자/200자');
+                }
+
+                // 글자 수 제한
+                if (contentInputVal.length > 200) {
+                    // 200자 부터는 타이핑 되지 않도록
+                    $(this).val($(this).val().substring(0, 200));
+                    // 200자 넘으면 알림창 뜨도록
+                    alert('내용은 200자까지 입력 가능합니다.');
+                }
+            });
         });
     </script>
 </body>

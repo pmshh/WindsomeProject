@@ -25,7 +25,7 @@
                         <div class="item_info_wrap">
                             <span class="thumbnail">
                                 <a th:href="${'/item/' + review.itemId}">
-                                    <img th:src="${review.imgUrl}">
+                                    <img class="item_img" th:src="${review.imgUrl}">
                                 </a>
                             </span>
                             <div class="information">
@@ -56,7 +56,6 @@
                                         </th>
                                         <td>
                                             <input class="title_input" type="text" th:field="*{title}" readonly>
-                                            <span class="text-danger title_warn">제목을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -64,7 +63,7 @@
                                             <label th:for="*{rating}">평점 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <fieldset class="rateForDtlForm">
+                                            <fieldset class="rate">
                                                 <input type="radio" id="rating10" name="rating" value="5" onclick="return false;"><label for="rating10"></label>
                                                 <input type="radio" id="rating9" name="rating" value="4.5" onclick="return false;"><label for="rating9" class="half" ></label>
                                                 <input type="radio" id="rating8" name="rating" value="4" onclick="return false;"><label for="rating8"></label>
@@ -84,7 +83,6 @@
                                         </th>
                                         <td>
                                             <textarea class="content_input" th:field="*{content}" readonly></textarea>
-                                            <span class="text-danger content_warn">내용을 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -93,16 +91,15 @@
                                         </th>
                                         <td>
                                             <input class="password_input" th:field="*{password}" type="password">
-                                            <span class="text-danger password_warn">비밀번호를 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
 
-                                <div class="btn_box">
-                                    <button th:data-reviewId="${review.reviewId}" class="black_btn_w130_h40 update_btn" type="button">수정</button>
-                                    <button class="white_btn_w130_h40 cancel_btn" type="button">취소</button>
+                                <div class="btn_box_add_float">
+                                    <button class="white_btn_w130_h40 cancel_btn" type="button">목록</button>
                                     <button class="white_btn_w130_h40 del_btn" type="button">삭제</button>
+                                    <button th:data-reviewId="${review.reviewId}" class="black_btn_w130_h40 update_btn" type="button">수정</button>
                                 </div>
                             </form>
                         </div>
@@ -128,7 +125,7 @@
                     alert("비밀번호를 입력하세요.");
                 } else if (passwordVal === password) {
                     let reviewId = $(this).attr("data-reviewId");
-                    location.href = "/review/update/" + reviewId;
+                    location.href = "/board/review/update/" + reviewId;
                 } else {
                     alert("비밀번호가 일치하지 않습니다.");
                 }
@@ -146,13 +143,13 @@
                 } else if (passwordVal === password) {
                     if (confirm("리뷰를 삭제하시겠습니까?")) {
                         $.ajax({
-                            url: "/review/delete/" + reviewId + "?itemId=" + itemId,
+                            url: "/board/review/delete/" + reviewId + "?itemId=" + itemId,
                             type: "DELETE",
                             dataType: "text",
                             cache: false,
                             success: function (result, status) {
                                 alert(result);
-                                location.href = '/reviews';
+                                location.href = '/board/review';
                             },
                             error: function (request, status, error) {
                                 if (request.status === '401') {

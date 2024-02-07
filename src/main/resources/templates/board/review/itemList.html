@@ -213,7 +213,7 @@
             </div>
 
             <!-- pagination start -->
-            <div class="pagination mt-3"
+            <div class="pagination"
                  th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
                 <ul>
                     <li class="prev" th:classappend="${items.first} ? 'disabled'">
@@ -268,7 +268,7 @@
                     alert("검색어를 입력해주세요.")
                     return false;
                 }
-                location.href = "/review/itemList?searchQuery=" + searchQuery + "&size=" + selectVal;
+                location.href = "/board/review/itemList?searchQuery=" + searchQuery + "&size=" + selectVal;
             });
 
             /* 선택 버튼 */
@@ -320,7 +320,7 @@
                 if (searchQuery === '') {
                     searchQuery = null;
                 }
-                location.href = "/review/itemList?searchQuery=" + searchQuery + "&size=" + selectVal;
+                location.href = "/board/review/itemList?searchQuery=" + searchQuery + "&size=" + selectVal;
             });
         });
 
@@ -328,7 +328,7 @@
         function page(page) {
             let searchQuery = $("input[name='searchQuery']").val();
             let selectVal = $("#limit option:selected").val();
-            location.href = "/review/itemList?page=" + page + "&searchQuery=" + searchQuery + "&size=" + selectVal;
+            location.href = "/board/review/itemList?page=" + page + "&searchQuery=" + searchQuery + "&size=" + selectVal;
         }
     </script>
 </body>

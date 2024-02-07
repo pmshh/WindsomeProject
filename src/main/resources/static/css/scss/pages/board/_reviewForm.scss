@@ -19,8 +19,12 @@
             vertical-align: middle;
             width: 190px;
 
-            img {
-                width: 140px;
+            img.no_img {
+                width: 150px;
+            }
+
+            img.item_img {
+                width: 150px;
                 height: 190px;
             }
         }
@@ -28,7 +32,7 @@
         .information {
             display: table-cell;
             padding: 0 20px 0 0;
-            vertical-align: middle;
+            vertical-align: bottom;
 
             h3 {
                 font-size: 14px;
@@ -36,10 +40,12 @@
                 max-width: 600px;
                 letter-spacing: 0.01em;
                 word-break: keep-all;
-                margin-bottom: 2px;
+                margin: 0 0 5px;
             }
 
             .price {
+                margin-bottom: 20px;
+
                 span.price {
                     font-size: 12px;
                     color: #666666;
@@ -57,6 +63,19 @@
                     font-weight: bold;
                     margin-left: 5px;
                 }
+            }
+
+            button {
+                font-size: 12px;
+                color: #222222;
+                height: 30px !important;
+                display: block;
+            }
+
+            .itemId_warn_msg {
+                display: none;
+                font-size: 12px;
+                margin-top: 2px;
             }
         }
     }
@@ -103,16 +122,6 @@
                         vertical-align: middle;
                         padding: 11px 0 10px 18px;
 
-                        .fake_input {
-                            display: inline-block;
-                            height: 26px;
-                            padding: 0 10px;
-                            vertical-align: middle;
-                            border: 1px solid #dddddd;
-                            width: 40%;
-                            color: #999999;
-                        }
-
                         input {
                             width: 100%;
                             height: 29px;
@@ -125,7 +134,7 @@
                         }
 
                         select {
-                            width: 15%;
+                            width: 10%;
                         }
 
                         textarea {
@@ -143,11 +152,7 @@
                             width: 30%;
                         }
 
-                        span.text-danger {
-                            display: none;
-                        }
-
-                        .rateForUpdateForm {
+                        .rate {
                             display: inline-block;
 
                             input {
@@ -181,50 +186,45 @@
                             }
                         }
 
-                        .rateForDtlForm {
-                            display: inline-block;
+                        &.title,
+                        &.content {
+                            position: relative;
 
-                            input {
-                                display: none;
-                            }
-
-                            label {
-                                float: right;
-                                color: #ddd;
-
-                                &:before {
-                                    display: inline-block;
-                                    font-size: 1rem;
-                                    padding: .3rem .2rem;
-                                    margin: 0;
-                                    font-family: FontAwesome;
-                                    content: "\f005 ";
-                                }
-                            }
-
-                            .half:before {
-                                content: "\f089 ";
+                            span.title_text_count {
                                 position: absolute;
+                                top: 16px;
+                                right: 5px;
+                                color: #353535;
                             }
 
-                            input:checked~label {
-                                color: #f73c32 !important;
+
+                            span.content_text_count {
+                                position: absolute;
+                                bottom: 20px;
+                                right: 5px;
                             }
                         }
                     }
                 }
             }
 
-            .btn_box {
+            .btn_box,
+            .btn_box_add_float {
                 padding: 10px 0;
                 text-align: center;
                 display: block;
                 margin-top: 50px;
-                position: relative;
+            }
 
-                button.del_btn {
-                    position: absolute;
-                    right: 0;
+            .btn_box_add_float {
+                .cancel_btn {
+                    float: left;
+                }
+
+                .del_btn,
+                .update_btn {
+                    float: right;
+                    margin-left: 5px;
                 }
             }
         }

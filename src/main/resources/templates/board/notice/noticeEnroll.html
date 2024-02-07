@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+    <main>
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="content">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- noticeForm section -->
+            <section id="noticeForm">
+                <div class="container-fluid noticeForm">
+                    <div class="section_header">
+                        <h2>공지사항 등록</h2>
+                        <div class="divider"></div>
+                    </div>
+                    <div class="noticeForm_body mt-5">
+                        <form id="noticeEnrollForm" th:action="@{'/board/notice/enroll'}" th:object="${noticeDto}"
+                                  method="post">
+                                <table class="col_header_table_basic">
+                                    <colgroup>
+                                        <col style="width:15%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{noticeYN}">공지 여부 <span>*</span></label>
+                                        </th>
+                                        <td class="check">
+                                            <input class="noticeYN_input" type="checkbox" id="noticeYN" th:field="*{noticeYN}">
+                                            <label for="noticeYN">상단 고정</label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{title}">제목 <span>*</span></label>
+                                        </th>
+                                        <td class="title">
+                                            <input class="title_input" type="text" th:field="*{title}" maxlength="50" placeholder="제목을 입력하세요.">
+                                            <span class="title_text_count">0자/50자</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{content}">내용 <span>*</span></label>
+                                        </th>
+                                        <td class="content">
+                                            <textarea class="content_input" name="content" th:field="*{content}" maxlength="500"></textarea>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="btn_box">
+                                    <button class="black_btn_w130_h40 enroll_btn" type="button">등록</button>
+                                    <button class="white_btn_w130_h40" type="button" onclick="location.href='/board/notice'">취소</button>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+    <!-- editor -->
+    <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/translations/ko.js"></script>
+
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과유무 변수 */
+        let checkTitle = false;
+        let checkContent = false;
+
+        $(function () {
+
+            /* 위지웍 적용 */
+            ClassicEditor
+                .create(document.querySelector('#content'), {
+                    language: 'ko'
+                })
+                .then( newEditor => {
+                    window.editor = newEditor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            /* 저장 버튼 */
+            $(".enroll_btn").click(function () {
+                let titleInputVal = $(".title_input").val();
+                let contentInputVal = editor.getData();
+
+                /* 제목 빈값 검사 */
+                if (titleInputVal === '') {
+                    alert("제목을 입력하세요.");
+                    $(".title_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkTitle = true;
+                }
+
+                /* 내용 빈값 검사 */
+                if (contentInputVal === '') {
+                    alert("내용을 입력하세요.");
+                    $(".content_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkContent = true;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkTitle && checkContent) {
+                    $("#noticeEnrollForm").submit();
+                }
+            });
+
+            /* 제목 입력란 글자 수 제한 */
+            $(".title_input").on("propertychange change keyup paste input", function () {
+                let titleInputVal = $(this).val();
+
+                // 글자 수 세기
+                if (titleInputVal.length === 0 || titleInputVal === '') {
+                    $(".title_text_count").text("0자/50자");
+                } else {
+                    $(".title_text_count").text(titleInputVal.length + '자/50자');
+                }
+
+                // 글자 수 제한
+                if (titleInputVal.length > 50) {
+                    // 50자 부터는 타이핑 되지 않도록
+                    $(this).val($(this).val().substring(0, 50));
+                    // 50자 넘으면 알림창 뜨도록
+                    alert('제목은 50자까지 입력 가능합니다.');
+                }
+            });
+        })
+    </script>
+</body>
+</html>

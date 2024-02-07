@@ -25,7 +25,7 @@
                         <div class="item_info_wrap">
                             <span class="thumbnail">
                                 <a th:href="${'/item/' + review.itemId}">
-                                    <img th:src="${review.imgUrl}">
+                                    <img class="item_img" th:src="${review.imgUrl}">
                                 </a>
                             </span>
                             <div class="information">
@@ -54,9 +54,9 @@
                                         <th scope="row">
                                             <label th:for="*{title}">제목 <span>*</span></label>
                                         </th>
-                                        <td>
+                                        <td class="title">
                                             <input class="title_input" type="text" th:field="*{title}">
-                                            <span class="text-danger title_warn_msg">제목을 입력해주세요.</span>
+                                            <span class="title_text_count">0자/50자</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -64,7 +64,7 @@
                                             <label th:for="*{rating}">평점 <span>*</span></label>
                                         </th>
                                         <td>
-                                            <fieldset class="rateForUpdateForm">
+                                            <fieldset class="rate">
                                                 <input type="radio" id="rating10" name="rating" value="5"><label for="rating10"></label>
                                                 <input type="radio" id="rating9" name="rating" value="4.5"><label for="rating9" class="half" ></label>
                                                 <input type="radio" id="rating8" name="rating" value="4"><label for="rating8"></label>
@@ -82,9 +82,9 @@
                                         <th scope="row">
                                             <label th:for="*{content}">내용 <span>*</span></label>
                                         </th>
-                                        <td>
+                                        <td class="content">
                                             <textarea class="content_input" th:field="*{content}"></textarea>
-                                            <span class="text-danger content_warn_msg">내용을 입력해주세요.</span>
+                                            <span class="content_text_count">0자/200자</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -93,7 +93,6 @@
                                         </th>
                                         <td>
                                             <input class="password_input" th:field="*{password}" type="password">
-                                            <span class="text-danger password_warn_msg">비밀번호를 입력해주세요.</span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -116,6 +115,13 @@
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script th:inline="javascript">
+        /* 유효성 검사 통과유무 변수 */
+        let titleCheck = false;     // 제목 체크
+        let ratingCheck = false;    // 평점 체크
+        let contentCheck = false;   // 내용 체크
+        let passwordCheck = false;  // 비밀번호 체크
+        let itemIdCheck = false;    // 상품정보선택 체크
+
         $(function() {
 
             /* 저장 버튼 */
@@ -123,40 +129,37 @@
                 let reviewId = [[${review.reviewId}]];
                 let password = [[${review.password}]];
 
-                /* 유효성 검사 통과유무 변수 */
-                let titleCheck = false;     // 제목 체크
-                let ratingCheck = false;    // 평점 체크
-                let contentCheck = false;   // 내용 체크
-
                 /* 입력값 변수 */
                 let titleVal = $('.title_input').val(); // 제목 입력란
                 let ratingVal = $("input[name='rating']:checked").val(); // 제목 입력란
                 let contentVal = $('.content_input').val(); // 내용 입력란
 
-                /* 제목 유효성 검사 */
-                if (titleVal === "") {
-                    $('.title_warn_msg').css('display', 'block')
-                    titleCheck = false;
+                /* 제목 빈값 검사 */
+                if (titleVal === '') {
+                    alert("제목을 입력하세요.");
+                    $(".title_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.title_warn_msg').css('display', 'none')
                     titleCheck = true;
                 }
 
-                /* 평점 유효성 검사 */
+                /* 평점 빈값 검사 */
                 if (!ratingVal >= 1) {
-                    $('.rating_warn_msg').css('display', 'block')
-                    ratingCheck = false;
+                    alert("평점을 입력하세요.");
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.rating_warn_msg').css('display', 'none')
                     ratingCheck = true;
                 }
 
-                /* 내용 유효성 검사 */
+                /* 내용 빈값 검사 */
                 if (contentVal === "") {
-                    $('.content_warn_msg').css('display', 'block')
-                    contentCheck = false;
+                    alert("내용을 입력하세요.");
+                    $(".content_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
                 } else {
-                    $('.content_warn_msg').css('display', 'none')
                     contentCheck = true;
                 }
 
@@ -183,17 +186,17 @@
                             let paramData = JSON.stringify(param);
 
                             $.ajax({
-                                url: "/review/update/" + reviewId,
+                                url: "/board/review/update/" + reviewId,
                                 type: "PATCH",
                                 contentType: "application/json",
                                 dataType: "text",
                                 cache: false,
                                 data: paramData,
-                                success: function (result, status) {
+                                success: function (result) {
                                     alert(result);
-                                    location.href = '/reviews';
+                                    location.href = '/board/review';
                                 },
-                                error: function (request, status, error) {
+                                error: function (request) {
                                     if (request.status === '401') {
                                         alert('로그인 후 이용해주세요.');
                                         location.href = '/login';
@@ -213,7 +216,7 @@
 
             /* 취소 버튼 */
             $(".cancel_btn").on("click", function () {
-                location.href = "/reviews";
+                location.href = "/board/review";
             });
 
             /* 평점 값 설정 */
@@ -223,6 +226,46 @@
 
                 if (ratingVal === reviewRating) {
                     $(this).prop("checked", true);
+                }
+            });
+
+            /* 제목 입력란 글자 수 제한 */
+            $(".title_input").on("propertychange change keyup paste input", function () {
+                let titleInputVal = $(this).val();
+
+                // 글자 수 세기
+                if (titleInputVal.length === 0 || titleInputVal === '') {
+                    $(".title_text_count").text("0자/50자");
+                } else {
+                    $(".title_text_count").text(titleInputVal.length + '자/50자');
+                }
+
+                // 글자 수 제한
+                if (titleInputVal.length > 50) {
+                    // 50자 부터는 타이핑 되지 않도록
+                    $(this).val($(this).val().substring(0, 50));
+                    // 50자 넘으면 알림창 뜨도록
+                    alert('제목은 50자까지 입력 가능합니다.');
+                }
+            });
+
+            /* 내용 입력란 글자 수 제한 */
+            $(".content_input").on("propertychange change keyup paste input", function () {
+                let contentInputVal = $(this).val();
+
+                // 글자 수 세기
+                if (contentInputVal.length === 0 || contentInputVal === '') {
+                    $(".content_text_count").text("0자/200자");
+                } else {
+                    $(".content_text_count").text(contentInputVal.length + '자/200자');
+                }
+
+                // 글자 수 제한
+                if (contentInputVal.length > 200) {
+                    // 200자 부터는 타이핑 되지 않도록
+                    $(this).val($(this).val().substring(0, 200));
+                    // 200자 넘으면 알림창 뜨도록
+                    alert('내용은 200자까지 입력 가능합니다.');
                 }
             });
         });
