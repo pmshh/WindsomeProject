@@ -1,4 +1,4 @@
-package com.windsome.entity.Auditing;
+package com.windsome.entity.auditing;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;

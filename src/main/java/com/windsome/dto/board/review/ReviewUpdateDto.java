@@ -1,4 +1,4 @@
-package com.windsome.dto.review;
+package com.windsome.dto.board.review;
 
 import lombok.*;
 

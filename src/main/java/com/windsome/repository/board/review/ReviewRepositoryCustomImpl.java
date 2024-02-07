@@ -1,13 +1,13 @@
-package com.windsome.repository;
+package com.windsome.repository.board.review;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.windsome.dto.review.QReviewListDto;
-import com.windsome.dto.review.ReviewListDto;
-import com.windsome.dto.review.ReviewSearchDto;
+import com.windsome.dto.board.review.QReviewListDto;
+import com.windsome.dto.board.review.ReviewListDto;
+import com.windsome.dto.board.review.ReviewSearchDto;
 import com.windsome.entity.QItemImg;
-import com.windsome.entity.QReview;
+import com.windsome.entity.board.QReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,8 @@ import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
-import static com.windsome.entity.QReview.*;
+import static com.windsome.entity.board.QReview.*;
+
 
 @RequiredArgsConstructor
 public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {

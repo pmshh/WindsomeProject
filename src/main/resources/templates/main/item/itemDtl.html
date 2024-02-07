@@ -199,6 +199,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
+
                                     <!-- 리뷰 데이터 없는 경우 -->
                                     <div class="message_wrap" th:if="${#lists.isEmpty(reviews.getContent())}">
                                         <span class="message">등록된 리뷰가 없습니다.</span>
@@ -207,7 +208,8 @@
                                         <button class="white_btn_w65_h30 write_btn">WRITE</button>
                                         <button class="white_btn_w65_h30 list_btn">LIST</button>
                                     </div>
-                                    <div class="pagination mt-3"
+
+                                    <div class="pagination"
                                          th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
                                      (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
                                         <ul>

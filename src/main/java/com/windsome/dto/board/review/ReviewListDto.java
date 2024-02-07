@@ -1,4 +1,4 @@
-package com.windsome.dto.review;
+package com.windsome.dto.board.review;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;

@@ -20,26 +20,29 @@
 
 /* 4. modules */
 @import 'modules/pagination';
-@import 'modules/formTable';
+@import 'modules/rowHeaderTable';
+@import 'modules/colHeaderTableBasic';
+@import 'modules/colHeaderTableColor';
 
 /* 5. pages */
-@import 'pages/board';
-@import 'pages/cart';
+@import 'pages/main';
+@import 'pages/signUp';
+@import 'pages/login';
 @import 'pages/findAccount';
 @import 'pages/findId';
 @import 'pages/updatePw';
-@import 'pages/main';
-@import 'pages/item';
-@import 'pages/login';
-@import 'pages/mypage';
 @import 'pages/profile';
-@import 'pages/signUp';
+@import 'pages/mypage';
+@import 'pages/item';
 @import 'pages/itemDtl';
-@import 'pages/orderHist';
+@import 'pages/cart';
 @import 'pages/orderForm';
-@import 'pages/reviewEnroll';
-@import 'pages/reviews';
-@import 'pages/reviewForm';
+@import 'pages/orderHist';
+@import 'pages/board/review';
+@import 'pages/board/reviewForm';
+@import 'pages/board/notice';
+@import 'pages/board/noticeDtl';
+@import 'pages/board/noticeForm';
 
 /* 5. pages (for. admin page) */
 @import 'pages/admin/itemForm';

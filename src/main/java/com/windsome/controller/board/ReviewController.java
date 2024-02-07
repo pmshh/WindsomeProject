@@ -1,11 +1,10 @@
-package com.windsome.controller;
+package com.windsome.controller.board;
 
 import com.windsome.config.security.CurrentAccount;
-import com.windsome.dto.review.*;
+import com.windsome.dto.board.review.*;
 import com.windsome.entity.Account;
-import com.windsome.repository.ReviewRepository;
 import com.windsome.service.CartService;
-import com.windsome.service.ReviewService;
+import com.windsome.service.board.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,6 +20,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/board")
 @Slf4j
 public class ReviewController {
 
@@ -30,8 +30,8 @@ public class ReviewController {
     /**
      * 리뷰 게시판 화면
      */
-    @GetMapping("/reviews")
-    public String reviews(@CurrentAccount Account account, ReviewSearchDto reviewSearchDto, Optional<Integer> page, Model model) {
+    @GetMapping("/review")
+    public String review(@CurrentAccount Account account, ReviewSearchDto reviewSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
         Page<ReviewListDto> reviews = reviewService.getReviews(reviewSearchDto, pageable);
 
@@ -44,7 +44,7 @@ public class ReviewController {
         model.addAttribute("reviewSearchDto", reviewSearchDto);
         model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute("maxPage", 10);
-        return "review/reviews";
+        return "board/review/review";
     }
 
     /**
@@ -53,7 +53,7 @@ public class ReviewController {
     @GetMapping("/review/{reviewId}")
     public String reviewDtl(@PathVariable(value = "reviewId") Long reviewId, Model model) {
         model.addAttribute("review", reviewService.getReviewDtl(reviewId));
-        return "review/reviewDtl";
+        return "board/review/reviewDtl";
     }
 
     /**
@@ -67,7 +67,7 @@ public class ReviewController {
             model.addAttribute("review", review);
         }
         model.addAttribute("reviewDto", new ReviewEnrollDto());
-        return "review/reviewEnroll";
+        return "board/review/reviewEnroll";
     }
 
     /**
@@ -81,7 +81,7 @@ public class ReviewController {
         model.addAttribute("searchQuery", searchDto.getSearchQuery());
         model.addAttribute("size", size.orElse(5));
         model.addAttribute("maxPage", 5);
-        return "review/itemList";
+        return "board/review/itemList";
     }
 
     /**
@@ -104,7 +104,7 @@ public class ReviewController {
     @GetMapping("/review/update/{reviewId}")
     public String updateReviewForm(@PathVariable(value = "reviewId") Long reviewId, Model model) {
         model.addAttribute("review", reviewService.getReviewDtl(reviewId));
-        return "review/reviewUpdate";
+        return "board/review/reviewUpdate";
     }
 
     /**

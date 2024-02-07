@@ -94,7 +94,7 @@
                                 </th:block>
                             </div>
 
-                            <div class="pagination mt-3"
+                            <div class="pagination"
                                 th:with="start=${(items.number/maxPage)*maxPage + 1},
                                          end=(${(items.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">

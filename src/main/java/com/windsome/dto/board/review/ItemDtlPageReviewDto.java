@@ -1,7 +1,7 @@
-package com.windsome.dto.review;
+package com.windsome.dto.board.review;
 
 import com.windsome.entity.Item;
-import com.windsome.entity.Review;
+import com.windsome.entity.board.Review;
 import lombok.Data;
 
 import java.math.BigDecimal;

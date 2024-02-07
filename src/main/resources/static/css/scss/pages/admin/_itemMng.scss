@@ -4,30 +4,9 @@
 
     form {
         table {
-            font-size: 12px;
-
-            thead {
-                th {
-                    padding: 15px 0 14px;
-                    border-bottom: 1px solid #e5e5e5;
-                    border-top: 1px solid #e5e5e5;
-                    color: #353535;
-                    vertical-align: middle;
-                    font-weight: normal;
-                    background: #fff;
-                    text-align: center;
-                }
-            }
-
             tbody {
-                vertical-align: middle;
-                text-align: center;
-
                 tr {
                     td {
-                        padding: 15px 5px 14px;
-                        border-top: 1px solid #e5e5e5;
-                        color: #353535;
                         height: 100px;
 
                         a {

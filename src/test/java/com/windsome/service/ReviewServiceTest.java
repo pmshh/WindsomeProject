@@ -2,15 +2,16 @@ package com.windsome.service;
 
 import com.windsome.WithAccount;
 import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.review.*;
+import com.windsome.dto.board.review.*;
 import com.windsome.entity.Account;
 import com.windsome.entity.Item;
 import com.windsome.entity.ItemImg;
-import com.windsome.entity.Review;
+import com.windsome.entity.board.Review;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
-import com.windsome.repository.ReviewRepository;
+import com.windsome.repository.board.review.ReviewRepository;
+import com.windsome.service.board.ReviewService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class ReviewServiceTest {
 
-    @Autowired ReviewService reviewService;
+    @Autowired
+    ReviewService reviewService;
     @Autowired ReviewRepository reviewRepository;
     @Autowired ItemRepository itemRepository;
     @Autowired ItemImgRepository itemImgRepository;

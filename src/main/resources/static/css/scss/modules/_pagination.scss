@@ -1,19 +1,16 @@
 /* pagination start */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    margin: 70px 0 40px;
 
     ul {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 10px 20px;
-        line-height: 50px;
         font-size: 13px;
+        display: inline-block;
+        margin: 0 auto;
 
         li {
             margin: 0 15px;
+            display: inline-block;
 
             a {
                 color: #999;

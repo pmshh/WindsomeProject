@@ -20,9 +20,8 @@
                         <div class="divider"></div>
                     </div>
                     <div class="order_mng_body mt-5">
-                        <div class="table-responsive">
-                            <form th:action="@{'/admin/orders/' + ${orders.number}}" method="get" th:object="${orders}">
-                                <table class="table">
+                        <form th:action="@{'/admin/orders/' + ${orders.number}}" method="get" th:object="${orders}">
+                                <table class="row_header_table">
                                     <thead>
                                         <tr>
                                             <th style="width: 10%;" scope="col">주문 번호</th>
@@ -97,7 +96,7 @@
                                     </tbody>
                                 </table>
 
-                                <div class="pagination mt-3"
+                                <div class="pagination"
                                     th:with="start=${(orders.number/maxPage)*maxPage + 1},
                                          end=(${(orders.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
@@ -137,8 +136,7 @@
                                         placeholder="주문자 아이디를 입력해주세요">
                                     <button class="search_btn black_btn_w90_h40" type="submit">검색</button>
                                 </div>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </section>

@@ -1,4 +1,4 @@
-package com.windsome.dto.review;
+package com.windsome.dto.board.review;
 
 import com.windsome.entity.Item;
 import lombok.Getter;

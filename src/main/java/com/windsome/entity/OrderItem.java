@@ -1,6 +1,6 @@
 package com.windsome.entity;
 
-import com.windsome.entity.Auditing.BaseEntity;
+import com.windsome.entity.auditing.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;

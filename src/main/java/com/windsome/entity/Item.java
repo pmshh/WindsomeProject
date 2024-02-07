@@ -2,7 +2,8 @@ package com.windsome.entity;
 
 import com.windsome.constant.ItemSellStatus;
 import com.windsome.dto.item.ItemFormDto;
-import com.windsome.entity.Auditing.BaseEntity;
+import com.windsome.entity.auditing.BaseEntity;
+import com.windsome.entity.board.Review;
 import lombok.*;
 
 import javax.persistence.*;

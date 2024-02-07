@@ -7,40 +7,10 @@
         width: 100%;
         overflow-x: auto;
 
-        table.order_hist_table {
-            width: 100%;
-            min-width: 964px;
-            table-layout: fixed;
-            border-spacing: 0;
-            border-collapse: collapse;
-            border: 1px solid #e5e5e5;
-            border-top: 1px solid #e5e5e5;
-            border-right: none;
-            border-left: none;
-            line-height: 1.7;
-            font-size: 12px;
-            letter-spacing: 0.0em !important;
-            color: #353535;
-
-            thead {
-                tr {
-                    th {
-                        text-align: center;
-                        padding: 15px 0 14px;
-                        vertical-align: middle;
-                        font-weight: normal;
-                        background-color: #fff;
-                    }
-                }
-            }
-
+        table {
             tbody {
                 tr {
                     td {
-                        border-top: 1px solid #e5e5e5;
-                        text-align: center;
-                        vertical-align: middle;
-                        padding: 15px 0;
                         height: 135px;
 
                         &.order_date {
@@ -93,10 +63,6 @@
                             font-size: 12px;
                         }
                     }
-                }
-
-                &.center {
-                    text-align: center;
                 }
             }
         }

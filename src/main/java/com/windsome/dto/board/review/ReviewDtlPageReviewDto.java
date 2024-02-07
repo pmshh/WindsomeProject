@@ -1,7 +1,7 @@
-package com.windsome.dto.review;
+package com.windsome.dto.board.review;
 
 import com.windsome.entity.ItemImg;
-import com.windsome.entity.Review;
+import com.windsome.entity.board.Review;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,12 +1,12 @@
-package com.windsome.service;
+package com.windsome.service.board;
 
-import com.windsome.dto.review.ItemDtlPageReviewDto;
-import com.windsome.dto.review.*;
+import com.windsome.dto.board.review.*;
 import com.windsome.entity.*;
+import com.windsome.entity.board.Review;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
-import com.windsome.repository.ReviewRepository;
+import com.windsome.repository.board.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,7 +16,6 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

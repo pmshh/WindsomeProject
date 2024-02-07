@@ -2,7 +2,8 @@ package com.windsome.entity;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.order.OrderDto;
-import com.windsome.entity.Auditing.BaseTimeEntity;
+import com.windsome.entity.auditing.BaseTimeEntity;
+import com.windsome.entity.board.Review;
 import lombok.*;
 
 import javax.persistence.*;

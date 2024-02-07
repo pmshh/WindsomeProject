@@ -4,7 +4,7 @@ import com.windsome.config.security.CurrentAccount;
 import com.windsome.entity.Account;
 import com.windsome.service.CartService;
 import com.windsome.service.ItemService;
-import com.windsome.service.ReviewService;
+import com.windsome.service.board.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

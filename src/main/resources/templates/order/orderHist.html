@@ -23,7 +23,7 @@
 
                         <!-- table_wrap start -->
                         <div class="table_wrap">
-                            <table class="order_hist_table">
+                            <table class="row_header_table">
                                 <thead>
                                 <tr>
                                     <th style="width: 130px;" scope="col">주문일자</th>
@@ -122,7 +122,7 @@
                         </div>
 
                         <!-- pagination start -->
-                        <div class="pagination mt-3"
+                        <div class="pagination"
                             th:with="start=${(orders.number/maxPage)*maxPage + 1}, end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
                             <ul>
                                 <li class="prev" th:classappend="${orders.first} ? 'disabled'">

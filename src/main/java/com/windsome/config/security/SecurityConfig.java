@@ -35,6 +35,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return (web) -> web.ignoring()
                 .antMatchers("/h2-console/**")
+                .antMatchers("/node_modules/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 

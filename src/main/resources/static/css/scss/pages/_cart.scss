@@ -3,7 +3,7 @@
     width: 100%;
     margin: 0 auto 60px;
 
-    .table_box {
+    .table_wrap {
         .title {
             margin: 40px 0 10px 10px;
 
@@ -15,30 +15,9 @@
         }
 
         table {
-            table-layout: fixed;
-            width: 100%;
-            border-spacing: 0;
-            border-collapse: collapse;
-            position: relative;
-            margin: 10px 0 0;
-            border: 1px solid #e5e5e5;
-            border-top: 1px solid #e5e5e5;
-            border-right: none;
-            border-left: none;
-            line-height: 1.7;
-            font-size: 12px;
-            letter-spacing: 0.0em !important;
-            color: #353535;
-
             thead {
                 tr {
                     th {
-                        text-align: center;
-                        padding: 15px 0 14px;
-                        vertical-align: middle;
-                        font-weight: normal;
-                        background-color: #fff;
-
                         input[type=checkbox] {
                             position: relative;
                             top: 3px;
@@ -50,10 +29,6 @@
             tbody {
                 tr {
                     td {
-                        border-top: 1px solid #e5e5e5;
-                        text-align: center;
-                        vertical-align: middle;
-                        padding: 15px 0;
                         height: 135px;
 
                         &.order_date {
@@ -154,10 +129,6 @@
                         }
                     }
                 }
-
-                &.center {
-                    text-align: center;
-                }
             }
         }
 
@@ -169,63 +140,6 @@
             color: #757575;
             font-weight: normal;
             font-size: 12px;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            ul {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 10px 20px;
-                line-height: 50px;
-                font-size: 13px;
-
-                li {
-                    margin: 0 15px;
-
-                    a {
-                        color: #999;
-                    }
-                }
-
-                li.disabled {
-                    pointer-events: none;
-                }
-
-                .page {
-                    text-align: center;
-                }
-
-                .page:hover a {
-                    color: #000;
-                    font-weight: bold;
-                }
-
-                .page.active a {
-                    color: #000;
-                    font-weight: bold;
-                    text-decoration-line: underline;
-                }
-
-                .prev,
-                .next {
-                    color: rgba(50, 50, 50, 1);
-                    font-size: 13px;
-                }
-
-                .prev {
-                    margin-right: 20px;
-
-                }
-
-                .next {
-                    margin-left: 20px;
-                }
-            }
         }
     }
 
