@@ -16,8 +16,17 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -137,5 +146,34 @@ public class ReviewService {
      */
     public boolean existsByItemIdAndAccountId(Long itemId, Long accountId) {
         return reviewRepository.existsByItemIdAndAccountId(itemId, accountId);
+    }
+
+    public void validateHitsCount(ReviewDtlPageReviewDto review, HttpServletRequest request, HttpServletResponse response) {
+        Review findReview = reviewRepository.findById(review.getReviewId()).orElseThrow(EntityNotFoundException::new);
+
+        Cookie[] cookies = Optional.ofNullable(request.getCookies()).orElseGet(() -> new Cookie[0]);
+
+        // "checkedReview" 쿠키가 있을 시, 변수 cookie에 해당 쿠키 추가
+        Cookie cookie = Arrays.stream(cookies)
+                .filter(c -> c.getName().equals("checkedReview"))
+                .findFirst()
+                .orElseGet(() -> {
+                    findReview.addHitsCount();
+                    reviewRepository.save(findReview);
+                    return new Cookie("checkedReview", "[" + review.getReviewId() + "]");
+                });
+
+        // "checkedReview" 쿠키가 없을 시, 조회수 증가 및 "reviewHits" 쿠키 새로 생성
+        if (!cookie.getValue().contains("[" + review.getReviewId() + "]")) {
+            findReview.addHitsCount();
+            reviewRepository.save(findReview);
+            cookie.setValue(cookie.getValue() + "[" + review.getReviewId() + "]");
+        }
+
+        long todayEndSecond = LocalDate.now().atTime(LocalTime.MAX).toEpochSecond(ZoneOffset.UTC);
+        long currentSecond = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        cookie.setPath("/"); // 모든 경로에서 접근 가능
+        cookie.setMaxAge((int) (todayEndSecond - currentSecond)); // 오늘 하루 자정까지 남은 시간초 설정
+        response.addCookie(cookie);
     }
 }

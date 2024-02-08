@@ -62,4 +62,7 @@ public class Review {
         this.setRating(reviewUpdateDto.getRating());
     }
 
+    public void addHitsCount() {
+        this.hits += 1;
+    }
 }

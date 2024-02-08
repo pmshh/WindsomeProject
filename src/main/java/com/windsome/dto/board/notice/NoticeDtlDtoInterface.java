@@ -10,5 +10,4 @@ public interface NoticeDtlDtoInterface {
     boolean getNoticeYN();
     Long getAccountId();
     LocalDateTime getRegTime();
-
 }

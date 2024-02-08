@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Controller
@@ -51,8 +53,11 @@ public class ReviewController {
      * 리뷰 상세 화면
      */
     @GetMapping("/review/{reviewId}")
-    public String reviewDtl(@PathVariable(value = "reviewId") Long reviewId, Model model) {
-        model.addAttribute("review", reviewService.getReviewDtl(reviewId));
+    public String reviewDtl(@PathVariable(value = "reviewId") Long reviewId, HttpServletRequest request, HttpServletResponse response, Model model) {
+        ReviewDtlPageReviewDto review = reviewService.getReviewDtl(reviewId);
+        reviewService.validateHitsCount(review, request, response);
+
+        model.addAttribute("review", review);
         return "board/review/reviewDtl";
     }
 
