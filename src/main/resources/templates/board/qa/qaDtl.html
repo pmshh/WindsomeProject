@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def_main_area">
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="def_content_area">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
+                    <div class="section_header">
+                        <h2>NOTICE</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section_body qa_dtl_body mt-5">
+
+                        <div class="table_box">
+                            <table>
+                                <colgroup>
+                                    <col style="width:130px;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td colspan="2" class="board_title">
+                                        <span th:text="${qaDtlDto.title}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="board_date_con">
+                                        <ul class="etcArea">
+                                            <li th:text="${qaDtlDto.createdBy}"></li>
+                                            <li><span class="txtNum" th:text="${#temporals.format(qaDtlDto.regTime, 'yyyy-MM-dd')}"></span> </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="detail">
+                                <div class="article" th:utext="${qaDtlDto.content}"></div>
+                            </div>
+                        </div>
+
+                        <div class="password_box">
+                            <span class="pw_txt">비밀번호</span>
+                            <input class="password_input" type="password" minlength="8" maxlength="20">
+                            <span class="help"><i class="xi-warning"></i>삭제하려면 비밀번호를 입력하세요.</span>
+                        </div>
+
+                        <div class="btn_box">
+                            <button class="white_btn_w100_h30 cancel_btn" type="button">목록</button>
+                            <button class="white_btn_w100_h30 del_btn" type="button">삭제</button>
+                            <button class="white_btn_w100_h30 update_btn" type="button">수정</button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        let pw = [[${password}]]; // db에 저장된 게시글 비밀번호
+
+        $(function () {
+            /* 수정 버튼 */
+            $(".update_btn").click(function () {
+                let qaId = [[${qaDtlDto.qaId}]];
+                let userInputPw = $(".password_input").val();
+
+                if (userInputPw === pw) {
+                    location.href = '/board/qa/update/' + qaId + '?password=' + pw;
+                } else if (userInputPw === '') {
+                    alert("비밀번호를 입력해 주세요.");
+                } else  {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+            });
+
+            /* 삭제 버튼 */
+            $(".del_btn").click(function () {
+                let qaId = [[${qaDtlDto.qaId}]];
+                let userInputPw = $(".password_input").val();
+
+                if (userInputPw === pw) {
+                    if (confirm("게시글을 삭제하시겠습니까?")) {
+                        $.ajax({
+                            url:'/board/qa/' + qaId,
+                            type: 'delete',
+                            data: {
+                                qaId: qaId,
+                                password: $(".password_input").val()
+                            },
+                            success(res) {
+                                alert(res);
+                                location.href = '/board/qa';
+                            },
+                            error(request) {
+                                alert(request.responseText);
+                            },
+                        });
+                    }
+                } else if (userInputPw === '') {
+                    alert("비밀번호를 입력해 주세요.");
+                } else  {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+            });
+        });
+    </script>
+</body>

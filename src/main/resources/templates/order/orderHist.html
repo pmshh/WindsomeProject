@@ -6,22 +6,22 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- orderHist section -->
-            <section id="order_hist">
-                <div class="container-fluid order_hist">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
                     <div class="section_header">
                         <h2>ORDER CHECK</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="order_hist_body mt-5">
 
-                        <!-- table_wrap start -->
+                    <div class="section_body order_hist_body mt-5">
                         <div class="table_wrap">
                             <table class="row_header_table">
                                 <thead>
@@ -29,30 +29,24 @@
                                     <th style="width: 130px;" scope="col">주문일자</th>
                                     <th style="width: 80px;" scope="col">이미지</th>
                                     <th style="width: auto;" scope="col">상품정보</th>
-                                    <th style="width: 130px;" scope="col">수량</th>
-                                    <th style="width: 130px;" scope="col">상품구매금액</th>
-                                    <th style="width: 130px;" scope="col">주문처리상태</th>
-                                    <th style="width: 130px;" scope="col">취소/교환/반품</th>
+                                    <th style="width: 61px;" scope="col">수량</th>
+                                    <th style="width: 111px;" scope="col">상품구매금액</th>
+                                    <th style="width: 111px;" scope="col">주문처리상태</th>
+                                    <th style="width: 111px;" scope="col">취소/교환/반품</th>
                                 </tr>
                                 </thead>
                                 <tbody class="center">
-                                <th:block th:each="order, status: ${orders.getContent()}">
-
-                                    <th:block th:if="${#lists.size(order.orderItemDtoList) >= 2}">
+                                    <th:block th:each="order, status: ${orders.getContent()}">
                                         <tr th:each="orderItem, status: ${order.orderItemDtoList}">
-
-                                            <td th:if="${status.index == 0}"
-                                                th:rowspan="${#lists.size(order.orderItemDtoList)}"
-                                                class="order_date" th:text="${order.orderDate}"></td>
+                                            <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}" class="order_date" th:text="${order.orderDate}"></td>
                                             <td class="thumb">
                                                 <a th:href="${'/item/' + orderItem.itemId}">
                                                     <img th:src="${orderItem.imgUrl}">
                                                 </a>
                                             </td>
-                                            <td class="product left_top">
+                                            <td class="product left top">
                                                 <strong class="name">
-                                                    <a th:href="${'/item/' + orderItem.itemId}"
-                                                       th:text="${orderItem.itemNm}"></a>
+                                                    <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
                                                 </strong>
                                                 <div class="option">[옵션: 선택 X]</div>
                                             </td>
@@ -63,66 +57,26 @@
                                                 <strong th:if="${orderItem.discount > 0}" th:text="|${#numbers.formatInteger(orderItem.price * (1 - orderItem.discount), 0, 'COMMA')}원|"></strong>
                                             </td>
                                             <td class="state">
-                                                <span th:if="${order.orderStatus == orderStatus}">배송 준비중</span>
-                                                <span th:if="${order.orderStatus != orderStatus}">주문 취소</span>
+                                                <span th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}">배송 준비중</span>
+                                                <span th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">주문 취소</span>
                                             </td>
-                                            <td th:if="${status.index == 0}"
-                                                th:rowspan="${#lists.size(order.orderItemDtoList)}">
-                                                <button th:if="${order.orderStatus == orderStatus}"
-                                                        class="black_btn_w65_h30" type="button"
-                                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문
-                                                    취소</button>
-                                                <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
+                                            <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}">
+                                                <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}"
+                                                        class="black_btn_w65_h30 order_cancel_btn" type="button" th:value="${order.orderId}"
+                                                        onclick="cancelOrder(this.value)">주문 취소</button>
+                                                <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
                                             </td>
                                         </tr>
                                     </th:block>
-
-                                    <tr th:if="${#lists.size(order.orderItemDtoList) < 2}"
-                                        th:each="orderItem, status: ${order.orderItemDtoList}">
-                                        <td class="order_date" th:text="${order.orderDate}"></td>
-                                        <td class="thumb">
-                                            <a th:href="${'/item/' + orderItem.itemId}">
-                                                <img th:src="${orderItem.imgUrl}">
-                                            </a>
-                                        </td>
-                                        <td class="product left_top">
-                                            <strong class="name">
-                                                <a th:href="${'/item/' + orderItem.itemId}"
-                                                   th:text="${orderItem.itemNm}"></a>
-                                            </strong>
-                                            <div class="option">[옵션: 선택 X]</div>
-                                        </td>
-                                        <td th:text="${orderItem.count}">
-                                        </td>
-                                        <td class="item_price">
-                                            <span th:if="${orderItem.discount == 0}" th:text="|${#numbers.formatInteger(orderItem.price, 0, 'COMMA')}원|"></span>
-                                            <span th:if="${orderItem.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(orderItem.price, 0, 'COMMA')}원|"></span>
-                                            <strong th:if="${orderItem.discount > 0}" th:text="|${#numbers.formatInteger(orderItem.price * (1 - orderItem.discount), 0, 'COMMA')}원|"></strong>
-                                        </td>
-                                        <td class="state">
-                                            <span th:if="${order.orderStatus == orderStatus}">배송 준비중</span>
-                                            <span th:if="${order.orderStatus != orderStatus}">주문 취소</span>
-                                        </td>
-                                        <td>
-                                            <button th:if="${order.orderStatus == orderStatus}"
-                                                    class="black_btn_w65_h30 order_cancel_btn" type="button" th:value="${order.orderId}"
-                                                    onclick="cancelOrder(this.value)">주문 취소</button>
-                                            <div th:unless="${order.orderStatus == orderStatus}">취소 완료</div>
-                                        </td>
-                                    </tr>
-
-                                </th:block>
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- message_wrap start -->
                         <div th:if="${#lists.isEmpty(orders.getContent())}" class="message_wrap">
                             <span class="message">주문 내역이 없습니다.</span>
                         </div>
 
-                        <!-- pagination start -->
-                        <div class="pagination"
+                        <div class="def_pagination"
                             th:with="start=${(orders.number/maxPage)*maxPage + 1}, end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
                             <ul>
                                 <li class="prev" th:classappend="${orders.first} ? 'disabled'">

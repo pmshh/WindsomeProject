@@ -23,9 +23,9 @@
 </th:block>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <!-- sidebar -->
-        <aside class="sidebar" th:fragment="sidebar">
+        <aside th:fragment="sidebar" class="def_sidebar_area" >
             <div class="sidebar_logo">
                 <a th:href="@{/}">
                     <h1>WINDSOME</h1>
@@ -117,10 +117,7 @@
                             <a th:href="@{/board/notice}">NOTICE</a>
                         </li>
                         <li>
-                            <a href="board.html">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="board.html">Q&A</a>
+                            <a th:href="@{/board/qa}">Q&A</a>
                         </li>
                         <li>
                             <a th:href="@{/board/review}">REVIEW</a>
@@ -154,9 +151,10 @@
         </aside>
 
         <!-- content -->
-        <article class="content">
+        <article class="def_content_area">
+
             <!-- nav -->
-            <nav th:fragment="nav" class="nav">
+            <nav th:fragment="nav" class="def_nav_area">
                 <div class="menu">
                     <ul class="menu_link">
                         <li sec:authorize="hasRole('ADMIN')">
@@ -218,7 +216,7 @@
             </nav>
 
             <!-- footer -->
-            <footer th:fragment="footer">
+            <footer th:fragment="footer" class="def_footer_area">
                 <div class="footer_header">
                     <ul>
                         <li><a class="footer_header_link">HOME</a></li>
@@ -252,14 +250,14 @@
             /* 스크롤 시 navbar 투명 */
             $(window).scroll(function () {
                 if ($(this).scrollTop() == 0)
-                    $('nav').css('opacity', '1');
+                    $('.def_nav_area').css('opacity', '1');
                 else
-                    $('nav').css('opacity', '.6');
+                    $('.def_nav_area').css('opacity', '.6');
             });
 
             /* sidebar toggle 기능 */
             let toggleBtn = $('.menu_toggle');
-            let sidebar = $('.sidebar');
+            let sidebar = $('.def_sidebar_area');
             toggleBtn.click(function (e) {
                 e.preventDefault();
                 sidebar.toggleClass("active");

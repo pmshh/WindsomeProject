@@ -6,22 +6,23 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- review_form section -->
-            <section id="review_form">
-                <div class="container-fluid review_form">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
                     <div class="section_header">
                         <h2>리뷰 상세</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="review_form_body mt-5">
 
-                        <!-- item_info_wrap start -->
+                    <div class="section_body review_form_body mt-5">
+
                         <div class="item_info_wrap">
                             <span class="thumbnail">
                                 <a th:href="${'/item/' + review.itemId}">
@@ -39,12 +40,10 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- item_info_wrap end -->
 
-                        <!-- review_form_wrap start -->
                         <div class="review_form_wrap">
                             <form th:object="${review}" method="post">
-                                <table>
+                                <table class="col_header_table_basic">
                                     <colgroup>
                                         <col style="width:15%;">
                                         <col style="width: auto;">
@@ -103,7 +102,7 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- review_form_wrap end -->
+
                     </div>
                 </div>
             </section>
@@ -123,11 +122,13 @@
 
                 if (passwordVal === '') {
                     alert("비밀번호를 입력하세요.");
+                    $('.password_input').focus();
                 } else if (passwordVal === password) {
                     let reviewId = $(this).attr("data-reviewId");
                     location.href = "/board/review/update/" + reviewId;
                 } else {
                     alert("비밀번호가 일치하지 않습니다.");
+                    $('.password_input').focus();
                 }
             });
 
@@ -140,6 +141,7 @@
 
                 if (passwordVal === '') {
                     alert("비밀번호를 입력하세요.");
+                    $('.password_input').focus();
                 } else if (passwordVal === password) {
                     if (confirm("리뷰를 삭제하시겠습니까?")) {
                         $.ajax({
@@ -165,12 +167,13 @@
                     }
                 } else {
                     alert("비밀번호가 일치하지 않습니다.");
+                    $('.password_input').focus();
                 }
             });
 
             /* 취소 버튼 */
             $(".cancel_btn").on("click", function () {
-                window.history.back();
+                location.href = '/board/review';
             });
 
             /* 평점 값 설정 */

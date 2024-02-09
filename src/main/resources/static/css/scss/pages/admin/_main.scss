@@ -1,92 +1,127 @@
-/* admin_main page start */
 .admin_main_body {
-    .card-header {
-        position: relative;
+    .row {
+        width: 100%;
 
-        span {
-            margin-left: 5px;
-        }
+        .info_box {
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 3px;
+            width: 100%;
+            // box-shadow: 1px 1px 20px -10px rgb(0, 0, 0, 0.2);
 
-        .fa-bars {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-    }
+            .txt_box {
+                .title {
+                    display: block;
+                    color: #6b6b6b;
+                    font-size: 12px;
+                }
 
-    .card-body {
-        table {
-            font-size: 12px;
+                .txt {
+                    font-size: 12px;
+                    color: #6b6b6b;
+                }
 
-            thead {
-                th {
-                    padding: 15px 0 14px;
-                    border-top: 1px solid #e5e5e5;
-                    border-bottom: 1px solid #e5e5e5;
-                    color: #353535;
-                    vertical-align: middle;
-                    font-weight: normal;
-                    background: #fff;
-                    text-align: center;
+                strong {
+                    font-size: 18px;
                 }
             }
 
-            tbody {
-                vertical-align: middle;
-                text-align: center;
+            .icon_box {
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    padding: 15px;
+                }
 
-                tr {
-                    td {
-                        padding: 15px 5px 14px;
-                        border-top: 1px solid #e5e5e5;
-                        color: #353535;
+                svg.fa-user {
+                    color: #0090F4;
+                    background-color: #EBF4FC;
+                }
 
-                        a {
-                            width: 90px;
-                            margin: 1px 0;
-                        }
+                svg.fa-cart-shopping {
+                    color: #FCBB0F;
+                    background-color: #FDF5D8;
+                }
 
-                        a:hover {
-                            text-decoration: underline;
-                            color: rgb(107, 107, 107);
-                        }
+                svg.fa-envelope {
+                    color: #6C41E8;
+                    background-color: #F2EEFF;
+                }
 
-                        &.thumb {
-                            img {
-                                width: 80px;
-                                height: 110px;
-                            }
-                        }
-
-                        &.product {
-                            .name a {
-                                color: #353535 !important;
-                            }
-
-                            .option {
-                                color: #757575;
-                                margin-top: 9px;
-                            }
-                        }
-
-                        &.left_top {
-                            text-align: left;
-                            vertical-align: top;
-                        }
-
-                        button {
-                            font-size: 12px !important;
-                            padding: 0 !important;
-                        }
-                    }
-
-                    td.left {
-                        text-align: left;
-                    }
+                svg.fa-coins {
+                    color: #14C470;
+                    background-color: #E6FFEB;
                 }
             }
+        }
+
+        .chart_box {
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 3px;
+            width: 100%;
+            min-height: 300px;
+            max-height: 300px;
+
+            .header {
+                width: 100%;
+                text-align: left;
+                padding: 0 0 15px 0;
+
+                span {
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+            }
+
+            .body {
+                width: 100%;
+                flex: 1 1 0;
+            }
+        }
+
+        .table_box {
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 3px;
+            width: 100%;
+            min-height: 300px;
+            max-height: 300px;
+
+            .header {
+                width: 100%;
+                text-align: left;
+                padding: 0 0 15px 0;
+
+                span {
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+            }
+
+            .body {
+                width: 100%;
+                overflow-x: auto;
+
+                .message_wrap {
+                    @include board_message_wrap();
+                }
+            }
+        }
+
+        .big_table_box {
+            min-height: 500px;
+            max-height: 500px;
         }
     }
 }

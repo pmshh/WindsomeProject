@@ -6,80 +6,98 @@
 </head>
 
 <body>
-    <main>
+    <main class="admin_main_area">
         <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='home')"></div>
 
-        <article class="admin_content">
+        <article class="admin_content_area bg_gray">
             <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-            <section id="admin_main">
-                <div class="container admin_main">
-                    <div class="admin_main_header">
+            <!-- section start -->
+            <section class="admin_section_area">
+                <div class="container-fluid">
+
+                    <div class="section_header">
                         <h2>Dashboard</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="admin_main_body mt-5">
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa-solid fa-user"></i> 회원 수
+
+                    <div class="section_body admin_main_body">
+                        <div class="row gy-3">
+                            <div class="col-md-6 col-xl-3">
+                                <div class="info_box">
+                                    <div class="txt_box">
+                                        <span class="title">회원 수</span>
+                                        <strong th:text="${dashboardData.totalAccount}"></strong>
                                     </div>
-                                    <div class="card-body">
-                                        <span th:text="${dashboardData.totalAccount}"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa-solid fa-cart-shopping"></i> 상품 수
-                                    </div>
-                                    <div class="card-body">
-                                        <span th:text="${dashboardData.totalItem}"></span>
+                                    <div class="icon_box">
+                                        <i class="fa-solid fa-user"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa-solid fa-envelope"></i> 고객 문의
+                            <div class="col-md-6 col-xl-3">
+                                <div class="info_box">
+                                    <div class="txt_box">
+                                        <span class="title">상품 수</span>
+                                        <strong th:text="${dashboardData.totalItem}"></strong>
                                     </div>
-                                    <div class="card-body">
-                                        준비중...
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa-solid fa-chart-simple"></i> 총 매출
-                                    </div>
-                                    <div class="card-body">
-                                        <span
-                                            th:text="${#numbers.formatInteger(dashboardData.totalSales, 1, 'COMMA') + '원'}"></span>
+                                    <div class="icon_box">
+                                        <i class="fa-solid fa-cart-shopping"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 mt-5">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa-solid fa-store"></i><span>상품 관리</span>
-                                        <a th:href="@{/admin/items}"><i class="fa-solid fa-bars"></i></a>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="info_box">
+                                    <div class="txt_box">
+                                        <span class="title">고객 문의</span>
+                                        <strong th:text="${dashboardData.totalQa}"></strong>
                                     </div>
-                                    <div class="card-body">
-                                        <table class="table">
+                                    <div class="icon_box">
+                                        <i class="fa-solid fa-envelope"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="info_box">
+                                    <div class="txt_box">
+                                        <span class="title">전체 총 수입</span>
+                                        <strong th:text="${#numbers.formatInteger(dashboardData.totalSales, 1, 'COMMA')}"></strong><span class="txt"> 원</span>
+                                    </div>
+                                    <div class="icon_box">
+                                        <i class="fa-solid fa-coins"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-xxl-4 mt-5">
+                                <div class="chart_box">
+                                    <div class="header">
+                                        <span>카테고리별 판매 건수</span>
+                                    </div>
+                                    <div class="body">
+                                        <canvas id="myChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-12 col-xxl-8 mt-5">
+                                <div class="table_box">
+                                    <div class="header">
+                                        <span>최근 등록 상품</span>
+<!--                                        <a th:href="@{/admin/items}"><i class="fa-solid fa-bars"></i></a>-->
+                                    </div>
+                                    <div class="body">
+                                        <table class="row_header_table">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 10%;" scope="col">번호</th>
-                                                    <th style="width: 30%;" scope="col">상품명</th>
-                                                    <th style="width: 10%;" scope="col">상태</th>
-                                                    <th style="width: 10%;" scope="col">등록자</th>
-                                                    <th style="width: 20%;" scope="col">등록일</th>
+                                                    <th style="width: 80px;" scope="col">번호</th>
+                                                    <th style="width: auto;" scope="col">상품명</th>
+                                                    <th style="width: 110px;" scope="col">상태</th>
+                                                    <th style="width: 110px;" scope="col">등록자</th>
+                                                    <th style="width: 110px;" scope="col">등록일</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="item, status: ${items}">
+                                                <tr th:each="item, status: ${items.getContent()}">
                                                     <td th:text="${status.index + 1}">
                                                     </td>
                                                     <td class="left">
@@ -95,96 +113,63 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div th:if="${#lists.isEmpty(items.getContent())}" class="message_wrap">
+                                            <span class="message">등록된 상품이 없습니다.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-12 mt-5">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <i class="fa-solid fa-store"></i><span>주문 관리</span>
-                                        <a th:href="@{/admin/orders}"><i class="fa-solid fa-bars"></i></a>
+                                <div class="table_box big_table_box">
+                                    <div class="header">
+                                        <span>최근 주문 내역</span>
+<!--                                        <a th:href="@{/admin/orders}"><i class="fa-solid fa-bars"></i></a>-->
                                     </div>
-                                    <div class="card-body">
-                                        <table class="table">
+                                    <div class="body">
+                                        <table class="row_header_table">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 10%;" scope="col">주문 번호</th>
-                                                    <th style="width: 10%;" scope="col">이미지</th>
+                                                    <th style="width: 80px;" scope="col">주문 번호</th>
+                                                    <th style="width: 110px;" scope="col">이미지</th>
                                                     <th style="width: auto;" scope="col">상품정보</th>
-                                                    <th style="width: 10%;" scope="col">주문 상태</th>
-                                                    <th style="width: 10%;" scope="col">주문자 아이디</th>
-                                                    <th style="width: 10%;" scope="col">주문 날짜</th>
-                                                    <th style="width: 10%;" scope="col">취소</th>
+                                                    <th style="width: 110px;" scope="col">주문 상태</th>
+                                                    <th style="width: 110px;" scope="col">주문자 아이디</th>
+                                                    <th style="width: 110px;" scope="col">주문 날짜</th>
+                                                    <th style="width: 110px;" scope="col">취소</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <th:block th:each="order, status: ${orders.getContent()}">
+                                                    <tr th:each="orderItem, status: ${order.orderItemDtoList}">
 
-                                                    <th:block th:if="${#lists.size(order.orderItemDtoList) >= 2}">
-                                                        <tr th:each="orderItem, status: ${order.orderItemDtoList}">
-
-                                                            <td th:if="${status.index == 0}"
-                                                                th:rowspan="${#lists.size(order.orderItemDtoList)}"
-                                                                th:text="${order.orderId}"></td>
-                                                            <td class="thumb">
-                                                                <a th:href="${'/item/' + orderItem.itemId}">
-                                                                    <img th:src="${orderItem.imgUrl}">
-                                                                </a>
-                                                            </td>
-                                                            <td class="product left_top">
-                                                                <strong class="name">
-                                                                    <a th:href="${'/item/' + orderItem.itemId}"
-                                                                        th:text="${orderItem.itemNm}"></a>
-                                                                </strong>
-                                                                <div class="option">[옵션: 선택 X]</div>
-                                                            </td>
-                                                            <td th:text="${order.orderStatus}"></td>
-                                                            <td th:text="${order.buyerId}"></td>
-                                                            <td th:text="${order.orderDate}"></td>
-                                                            <td th:if="${status.index == 0}"
-                                                                th:rowspan="${#lists.size(order.orderItemDtoList)}">
-                                                                <button th:if="${order.orderStatus == orderStatus}"
-                                                                    class="black_btn_w65_h30" type="button"
-                                                                    th:value="${order.orderId}"
-                                                                    onclick="cancelOrder(this.value)">주문 취소</button>
-                                                                <div th:unless="${order.orderStatus == orderStatus}">취소
-                                                                    완료</div>
-                                                            </td>
-                                                        </tr>
-                                                    </th:block>
-
-                                                    <tr th:if="${#lists.size(order.orderItemDtoList) < 2}"
-                                                        th:each="orderItem, status: ${order.orderItemDtoList}">
-                                                        <td th:text="${order.orderId}"></td>
+                                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}" th:text="${order.orderId}"></td>
                                                         <td class="thumb">
                                                             <a th:href="${'/item/' + orderItem.itemId}">
                                                                 <img th:src="${orderItem.imgUrl}">
                                                             </a>
                                                         </td>
-                                                        <td class="product left_top">
+                                                        <td class="product left top">
                                                             <strong class="name">
-                                                                <a th:href="${'/item/' + orderItem.itemId}"
-                                                                    th:text="${orderItem.itemNm}"></a>
+                                                                <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
                                                             </strong>
                                                             <div class="option">[옵션: 선택 X]</div>
                                                         </td>
                                                         <td th:text="${order.orderStatus}"></td>
                                                         <td th:text="${order.buyerId}"></td>
-                                                        <td th:text="${order.orderDate}"></td>
-                                                        <td>
-                                                            <button th:if="${order.orderStatus == orderStatus}"
-                                                                class="black_btn_w65_h30" type="button"
-                                                                th:value="${order.orderId}"
-                                                                onclick="cancelOrder(this.value)">주문
-                                                                취소</button>
-                                                            <div th:unless="${order.orderStatus == orderStatus}">취소 완료
-                                                            </div>
+                                                        <td th:text="${order.orderDate}" class="gray_col fz11"></td>
+                                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}">
+                                                            <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}" class="black_btn_w65_h30" type="button"
+                                                                th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                            <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
                                                         </td>
                                                     </tr>
                                                 </th:block>
                                             </tbody>
                                         </table>
+                                        <div th:if="${#lists.isEmpty(orders.getContent())}" class="message_wrap">
+                                            <span class="message">주문 내역이 없습니다.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -197,9 +182,60 @@
             <div th:replace="/layouts/adminLayout.html :: footer"></div>
         </article>
     </main>
-    <div th:replace="/layouts/adminLayout.html :: js"></div>
+    <div th:replace="/layouts/adminLayout.html :: commonJs"></div>
+
     <!-- custom js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- chart.js -->
     <script th:inline="javascript">
+        const ctx = document.getElementById('myChart');
+
+        let test = [[${dashboardData.numOfSalesByCateList}]];
+        let param = [];
+        for(let key in test) {
+            let val = test[key].count;
+            param.push(val);
+        }
+        console.log(param);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
+                datasets: [{
+                    data: param,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins:{
+                    legend: {
+                        display: false
+                    },
+                },
+                indexAxis: 'y',
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
         function cancelOrder(orderId) {
             if (confirm("선택하신 주문을 취소하시겠습니까?")) {
                 let paramData = {

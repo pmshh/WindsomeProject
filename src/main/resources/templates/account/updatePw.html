@@ -6,24 +6,25 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- updatePw section -->
-            <section id="update_pw">
-                <div class="container update_pw">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container">
+
                     <div class="section_header">
                         <h2>비밀번호 변경</h2>
                         <div class="divider"></div>
                     </div>
 
-                    <div class="update_pw_body mt-5">
+                    <div class="section_body update_pw_body mt-5">
                         <div class="result_success" th:if="${not #strings.isEmpty(result) && result != 'fail'}">
                             <form id="updatePwForm" th:action="@{/update/pw}" method="post">
-                                <table class="col_header_table">
+                                <table class="col_header_table_color">
                                     <colgroup>
                                         <col style="width:15%;">
                                         <col style="width: auto;">
@@ -167,6 +168,11 @@
                         if (isMatch(pwVal, pwConfirmVal)) { // 비밀번호 확인을 먼저 입력하고 비밀번호를 입력하는 경우 실패 메시지 뜨는 것 방지
                             pwConfirmResultText.css("color", "#0000ff");
                             pwConfirmResultText.html("비밀번호가 일치합니다.")
+                            checkPwMatch = true;
+                        } else if (!isMatch(pwVal, pwConfirmVal) && pwConfirmVal !== '') {
+                            pwConfirmResultText.css("color", "#d43301");
+                            pwConfirmResultText.html("비밀번호가 일치하지 않습니다.");
+                            checkPwMatch = false;
                         }
                     }
                     else {

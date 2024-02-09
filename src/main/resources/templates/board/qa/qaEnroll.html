@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def_main_area">
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="def_content_area">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
+                    <div class="section_header">
+                        <h2>Q&A 등록</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section_body qaForm_body mt-5">
+                        <form id="qaEnrollForm" th:action="@{'/board/qa/enroll'}" th:object="${qaEnrollDto}"
+                              method="post">
+                            <table class="col_header_table_basic">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{title}">제목 <span>*</span></label>
+                                    </th>
+                                    <td class="title">
+                                        <select name="title">
+                                            <option value="1">문의 드립니다.</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{content}">내용 <span>*</span></label>
+                                    </th>
+                                    <td class="content">
+                                        <textarea class="content_input" name="content" th:field="*{content}" maxlength="500"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{password}">비밀번호 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <input class="password_input" th:field="*{password}" type="password" minlength="8" maxlength="20">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label >비밀글설정 <span>*</span></label>
+                                    </th>
+                                    <td class="check">
+                                        <input type="radio" id="secretF" name="secret" value="false" disabled>
+                                        <label for="secretF">공개글</label>
+                                        <input type="radio" id="secretT" name="secret" value="true" checked>
+                                        <label for="secretT">비밀글</label>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="btn_box">
+                                <button class="black_btn_w130_h40 enroll_btn" type="button">등록</button>
+                                <button class="white_btn_w130_h40" type="button" onclick="location.href='/board/notice'">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+    <!-- editor -->
+    <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/translations/ko.js"></script>
+
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과유무 변수 */
+        let checkTitle = false;
+        let checkContent = false;
+        let checkPassword = false;
+
+        $(function () {
+            /* 위지웍 적용 */
+            ClassicEditor
+                .create(document.querySelector('#content'), {
+                    language: 'ko'
+                })
+                .then( newEditor => {
+                    window.editor = newEditor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            /* 제목 입력란 글자 수 제한 */
+            $(".title_input").on("propertychange change keyup paste input", function () {
+                let titleInputVal = $(this).val();
+
+                // 글자 수 세기
+                if (titleInputVal.length === 0 || titleInputVal === '') {
+                    $(".title_text_count").text("0자/50자");
+                } else {
+                    $(".title_text_count").text(titleInputVal.length + '자/50자');
+                }
+
+                // 글자 수 제한
+                if (titleInputVal.length > 50) {
+                    // 50자 부터는 타이핑 되지 않도록
+                    $(this).val($(this).val().substring(0, 50));
+                    // 50자 넘으면 알림창 뜨도록
+                    alert('제목은 50자까지 입력 가능합니다.');
+                }
+            });
+
+            /* 게시글 등록 버튼 */
+            $(".enroll_btn").click(function () {
+                let titleInputVal = $("select[name=title] option:selected").val();
+                let contentInputVal = editor.getData();
+                let passwordInputVal = $(".password_input").val();
+
+                /* 제목 빈값 검사 */
+                if (titleInputVal === '') {
+                    alert("제목을 입력하세요.");
+                    $(".title_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkTitle = true;
+                }
+
+                /* 내용 빈값 검사 */
+                if (contentInputVal === '') {
+                    alert("내용을 입력하세요.");
+                    $(".content_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkContent = true;
+                }
+
+                /* 비밀번호 빈값 검사 */
+                if (passwordInputVal === '') {
+                    alert("비밀번호를 입력하세요.");
+                    $(".password_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    if (passwordInputVal.length < 8 || passwordInputVal.length > 20) {
+                        alert("비밀번호는 8~20자 사이로 입력해 주세요.");
+                        return false;
+                    }
+                    checkPassword = true;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkTitle && checkContent) {
+                    $.ajax({
+                        url: '/board/qa/enroll',
+                        type: 'POST',
+                        data: {
+                            title: $("select[name=title] option:selected").text(),
+                            content: contentInputVal,
+                            password: passwordInputVal,
+                            secretYN: $("input[name='secret']:checked").val()
+                        },
+                        success(res) {
+                            alert(res);
+                            location.href = '/board/qa';
+                        },
+                        error(request) {
+                            alert(request.responseText);
+                        },
+                    })
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -8,22 +8,23 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- item_dtl section -->
-            <section id="item_dtl">
-                <div class="container item_dtl">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container">
+
                     <div class="section_header">
                         <h2>ITEM DETAIL</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="item_dtl_body mt-5">
 
-                        <!-- item_dtl start -->
+                    <div class="section_body item_dtl_body mt-5">
+
                         <div class="item_dtl row justify-content-md-center">
                             <div class="item_img_wrap col-md-auto">
                                 <div class="main_img_box">
@@ -143,10 +144,7 @@
                             </div>
                         </div>
 
-                        <!-- item_additional start -->
                         <div class="item_additional">
-
-                            <!-- item_review start -->
                             <div class="item_review_warp" id="review">
                                 <div class="item_review_header">
                                     <h3>Review</h3>
@@ -209,7 +207,7 @@
                                         <button class="white_btn_w65_h30 list_btn">LIST</button>
                                     </div>
 
-                                    <div class="pagination"
+                                    <div class="def_pagination"
                                          th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
                                      (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
                                         <ul>
@@ -244,8 +242,8 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
             </section>

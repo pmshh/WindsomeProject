@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/defaultLayout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def_main_area">
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+
+        <article class="def_content_area">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
+                    <div class="section_header">
+                        <h2>Q&A 등록</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section_body qaForm_body mt-5">
+                        <form id="qaUpdateForm" th:action="@{'/board/qa/update'}" th:object="${qaUpdateDto}" method="post">
+                            <table class="col_header_table_basic">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{title}">제목 <span>*</span></label>
+                                    </th>
+                                    <td class="title">
+                                        <select name="title">
+                                            <option value="1">문의 드립니다.</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{content}">내용 <span>*</span></label>
+                                    </th>
+                                    <td class="content">
+                                        <textarea class="content_input" name="content" th:field="*{content}" maxlength="500"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label >비밀글설정 <span>*</span></label>
+                                    </th>
+                                    <td class="check">
+                                        <input type="radio" id="secretF" name="secret" value="false" disabled>
+                                        <label for="secretF">공개글</label>
+                                        <input type="radio" id="secretT" name="secret" value="true" checked>
+                                        <label for="secretT">비밀글</label>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="btn_box">
+                                <button class="black_btn_w130_h40 update_btn" type="button">수정</button>
+                                <button class="white_btn_w130_h40 cancel_btn" type="button">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+    <!-- editor -->
+    <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+    <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/translations/ko.js"></script>
+
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과유무 변수 */
+        let checkTitle = false;
+        let checkContent = false;
+
+        $(function () {
+            /* 경고 창 출력 */
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+
+            /* 위지웍 적용 */
+            ClassicEditor
+                .create(document.querySelector('#content'), {
+                    language: 'ko'
+                })
+                .then( newEditor => {
+                    window.editor = newEditor;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            /* 수정 버튼 */
+            $(".update_btn").click(function () {
+                let qaId = [[${qaUpdateDto.qaId}]]
+                let titleInputVal = $("select[name=title] option:selected").val();
+                let contentInputVal = editor.getData();
+                let radioVal = $('input[name="secret"]:checked').val();
+
+                /* 제목 빈값 검사 */
+                if (titleInputVal === '') {
+                    alert("제목을 입력하세요.");
+                    $(".title_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkTitle = true;
+                }
+
+                /* 내용 빈값 검사 */
+                if (contentInputVal === '') {
+                    alert("내용을 입력하세요.");
+                    $(".content_input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkContent = true;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkTitle && checkContent) {
+                    if (confirm("게시글을 수정하시겠습니까?")) {
+
+                        $.ajax({
+                            url: '/board/qa/update',
+                            type: 'patch',
+                            data: {
+                                qaId: qaId,
+                                title: $("select[name=title] option:selected").text(),
+                                content: contentInputVal,
+                                secretYN: radioVal
+                            },
+                            success(res) {
+                                alert(res);
+                                location.href = '/board/qa';
+                            },
+                            error(request) {
+                                alert(request.responseText);
+                            },
+                        })
+                    }
+                    return false;
+                }
+            });
+
+            /* 취소 버튼 */
+            $(".cancel_btn").click(function () {
+                let qaId = [[${qaUpdateDto.qaId}]];
+                let pw = [[${qaUpdateDto.password}]];
+                location.href = '/board/qa/' + qaId + '?password=' + pw;
+            });
+        });
+    </script>
+</body>
+</html>

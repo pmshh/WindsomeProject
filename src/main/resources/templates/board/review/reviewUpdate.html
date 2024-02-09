@@ -6,22 +6,23 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- review_form section -->
-            <section id="review_form">
-                <div class="container-fluid review_form">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
                     <div class="section_header">
                         <h2>리뷰 수정</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="review_form_body mt-5">
 
-                        <!-- item_info_wrap start -->
+                    <div class="section_body review_form_body mt-5">
+
                         <div class="item_info_wrap">
                             <span class="thumbnail">
                                 <a th:href="${'/item/' + review.itemId}">
@@ -39,9 +40,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- item_info_wrap end -->
 
-                        <!-- review_form_wrap start -->
                         <div class="review_form_wrap">
                             <form th:object="${review}" method="post">
                                 <table class="col_header_table_basic">
@@ -103,7 +102,7 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- review_form_wrap end -->
+
                     </div>
                 </div>
             </section>

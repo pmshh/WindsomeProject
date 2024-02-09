@@ -6,86 +6,84 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- notice_dtl section -->
-            <section id="notice_dtl">
-                <div class="container-fluid notice_dtl">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
                     <div class="section_header">
                         <h2>NOTICE</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="notice_dtl_body mt-5">
 
-                        <form>
-                            <div class="table_box">
-                                <table>
-                                    <colgroup>
-                                        <col style="width:130px;">
-                                        <col style="width: auto;">
-                                    </colgroup>
-                                    <tbody>
-                                    <tr>
-                                        <td colspan="2" class="board_title">
-                                            <span th:text="${noticeDtlList.get(0).title}"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="board_date_con">
-                                            <ul class="etcArea">
-                                                <li th:text="${noticeDtlList.get(0).createdBy}"></li>
-                                                <li><span class="txtNum" th:text="${#temporals.format(noticeDtlList.get(0).regTime, 'yyyy-MM-dd')}"></span> </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                    <div class="section_body notice_dtl_body mt-5">
+                        <div class="table_box">
+                            <table>
+                                <colgroup>
+                                    <col style="width:130px;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td colspan="2" class="board_title">
+                                        <span th:text="${noticeDtlList.get(0).title}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="board_date_con">
+                                        <ul class="etcArea">
+                                            <li th:text="${noticeDtlList.get(0).createdBy}"></li>
+                                            <li><span class="txtNum" th:text="${#temporals.format(noticeDtlList.get(0).regTime, 'yyyy-MM-dd')}"></span> </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                                <div class="detail">
-                                    <div class="article" th:utext="${noticeDtlList.get(0).content}"></div>
-                                </div>
+                            <div class="detail">
+                                <div class="article" th:utext="${noticeDtlList.get(0).content}"></div>
                             </div>
+                        </div>
 
-                            <div class="btn_box">
-                                <button class="white_btn_w90_h30 cancel_btn" type="button">목록</button>
-                                <button sec:authorize="hasRole('ADMIN')" class="black_btn_w90_h30 del_btn" type="button">삭제</button>
-                                <button sec:authorize="hasRole('ADMIN')" class="white_btn_w90_h30 update_btn" type="button">수정</button>
-                            </div>
+                        <div class="btn_box">
+                            <button class="white_btn_w90_h30 cancel_btn" type="button">목록</button>
+                            <button sec:authorize="hasRole('ADMIN')" class="black_btn_w90_h30 del_btn" type="button">삭제</button>
+                            <button sec:authorize="hasRole('ADMIN')" class="white_btn_w90_h30 update_btn" type="button">수정</button>
+                        </div>
 
-                            <div class="board_movement">
-                                <ul th:if="${noticeDtlList.size() == 3}">
-                                    <li class="prev">
-                                        <strong>이전글</strong>
-                                        <a th:href="@{'/board/notice/' + ${noticeDtlList.get(2).noticeId}}"><span th:text="${noticeDtlList.get(2).title}"></span></a>
-                                    </li>
-                                    <li class="next">
-                                        <strong>다음글</strong>
-                                        <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
-                                    </li>
-                                </ul>
+                        <div class="board_movement">
+                            <ul th:if="${noticeDtlList.size() == 3}">
+                                <li class="prev">
+                                    <strong>이전글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(2).noticeId}}"><span th:text="${noticeDtlList.get(2).title}"></span></a>
+                                </li>
+                                <li class="next">
+                                    <strong>다음글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
 
-                                <!-- 이전글만 존재하는 경우 -->
-                                <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId > noticeDtlList.get(1).noticeId}">
-                                    <li class="only_prev">
-                                        <strong>이전글</strong>
-                                        <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
-                                    </li>
-                                </ul>
+                            <!-- 이전글만 존재하는 경우 -->
+                            <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId > noticeDtlList.get(1).noticeId}">
+                                <li class="only_prev">
+                                    <strong>이전글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
 
-                                <!-- 다음글만 존재하는 경우 -->
-                                <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
-                                    <li class="next">
-                                        <strong>다음글</strong>
-                                        <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </form>
-
+                            <!-- 다음글만 존재하는 경우 -->
+                            <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
+                                <li class="next">
+                                    <strong>다음글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>

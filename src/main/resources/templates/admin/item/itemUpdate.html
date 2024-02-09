@@ -6,19 +6,22 @@
 </head>
 
 <body>
-    <main>
+    <main class="admin_main_area">
         <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
 
-        <article class="content">
+        <article class="admin_content_area">
             <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-            <section>
+            <!-- section start -->
+            <section class="admin_section_area">
                 <div class="container">
+
                     <div class="section_header">
                         <h2>상품 수정</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="add_item_body mt-5">
+
+                    <div class="section_body add_item_body">
                         <form id="itemFormDto" th:action="@{'/admin/item/' + ${itemFormDto.id}}" th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
                             <table style="table-layout: fixed !important;">
                                 <colgroup>
@@ -141,7 +144,7 @@
         </article>
     </main>
 
-    <div th:replace="/layouts/adminLayout.html :: js"></div>
+    <div th:replace="/layouts/adminLayout.html :: commonJs"></div>
     <!-- editor -->
     <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
     <!-- custom js -->

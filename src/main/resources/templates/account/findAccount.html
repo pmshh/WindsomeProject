@@ -6,22 +6,22 @@
 </head>
 
 <body>
-
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- findAccount section -->
-            <section id="find_account">
-                <div class="container find_account">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container">
+
                     <div class="section_header">
                         <h2>아이디/비밀번호 찾기</h2>
                         <div class="divider"></div>
                     </div>
 
-                    <div class="find_account_body mt-5">
+                    <div class="section_body find_account_body mt-5">
 
                         <div class="tab_box">
                             <ul>
@@ -31,7 +31,6 @@
                         </div>
 
                         <div class="content_box">
-
                             <!-- find_id_form_box start -->
                             <div class="find_id_form_box content_box content_1" id="content_1">
                                 <div class="little_text_box">

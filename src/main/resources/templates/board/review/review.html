@@ -6,180 +6,185 @@
 </head>
 
 <body>
-<main>
-    <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
+    <main class="def_main_area">
+        <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-    <article class="content">
-        <div th:replace="/layouts/defaultLayout.html :: nav"></div>
+        <article class="def_content_area">
+            <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-        <!-- review section -->
-        <section id="review">
-            <div class="container-fluid board">
-                <div class="section_header">
-                    <h2>REVIEW</h2>
-                    <div class="divider"></div>
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
+                    <div class="section_header">
+                        <h2>REVIEW</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section_body review_body mt-5">
+                        <div class="table_wrap">
+                            <table class="row_header_table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 80px;" scope="col">번호</th>
+                                    <th style="width: 80px;" scope="col">상품정보</th>
+                                    <th style="width: 200px;" scope="col"></th>
+                                    <th style="width: auto;" scope="col">제목</th>
+                                    <th style="width: 150px;" scope="col">평점</th>
+                                    <th style="width: 110px;" scope="col">작성자</th>
+                                    <th style="width: 110px;" scope="col">작성일</th>
+                                </tr>
+                                </thead>
+                                <tbody class="center">
+                                <tr th:each="review, status: ${reviews.getContent()}">
+                                    <td>
+                                        <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
+                                    </td>
+                                    <td class="thumb">
+                                        <a th:href="${'/item/' + review.itemId}">
+                                            <img th:src="${review.imgUrl}">
+                                        </a>
+                                    </td>
+                                    <td class="left itemNm pl20">
+                                        <a th:href="${'/item/' + review.itemId}">
+                                            <span th:text="${review.itemNm}"></span>
+                                        </a>
+                                    </td>
+                                    <td class="left pl20">
+                                        <a th:href="${'/board/review/' + review.reviewId}">
+                                            <span th:text="${review.title}"></span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <fieldset class="rate" th:data-rating="${review.rating}">
+                                            <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;"><label th:for="${review.createdBy + 1}" ></label>
+                                            <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;"><label th:for="${review.createdBy + 2}" class="half" ></label>
+                                            <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;"><label th:for="${review.createdBy + 3}"></label>
+                                            <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;"><label th:for="${review.createdBy + 4}" class="half" ></label>
+                                            <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;"><label th:for="${review.createdBy + 5}"></label>
+                                            <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;"><label th:for="${review.createdBy + 6}" class="half" ></label>
+                                            <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;"><label th:for="${review.createdBy + 7}"></label>
+                                            <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;"><label th:for="${review.createdBy + 8}" class="half" ></label>
+                                            <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;"><label th:for="${review.createdBy + 9}"></label>
+                                            <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;"><label th:for="${review.createdBy + 10}" class="half" ></label>
+                                        </fieldset>
+                                    </td>
+                                    <td>
+                                        <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
+                                    </td>
+                                    <td class="regDate">
+                                        <span th:text="${review.regDate}"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 리뷰 데이터 없는 경우 -->
+                        <div class="message_wrap" th:if="${#lists.isEmpty(reviews.getContent())}">
+                            <span class="message">등록된 리뷰가 없습니다.</span>
+                        </div>
+
+                        <div class="btn_box">
+                            <button class="white_btn_w65_h30 write_btn">글쓰기</button>
+                        </div>
+
+                        <div class="def_pagination"
+                             th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
+                                         (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
+                            <ul>
+                                <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i
+                                            class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' +  ${reviews.number - 1} + ')'">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${reviews.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                       th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${reviews.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${reviews.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${reviews.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="search_box" th:object="${reviewSearchDto}">
+                            <i class="fa-solid fa-angle-right"></i>
+                            <span class="txt">검색어</span>
+                            <select class="search_date_type" th:field="*{searchDateType}">
+                                <option value="">(전체)</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="name">작성자</option>
+                            </select>
+                            <input class="search_query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                            <button class="search_btn white_btn_w90_h30" type="button">검색</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="review_body mt-5">
-                    <div class="table_wrap">
-                        <table class="row_header_table">
-                            <thead>
-                            <tr>
-                                <th style="width: 50px;" scope="col">번호</th>
-                                <th style="width: 80px;" scope="col">상품정보</th>
-                                <th style="width: 180px;" scope="col"></th>
-                                <th style="width: auto;" scope="col">제목</th>
-                                <th style="width: 150px;" scope="col">평점</th>
-                                <th style="width: 10%;" scope="col">작성자</th>
-                                <th style="width: 10%;" scope="col">작성일</th>
-                            </tr>
-                            </thead>
-                            <tbody class="center">
-                            <tr th:each="review, status: ${reviews.getContent()}">
-                                <td>
-                                    <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
-                                </td>
-                                <td class="thumb">
-                                    <a th:href="${'/item/' + review.itemId}">
-                                        <img th:src="${review.imgUrl}">
-                                    </a>
-                                </td>
-                                <td class="left itemNm">
-                                    <a th:href="${'/item/' + review.itemId}">
-                                        <span th:text="${review.itemNm}"></span>
-                                    </a>
-                                </td>
-                                <td class="left title">
-                                    <a th:href="${'/board/review/' + review.reviewId}">
-                                        <span th:text="${review.title}"></span>
-                                    </a>
-                                </td>
-                                <td>
-                                    <fieldset class="rate" th:data-rating="${review.rating}">
-                                        <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;"><label th:for="${review.createdBy + 1}" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;"><label th:for="${review.createdBy + 2}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;"><label th:for="${review.createdBy + 3}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;"><label th:for="${review.createdBy + 4}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;"><label th:for="${review.createdBy + 5}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;"><label th:for="${review.createdBy + 6}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;"><label th:for="${review.createdBy + 7}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;"><label th:for="${review.createdBy + 8}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;"><label th:for="${review.createdBy + 9}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;"><label th:for="${review.createdBy + 10}" class="half" ></label>
-                                    </fieldset>
-                                </td>
-                                <td class="createdBy">
-                                    <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
-                                </td>
-                                <td class="regDate">
-                                    <span th:text="${review.regDate}"></span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            </section>
 
-                    <!-- 리뷰 데이터 없는 경우 -->
-                    <div class="message_wrap" th:if="${#lists.isEmpty(reviews.getContent())}">
-                        <span class="message">등록된 리뷰가 없습니다.</span>
-                    </div>
+            <div th:replace="/layouts/defaultLayout.html :: footer"></div>
+        </article>
+    </main>
 
-                    <div class="btn_box">
-                        <button class="white_btn_w65_h30 write_btn">글쓰기</button>
-                    </div>
-
-                    <div class="pagination"
-                         th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
-                                     (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
-                        <ul>
-                            <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
-                                <a th:onclick="'javascript:page(0)'">
-                                    <i class="fa-solid fa-angle-left"></i><i
-                                        class="fa-solid fa-angle-left"></i>
-                                </a>
-                            </li>
-                            <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
-                                <a th:onclick="'javascript:page(' +  ${reviews.number - 1} + ')'">
-                                    <i class="fa-solid fa-angle-left"></i>
-                                </a>
-                            </li>
-                            <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                th:classappend="${reviews.number eq page - 1} ? 'active' : ''">
-                                <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                                   th:inline="text">[[${page}]]</a>
-                            </li>
-                            <li class="next" th:classappend="${reviews.last} ? 'disabled'">
-                                <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'">
-                                    <i class="fa-solid fa-angle-right"></i>
-                                </a>
-                            </li>
-                            <li class="next" th:classappend="${reviews.last} ? 'disabled'">
-                                <a th:onclick="'javascript:page(' + ${reviews.totalPages - 1} + ')'">
-                                    <i class="fa-solid fa-angle-right"></i><i
-                                        class="fa-solid fa-angle-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="search_box" th:object="${reviewSearchDto}">
-                        <fieldset class="board_search">
-                            <legend>게시물 검색</legend>
-                            <p>
-                                <select class="search_date_type" th:field="*{searchDateType}">
-                                    <option value="">(전체)</option>
-                                    <option value="title">제목</option>
-                                    <option value="content">내용</option>
-                                    <option value="name">작성자</option>
-                                </select>
-                                <input class="search_query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                                <button class="search_btn white_btn_w90_h30" type="button">검색</button>
-                            </p>
-                        </fieldset>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div th:replace="/layouts/defaultLayout.html :: footer"></div>
-    </article>
-</main>
-
-<div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
-<!-- 사용자 JS -->
-<script>
-    $(function() {
-        /* 검색 버튼 */
-        $(".search_btn").on("click", function (e) {
-            e.preventDefault();
-            if ($(".search_query").val() === '') {
-                alert("검색어를 입력해주세요.");
-                return false;
+    <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(function() {
+            /* 로그인 경고창 */
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
             }
-            page(0);
-        });
 
-        /* 글쓰기 버튼 */
-        $(".write_btn").on("click", function () {
-            location.href = "/board/review/enroll";
-        });
-
-        /* 평점 값 설정 */
-        $(".rate").each(function () {
-
-            let rating = $(this).attr("data-rating");
-            $(this).find('input').each(function (index, element) {
-                if ($(element).val() === rating) {
-                    $(element).prop("checked", true);
+            /* 검색 버튼 */
+            $(".search_btn").on("click", function (e) {
+                e.preventDefault();
+                if ($(".search_query").val() === '') {
+                    alert("검색어를 입력해주세요.");
+                    return false;
                 }
+                page(0);
+            });
+
+            /* 글쓰기 버튼 */
+            $(".write_btn").on("click", function () {
+                location.href = "/board/review/enroll";
+            });
+
+            /* 평점 값 설정 */
+            $(".rate").each(function () {
+
+                let rating = $(this).attr("data-rating");
+                $(this).find('input').each(function (index, element) {
+                    if ($(element).val() === rating) {
+                        $(element).prop("checked", true);
+                    }
+                });
             });
         });
-    });
 
-    /* page 이동 */
-    function page(page) {
-        let searchDateType = $(".search_date_type").val();
-        let searchQuery = $(".search_query").val();
-        location.href = "/board/review?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
-    }
-</script>
+        /* page 이동 */
+        function page(page) {
+            let searchDateType = $(".search_date_type").val();
+            let searchQuery = $(".search_query").val();
+            location.href = "/board/review?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+        }
+    </script>
 </body>

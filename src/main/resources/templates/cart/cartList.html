@@ -6,20 +6,22 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- cart section -->
-            <section id="cart">
-                <div class="container cart">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container">
+
                     <div class="section_header">
                         <h2>CART</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="cart_body mt-5">
+
+                    <div class="section_body cart_body mt-5">
                         <div class="table_wrap">
                             <table class="row_header_table">
                                 <thead>
@@ -28,13 +30,13 @@
                                             <input type="checkbox" id="check_all" name="check_all" onclick="checkAll()">
                                             <label for="check_all">전체 선택</label>
                                         </th>
-                                        <th style="width: 10%;" scope="col">이미지</th>
+                                        <th style="width: 80px;" scope="col">이미지</th>
                                         <th style="width: auto;" scope="col">상품정보</th>
-                                        <th style="width: 10%;" scope="col">가격</th>
-                                        <th style="width: 10%;" scope="col">수량</th>
-                                        <th style="width: 10%;" scope="col">상품주문금액</th>
-                                        <th style="width: 10%;" scope="col">배송비</th>
-                                        <th style="width: 10%;" scope="col">선택</th>
+                                        <th style="width: 110px;" scope="col">가격</th>
+                                        <th style="width: 110px;" scope="col">수량</th>
+                                        <th style="width: 110px;" scope="col">상품주문금액</th>
+                                        <th style="width: 110px;" scope="col">배송비</th>
+                                        <th style="width: 110px;" scope="col">선택</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -62,7 +64,7 @@
                                                 <img th:src="${cartItem.imgUrl}">
                                             </a>
                                         </td>
-                                        <td class="product left_top">
+                                        <td class="product left top">
                                             <strong class="name">
                                                 <a th:href="${'/item/' + cartItem.itemId}"
                                                     th:text="${cartItem.itemNm}"></a>
@@ -106,7 +108,7 @@
                                             <button th:data-id="${cartItem.cartItemId}"
                                                 class="black_btn_w90_h30 order_btn" type="button">주문하기</button>
                                             <button th:data-id="${cartItem.cartItemId}" type="button"
-                                                class="white_btn_w90_h30" onclick="deleteCartItem(this)">삭제</button>
+                                                class="white_btn_w90_h30 del_btn" onclick="deleteCartItem(this)">삭제</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -151,41 +153,44 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    <div class="cart_btn">
-                        <button type="button" class="black_btn_w130_h40 all_items_order">전체상품주문</button>
-                        <button type="button" class="white_btn_w130_h40 select_order">선택상품주문</button>
-                        <span>
+
+                        <div class="cart_btn">
+                            <button type="button" class="black_btn_w130_h40 all_items_order">전체상품주문</button>
+                            <button type="button" class="white_btn_w130_h40 select_order">선택상품주문</button>
+                            <span>
                             <button type="button" class="white_btn_w130_h40 resume_btn">쇼핑계속하기</button>
                         </span>
-                    </div>
-                    <div class="user_help">
-                        <h3>이용안내</h3>
-                        <div class="inner">
-                            <h4>장바구니 이용안내</h4>
-                            <ol>
-                                <li class="item1">
-                                    [전체 상품 주문] 버튼을 누르시면 모든 상품에 대한 주문/결제가 이루어집니다.
+                        </div>
 
-                                </li>
-                            </ol>
-                            <ol>
-                                <li class="item2">
-                                    [선택 상품 주문] 버튼을 통해 원하시는 상품만 선택하여 주문하실 수 있습니다.
-                                </li>
-                            </ol>
-                            <ol>
-                                <li class="item3">
-                                    [쇼핑계속하기] 버튼을 누르시면 쇼핑을 계속 하실 수 있습니다.
-                                </li>
-                            </ol>
-                            <ol>
-                                <li class="item4">
-                                    총 상품 금액(할인 적용된 금액)이 30,000원 이상인 경우 배송비가 무료입니다.
-                                </li>
-                            </ol>
+                        <div class="user_help">
+                            <h3>이용안내</h3>
+                            <div class="inner">
+                                <h4>장바구니 이용안내</h4>
+                                <ol>
+                                    <li class="item1">
+                                        [전체 상품 주문] 버튼을 누르시면 모든 상품에 대한 주문/결제가 이루어집니다.
+
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li class="item2">
+                                        [선택 상품 주문] 버튼을 통해 원하시는 상품만 선택하여 주문하실 수 있습니다.
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li class="item3">
+                                        [쇼핑계속하기] 버튼을 누르시면 쇼핑을 계속 하실 수 있습니다.
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li class="item4">
+                                        총 상품 금액(할인 적용된 금액)이 30,000원 이상인 경우 배송비가 무료입니다.
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </section>
 
@@ -448,5 +453,4 @@
         });
     </script>
 </body>
-
 </html>

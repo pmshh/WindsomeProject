@@ -6,150 +6,142 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <section id="items">
-                <div class="section_content">
-                    <div class="container-fluid items">
-                        <div class="items_header">
-                            <div class="title">
-                                <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL</h2>
-                                <h2 th:each="category, status:${categories}"
-                                    th:if="${itemSearchDto.category == category.id}" th:text="${category.name}"></h2>
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+                    <div class="items_header">
+                        <div class="title">
+                            <h2 th:if="${#strings.isEmpty(itemSearchDto.category)}">ALL</h2>
+                            <h2 th:each="category, status:${categories}"
+                                th:if="${itemSearchDto.category == category.id}" th:text="${category.name}"></h2>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="little_category">
+                            <ul class="menu_category">
+                                <li th:each="category, status:${categories}"
+                                    th:if="${#strings.substring(category.id, 0, 1) == #strings.substring(itemSearchDto.category, 0, 1) && #strings.substring(category.id, 2) ne '0'}">
+                                    <a th:text="${category.name}"
+                                        th:classappend="${itemSearchDto.category == category.id} ? 'active'"
+                                        th:href="@{'/?category=' + ${category.id} + '&searchQuery=none'}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="items_body">
+                        <div class="search_result"
+                            th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
+                            <div class="search_input">
+                                <form th:action="@{/}" method="get">
+                                    <input name="searchQuery" type="search" placeholder="Search"
+                                        th:value="${itemSearchDto.searchQuery}">
+                                    <button type="submit"><i class="fa-solid fa-magnifying-glass icon"></i></button>
+                                </form>
                             </div>
-                            <div class="divider"></div>
-                            <div class="little_category">
-                                <ul class="menu_category">
-                                    <li th:each="category, status:${categories}"
-                                        th:if="${#strings.substring(category.id, 0, 1) == #strings.substring(itemSearchDto.category, 0, 1) && #strings.substring(category.id, 2) ne '0'}">
-                                        <a th:text="${category.name}"
-                                            th:classappend="${itemSearchDto.category == category.id} ? 'active'"
-                                            th:href="@{'/?category=' + ${category.id} + '&searchQuery=none'}"></a>
-                                    </li>
+                            <div class="search_result_msg mt-3">
+                                <p class="content_count">총 <strong class="fw-bold" th:text="${items.getTotalElements()}"></strong>개의 상품이 검색되었습니다.</p>
+                            </div>
+                        </div>
+
+                        <div class="normal_menu">
+                            <div class="item_total">
+                                <span th:text="${items.getTotalElements()}"></span> ITEMS
+                            </div>
+                            <div class="item_filter">
+                                <ul>
+                                    <li><a onclick="filter('new')">NEW</a></li>
+                                    <li><a onclick="filter('best')">BEST</a></li>
+                                    <li><a onclick="filter('low')">LOW</a></li>
+                                    <li><a onclick="filter('high')">HIGH</a></li>
+                                    <li><a onclick="filter('name')">NAME</a></li>
                                 </ul>
                             </div>
                         </div>
 
-                        <div class="items_body">
-                            <!--                            <input type="hidden" name="searchQuery" th:value="${itemSearchDto.searchQuery}">-->
-                            <div class="search_result"
-                                th:if="${not #strings.isEmpty(itemSearchDto.searchQuery) && #strings.isEmpty(itemSearchDto.category)}">
-                                <div class="search_input">
-                                    <form th:action="@{/}" method="get">
-                                        <input name="searchQuery" type="search" placeholder="Search"
-                                            th:value="${itemSearchDto.searchQuery}">
-                                        <button type="submit"><i class="fa-solid fa-magnifying-glass icon"></i></button>
-                                    </form>
-                                </div>
-                                <div class="search_result_msg mt-3">
-                                    <p class="content_count">총 <strong class="fw-bold"
-                                            th:text="${items.getTotalElements()}"></strong>개의 상품이
-                                        검색되었습니다.</p>
-                                </div>
-                            </div>
-
-                            <div class="normal_menu">
-                                <div class="item_total">
-                                    <span th:text="${items.getTotalElements()}"></span> ITEMS
-                                </div>
-                                <div class="item_filter">
-                                    <ul>
-                                        <li><a onclick="filter('new')">NEW</a></li>
-                                        <li><a onclick="filter('best')">BEST</a></li>
-                                        <li><a onclick="filter('low')">LOW</a></li>
-                                        <li><a onclick="filter('high')">HIGH</a></li>
-                                        <li><a onclick="filter('name')">NAME</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="row g-2">
-                                <th:block th:each="item, status: ${items.getContent()}">
-                                    <div class="col-xs-12 col-lg-6 col-xl-4 img_box">
-                                        <a th:href="'/item/' + ${item.id}">
-                                            <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}">
-                                        </a>
-                                        <div class="desc">
-                                            <div class="name">
-                                                <a>[[${item.itemNm}]]</a>
-                                            </div>
-                                            <div class="discount" th:if="${item.discount} == 0">
-                                                <span class="item_price"
-                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
-                                            </div>
-                                            <div class="no_discount" th:if="${item.discount} > 0">
-                                                <span class="item_price"
-                                                    th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
-                                                <span class="discount_price"
-                                                    th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|"></span>
-                                                <span class="discount_rate"
-                                                    th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
-                                            </div>
-                                        </div>
+                        <div class="products_wrap row g-2">
+                            <div class="col-xs-12 col-lg-6 col-xl-4 product_dtl" th:each="item, status: ${items.getContent()}">
+                                <a th:href="'/item/' + ${item.id}">
+                                    <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}">
+                                </a>
+                                <div class="desc">
+                                    <div class="name">
+                                        <a>[[${item.itemNm}]]</a>
                                     </div>
-                                </th:block>
+                                    <div class="discount" th:if="${item.discount} == 0">
+                                        <span class="item_price"
+                                            th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                    </div>
+                                    <div class="no_discount" th:if="${item.discount} > 0">
+                                        <span class="item_price"
+                                            th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')}원|"></span>
+                                        <span class="discount_price"
+                                            th:text="|${#numbers.formatInteger(item.price * (1 - item.discount), 0, 'COMMA')}원|"></span>
+                                        <span class="discount_rate"
+                                            th:text="${#numbers.formatInteger(item.discount * 100, 1, 'COMMA')} + '%'"></span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="pagination"
-                                th:with="start=${(items.number/maxPage)*maxPage + 1},
-                                         end=(${(items.totalPages == 0) ? 1 :
-                                         (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
-                                <ul>
-                                    <li class="prev" th:classappend="${items.first} ? 'disabled'">
-                                        <a th:onclick="'javascript:page(0)'">
-                                            <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="prev" th:classappend="${items.first} ? 'disabled'">
-                                        <a
-                                            th:href="@{'/' + '?page=' + ${items.number - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
-                                            <i class="fa-solid fa-angle-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                        th:classappend="${items.number eq page - 1} ? 'active' : ''">
-                                        <a th:href="@{'/' + '?page=' + ${page - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}"
-                                            th:inline="text">[[${page}]]</a>
-                                    </li>
-                                    <li class="next" th:classappend="${items.last} ? 'disabled'">
-                                        <a
-                                            th:href="@{'/' + '?page=' + ${items.number + 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
-                                            <i class="fa-solid fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                    <li class="next" th:classappend="${items.last} ? 'disabled'">
-                                        <a th:onclick="'javascript:page(' + ${items.totalPages - 1} + ')'">
-                                            <i class="fa-solid fa-angle-right"></i><i
-                                                class="fa-solid fa-angle-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+                            <div th:if="${#lists.isEmpty(items.getContent())}" class="message_wrap">
+                                <span class="message">등록된 상품이 없습니다.</span>
                             </div>
+                        </div>
 
+                        <div class="def_pagination"
+                            th:with="start=${(items.number/maxPage)*maxPage + 1},
+                                     end=(${(items.totalPages == 0) ? 1 :
+                                     (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+                            <ul>
+                                <li class="prev" th:classappend="${items.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${items.first} ? 'disabled'">
+                                    <a
+                                        th:href="@{'/' + '?page=' + ${items.number - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${items.number eq page - 1} ? 'active' : ''">
+                                    <a th:href="@{'/' + '?page=' + ${page - 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}"
+                                        th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${items.last} ? 'disabled'">
+                                    <a
+                                        th:href="@{'/' + '?page=' + ${items.number + 1} + '&sort=' + ${itemSearchDto.sort} + '&searchQuery=' + ${itemSearchDto.searchQuery}}">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${items.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${items.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </section>
+
             <div th:replace="/layouts/defaultLayout.html :: footer"></div>
         </article>
     </main>
 
     <div th:replace="/layouts/defaultLayout.html :: commonJs"></div>
+
     <script th:inline="javascript">
         $(function() {
-            /* 상품 주문 결과 창 출력 */
-            let orderRes = [[${ order_result }]];
-            checkResult(orderRes);
-            function checkResult(result) {
-                if (result === 'order_ok') {
-                    alert("주문이 완료되었습니다.");
-                } else if (result === 'order_fail') {
-                    alert("상품 주문 중 오류가 발생하였습니다.");
-                }
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
             }
         });
 

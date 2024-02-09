@@ -6,21 +6,24 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- noticeForm section -->
-            <section id="noticeForm">
-                <div class="container-fluid noticeForm">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid ">
+
                     <div class="section_header">
                         <h2>리뷰 수정</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="noticeForm_body mt-5">
+
+                    <div class="section_body noticeForm_body mt-5">
                         <form th:object="${notice}" method="post">
+
                             <table class="col_header_table_basic">
                                 <colgroup>
                                     <col style="width:20%;">
@@ -55,10 +58,12 @@
                                 </tr>
                                 </tbody>
                             </table>
+
                             <div class="btn_box">
                                 <button class="black_btn_w130_h40 save_btn" type="button">저장</button>
                                 <button class="white_btn_w130_h40 cancel_btn" type="button">취소</button>
                             </div>
+
                         </form>
                     </div>
                 </div>

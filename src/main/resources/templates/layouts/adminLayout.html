@@ -34,16 +34,20 @@
 </th:block>
 
 <body>
-    <main class="admin_main">
-        <aside class="admin_sidebar" th:fragment="sidebar (currentMenu)">
+    <main class="admin_main_area">
+        <aside class="admin_sidebar_area" th:fragment="sidebar (currentMenu)">
             <div class="sidebar_logo">
+                <h2>WINDSOME</h2>
+            </div>
+
+            <div class="sidebar_profile">
                 <div class="profile_img">
                     <svg th:data-jdenticon-value="${#authentication.name}" width="36" height="36"></svg>
                 </div>
                 <div class="profile_name">
-                    <button class="logout_box_toggle" type="button">
-                        pms000723 <i class="fa-solid fa-sort-down"></i>
-                    </button>
+                    <div class="name_box">
+                        <button type="button" class="toggle_btn"><span th:text="${#authentication.name}"></span><i class="fa-solid fa-sort-down"></i></button>
+                    </div>
                     <div class="logout_box">
                         <ul>
                             <li sec:authorize="isAuthenticated()">
@@ -59,12 +63,12 @@
             </div>
             <div class="sidebar_menu">
                 <div class="sidebar-header">
-                    NAVIGATION
+                    사이트 관리
                 </div>
                 <div class="sidebar-item">
                     <a th:href="@{/admin/main}" class="sidebar-link" th:classappend="${currentMenu == 'home'}? active">
                         <i class="xi-cog pe-2"></i>
-                        Home
+                        Dashboard
                     </a>
                     <a th:href="@{/admin/items}" class="sidebar-link"
                         th:classappend="${currentMenu == 'productManagement'}? active">
@@ -76,21 +80,26 @@
                         <i class="xi-cart-o pe-2"></i>
                         주문 관리
                     </a>
-                    <a href="" class="sidebar-link" th:classappend="${currentMenu == 'customerManagement'}? active">
+                    <a onclick="alert('준비중입니다.');" class="sidebar-link" th:classappend="${currentMenu == 'customerManagement'}? active">
                         <i class="xi-user-o pe-2"></i>
                         고객 관리
                     </a>
-                    <a href="" class="sidebar-link" th:classappend="${currentMenu == 'boardManagement'}? active">
+                    <a onclick="alert('준비중입니다.');" class="sidebar-link" th:classappend="${currentMenu == 'boardManagement'}? active">
                         <i class="xi-list pe-2"></i>
                         게시판 관리
+                    </a>
+                    <hr class="line">
+                    <a th:href="@{/}" class="sidebar-link">
+                        <i class="xi-log-out pe-2"></i>
+                        나가기
                     </a>
                 </div>
             </div>
         </aside>
 
-        <article class="admin_content">
+        <article class="admin_content_area">
             <!-- navigation -->
-            <nav th:fragment="nav" class="admin_nav">
+            <nav th:fragment="nav" class="admin_nav_area">
                 <div class="menu">
                     <ul class="menu_link">
                         <li>
@@ -111,14 +120,14 @@
             </nav>
 
             <!-- footer -->
-            <footer th:fragment="footer">
+            <footer th:fragment="footer" class="def_footer_area">
                 <div class="footer_header">
                     <ul>
-                        <li><a href="../index.html">HOME</a></li>
-                        <li><a href="../index.html">COMPANY</a></li>
-                        <li><a href="../index.html">AGREEMENT</a></li>
-                        <li><a href="../index.html">PRIVACY</a></li>
-                        <li><a href="../index.html">GUIDE</a></li>
+                        <li><a onclick="alert('준비중입니다.');">HOME</a></li>
+                        <li><a onclick="alert('준비중입니다.');">COMPANY</a></li>
+                        <li><a onclick="alert('준비중입니다.');">AGREEMENT</a></li>
+                        <li><a onclick="alert('준비중입니다.');">PRIVACY</a></li>
+                        <li><a onclick="alert('준비중입니다.');">GUIDE</a></li>
                     </ul>
                 </div>
                 <div class="footer_address">
@@ -133,42 +142,37 @@
         </article>
     </main>
 
-    <th:block th:fragment="js">
-        <!-- common js -->
-        <script>
+    <script th:inline="javascript" th:fragment="commonJs">
+        $(function () {
+            /* csrf token */
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+
+            /* 스크롤 시 navbar 투명 */
             $(window).scroll(function () {
                 if ($(this).scrollTop() == 0)
-                    $('nav').css('opacity', '1');
+                    $('.admin_nav_area').css('opacity', '1');
                 else
-                    $('nav').css('opacity', '.6');
+                    $('.admin_nav_area').css('opacity', '.6');
             });
 
             <!-- sidebar toggle 기능 -->
             let toggleBtn = $('.menu_toggle');
-            let sidebar = $('.sidebar');
+            let sidebar = $('.admin_sidebar_area');
             toggleBtn.click(function (e) {
                 e.preventDefault();
                 sidebar.toggleClass("active");
-            })
+            });
 
-            let logoutBtnToggle = $('.logout_box_toggle');
-            let logoutBox = $('.logout_box');
-            logoutBtnToggle.click(function (e) {
-                e.preventDefault();
-                logoutBox.slideToggle();
+            <!-- 프로필 toggle 기능 -->
+            $('.toggle_btn').click(function () {
+                $('.logout_box').toggleClass('active');
             });
-        </script>
-        <!-- csrf token -->
-        <script type="application/javascript" th:inline="javascript">
-            $(function () {
-                var csrfToken = /*[[${_csrf.token}]]*/ null;
-                var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
-                $(document).ajaxSend(function (e, xhr, options) {
-                    xhr.setRequestHeader(csrfHeader, csrfToken);
-                });
-            });
-        </script>
-    </th:block>
+        });
+    </script>
 </body>
 
 </html>

@@ -6,28 +6,30 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- orderHist section -->
-            <section id="order_form">
-                <div class="container order_form">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container-fluid">
+
                     <div class="section_header">
                         <h2>주문서 작성</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="order_form_body mt-5">
 
-                        <!-- order_items_info start -->
+                    <div class="section_body order_form_body mt-5">
+
                         <div class="order_items_info">
                             <div class="title">
                                 <h2>주문 상품 정보</h2>
                             </div>
+
                             <div class="body">
-                                <table class="table table-sm">
+                                <table class="row_header_table">
                                     <thead>
                                         <tr>
                                             <th style="width: 10%;" scope="col">이미지</th>
@@ -79,15 +81,14 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="delivery_and_point">
-                                <span class="total_delivery_price">배송비: 0원</span>
-                                <span class="total_point">적립 예정 금액: 0원</span>
+
+                                <div class="delivery_and_point">
+                                    <span class="total_delivery_price">배송비: 0원</span>
+                                    <span class="total_point">적립 예정 금액: 0원</span>
+                                </div>
                             </div>
                         </div>
-                        <!-- order_items_info end -->
 
-                        <!-- user_info start -->
                         <div class="user_info mt-3">
                             <div class="title">
                                 <h2>배송지 정보</h2>
@@ -108,7 +109,6 @@
                                                 <div class="name_input_box">
                                                     <input class="name_input" th:field="*{name}" type="text">
                                                 </div>
-                                                <span class="final_check_name text-danger">받으시는 분을 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -125,7 +125,6 @@
                                                        readonly="readonly">
                                                 <input th:field="*{address3}" class="address_input_3 d-block w-50 mb-1"
                                                        readonly="readonly">
-                                                <span class="final_check_address text-danger">주소를 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -134,9 +133,20 @@
                                             </th>
                                             <td>
                                                 <div>
-                                                    <input type="text" class="tel_input" maxlength="13">
+                                                    <select class="tel_select">
+                                                        <option value="1">선택</option>
+                                                        <option value="010" selected>010</option>
+                                                        <option value="011">011</option>
+                                                        <option value="016">016</option>
+                                                        <option value="017">017</option>
+                                                        <option value="018">018</option>
+                                                        <option value="019">019</option>
+                                                    </select>
+                                                    -
+                                                    <input type="text" class="tel_input1" maxlength="4">
+                                                    -
+                                                    <input type="text" class="tel_input2" maxlength="4">
                                                 </div>
-                                                <span class="final_check_tel text-danger">휴대전화를 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -165,7 +175,6 @@
                                                         <option value="paran.com">paran.com</option>
                                                     </select>
                                                 </div>
-                                                <span class="final_check_mail text-danger">이메일을 입력해주세요.</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -183,9 +192,7 @@
                                 </form>
                             </div>
                         </div>
-                        <!-- user_info end -->
 
-                        <!-- discount_box start -->
                         <div class="discount_box">
                             <div class="title">
                                 <h2>할인/부가결제</h2>
@@ -225,9 +232,7 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- discount_box end -->
 
-                        <!-- total_box start -->
                         <div class="total_box">
                             <div class="title">
                                 <h2>결제 정보</h2>
@@ -261,14 +266,11 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- total_box end -->
 
-                        <!-- btn_box start -->
                         <div class="btn_box">
                             <button class="order_btn black_btn_w130_h40" type="button">결제하기</button>
                             <button class="cancel_btn white_btn_w130_h40" type="button">취소</button>
                         </div>
-                        <!-- btn_box end -->
 
                     </div>
                 </div>
@@ -295,21 +297,26 @@
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script th:inline="javascript">
+        /* 유효성 검사 통과 유무 변수 */
+        let checkName = false;          // 이름
+        let checkAddress = false        // 주소
+        let checkTel = false            // 휴대 전화
+        let checkMail = false           // 이메일
+
         $(function() {
             setTotalInfo();
 
             /* 주문 요청 */
             $(".order_btn").on("click", function(){
-                /* 유효성 검사 통과 유무 변수 */
-                let checkName = false;          // 이름
-                let checkAddress = false        // 주소
-                let checkTel = false            // 휴대 전화
-                let checkMail = false           // 이메일
+
 
                 /* 입력값 변수 */
                 let nameVal = $('.name_input').val();          // 이름 입력란
                 let addressVal = $('.address_input_3').val();  // 주소 입력란
-                let telVal = $('.tel_input').val();            // 휴대 전화 입력란
+                let telSelect = $('.tel_select').val();            // 휴대 전화 입력란
+                let tel1Val = $('.tel_input1').val();            // 휴대 전화 입력란
+                let tel2Val = $('.tel_input2').val();            // 휴대 전화 입력란
+                let fullTel = telSelect + tel1Val + tel2Val;
                 let reqVal = $('.req_input').val();            // 배송 메시지 입력란
                 let mailVal1 = $(".mail_input").val();                                  // 이메일 앞부분
                 let mailVal2 = $(".mail_input2").val();                                 // 이메일 뒷부분
@@ -317,37 +324,49 @@
 
                 /* 이름 유효성 검사 */
                 if (nameVal === "") {
-                    $('.final_check_name').css('display', 'inline-block')
+                    alert("받으시는 분을 입력해 주세요.");
+                    $('.name_input').focus();
+                    let topLocation = $(".name_input").offset();
+                    window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
                     checkName = false;
+                    return false;
                 } else {
-                    $('.final_check_name').css('display', 'none')
                     checkName = true;
                 }
 
                 /* 주소 유효성 검사 */
                 if (addressVal === "") {
-                    $('.final_check_address').css('display', 'inline-block');
+                    alert("주소를 입력해 주세요.");
+                    $('.mail_input').focus();
+                    let topLocation = $(".mail_input").offset();
+                    window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
                     checkAddress = false;
+                    return false;
                 } else {
-                    $('.final_check_address').css('display', 'none');
                     checkAddress = true;
                 }
 
                 /* 휴대 전화 유효성 검사 */
-                if (telVal === "") {
-                    $('.final_check_tel').css('display', 'inline-block')
+                if (telSelect === "1" || tel1Val === "" || tel2Val === "") {
+                    alert("휴대전화를 입력해 주세요.");
+                    $('.tel_input1').focus();
+                    let topLocation = $(".tel_input1").offset();
+                    window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
                     checkTel = false;
+                    return false;
                 } else {
-                    $('.final_check_tel').css('display', 'none')
                     checkTel = true;
                 }
 
                 /* 이메일 유효성 검사 */
                 if (mailVal1 === '' || mailVal2 === '') {
-                    $(".final_check_mail").css("display", "inline-block");
+                    alert("이메일을 입력해 주세요.");
+                    $('.mail_input').focus();
+                    let topLocation = $(".mail_input").offset();
+                    window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
                     checkMail = false;
+                    return false;
                 } else {
-                    $(".final_check_mail").css("display", "none");
                     checkMail = true;
                 }
 
@@ -363,7 +382,7 @@
                     $("input[name='address1']").val(addressVal1);
                     $("input[name='address2']").val(addressVal2);
                     $("input[name='address3']").val(addressVal3);
-                    $("input[name='tel']").val(telVal);
+                    $("input[name='tel']").val(fullTel);
                     $("input[name='email']").val(fullEmail);
                     $("input[name='req']").val(reqVal);
 

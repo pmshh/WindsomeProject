@@ -1,10 +1,11 @@
 /* button start */
 .black_btn_w130_h40,
+.black_btn_w100_h30,
 .black_btn_w90_h40,
 .black_btn_w90_h30,
 .black_btn_w65_h30 {
     display: inline-block;
-    font-size: 13px;
+    font-size: 12px;
     border: 1px solid transparent !important;
     vertical-align: middle;
     text-align: center;
@@ -19,6 +20,11 @@
 .black_btn_w130_h40 {
     width: 130px;
     height: 40px;
+}
+
+.black_btn_w100_h30 {
+    width: 100px;
+    height: 30px;
 }
 
 .black_btn_w90_h40 {
@@ -37,11 +43,12 @@
 }
 
 .white_btn_w130_h40,
+.white_btn_w100_h30,
 .white_btn_w90_h40,
 .white_btn_w90_h30,
 .white_btn_w65_h30 {
     display: inline-block;
-    font-size: 13px;
+    font-size: 12px;
     border: 1px solid #e2e2e2 !important;
     vertical-align: middle;
     text-align: center;
@@ -56,6 +63,11 @@
 .white_btn_w130_h40 {
     width: 130px;
     height: 40px;
+}
+
+.white_btn_w100_h30 {
+    width: 100px;
+    height: 30px;
 }
 
 .white_btn_w90_h40 {

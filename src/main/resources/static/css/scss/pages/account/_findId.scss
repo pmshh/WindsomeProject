@@ -1,0 +1,52 @@
+.find_id_body {
+    border: 1px solid #dddddd;
+    padding: 30px;
+    width: 80%;
+    margin: 0 auto;
+
+    .message_box {
+        font-size: 28px;
+        text-align: center;
+        line-height: 64px;
+        color: #1d1d1d;
+        font-weight: 300;
+
+        p {
+            svg {
+                color: #12A19A;
+                font-size: 56px;
+                margin-right: 10px;
+                vertical-align: middle;
+            }
+
+            span {
+                color: #12A19A;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .btn_box {
+        margin: 0 auto;
+        padding: 30px;
+
+        button {
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: -0.7px;
+            line-height: 46px;
+            text-align: center;
+            vertical-align: middle;
+            word-spacing: 0px;
+            height: 50px;
+            width: 216px;
+            border: 1px solid #dddddd;
+            margin: 0.3px 0.3px;
+            background-color: #F5F5F5;
+
+            &:hover {
+                background-color: #ffffff;
+            }
+        }
+    }
+}

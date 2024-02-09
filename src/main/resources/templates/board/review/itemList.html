@@ -213,7 +213,7 @@
             </div>
 
             <!-- pagination start -->
-            <div class="pagination"
+            <div class="def_pagination"
                  th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
                 <ul>
                     <li class="prev" th:classappend="${items.first} ? 'disabled'">

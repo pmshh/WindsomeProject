@@ -1,0 +1,39 @@
+.order_hist_body {
+    width: 90%;
+    margin: 0 auto;
+
+    .table_wrap {
+        width: 100%;
+        overflow-x: auto;
+
+        table {
+            min-width: 860px;
+
+            tbody {
+                tr {
+                    td {
+                        height: 135px;
+
+                        &.order_date {
+                            letter-spacing: -0.5px;
+                        }
+
+                        .order_cancel_btn {
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .message_wrap {
+        @include board_message_wrap();
+    }
+}
+
+@media (max-width: 1400px) {
+    .order_hist_body {
+        width: 100%;
+    }
+}

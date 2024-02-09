@@ -8,23 +8,27 @@
 </head>
 
 <body>
-    <main>
+    <main class="def_main_area">
         <div th:replace="/layouts/defaultLayout.html :: sidebar"></div>
 
-        <article class="content">
+        <article class="def_content_area">
             <div th:replace="/layouts/defaultLayout.html :: nav"></div>
 
-            <!-- login section -->
-            <section id="login">
-                <div class="container login">
-                    <div class="login_header">
+            <!-- section start -->
+            <section class="def_section_area">
+                <div class="container">
+
+                    <div class="section_header">
                         <h2>LOGIN</h2>
                         <div class="divider"></div>
                     </div>
-                    <div class="login_body">
-                        <div th:if="${error}">
+
+                    <div class="section_body login_body">
+
+                        <div th:if="${error}" class="message_box">
                             <div class="alert alert-danger" style="font-size: 13px;" th:text="${exception}"></div>
                         </div>
+
                         <div class="login_form">
                             <form th:action="@{/login}" method="post">
                                 <input id="userId" name="userId" type="text" placeholder="아이디">

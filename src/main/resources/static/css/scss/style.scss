@@ -1,52 +1,48 @@
-/* 1. base */
+/***** abstracts *****/
+@import 'abstracts/mixin';
+@import 'abstracts/variables';
+
+/***** base *****/
 @import 'base/reset';
 
-/* 2. components */
+/***** components *****/
 @import 'components/button';
 
-/* 3. layout */
-@import 'layout/main';
-@import 'layout/content';
-@import 'layout/sidebar';
-@import 'layout/navigation';
+/***** layout *****/
+@import 'layout/colHeaderTableBasic';
+@import 'layout/colHeaderTableColor';
 @import 'layout/footer';
-@import 'layout/section';
+@import 'layout/pagination';
+@import 'layout/rowHeaderTable';
 
-/* 3. Layout (for. admin page) */
-@import 'layout/admin/main';
-@import 'layout/admin/content';
-@import 'layout/admin/sidebar';
-@import 'layout/admin/navigation';
-
-/* 4. modules */
-@import 'modules/pagination';
-@import 'modules/rowHeaderTable';
-@import 'modules/colHeaderTableBasic';
-@import 'modules/colHeaderTableColor';
-
-/* 5. pages */
-@import 'pages/main';
-@import 'pages/signUp';
-@import 'pages/login';
-@import 'pages/findAccount';
-@import 'pages/findId';
-@import 'pages/updatePw';
-@import 'pages/profile';
-@import 'pages/mypage';
-@import 'pages/item';
-@import 'pages/itemDtl';
-@import 'pages/cart';
-@import 'pages/orderForm';
-@import 'pages/orderHist';
-@import 'pages/board/review';
-@import 'pages/board/reviewForm';
-@import 'pages/board/notice';
-@import 'pages/board/noticeDtl';
-@import 'pages/board/noticeForm';
-
-/* 5. pages (for. admin page) */
-@import 'pages/admin/itemForm';
-@import 'pages/admin/itemMng';
-@import 'pages/admin/orderMng';
+/***** pages *****/
+@import 'pages/account/findAccount'; // account start
+@import 'pages/account/findId';
+@import 'pages/account/login';
+@import 'pages/account/mypage';
+@import 'pages/account/profile';
+@import 'pages/account/signUp';
+@import 'pages/account/updatePw';
+@import 'pages/admin/item/itemDtl'; //  admin start
+@import 'pages/admin/item/itemForm';
+@import 'pages/admin/item/itemMng';
+@import 'pages/admin/order/orderMng';
 @import 'pages/admin/main';
-@import 'pages/admin/itemDtl';
+@import 'pages/board/notice/notice'; // board start
+@import 'pages/board/notice/noticeDtl';
+@import 'pages/board/notice/noticeForm';
+@import 'pages/board/qa/qa';
+@import 'pages/board/qa/qaDtl';
+@import 'pages/board/qa/qaForm';
+@import 'pages/board/qa/secret';
+@import 'pages/board/review/review';
+@import 'pages/board/review/reviewForm';
+@import 'pages/cart/cart'; // cart start
+@import 'pages/main/item/itemDtl'; // main start
+@import 'pages/main/main';
+@import 'pages/order/orderForm'; // order start
+@import 'pages/order/orderHist';
+
+/***** themes *****/
+@import 'themes/theme';
+@import 'themes/admin';
