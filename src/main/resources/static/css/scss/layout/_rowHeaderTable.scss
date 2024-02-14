@@ -24,6 +24,11 @@
                 vertical-align: middle;
                 background-color: #fff;
                 font-weight: normal;
+
+                input[type=checkbox] {
+                    position: relative;
+                    top: 3px;
+                }
             }
         }
     }
@@ -36,6 +41,7 @@
                 vertical-align: middle;
                 padding: 15px 0;
                 color: #353535;
+                background-color: #fff;
             }
         }
     }

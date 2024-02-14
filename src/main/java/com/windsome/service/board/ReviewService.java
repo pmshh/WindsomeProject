@@ -2,6 +2,7 @@ package com.windsome.service.board;
 
 import com.windsome.dto.board.review.*;
 import com.windsome.entity.*;
+import com.windsome.entity.board.Qa;
 import com.windsome.entity.board.Review;
 import com.windsome.repository.AccountRepository;
 import com.windsome.repository.ItemImgRepository;
@@ -148,6 +149,9 @@ public class ReviewService {
         return reviewRepository.existsByItemIdAndAccountId(itemId, accountId);
     }
 
+    /**
+     * 리뷰 조회수
+     */
     public void validateHitsCount(ReviewDtlPageReviewDto review, HttpServletRequest request, HttpServletResponse response) {
         Review findReview = reviewRepository.findById(review.getReviewId()).orElseThrow(EntityNotFoundException::new);
 
@@ -175,5 +179,15 @@ public class ReviewService {
         cookie.setPath("/"); // 모든 경로에서 접근 가능
         cookie.setMaxAge((int) (todayEndSecond - currentSecond)); // 오늘 하루 자정까지 남은 시간초 설정
         response.addCookie(cookie);
+    }
+
+    /**
+     * 리뷰 삭제
+     */
+    public void deleteReviews(Long[] reviewIds) {
+        for (Long reviewId : reviewIds) {
+            Review review = reviewRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
+            reviewRepository.delete(review);
+        }
     }
 }

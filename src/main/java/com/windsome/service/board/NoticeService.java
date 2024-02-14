@@ -84,4 +84,31 @@ public class NoticeService {
     public boolean isAdmin(Account account) {
         return account.getState().equals(Role.ADMIN);
     }
+
+    /**
+     * 게시글 삭제
+     */
+    public void deleteNotices(Long[] noticeIds) {
+        for (Long noticeId : noticeIds) {
+            Notice notice = noticeRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
+            noticeRepository.delete(notice);
+        }
+    }
+
+    /**
+     * 공지글 설정 가능 여부 검증
+     */
+    public boolean checkNoticeYN(Long noticeId, boolean noticeYn) {
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
+        return notice.isNoticeYN() == noticeYn;
+    }
+
+    /**
+     * 공지글 설정 수정
+     */
+    public void updateNoticeYN(Long noticeId, boolean noticeYn) {
+        Notice notice = noticeRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
+        notice.setNoticeYN(noticeYn);
+        noticeRepository.save(notice);
+    }
 }

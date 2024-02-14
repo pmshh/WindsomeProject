@@ -1,0 +1,74 @@
+.reviewMng_body {
+    width: 90%;
+    margin: 0 auto;
+
+    .table_wrap {
+        width: 100%;
+        overflow-x: auto;
+
+        table {
+            min-width: 1150px;
+
+            tbody {
+                tr {
+                    td {
+                        &.itemNm {
+                            padding-right: 5px;
+
+                            a {
+                                color: #b5b5b5;
+
+                                &:hover {
+                                    color: #555555;
+                                }
+                            }
+                        }
+
+                        .rate {
+                            display: inline-block;
+
+                            input {
+                                display: none;
+                            }
+
+                            label {
+                                float: right;
+                                color: #ddd;
+
+                                &:before {
+                                    display: inline-block;
+                                    font-size: 1rem;
+                                    padding: .3rem .2rem;
+                                    margin: 0;
+                                    font-family: FontAwesome;
+                                    content: "\f005 ";
+                                }
+                            }
+
+                            .half:before {
+                                content: "\f089 ";
+                                position: absolute;
+                            }
+
+                            input:checked~label {
+                                color: #f73c32 !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .message_wrap {
+        @include board_message_wrap();
+    }
+
+    .btn_box {
+        @include board_btn_box();
+    }
+
+    .search_box {
+        @include board_search_box();
+    }
+}

@@ -46,7 +46,8 @@
                 </div>
                 <div class="profile_name">
                     <div class="name_box">
-                        <button type="button" class="toggle_btn"><span th:text="${#authentication.name}"></span><i class="fa-solid fa-sort-down"></i></button>
+                        <button type="button" class="toggle_btn"><span th:text="${#authentication.name}"></span><i
+                                class="fa-solid fa-sort-down"></i></button>
                     </div>
                     <div class="logout_box">
                         <ul>
@@ -80,14 +81,21 @@
                         <i class="xi-cart-o pe-2"></i>
                         주문 관리
                     </a>
-                    <a onclick="alert('준비중입니다.');" class="sidebar-link" th:classappend="${currentMenu == 'customerManagement'}? active">
+                    <a onclick="alert('준비중입니다.');" class="sidebar-link"
+                        th:classappend="${currentMenu == 'customerManagement'}? active">
                         <i class="xi-user-o pe-2"></i>
                         고객 관리
                     </a>
-                    <a onclick="alert('준비중입니다.');" class="sidebar-link" th:classappend="${currentMenu == 'boardManagement'}? active">
+                    <a class="sidebar-link collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#sub_menu" role="button">
                         <i class="xi-list pe-2"></i>
                         게시판 관리
                     </a>
+                    <div class="collapse sub_menu" id="sub_menu">
+                        <a th:href="@{/admin/board/notice}" th:classappend="${currentMenu == 'noticeManagement'}? active">Notice</a>
+                        <a th:href="@{/admin/board/qa}" th:classappend="${currentMenu == 'qaManagement'}? active">Q&A</a>
+                        <a th:href="@{/admin/board/review}" th:classappend="${currentMenu == 'reviewManagement'}? active">Review</a>
+                    </div>
                     <hr class="line">
                     <a th:href="@{/}" class="sidebar-link">
                         <i class="xi-log-out pe-2"></i>
@@ -167,7 +175,7 @@
                 sidebar.toggleClass("active");
             });
 
-            <!-- 프로필 toggle 기능 -->
+            <!--프로필 toggle 기능-->
             $('.toggle_btn').click(function () {
                 $('.logout_box').toggleClass('active');
             });

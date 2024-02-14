@@ -22,8 +22,9 @@
                     </div>
 
                     <div class="section_body admin_main_body">
-                        <div class="row gy-3">
-                            <div class="col-md-6 col-xl-3">
+                        <div class="row gy-4">
+                            <!-- shop data -->
+                            <div class="col-md-6 col-xl-3 info_wrap">
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">회원 수</span>
@@ -34,7 +35,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3">
+                            <div class="col-md-6 col-xl-3 info_wrap">
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">상품 수</span>
@@ -45,7 +46,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3">
+                            <div class="col-md-6 col-xl-3 info_wrap">
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">고객 문의</span>
@@ -56,7 +57,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3">
+                            <div class="col-md-6 col-xl-3 info_wrap">
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">전체 총 수입</span>
@@ -68,7 +69,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-12 col-xxl-4 mt-5">
+                            <!-- 카테고리별 판매 건수 -->
+                            <div class="col-xl-12 col-xxl-4">
                                 <div class="chart_box">
                                     <div class="header">
                                         <span>카테고리별 판매 건수</span>
@@ -79,38 +81,82 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-12 col-xxl-8 mt-5">
+                            <!-- 최근 고객 문의 -->
+                            <div class="col-xl-12 col-xxl-8">
                                 <div class="table_box">
                                     <div class="header">
-                                        <span>최근 등록 상품</span>
-<!--                                        <a th:href="@{/admin/items}"><i class="fa-solid fa-bars"></i></a>-->
+                                        <span>최근 고객 문의</span>
                                     </div>
                                     <div class="body">
                                         <table class="row_header_table">
                                             <thead>
-                                                <tr>
-                                                    <th style="width: 80px;" scope="col">번호</th>
-                                                    <th style="width: auto;" scope="col">상품명</th>
-                                                    <th style="width: 110px;" scope="col">상태</th>
-                                                    <th style="width: 110px;" scope="col">등록자</th>
-                                                    <th style="width: 110px;" scope="col">등록일</th>
-                                                </tr>
+                                            <tr>
+                                                <th style="width: 150px;" scope="col">번호</th>
+                                                <th style="width: auto;" scope="col">제목</th>
+                                                <th style="width: 180px;" scope="col">작성자</th>
+                                                <th style="width: 180px;" scope="col">작성일</th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="item, status: ${items.getContent()}">
-                                                    <td th:text="${status.index + 1}">
-                                                    </td>
-                                                    <td class="left">
-                                                        <a th:href="'/admin/item/'+${item.id}"
-                                                            th:text="${item.itemNm}"></a>
-                                                    </td>
-                                                    <td th:text="${item.itemSellStatus == sellStatus} ? '판매' : '품절'">
-                                                    </td>
-                                                    <td th:text="${item.createdBy}"></td>
-                                                    <td
-                                                        th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}">
-                                                    </td>
-                                                </tr>
+                                            <tr th:each="qa, status:${qaList.getContent()}">
+                                                <td>
+                                                    <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
+                                                </td>
+                                                <td class="left">
+                                                    <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><span th:text="${qa.title}"></span></a>
+                                                    <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                    <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                    <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                    <i class="xi-lock-o"></i>
+                                                </td>
+                                                <td>
+                                                    <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
+                                                    <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
+                                                </td>
+                                                <td>
+                                                    <span class="txtNum gray_col fz11" th:text="${qa.regDate}">2024-02-06</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div th:if="${#lists.isEmpty(orders.getContent())}" class="message_wrap">
+                                            <span class="message">등록된 Q&A가 없습니다.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 최근 등록 상품 -->
+                            <div class="col-12">
+                                <div class="table_box">
+                                    <div class="header">
+                                        <span>최근 등록 상품</span>
+                                    </div>
+                                    <div class="body">
+                                        <table class="row_header_table">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 80px;" scope="col">번호</th>
+                                                <th style="width: auto;" scope="col">상품명</th>
+                                                <th style="width: 110px;" scope="col">상태</th>
+                                                <th style="width: 110px;" scope="col">등록자</th>
+                                                <th style="width: 150px;" scope="col">등록일</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="item, status: ${items.getContent()}">
+                                                <td th:text="${status.index + 1}">
+                                                </td>
+                                                <td class="left">
+                                                    <a th:href="'/admin/item/'+${item.id}"
+                                                       th:text="${item.itemNm}"></a>
+                                                </td>
+                                                <td th:text="${item.itemSellStatus.name == T(com.windsome.constant.ItemSellStatus).SELL.name} ? '판매' : '품절'">
+                                                </td>
+                                                <td th:text="${item.createdBy}"></td>
+                                                <td th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}" class="gray_col fz11">
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                         <div th:if="${#lists.isEmpty(items.getContent())}" class="message_wrap">
@@ -120,11 +166,11 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 mt-5">
+                            <!-- 최근 주문 내역 -->
+                            <div class="col-12">
                                 <div class="table_box big_table_box">
                                     <div class="header">
                                         <span>최근 주문 내역</span>
-<!--                                        <a th:href="@{/admin/orders}"><i class="fa-solid fa-bars"></i></a>-->
                                     </div>
                                     <div class="body">
                                         <table class="row_header_table">
@@ -155,7 +201,7 @@
                                                             </strong>
                                                             <div class="option">[옵션: 선택 X]</div>
                                                         </td>
-                                                        <td th:text="${order.orderStatus}"></td>
+                                                        <td th:text="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name ? '배송 준비중' : '주문 취소'}"></td>
                                                         <td th:text="${order.buyerId}"></td>
                                                         <td th:text="${order.orderDate}" class="gray_col fz11"></td>
                                                         <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}">
@@ -173,7 +219,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>

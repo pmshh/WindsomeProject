@@ -2,60 +2,93 @@
     .row {
         width: 100%;
 
-        .info_box {
-            background-color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 3px;
-            width: 100%;
-            // box-shadow: 1px 1px 20px -10px rgb(0, 0, 0, 0.2);
+        .info_wrap {
+            .info_box {
+                background-color: white;
+                padding: 20px 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 3px;
+                width: 100%;
+                position: relative;
+                // box-shadow: 1px 1px 20px -10px rgb(0, 0, 0, 0.2);
 
-            .txt_box {
-                .title {
-                    display: block;
-                    color: #6b6b6b;
-                    font-size: 12px;
+                .txt_box {
+                    .title {
+                        display: block;
+                        color: #6b6b6b;
+                        font-size: 12px;
+                    }
+
+                    .txt {
+                        font-size: 12px;
+                        color: #6b6b6b;
+                    }
+
+                    strong {
+                        font-size: 18px;
+                    }
                 }
 
-                .txt {
-                    font-size: 12px;
-                    color: #6b6b6b;
-                }
+                .icon_box {
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        padding: 15px;
+                    }
 
-                strong {
-                    font-size: 18px;
+                    svg.fa-user {
+                        color: #0090F4;
+                        background-color: #EBF4FC;
+                    }
+
+                    svg.fa-cart-shopping {
+                        color: #FCBB0F;
+                        background-color: #FDF5D8;
+                    }
+
+                    svg.fa-envelope {
+                        color: #6C41E8;
+                        background-color: #F2EEFF;
+                    }
+
+                    svg.fa-coins {
+                        color: #14C470;
+                        background-color: #E6FFEB;
+                    }
                 }
             }
 
-            .icon_box {
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    padding: 15px;
-                }
+            &:nth-child(1) .info_box::before,
+            &:nth-child(2) .info_box::before,
+            &:nth-child(3) .info_box::before,
+            &:nth-child(4) .info_box::before {
+                content: "";
+                width: 1px;
+                position: absolute;
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+                height: 100%;
+                left: 0px;
+                top: 0px;
+            }
 
-                svg.fa-user {
-                    color: #0090F4;
-                    background-color: #EBF4FC;
-                }
+            &:nth-child(1) .info_box::before {
+                border: 2px solid #0090F4;
+            }
 
-                svg.fa-cart-shopping {
-                    color: #FCBB0F;
-                    background-color: #FDF5D8;
-                }
+            &:nth-child(2) .info_box::before {
+                border: 2px solid #FCBB0F;
+            }
 
-                svg.fa-envelope {
-                    color: #6C41E8;
-                    background-color: #F2EEFF;
-                }
+            &:nth-child(3) .info_box::before {
+                border: 2px solid #6C41E8;
+            }
 
-                svg.fa-coins {
-                    color: #14C470;
-                    background-color: #E6FFEB;
-                }
+            &:nth-child(4) .info_box::before {
+                border: 2px solid #14C470;
             }
         }
 
@@ -115,12 +148,14 @@
 
                 .message_wrap {
                     @include board_message_wrap();
+                    height: 160px;
+                    padding: 0;
                 }
             }
         }
 
         .big_table_box {
-            min-height: 500px;
+            min-height: 300px;
             max-height: 500px;
         }
     }

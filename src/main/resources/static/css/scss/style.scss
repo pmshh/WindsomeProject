@@ -23,7 +23,10 @@
 @import 'pages/account/profile';
 @import 'pages/account/signUp';
 @import 'pages/account/updatePw';
-@import 'pages/admin/item/itemDtl'; //  admin start
+@import 'pages/admin/board/noticeMng'; //  admin start
+@import 'pages/admin/board/qaMng';
+@import 'pages/admin/board/reviewMng';
+@import 'pages/admin/item/itemDtl';
 @import 'pages/admin/item/itemForm';
 @import 'pages/admin/item/itemMng';
 @import 'pages/admin/order/orderMng';

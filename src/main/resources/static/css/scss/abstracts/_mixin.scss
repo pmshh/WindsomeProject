@@ -20,6 +20,15 @@
     display: flex;
     justify-content: end;
     align-items: center;
+
+    .posts_del_btn,
+    .all_post_del_btn {
+        margin-left: 5px;
+    }
+
+    .write_btn {
+        margin-left: 30px;
+    }
 }
 
 @mixin board_search_box() {
