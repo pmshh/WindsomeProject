@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,14 +36,14 @@ public class ReviewController {
     @GetMapping("/review")
     public String review(@CurrentAccount Account account, ReviewSearchDto reviewSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        Page<ReviewListDto> reviews = reviewService.getReviews(reviewSearchDto, pageable);
 
+        // cartItemTotalCount = 장바구니에 담긴 상품 개수
         Long cartItemTotalCount = null;
         if (account != null) {
             cartItemTotalCount = cartService.getCartItemTotalCount(account);
         }
 
-        model.addAttribute("reviews", reviews);
+        model.addAttribute("reviews", reviewService.getReviews(reviewSearchDto, pageable));
         model.addAttribute("reviewSearchDto", reviewSearchDto);
         model.addAttribute("cartItemTotalCount", cartItemTotalCount);
         model.addAttribute("maxPage", 10);
@@ -65,7 +66,12 @@ public class ReviewController {
      * 리뷰 등록 화면
      */
     @GetMapping("/review/enroll")
-    public String enrollReviewForm(@RequestParam(value = "itemId", required = false) Long itemId, Model model) {
+    public String enrollReviewForm(@CurrentAccount Account account, RedirectAttributes redirectAttr, @RequestParam(value = "itemId", required = false) Long itemId, Model model) {
+        if (account == null) {
+            redirectAttr.addFlashAttribute("message", "로그인 후 이용해주세요.");
+            return "redirect:/board/review";
+        }
+
         if (itemId != null) {
             ItemDto review = reviewService.getItem(itemId);
             model.addAttribute("itemId", itemId);
@@ -117,6 +123,10 @@ public class ReviewController {
      */
     @PatchMapping("/review/update/{reviewId}")
     public ResponseEntity<String> updateReview(@PathVariable(value = "reviewId") Long reviewId, @RequestBody ReviewUpdateDto reviewUpdateDto, @CurrentAccount Account account) {
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해주세요.");
+        }
+
         if (reviewService.validateReview(reviewId, account.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
@@ -130,6 +140,9 @@ public class ReviewController {
      */
     @DeleteMapping("/review/delete/{reviewId}")
     public ResponseEntity<String> deleteReview(@PathVariable(value = "reviewId") Long reviewId, Long itemId, @CurrentAccount Account account) {
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해주세요.");
+        }
         if (reviewService.validateReview(reviewId, account.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
         }

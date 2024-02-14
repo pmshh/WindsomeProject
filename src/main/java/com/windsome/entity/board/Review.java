@@ -30,7 +30,7 @@ public class Review {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    private LocalDateTime regDate;
+    private LocalDateTime regDate; // ToDo - BaseTimeEntity 상속
 
     private String title;
 

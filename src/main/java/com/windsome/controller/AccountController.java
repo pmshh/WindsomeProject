@@ -1,6 +1,7 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentAccount;
+import com.windsome.constant.Role;
 import com.windsome.dto.account.UpdatePasswordDto;
 import com.windsome.dto.account.ProfileFormDto;
 import com.windsome.dto.account.SignUpFormDto;
@@ -53,13 +54,14 @@ public class AccountController {
      * 회원가입
      */
     @PostMapping("/signUp")
-    public String signUpSubmit(@Valid SignUpFormDto signUpFormDto, Errors errors) {
+    public String signUpSubmit(@Valid SignUpFormDto signUpFormDto, RedirectAttributes redirectAttr, Errors errors) {
         if (errors.hasErrors()) {
             return "account/signUp";
         }
 
         accountService.saveNewAccount(signUpFormDto);
         accountService.login(signUpFormDto.getUserIdentifier(), signUpFormDto.getPassword());
+        redirectAttr.addFlashAttribute("message", "회원가입이 완료되었습니다.");
         return "redirect:/";
     }
 
@@ -79,8 +81,9 @@ public class AccountController {
     @PostMapping("/account/profile")
     public String updateProfile(@CurrentAccount Account account, @Valid ProfileFormDto profileFormDto, Errors errors,
                                 Model model, RedirectAttributes attributes) {
-        if (errors.hasErrors()) {
+        if (errors.hasErrors() && account.getState() == Role.USER) {
             model.addAttribute(account);
+            model.addAttribute("message", "프로필을 수정하는 도중 오류가 발생하였습니다.");
             return "account/profile";
         }
 

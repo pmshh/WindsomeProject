@@ -42,7 +42,6 @@ public class OrderController {
         model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("maxPage", 5);
-        model.addAttribute("orderStatus", OrderStatus.READY);
         return "order/orderHist";
     }
 
@@ -65,10 +64,10 @@ public class OrderController {
         try {
             orderService.order(orderDto, account.getUserIdentifier());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("order_result", "order_fail");
+            redirectAttributes.addFlashAttribute("message", "상품 등록 중 오류가 발생하였습니다.");
             return "redirect:/";
         }
-        redirectAttributes.addFlashAttribute("order_result", "order_ok");
+        redirectAttributes.addFlashAttribute("message", "상품이 주문되었습니다.");
         return "redirect:/";
     }
 

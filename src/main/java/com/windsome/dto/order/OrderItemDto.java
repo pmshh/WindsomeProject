@@ -1,5 +1,6 @@
 package com.windsome.dto.order;
 
+import com.windsome.constant.OrderItemStatus;
 import com.windsome.entity.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,8 @@ public class OrderItemDto {
     private int savePoint;
 
     private String imgUrl;
+
+    private OrderItemStatus orderItemStatus;
 
     /**
      * DB에 존재 하지 않는 데이터
@@ -50,6 +53,7 @@ public class OrderItemDto {
         this.count = orderItem.getCount();
         this.price = orderItem.getPrice();
         this.discount = orderItem.getDiscount();
+        this.orderItemStatus = orderItem.getOrderItemStatus();
         this.imgUrl = imgUrl;
     }
 }

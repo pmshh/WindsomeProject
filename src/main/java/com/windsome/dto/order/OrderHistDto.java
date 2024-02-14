@@ -22,7 +22,7 @@ public class OrderHistDto {
 
     public OrderHistDto(Order order) {
         this.orderId = order.getId();
-        this.orderDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.orderDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         this.orderStatus = order.getOrderStatus();
     }
 

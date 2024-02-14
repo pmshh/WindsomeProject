@@ -171,6 +171,12 @@
 
                 /* 최종 유효성 검사 */
                 if (checkTitle && checkContent) {
+                    let qaId = [[${qaId}]];
+                    let originNo = 0;
+                    if (qaId) {
+                        originNo = qaId;
+                    }
+
                     $.ajax({
                         url: '/board/qa/enroll',
                         type: 'POST',
@@ -178,7 +184,8 @@
                             title: $("select[name=title] option:selected").text(),
                             content: contentInputVal,
                             password: passwordInputVal,
-                            secretYN: $("input[name='secret']:checked").val()
+                            secretYN: $("input[name='secret']:checked").val(),
+                            originNo: originNo
                         },
                         success(res) {
                             alert(res);
@@ -187,7 +194,7 @@
                         error(request) {
                             alert(request.responseText);
                         },
-                    })
+                    });
                 }
             });
         });

@@ -26,27 +26,31 @@
                             <table class="row_header_table">
                                 <thead>
                                 <tr>
-                                    <th style="width: 70px;" scope="col">번호</th>
-                                    <th style="width: 300px;" scope="col">제목</th>
-                                    <th style="width: 200px;" scope="col">작성자</th>
-                                    <th style="width: 100px;" scope="col">작성일</th>
+                                    <th style="width: 150px;" scope="col">번호</th>
+                                    <th style="width: auto;" scope="col">제목</th>
+                                    <th style="width: 180px;" scope="col">작성자</th>
+                                    <th style="width: 180px;" scope="col">작성일</th>
                                 </tr>
                                 </thead>
 
-                                <tbody class="center">
+                                <tbody>
                                 <tr th:each="qa, status:${qaList.getContent()}">
                                     <td>
                                         <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
                                     </td>
                                     <td class="left">
-                                        <a th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><span th:text="${qa.title}"></span></a>
+                                        <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><span th:text="${qa.title}"></span></a>
+                                        <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                        <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                        <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
                                         <i class="xi-lock-o"></i>
                                     </td>
                                     <td>
-                                        <span th:text="${qa.createdBy}"></span>
+                                        <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
+                                        <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
                                     </td>
                                     <td>
-                                        <span class="txtNum" th:text="${qa.regDate}">2024-02-06</span>
+                                        <span class="txtNum gray_col fz11" th:text="${qa.regDate}">2024-02-06</span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -119,6 +123,12 @@
     <!-- 사용자 JS -->
     <script th:inline="javascript">
         $(function () {
+            /* 검색어 유지 */
+            let query = [[${qaSearchDto.searchQuery}]];
+            let type = [[${qaSearchDto.searchDateType}]];
+            $(".search_query").val(query);
+            $(".search_date_type").val(type).prop("selected", true);
+
             /* 경고 메시지 있을 시 출력 */
             let message = [[${message}]];
             if (message !== null) {
@@ -129,6 +139,18 @@
             $(".write_btn").click(function () {
                 location.href = '/board/qa/enroll';
             });
+
+            /* 검색 버튼 */
+            $(".search_btn").click(function () {
+                page(0);
+            });
         });
+
+        /* page 이동 */
+        function page(page) {
+            let searchDateType = $(".search_date_type").val();
+            let searchQuery = $(".search_query").val();
+            location.href = "/board/qa?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+        }
     </script>
 </body>

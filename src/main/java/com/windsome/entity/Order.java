@@ -50,37 +50,30 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public void addOrderItem(OrderItem orderItem) {
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
+    public void addOrderItem(List<OrderItem> orderItemList) {
+        for (OrderItem orderItem : orderItemList) {
+            orderItem.setOrder(this);
+        }
     }
 
     public static Order createOrder(Account account, List<OrderItem> orderItemList, OrderDto orderDto) {
-        Order order = new Order();
-        order.setAccount(account);
-        order.setTotalOrderPrice(orderDto.getOrderFinalSalePrice());
-        order.setDeliveryCost(orderDto.getDeliveryCost());
-        order.setUsePoint(orderDto.getUsePoint());
-        order.setAddress1(orderDto.getAddress1());
-        order.setAddress2(orderDto.getAddress2());
-        order.setAddress3(orderDto.getAddress3());
-        order.setTel(orderDto.getTel());
-        order.setEmail(orderDto.getEmail());
-        order.setReq(orderDto.getReq());
-        for (OrderItem orderItem : orderItemList) {
-            order.addOrderItem(orderItem);
-        }
-        order.setOrderStatus(OrderStatus.READY);
-        order.setOrderDate(LocalDateTime.now());
+        Order order = Order.builder()
+                .account(account)
+                .totalOrderPrice(orderDto.getOrderFinalSalePrice())
+                .deliveryCost(orderDto.getDeliveryCost())
+                .usePoint(orderDto.getUsePoint())
+                .address1(orderDto.getAddress1())
+                .address2(orderDto.getAddress2())
+                .address3(orderDto.getAddress3())
+                .tel(orderDto.getTel())
+                .email(orderDto.getEmail())
+                .req(orderDto.getReq())
+                .orderItems(orderItemList)
+                .orderStatus(OrderStatus.READY)
+                .orderDate(LocalDateTime.now())
+                .build();
+        order.addOrderItem(orderItemList);
         return order;
-    }
-
-    public int getTotalPrice() {
-        int totalPrice = 0;
-        for (OrderItem orderItem : orderItems) {
-            totalPrice += orderItem.getTotalPrice();
-        }
-        return totalPrice;
     }
 
     public void cancelOrder() {

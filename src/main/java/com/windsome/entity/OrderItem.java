@@ -1,5 +1,7 @@
 package com.windsome.entity;
 
+import com.windsome.constant.OrderItemStatus;
+import com.windsome.constant.OrderStatus;
 import com.windsome.entity.auditing.BaseEntity;
 import lombok.*;
 
@@ -31,20 +33,20 @@ public class OrderItem extends BaseEntity {
 
     private int savePoint; // 적립 포인트
 
-    public static OrderItem createOrderItem(Item item, int count) {
-        OrderItem orderItem = new OrderItem();
-        orderItem.setItem(item);
-        orderItem.setPrice(item.getPrice());
-        orderItem.setCount(count);
-        orderItem.setDiscount(item.getDiscount());
-        orderItem.setSavePoint((int) (item.getPrice() * (1 - item.getDiscount()) * 0.05));
+    @Enumerated(EnumType.STRING)
+    private OrderItemStatus orderItemStatus;
 
+    public static OrderItem createOrderItem(Item item, int count) {
+        OrderItem orderItem = OrderItem.builder()
+                .item(item)
+                .price(item.getPrice())
+                .count(count)
+                .discount(item.getDiscount())
+                .savePoint((int) (item.getPrice() * (1 - item.getDiscount()) * 0.05))
+                .orderItemStatus(OrderItemStatus.ORDER)
+                .build();
         item.removeStock(count);
         return orderItem;
-    }
-
-    public int getTotalPrice() {
-        return price * count;
     }
 
     public void cancel() {
