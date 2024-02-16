@@ -144,13 +144,13 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         if (StringUtils.equals("all", searchDateType) || searchDateType == null) {
             return null;
         } else if (StringUtils.equals("1d", searchDateType)) {
-            LocalDateTime dataTime = dateTime.minusDays(1);
+            dateTime = dateTime.minusDays(1);
         } else if (StringUtils.equals("1w", searchDateType)) {
-            LocalDateTime dataTime = dateTime.minusWeeks(1);
+            dateTime = dateTime.minusWeeks(1);
         } else if (StringUtils.equals("1m", searchDateType)) {
-            LocalDateTime dataTime = dateTime.minusMonths(1);
+            dateTime = dateTime.minusMonths(1);
         }  else if (StringUtils.equals("6m", searchDateType)) {
-            LocalDateTime dataTime = dateTime.minusMonths(6);
+            dateTime = dateTime.minusMonths(6);
         }
         return item.regTime.after(dateTime);
     }

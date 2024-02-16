@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Entity
+@Getter
 public class Category {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

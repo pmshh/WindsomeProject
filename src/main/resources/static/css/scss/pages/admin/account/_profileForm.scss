@@ -1,0 +1,86 @@
+.profile_form_body {
+    .profile_form {
+        width: 80%;
+
+        table {
+            tbody {
+                td {
+                    span {
+                        margin-top: 2px;
+                    }
+
+                    .mail_select {
+                        width: 125px;
+                    }
+
+                    .pw_input_box {
+                        color: #d43301;
+
+                        .pw_result_text {
+                            margin-left: 4px;
+                        }
+                    }
+
+                    .pw_confirm_input_box {
+                        .pw_confirm_result_text {
+                            margin-left: 4px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .btn_box {
+            padding: 10px 0;
+            text-align: center;
+            display: block;
+            margin-top: 30px;
+            position: relative;
+
+            .del_btn {
+                position: absolute;
+                top: 10px;
+                right: 0;
+                background-color: #DC3545;
+                border: 1px solid transparent !important;
+                color: white;
+
+                &:hover {
+                    background-color: #db5562;
+                    border: 1px solid transparent !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1100px) {
+    .profile_form_body {
+        .profile_form {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .profile_form_body {
+        .profile_form {
+            width: 100%;
+
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
+                }
+            }
+
+            .btn_box {
+                button {
+                    font-size: 11px;
+                    width: 90px;
+                }
+            }
+        }
+    }
+}

@@ -139,7 +139,7 @@
                     }
 
                     &.active {
-                        background-color: #1a1a1a;
+                        color: #e06f18;
                     }
 
                     &[data-bs-toggle="collapse"]::after {
@@ -163,20 +163,19 @@
 
                 .sub_menu {
                     a {
-                        padding: 0.625rem 1.625rem;
-                        color: #e0ecef;
+                        padding: 10px 0 10px 25px;
+                        color: #a7afb1;
                         position: relative;
                         display: block;
-                        font-size: 0.875rem;
+                        font-size: 14px;
                         transition: all .2s ease-in-out;
-                        margin-bottom: 5px;
 
                         &:hover {
                             background-color: #1a1a1a;
                         }
 
                         &.active {
-                            background-color: #1a1a1a;
+                            color: #e06f18;
                         }
                     }
 

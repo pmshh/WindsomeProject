@@ -106,10 +106,10 @@
                         <div class="search_box">
                             <i class="fa-solid fa-angle-right"></i>
                             <span class="txt">검색어</span>
-                            <select class="search_date_type">
-                                <option value="">(전체)</option>
+                            <select class="search_type">
+                                <option value="">아이디</option>
                             </select>
-                            <input class="user_identifier" name="userIdentifier" id="userIdentifier" type="text"
+                            <input class="userid_input" name="userIdentifier" type="text"
                                    placeholder="주문자 아이디를 입력해주세요">
                             <button class="search_btn white_btn_w90_h30" type="button">검색</button>
                         </div>
@@ -133,7 +133,7 @@
 
         /* 페이징 */
         function page(page) {
-            let userIdentifier = $(".user_identifier").val();
+            let userIdentifier = $(".userid_input").val();
             location.href = "/admin/orders/" + page + "?userIdentifier=" + userIdentifier;
         }
 

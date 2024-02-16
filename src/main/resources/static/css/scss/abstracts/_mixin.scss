@@ -41,8 +41,9 @@
         margin-right: 22px;
     }
 
+    .search_type,
     .search_date_type,
-    .search_date_type_admin,
+    .search_state_type,
     .search_sell_status,
     .search_by {
         margin: 2px 2px 0 0;
@@ -55,7 +56,9 @@
         color: #353535;
     }
 
-    .search_date_type_admin {
+    .search_type,
+    .search_date_type,
+    .search_state_type {
         width: 100px;
     }
 

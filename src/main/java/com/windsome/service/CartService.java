@@ -28,7 +28,6 @@ public class CartService {
     private final AccountRepository accountRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final OrderService orderService;
 
     @Transactional(readOnly = true)
     public List<CartDetailDto> getCartList(String userIdentifier) {

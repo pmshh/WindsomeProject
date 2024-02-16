@@ -1,22 +1,21 @@
 package com.windsome.controller;
 
-import com.windsome.config.security.CurrentAccount;
-import com.windsome.constant.ItemSellStatus;
+import com.windsome.constant.Role;
+import com.windsome.dto.account.AccountSearchDto;
+import com.windsome.dto.account.AdminPageProfileFormDto;
 import com.windsome.dto.admin.PageDto;
 import com.windsome.dto.board.notice.NoticeSearchDto;
 import com.windsome.dto.board.qa.QaSearchDto;
 import com.windsome.dto.board.review.ReviewSearchDto;
 import com.windsome.dto.item.ItemFormDto;
 import com.windsome.dto.item.ItemSearchDto;
-import com.windsome.entity.Account;
-import com.windsome.entity.Item;
 import com.windsome.service.*;
 import com.windsome.service.board.NoticeService;
 import com.windsome.service.board.QaService;
 import com.windsome.service.board.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -35,20 +34,22 @@ import java.util.Optional;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 public class AdminController {
 
+    private final AdminService adminService;
+    private final CategoryService categoryService;
     private final ItemService itemService;
     private final OrderService orderService;
-    private final CategoryService categoryService;
-    private final AdminService adminService;
-    private final QaService qaService;
     private final NoticeService noticeService;
+    private final QaService qaService;
     private final ReviewService reviewService;
+    private final AccountService accountService;
 
     /**
-     * 관리자 페이지 메인 화면
+     * 메인
      */
-    @GetMapping("/admin/main")
+    @GetMapping("/main")
     public String home(Model model) {
         Pageable pageable = PageRequest.of(0, 3);
         model.addAttribute("dashboardData", adminService.getDashboardData());
@@ -59,33 +60,29 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 상품 관리
+     * 상품 관리 - 조회
      */
-    @GetMapping(value = {"/admin/items", "/admin/items/{page}"})
+    @GetMapping(value = {"/items", "/items/{page}"})
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable);
-
-        model.addAttribute("sellStatus", ItemSellStatus.SELL);
-        model.addAttribute("items", items);
+        model.addAttribute("items", itemService.getAdminItemPage(itemSearchDto, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("itemSearchDto", itemSearchDto);
         model.addAttribute("maxPage", 10);
         return "admin/item/itemMng";
     }
 
     /**
-     * 관리자 페이지 - 상품 등록 화면
+     * 상품 관리 - 상품 등록 화면
      */
-    @GetMapping("/admin/item")
+    @GetMapping("/item")
     public String saveItemForm(Model model) {
         model.addAttribute("itemFormDto", new ItemFormDto());
         return "admin/item/itemEnroll";
     }
 
     /**
-     * 관리자 페이지 - 상품 등록
+     * 상품 관리 - 상품 등록
      */
-    @PostMapping("/admin/item")
+    @PostMapping("/item")
     public String saveItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
                            @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
         if (bindingResult.hasErrors()) {
@@ -105,13 +102,13 @@ public class AdminController {
         }
 
         redirectAttributes.addFlashAttribute("save_result", "save_ok");
-        return "redirect:/admin/items";
+        return "redirect:/items";
     }
 
     /**
-     * 관리자 페이지 - 상품 상세 화면
+     * 상품 관리 - 상품 상세 화면
      */
-    @GetMapping("/admin/itemDtl/{itemId}")
+    @GetMapping("/itemDtl/{itemId}")
     public String itemDtl(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) {
         try {
             model.addAttribute("itemFormDto", itemService.getItemFormDto(itemId));
@@ -126,9 +123,9 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 상품 수정 화면
+     * 상품 관리 - 상품 수정 화면
      */
-    @GetMapping("/admin/item/{itemId}")
+    @GetMapping("/item/{itemId}")
     public String modifyItemForm(PageDto pageDto, @PathVariable("itemId") Long itemId, Model model) {
         try {
             model.addAttribute("itemFormDto", itemService.getItemFormDto(itemId));
@@ -143,9 +140,9 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 상품 수정
+     * 상품 관리 - 상품 수정
      */
-    @PostMapping("/admin/item/{itemId}")
+    @PostMapping("/item/{itemId}")
     public String modifyItem(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
         if (bindingResult.hasErrors()) {
@@ -154,24 +151,24 @@ public class AdminController {
 
         if (itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null) {
             redirectAttributes.addFlashAttribute("update_result", "required_rep_img");
-            return "redirect:/admin/items";
+            return "redirect:/items";
         }
 
         try {
             itemService.updateItem(itemFormDto, itemImgFileList);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("update_result", "update_fail");
-            return "redirect:/admin/items";
+            return "redirect:/items";
         }
 
         redirectAttributes.addFlashAttribute("update_result", "update_ok");
-        return "redirect:/admin/items";
+        return "redirect:/items";
     }
 
     /**
-     * 관리자 페이지 - 상품 삭제
+     * 상품 관리 - 상품 삭제
      */
-    @DeleteMapping("/admin/item/{itemId}")
+    @DeleteMapping("/item/{itemId}")
     public ResponseEntity<Object> deleteItem(@PathVariable("itemId") Long itemId) {
         try {
             itemService.deleteItem(itemId);
@@ -182,42 +179,117 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 상품 카테고리 목록(JSON) 불러오기
+     * 상품 관리 - 카테고리 조회
      */
-    @GetMapping("/admin/item/categories")
-    public ResponseEntity<Object> getItemCategories() throws Exception {
-        String jsonCategories = categoryService.getJsonCategories();
-        return ResponseEntity.ok().body(jsonCategories);
+    @GetMapping("/item/categories")
+    public ResponseEntity<String> getItemCategories() throws Exception {
+        return ResponseEntity.ok().body(categoryService.getJsonCategories());
     }
 
     /**
-     * 관리자 페이지 - 주문 관리 화면
+     * 주문 관리 - 조회
      */
-    @GetMapping(value = {"/admin/orders", "/admin/orders/{page}"})
+    @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderManage(String userIdentifier, @PathVariable("page") Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        model.addAttribute("orders", orderService.getAdminPageOrderList(userIdentifier == null ? "" : userIdentifier, pageable));
+        model.addAttribute("orders", orderService.getAdminPageOrderList(userIdentifier == null ? "" : userIdentifier, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("maxPage", 10);
         return "admin/order/orderMng";
     }
 
     /**
-     * 관리자 페이지 - 주문 취소
+     * 주문 관리 - 주문 취소
      */
-    @PostMapping("/admin/order/{orderId}/cancel")
-    public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId) {
-        orderService.cancelOrder(orderId);
-        return ResponseEntity.ok().body(orderId);
+    @PostMapping("/order/{orderId}/cancel")
+    public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId) {
+        try {
+            orderService.cancelOrder(orderId);
+        } catch (EntityNotFoundException e) {
+            ResponseEntity.badRequest().body("주문 취소 도중 오류가 발생하였습니다.");
+        }
+        return ResponseEntity.ok().body("주문이 취소되었습니다.");
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Notice 조회
+     * 회원 관리 - 회원 조회
      */
-    @GetMapping("/admin/board/notice")
+    @GetMapping("/account")
+    public String userManage(AccountSearchDto accountSearchDto, Optional<Integer> page, Model model) {
+        model.addAttribute("accountSearchDto", accountSearchDto);
+        model.addAttribute("accountInfoDto", accountService.getAccountInfo(accountSearchDto, PageRequest.of(page.orElse(0), 10)));
+        model.addAttribute("maxPage", 10);
+        return "admin/account/accountMng";
+    }
+
+    /**
+     * 회원 관리 - 회원 정보 상세 화면
+     */
+    @GetMapping("/account/{accountId}")
+    public String accountDtl(@PathVariable("accountId") Long accountId, Model model) {
+        model.addAttribute("viewName", "dtlPage");
+        model.addAttribute("profileFormDto", accountService.getAdminPageProfileFormDto(accountId));
+        return "admin/account/profileForm";
+    }
+
+
+    /**
+     * 회원 관리 - 회원 정보 수정 화면
+     */
+    @GetMapping("/account/update/{accountId}")
+    public String updateAccountForm(@PathVariable("accountId") Long accountId, Model model) {
+        model.addAttribute("viewName", "updatePage");
+        model.addAttribute("profileFormDto", accountService.getAdminPageProfileFormDto(accountId));
+        return "admin/account/profileForm";
+    }
+
+    /**
+     * 회원 관리 - 회원 정보 수정
+     */
+    @PostMapping ("/account/update/{accountId}")
+    public String updateAccount(AdminPageProfileFormDto adminPageProfileFormDto, RedirectAttributes redirectAttr, Model model) {
+        try {
+            accountService.updateProfileForAdmin(adminPageProfileFormDto);
+        } catch (Exception e) {
+            model.addAttribute("profileFormDto", accountService.getAdminPageProfileFormDto(adminPageProfileFormDto.getId()));
+            model.addAttribute("message", "회원 정보 수정을 실패했습니다.");
+            return "admin/account/profileForm";
+        }
+        redirectAttr.addFlashAttribute("message", "회원 정보를 수정했습니다.");
+        return "redirect:/admin/account";
+    }
+
+    /**
+     * 회원 관리 - 회원 권한 수정
+     */
+    @PatchMapping ("/account/update/{accountId}")
+    public ResponseEntity<String> updateAccountRole(@PathVariable Long accountId, Role role) {
+        try {
+            accountService.updateAccountRole(accountId, role);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
+        }
+        return ResponseEntity.ok().body("회원의 권한이 수정되었습니다.");
+    }
+
+    /**
+     * 회원 관리 - 회원 삭제
+     */
+    @DeleteMapping ("/account/delete/{accountId}")
+    public ResponseEntity<String> deleteAccount(@PathVariable Long accountId) {
+        try {
+            accountService.deleteAccount(accountId);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
+        }
+        return ResponseEntity.ok().body("회원이 삭제되었습니다.");
+    }
+
+    /**
+     * 게시판 관리(Notice) - 조회
+     */
+    @GetMapping("/board/notice")
     public String noticeManage(NoticeSearchDto noticeSearchDto, Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
         model.addAttribute("noticeSearchDto", noticeSearchDto);
-        model.addAttribute("noticeList", noticeService.getNoticeList(noticeSearchDto, pageable));
+        model.addAttribute("noticeList", noticeService.getNoticeList(noticeSearchDto, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("fixTopNoticeList", noticeService.getFixTopNoticeList());
         model.addAttribute("maxPage", 10);
         model.addAttribute("page", page.orElse(0));
@@ -225,10 +297,10 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Notice 삭제
+     * 게시판 관리(Notice) - 게시글 삭제
      */
-    @DeleteMapping("/admin/board/notice")
-    public ResponseEntity<Object> deleteNotice(@RequestParam(value = "noticeIds") Long[] noticeIds) {
+    @DeleteMapping("/board/notice")
+    public ResponseEntity<String> deleteNotice(@RequestParam(value = "noticeIds") Long[] noticeIds) {
         try {
             noticeService.deleteNotices(noticeIds);
         } catch (EntityNotFoundException e) {
@@ -238,10 +310,10 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Notice 수정
+     * 게시판 관리(Notice) - 게시글 수정
      */
-    @PatchMapping("/admin/board/notice/{noticeId}")
-    public ResponseEntity<Object> updateNotice(Long noticeId, boolean noticeYn) {
+    @PatchMapping("/board/notice/{noticeId}")
+    public ResponseEntity<String> updateNotice(Long noticeId, boolean noticeYn) {
         if (noticeService.checkNoticeYN(noticeId, noticeYn)) {
             return ResponseEntity.badRequest().body("이미 공지글로 설정되어있습니다.");
         }
@@ -255,12 +327,11 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Q&A 조회
+     * 게시판 관리(Q&A) - 조회
      */
-    @GetMapping("/admin/board/qa")
+    @GetMapping("/board/qa")
     public String qaManage(QaSearchDto qaSearchDto, Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        model.addAttribute("qaList", qaService.getQaList(qaSearchDto, pageable));
+        model.addAttribute("qaList", qaService.getQaList(qaSearchDto, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("qaSearchDto", qaSearchDto);
         model.addAttribute("maxPage", 10);
         model.addAttribute("page", page.orElse(0));
@@ -268,9 +339,9 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Q&A 삭제
+     * 게시판 관리(Q&A) - 게시글 삭제
      */
-    @DeleteMapping("/admin/board/qa")
+    @DeleteMapping("/board/qa")
     public ResponseEntity<String> deleteQa(Long[] qaIds) {
         try {
             qaService.deleteQas(qaIds);
@@ -281,21 +352,20 @@ public class AdminController {
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Review
+     * 게시판 관리(Review) - 조회
      */
-    @GetMapping("/admin/board/review")
+    @GetMapping("/board/review")
     public String reviewManage(ReviewSearchDto reviewSearchDto, Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        model.addAttribute("reviews", reviewService.getReviews(reviewSearchDto, pageable));
+        model.addAttribute("reviews", reviewService.getReviews(reviewSearchDto, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("reviewSearchDto", reviewSearchDto);
         model.addAttribute("maxPage", 10);
         return "admin/board/reviewMng";
     }
 
     /**
-     * 관리자 페이지 - 게시판 관리 - Q&A 삭제
+     * 게시판 관리(Review) - 게시글 삭제
      */
-    @DeleteMapping("/admin/board/review")
+    @DeleteMapping("/board/review")
     public ResponseEntity<String> deleteReview(Long[] reviewIds) {
         try {
             reviewService.deleteReviews(reviewIds);

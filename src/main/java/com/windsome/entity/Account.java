@@ -7,13 +7,14 @@ import com.windsome.entity.board.Review;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString
+@ToString(exclude = "reviews")
 public class Account extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,9 +38,8 @@ public class Account extends BaseTimeEntity {
     private String address3;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Role state;
-
-    private int money;
 
     private int point;
 

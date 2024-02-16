@@ -40,8 +40,7 @@
                                             th:text="${items.getTotalElements() - (items.getSize() * items.getNumber()) - status.index}">
                                     </td>
                                     <td>
-                                        <button class="item_dtl_btn" type="button" th:value="${item.id}"
-                                                th:text="${item.itemNm}"
+                                        <button class="item_dtl_btn" type="button" th:value="${item.id}" th:text="${item.itemNm}"
                                                 onclick="moveItemDtlPage(this.value)"></button>
                                     </td>
                                     <td th:text="${item.itemSellStatus.name == T(com.windsome.constant.ItemSellStatus).SELL.name} ? '판매' : '품절'">
@@ -104,7 +103,7 @@
                         <div class="search_box" th:object="${itemSearchDto}">
                             <i class="fa-solid fa-angle-right"></i>
                             <span class="txt">검색어</span>
-                            <select class="search_date_type_admin" th:field="*{searchDateType}">
+                            <select class="search_date_type" th:field="*{searchDateType}">
                                 <option value="all">전체기간</option>
                                 <option value="1d">1일</option>
                                 <option value="1w">1주</option>

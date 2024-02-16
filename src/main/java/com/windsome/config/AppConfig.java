@@ -22,6 +22,7 @@ public class AppConfig {
                 .setSkipNullEnabled(true)
                 .setDestinationNameTokenizer(NameTokenizers.UNDERSCORE)
                 .setSourceNameTokenizer(NameTokenizers.UNDERSCORE);
-        return new ModelMapper();
+
+        return modelMapper;
     }
 }

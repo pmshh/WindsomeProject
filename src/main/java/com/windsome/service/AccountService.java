@@ -1,10 +1,7 @@
 package com.windsome.service;
 
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.account.UpdatePasswordDto;
-import com.windsome.dto.account.MyPageInfoDto;
-import com.windsome.dto.account.ProfileFormDto;
-import com.windsome.dto.account.SignUpFormDto;
+import com.windsome.dto.account.*;
 import com.windsome.entity.Account;
 import com.windsome.constant.Role;
 import com.windsome.repository.OrderRepository;
@@ -14,6 +11,9 @@ import com.windsome.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,8 +22,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.mail.MessagingException;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -166,5 +170,48 @@ public class AccountService {
      */
     public Long getUserOrderCount(Account account) {
         return orderRepository.countByAccountIdAndOrderStatus(account.getId(), OrderStatus.READY);
+    }
+
+    /**
+     * 관리자 페이지 - 회원 정보 조회
+     */
+    public Page<AccountInfoDto> getAccountInfo(AccountSearchDto accountSearchDto, Pageable pageable) {
+        return accountRepository.getAccountInfo(accountSearchDto, pageable);
+    }
+
+    public AdminPageProfileFormDto getAdminPageProfileFormDto(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
+        return AdminPageProfileFormDto.toDto(account);
+    }
+
+    /**
+     * 관리자 페이지 - 회원 정보 수정
+     */
+    public void updateProfileForAdmin(AdminPageProfileFormDto adminPageProfileFormDto) {
+        Account account = accountRepository.findById(adminPageProfileFormDto.getId()).orElseThrow(EntityNotFoundException::new);
+        modelMapper.map(adminPageProfileFormDto, account);
+        // dto의 password 필드 값이 있으면 비밀번호 변경
+        if (!StringUtils.equals(adminPageProfileFormDto.getPassword(), null)) {
+            account.setPassword(passwordEncoder.encode(adminPageProfileFormDto.getPassword()));
+        }
+        System.out.println("account = " + account);
+        accountRepository.save(account);
+    }
+
+    /**
+     * 관리자 페이지 - 회원 권한 설정
+     */
+    public void updateAccountRole(Long accountId, Role role) {
+        Account account = accountRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
+        account.setState(role);
+        accountRepository.save(account);
+    }
+
+    /**
+     * 관리자 페이지 - 회원 삭제
+     */
+    public void deleteAccount(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
+        accountRepository.delete(account);
     }
 }
