@@ -26,20 +26,16 @@
                     <div class="section_body item_dtl_body mt-5">
 
                         <div class="item_dtl row justify-content-md-center">
-                            <div class="item_img_wrap col-md-auto">
+                            <div class="item_img_wrap col-auto">
                                 <div class="main_img_box">
-                                    <img id="image_box" class="main_img" th:src="${item.itemImgDtoList[0].imgUrl}"
-                                        alt="">
+                                    <img id="image_box" class="main_img" th:src="${item.itemImgDtoList[0].imgUrl}" alt="">
                                 </div>
                                 <div class="thumb_img_box">
-                                    <img class="thumb_img" th:src="${item.itemImgDtoList[0].imgUrl}"
-                                        onclick="myFunction(this)" alt="img">
-                                    <img class="thumb_img" th:src="${item.itemImgDtoList[1].imgUrl}"
-                                        onclick="myFunction(this)" alt="img">
+                                    <img th:each="img : ${item.itemImgDtoList}" th:if="${img.imgName != ''}" class="thumb_img" th:src="${img.imgUrl}" onclick="myFunction(this)" alt="img">
                                 </div>
                             </div>
 
-                            <div class="item_info_wrap col-md-auto">
+                            <div class="item_info_wrap col-auto">
                                 <div class="item_title">
                                     <h3 th:text="${item.itemNm}">Black Coat</h3>
                                 </div>

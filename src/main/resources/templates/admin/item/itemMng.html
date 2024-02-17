@@ -36,18 +36,14 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="item, status: ${items.getContent()}">
-                                    <td
-                                            th:text="${items.getTotalElements() - (items.getSize() * items.getNumber()) - status.index}">
-                                    </td>
+                                    <td th:text="${items.getTotalElements() - (items.getSize() * items.getNumber()) - status.index}"> </td>
                                     <td>
-                                        <button class="item_dtl_btn" type="button" th:value="${item.id}" th:text="${item.itemNm}"
-                                                onclick="moveItemDtlPage(this.value)"></button>
+                                        <button class="item_dtl_btn" type="button" th:value="${item.id}" th:text="${item.itemNm}" onclick="moveItemDtlPage(this.value)"></button>
                                     </td>
                                     <td th:text="${item.itemSellStatus.name == T(com.windsome.constant.ItemSellStatus).SELL.name} ? '판매' : '품절'">
                                     </td>
                                     <td th:text="${item.createdBy}"></td>
-                                    <td class="fz11 gray_col" th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd')}">
-                                    </td>
+                                    <td class="fz11 gray_col" th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd')}"></td>
                                     <td>
                                         <button th:data-id="${item.id}" class="black_btn_w90_h30 modify_btn" type="button">수정</button>
                                         <button th:data-id="${item.id}" class="white_btn_w90_h30 delete_btn" type="button">삭제</button>
@@ -58,43 +54,37 @@
                         </div>
 
                         <div class="btn_box">
-                            <button class="white_btn_w90_h30 enroll_btn" type="button"
-                                    onclick="moveItemEnrollPage()">상품 등록</button>
+                            <button class="white_btn_w90_h30 enroll_btn" type="button" onclick="moveItemEnrollPage()">상품 등록</button>
                         </div>
 
                         <div class="message_wrap" th:if="${#lists.isEmpty(items.getContent())}">
                             <span class="message">등록된 상품이 없습니다.</span>
                         </div>
 
-                        <div class="def_pagination"
-                             th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 :
+                        <div class="def_pagination" th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 :
                                  (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
                             <ul>
                                 <li class="prev" th:classappend="${items.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(0)'">
-                                        <i class="fa-solid fa-angle-left"></i><i
-                                            class="fa-solid fa-angle-left"></i>
+                                    <a th:onclick="'javascript:goToPage(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
                                     </a>
                                 </li>
                                 <li class="prev" th:classappend="${items.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' +  ${items.number - 1} + ')'">
+                                    <a th:onclick="'javascript:goToPage(' +  ${items.number - 1} + ')'">
                                         <i class="fa-solid fa-angle-left"></i>
                                     </a>
                                 </li>
-                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                    th:classappend="${items.number eq page - 1} ? 'active' : ''">
-                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                                       th:inline="text">[[${page}]]</a>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:goToPage(' + ${page - 1} + ')'" th:inline="text">[[${page}]]</a>
                                 </li>
                                 <li class="next" th:classappend="${items.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'">
+                                    <a th:onclick="'javascript:goToPage(' + ${items.number + 1} + ')'">
                                         <i class="fa-solid fa-angle-right"></i>
                                     </a>
                                 </li>
                                 <li class="next" th:classappend="${items.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${items.totalPages - 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i><i
-                                            class="fa-solid fa-angle-right"></i>
+                                    <a th:onclick="'javascript:goToPage(' + ${items.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i class="fa-solid fa-angle-right"></i>
                                     </a>
                                 </li>
                             </ul>
@@ -147,94 +137,94 @@
     <div th:replace="/layouts/adminLayout.html :: commonJs"></div>
     <!-- custom js -->
     <script th:inline="javascript">
-        $(function() {
-            $(".search_btn").on("click", function (e) {
-                e.preventDefault();
+        $(function () {
+            initializeSearchButton();
+            checkSaveResult();
+            checkUpdateResult();
+            initializeModifyButton();
+            initializeDeleteButton();
 
-                if (!$("#search_form").find("input[name='searchQuery']").val()) {
-                    alert("검색어를 입력해주세요.");
-                    return false;
-                }
+            function initializeSearchButton() {
+                $(".search_btn").on("click", function (e) {
+                    e.preventDefault();
+                    if ($('.search_query').val() === "") {
+                        alert("검색어를 입력해주세요.");
+                        return false;
+                    }
+                    goToPage(0);
+                });
+            }
 
-                page(0);
-            });
-
-            /* 상품 수정,등록 시 결과 창 출력 */
-            let save_result = [[${ save_result }]];
-            let update_result = [[${ update_result }]];
-            checkResultForSave(save_result);
-            checkResultForUpdate(update_result);
-
-            function checkResultForSave(result) {
-                if (result === 'save_ok') {
+            function checkSaveResult() {
+                let saveResult = [[${ save_result }]];
+                if (saveResult === 'save_ok') {
                     alert("상품 등록이 완료되었습니다.");
                 }
             }
 
-            function checkResultForUpdate(result) {
-                if (result === 'update_ok') {
+            function checkUpdateResult() {
+                let updateResult = [[${ update_result }]];
+                if (updateResult === 'update_ok') {
                     alert("상품 정보가 수정되었습니다.");
-                } else if (result === 'update_fail') {
+                } else if (updateResult === 'update_fail') {
                     alert("상품 수정 중 오류가 발생하였습니다.");
-                } else if (result === 'required_rep_img') {
-                    alert("상품 수정 중 오류가 발생하였습니다. (첫 번째 상품 이미지 필수)")
+                } else if (updateResult === 'required_rep_img') {
+                    alert("상품 수정 중 오류가 발생하였습니다. (첫 번째 상품 이미지 필수)");
                 }
             }
-        })
 
-        /* page 이동 */
-        function page(page) {
+            function initializeModifyButton() {
+                let moveForm = $("#move_form");
+                $(".modify_btn").on("click", function (e) {
+                    let itemId = $(this).attr("data-id");
+                    e.preventDefault();
+                    moveForm.attr("action", "/admin/items/" + itemId + "/edit");
+                    moveForm.submit();
+                });
+            }
+
+            function initializeDeleteButton() {
+                $(".delete_btn").on("click", function (e) {
+                    let itemId = $(this).attr("data-id");
+                    e.preventDefault();
+                    if (confirm("상품을 삭제하시겠습니까?")) {
+                        $.ajax({
+                            url: "/admin/items/" + itemId,
+                            type: "DELETE",
+                            success: function () {
+                                alert("상품이 삭제되었습니다.");
+                                location.href = "/admin/items";
+                            },
+                            error: function (request) {
+                                alert(request.responseText);
+                            }
+                        });
+                    }
+                    return false;
+                });
+            }
+        });
+
+        function goToPage(page) {
             let searchDateType = $(".search_date_type").val();
             let searchSellStatus = $(".search_sell_status").val();
             let searchBy = $(".search_by").val();
             let searchQuery = $(".search_query").val();
-
-            location.href = "/admin/items/" + page + "?searchDateType=" + searchDateType
+            location.href = "/admin/items?page=" + page + "&searchDateType=" + searchDateType
                 + "&searchSellStatus=" + searchSellStatus
                 + "&searchBy=" + searchBy
                 + "&searchQuery=" + searchQuery;
         }
 
-        /* 상품명 클릭 시 상품 상세 화면으로 이동 */
         function moveItemDtlPage(itemId) {
             let moveForm = $('#move_form');
-
-            moveForm.attr("action", "/admin/itemDtl/" + itemId);
+            moveForm.attr("action", "/admin/items/" + itemId);
             moveForm.submit();
         }
 
-        /* 상품 관리 페이지로 이동 */
         function moveItemEnrollPage() {
-            location.href = "/admin/item";
+            location.href = "/admin/items/new";
         }
-
-        /* 상품 수정 페이지 이동 버튼 */
-        let moveForm = $("#move_form");
-        $(".modify_btn").on("click", function(e){
-            let itemId = $(this).attr("data-id");
-            e.preventDefault();
-
-            moveForm.attr("action", "/admin/item/" + itemId);
-            moveForm.submit();
-        });
-
-        /* 상품 삭제 버튼 */
-        $(".delete_btn").on("click", function (e) {
-            let itemId = $(this).attr("data-id");
-            e.preventDefault();
-
-            $.ajax({
-                url: "/admin/item/" + itemId,
-                type: "DELETE",
-                success: function (res) {
-                    alert("상품이 삭제되었습니다.");
-                    location.href = "/admin/items";
-                },
-                error: function (request, status, error) {
-                    alert(request.responseText);
-                }
-            })
-        });
-
     </script>
+
 </body>

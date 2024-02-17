@@ -4,6 +4,7 @@ import com.windsome.constant.OrderStatus;
 import com.windsome.dto.account.*;
 import com.windsome.entity.Account;
 import com.windsome.constant.Role;
+import com.windsome.exception.AdminDeletionException;
 import com.windsome.repository.OrderRepository;
 import com.windsome.service.mail.EmailMessageDto;
 import com.windsome.service.mail.EmailService;
@@ -187,7 +188,7 @@ public class AccountService {
     /**
      * 관리자 페이지 - 회원 정보 수정
      */
-    public void updateProfileForAdmin(AdminPageProfileFormDto adminPageProfileFormDto) {
+    public void updateProfileForAdmin(AdminPageProfileFormDto adminPageProfileFormDto) throws Exception {
         Account account = accountRepository.findById(adminPageProfileFormDto.getId()).orElseThrow(EntityNotFoundException::new);
         modelMapper.map(adminPageProfileFormDto, account);
         // dto의 password 필드 값이 있으면 비밀번호 변경
@@ -210,8 +211,11 @@ public class AccountService {
     /**
      * 관리자 페이지 - 회원 삭제
      */
-    public void deleteAccount(Long accountId) {
+    public void deleteAccount(Long accountId) throws AdminDeletionException {
         Account account = accountRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
+        if (account.getState().equals(Role.ADMIN)) {
+            throw new AdminDeletionException("관리자 권한을 가진 사용자는 삭제할 수 없습니다.");
+        }
         accountRepository.delete(account);
     }
 }

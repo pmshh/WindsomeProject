@@ -158,7 +158,7 @@
                 <div class="menu">
                     <ul class="menu_link">
                         <li sec:authorize="hasRole('ADMIN')">
-                            <a th:href="@{/admin/main}">Admin</a>
+                            <a th:href="@{/admin/dashboard}">Admin</a>
                         </li>
                         <li sec:authorize="!isAuthenticated()">
                             <a th:href="@{/login}">Login</a>

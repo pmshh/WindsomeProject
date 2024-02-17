@@ -5,6 +5,7 @@ import com.windsome.dto.item.ItemImgDto;
 import com.windsome.dto.item.ItemSearchDto;
 import com.windsome.dto.item.MainItemDto;
 import com.windsome.entity.*;
+import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.repository.CategoryRepository;
 import com.windsome.repository.ItemImgRepository;
 import com.windsome.repository.ItemRepository;
@@ -101,10 +102,10 @@ public class ItemService {
 
     public void deleteItem(Long itemId) throws Exception {
         List<ItemImg> itemImgList = itemImgRepository.findByItemId(itemId).orElseThrow(EntityNotFoundException::new);
-        itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
-        itemImgRepository.deleteByItemId(itemId);
-        itemRepository.deleteById(itemId);
+        itemImgRepository.deleteAll(itemImgList);
+        itemRepository.delete(item);
 
         for (ItemImg itemImg : itemImgList) {
             // 기존 이미지 삭제
@@ -112,5 +113,17 @@ public class ItemService {
                 fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
             }
         }
+    }
+
+    public void deleteItemImg(Long itemImgId) {
+        ItemImg itemImg = itemImgRepository.findById(itemImgId).orElseThrow(EntityNotFoundException::new);
+        if (itemImg.getRepImgYn() == "N") {
+            itemImg.setImgName("");
+            itemImg.setImgUrl("");
+            itemImg.setOriImgName("");
+            itemImgRepository.save(itemImg);
+        }
+        throw new ProductImageDeletionException("첫 번째 상품 이미지는 삭제할 수 없습니다.");
+
     }
 }

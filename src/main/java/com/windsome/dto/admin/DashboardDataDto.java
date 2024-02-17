@@ -1,13 +1,12 @@
 package com.windsome.dto.admin;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter @Setter
 @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class DashboardDataDto {
 
     private long totalAccount;

@@ -21,14 +21,14 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section_body admin_main_body">
+                    <div class="section_body dashboard_body">
                         <div class="row gy-4">
                             <!-- shop data -->
                             <div class="col-md-6 col-xl-3 info_wrap">
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">회원 수</span>
-                                        <strong th:text="${dashboardData.totalAccount}"></strong>
+                                        <strong th:text="${dashboardData?.totalAccount}"></strong>
                                     </div>
                                     <div class="icon_box">
                                         <i class="fa-solid fa-user"></i>
@@ -39,7 +39,7 @@
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">상품 수</span>
-                                        <strong th:text="${dashboardData.totalItem}"></strong>
+                                        <strong th:text="${dashboardData?.totalItem}"></strong>
                                     </div>
                                     <div class="icon_box">
                                         <i class="fa-solid fa-cart-shopping"></i>
@@ -50,7 +50,7 @@
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">고객 문의</span>
-                                        <strong th:text="${dashboardData.totalQa}"></strong>
+                                        <strong th:text="${dashboardData?.totalQa}"></strong>
                                     </div>
                                     <div class="icon_box">
                                         <i class="fa-solid fa-envelope"></i>
@@ -61,7 +61,7 @@
                                 <div class="info_box">
                                     <div class="txt_box">
                                         <span class="title">전체 총 수입</span>
-                                        <strong th:text="${#numbers.formatInteger(dashboardData.totalSales, 1, 'COMMA')}"></strong><span class="txt"> 원</span>
+                                        <strong th:text="${#numbers.formatInteger(dashboardData?.totalSales, 1, 'COMMA')}"></strong><span class="txt"> 원</span>
                                     </div>
                                     <div class="icon_box">
                                         <i class="fa-solid fa-coins"></i>
@@ -232,52 +232,61 @@
     <!-- custom js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- chart.js -->
     <script th:inline="javascript">
-        const ctx = document.getElementById('myChart');
+        $(function () {
+            const ctx = document.getElementById('myChart');
+            const dashboardData = [[${dashboardData.numOfSalesByCateList}]];
+            const param = extractSalesCount(dashboardData);
 
-        let test = [[${dashboardData.numOfSalesByCateList}]];
-        let param = [];
-        for(let key in test) {
-            let val = test[key].count;
-            param.push(val);
-        }
-        console.log(param);
+            createChart(ctx, param);
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
-                datasets: [{
-                    data: param,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                plugins:{
-                    legend: {
-                        display: false
-                    },
-                },
-                indexAxis: 'y',
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            function extractSalesCount(data) {
+                const param = [];
+                for (let key in data) {
+                    let val = data[key].count;
+                    param.push(val);
                 }
+                return param;
+            }
+
+            function createChart(ctx, param) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
+                        datasets: [{
+                            data: param,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                        },
+                        indexAxis: 'y',
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
             }
         });
 
@@ -294,13 +303,13 @@
                     type: "POST",
                     contentType: "application/json",
                     data: param,
-                    dataType: "json",
+                    dataType: "text",
                     cache: false,
-                    success: function (result, status) {
+                    success: function () {
                         alert("주문이 취소 되었습니다.");
-                        location.href = '/admin/main';
+                        location.reload(true);
                     },
-                    error: function (request, status, error) {
+                    error: function (request) {
                         if (request.status === '401') {
                             alert('로그인 후 이용해주세요.');
                             location.href = '/login';

@@ -1,6 +1,5 @@
 package com.windsome.dto.account;
 
-import com.windsome.constant.Role;
 import com.windsome.entity.Account;
 import lombok.Builder;
 import lombok.Getter;

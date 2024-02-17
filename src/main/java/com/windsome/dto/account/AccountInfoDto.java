@@ -2,12 +2,15 @@ package com.windsome.dto.account;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.windsome.constant.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
+@Builder
 public class AccountInfoDto {
 
     private Long id;

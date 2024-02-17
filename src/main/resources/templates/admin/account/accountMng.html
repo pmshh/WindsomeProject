@@ -40,10 +40,10 @@
                                     </td>
                                     <td th:text="${account.state.name == T(com.windsome.constant.Role).ADMIN.name ? '관리자' : '일반 회원'}"></td>
                                     <td class="left top user_info pl20">
-                                        <a th:href="@{'/admin/account/' + ${account.id}}"><span th:text="|이름: ${account.name}|"></span></a>
-                                        <a th:href="@{'/admin/account/' + ${account.id}}"><span th:text="|아이디: ${account.userIdentifier}|"></span></a>
-                                        <a th:href="@{'/admin/account/' + ${account.id}}"><span th:text="|이메일: ${account.email}|"></span></a>
-                                        <a th:href="@{'/admin/account/' + ${account.id}}"><span th:text="|보유 포인트: ${#numbers.formatInteger(account.point, 0, 'COMMA')}|"></span></a>
+                                        <a th:href="@{'/admin/members/' + ${account.id}}"><span th:text="|이름: ${account.name}|"></span></a>
+                                        <a th:href="@{'/admin/members/' + ${account.id}}"><span th:text="|아이디: ${account.userIdentifier}|"></span></a>
+                                        <a th:href="@{'/admin/members/' + ${account.id}}"><span th:text="|이메일: ${account.email}|"></span></a>
+                                        <a th:href="@{'/admin/members/' + ${account.id}}"><span th:text="|보유 포인트: ${#numbers.formatInteger(account.point, 0, 'COMMA')}|"></span></a>
                                     </td>
                                     <td th:text="${#temporals.format(account.regTime, 'yyyy-MM-dd')}" class="gray_col fz11">2024-02-15</td>
                                     <td class="center">
@@ -155,7 +155,7 @@
         function initUpdateButtons() {
             $(".update_btn").click(function () {
                 let accountId = $(this).attr("data-accountId");
-                location.href = '/admin/account/update/' + accountId;
+                location.href = '/admin/members/' + accountId + '/edit';
             });
         }
 
@@ -173,7 +173,7 @@
 
         function updateRole(accountId, role) {
             $.ajax({
-                url: '/admin/account/update/' + accountId,
+                url: '/admin/members/' + accountId,
                 type: 'patch',
                 data: {
                     role: role

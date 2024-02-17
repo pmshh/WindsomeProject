@@ -1,4 +1,4 @@
-.add_item_body {
+.item_form_body {
     form {
         width: 80%;
 
@@ -75,7 +75,8 @@
                         padding: 3px !important;
                     }
 
-                    button.del_file {
+                    button.del_file,
+                    button.img_cancel_btn {
                         width: 70px !important;
                         height: 26px !important;
                         padding: 3px !important;
@@ -102,8 +103,8 @@
                         font-size: 12px;
                     }
 
-                    select.parent_cate,
-                    select.child_cate {
+                    select.parent_cate_select,
+                    select.child_cate_select {
                         width: calc(50% - 2px);
                     }
 
@@ -142,7 +143,7 @@
 }
 
 @media (max-width: 1172px) {
-    .add_item_body {
+    .item_form_body {
         form {
             width: 80%;
 
@@ -158,7 +159,7 @@
 }
 
 @media (max-width: 786px) {
-    .add_item_body {
+    .item_form_body {
         form {
             width: 100%;
 

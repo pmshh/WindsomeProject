@@ -6,398 +6,374 @@
 </head>
 
 <body>
-    <main class="admin_main_area">
-        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
+<main class="admin_main_area">
+    <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='productManagement')"></div>
 
-        <article class="admin_content_area">
-            <div th:replace="/layouts/adminLayout.html :: nav"></div>
+    <article class="admin_content_area">
+        <div th:replace="/layouts/adminLayout.html :: nav"></div>
 
-            <!-- section start -->
-            <section class="admin_section_area">
-                <div class="container">
+        <!-- section start -->
+        <section class="admin_section_area">
+            <div class="container">
 
-                    <div class="section_header">
-                        <h2 >상품 등록</h2>
-                        <div class="divider"></div>
-                    </div>
-
-                    <div class="section_body add_item_body">
-                        <form id="itemFormDto" th:action="@{/admin/item}" th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
-                            <table style="table-layout: fixed !important;">
-                                <colgroup>
-                                    <col style="width:20%;">
-                                    <col style="width: auto;">
-                                </colgroup>
-                                <tbody>
-                                <input th:type="hidden" th:field="*{id}">
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{itemSellStatus}">판매 상태 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <select class="sell_status" th:field="*{itemSellStatus}">
-                                            <option selected value="none">선택</option>
-                                            <option value="SELL">판매중</option>
-                                            <option value="SOLD_OUT">품절</option>
-                                        </select>
-                                        <span class="text-danger sell_status_warn">판매 상태를 선택해주세요.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label for="parent_cate_id">카테고리 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <select name="parent_cate_id" id="parent_cate_id" class="parent_cate">
-                                            <option selected value="0">선택</option>
-                                        </select>
-                                        <select th:field="*{categoryId}" class="child_cate">
-                                            <option selected value="0">선택</option>
-                                        </select>
-                                        <span class="text-danger category_warn">카테고리를 선택해주세요.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{itemNm}">상품명 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="name_input" type="text" th:field="*{itemNm}"
-                                               placeholder="상품명">
-                                        <span class="text-danger name_warn">상품명을 입력해주세요.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{price}">가격 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="price_input" type="text" th:field="*{price}" placeholder="가격">
-                                        <span class="text-danger price_warn">상품의 가격을 입력해주세요.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{discount}">할인율 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="discount_interface" placeholder="할인율" maxlength="2">
-                                        <input class="discount_input" type="hidden" th:field="*{discount}" name="discount" id="discount">
-                                        <span class="text-danger discount_warn">1~99 숫자를 입력해주세요.</span>
-                                        <span class="discount_text">할인 가격 : <span class="discount_price"></span></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{stockNumber}">재고 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="stock_input" th:field="*{stockNumber}" placeholder="재고">
-                                        <span class="text-danger stock_warn">상품의 재고를 입력해주세요.</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{itemDetail}">상품 상세 내용 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <textarea th:field="*{itemDetail}" placeholder="상세 내용" id="item_detail_textarea"></textarea>
-                                        <span class="text-danger detail_warn">상품의 상세 내용을 입력해주세요.</span>
-                                    </td>
-                                </tr>
-                                <tr th:each="num: ${#numbers.sequence(1,5)}">
-                                    <th scope="row">
-                                        <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
-                                    </th>
-                                    <td>
-                                        <input class="fake_input" type="text" th:value="${'상품 이미지 ' + num}">
-                                        <label class="white_btn_w90_h40 find_file" th:for="${'img' + num}">파일 찾기</label>
-                                        <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + num}">
-                                        <button class="black_btn_w90_h40 del_file" type="button" th:data-index="${num}">삭제</button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="btn_box">
-                                <button class="black_btn_w130_h40 enroll_btn" type="button">저장</button>
-                                <button class="white_btn_w130_h40" type="button" onclick="moveItemMngPage()">취소</button>
-                            </div>
-                        </form>
-                    </div>
+                <div class="section_header">
+                    <h2>상품 등록</h2>
+                    <div class="divider"></div>
                 </div>
-            </section>
 
-            <div th:replace="/layouts/adminLayout.html :: footer"></div>
-        </article>
-    </main>
+                <div class="section_body item_form_body">
+                    <!-- 상품 등록 폼 -->
+                    <form id="enrollForm" th:action="@{/admin/items/new}" method="post" th:object="${itemFormDto}" enctype="multipart/form-data">
+                        <table style="table-layout: fixed !important;">
+                            <colgroup>
+                                <col style="width:20%;">
+                                <col style="width: auto;">
+                            </colgroup>
+                            <tbody>
+                            <input class="id_input" th:type="hidden" th:field="*{id}">
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{itemSellStatus}">판매 상태 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <select class="sell_status_select" th:field="*{itemSellStatus}">
+                                        <option selected value="none">선택</option>
+                                        <option value="SELL">판매중</option>
+                                        <option value="SOLD_OUT">품절</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label>카테고리 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <select class="parent_cate_select">
+                                        <option selected value="0">선택</option>
+                                    </select>
+                                    <select th:field="*{categoryId}" class="child_cate_select">
+                                        <option selected value="0">선택</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{itemNm}">상품명 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <input class="name_input" type="text" th:field="*{itemNm}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{price}">가격 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <input class="price_input" type="text" th:field="*{price}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{discount}">할인율 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <input class="discount_interface" maxlength="2" th:value="*{discount}">
+                                    <input class="discount_input" type="hidden" th:value="*{discount}" th:field="*{discount}">
+                                    <span class="discount_text">할인 적용된 가격 : <span class="discount_price"></span></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{stockNumber}">재고 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <input class="stock_number_input" th:field="*{stockNumber}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{itemDetail}">상품 상세 내용 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <textarea th:field="*{itemDetail}" class="text_editor"></textarea>
+                                </td>
+                            </tr>
+                            <tr th:each="num: ${#numbers.sequence(1,5)}">
+                                <th scope="row">
+                                    <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
+                                </th>
+                                <td>
+                                    <input class="fake_input" type="text" th:value="${'상품 이미지 ' + num}">
+                                    <label class="white_btn_w90_h40 find_file" th:for="${'img' + num}">파일 찾기</label>
+                                    <input type="file" class="real_input" name="itemImgFile" th:id="${'img' + num}">
+                                    <button class="black_btn_w90_h40 img_cancel_btn" type="button" th:data-index="${num}">취소</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="btn_box">
+                            <button class="black_btn_w130_h40 enroll_btn" type="button">등록</button>
+                            <button class="white_btn_w130_h40 cancel_btn" type="button">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-    <div th:replace="/layouts/adminLayout.html :: commonJs"></div>
-    <!-- editor -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
-    <!-- custom js -->
-    <script th:inline="javascript">
-        $(function () {
-            /* 위지웍 적용 */
-            ClassicEditor
-                .create(document.querySelector('#item_detail_textarea'))
+        <div th:replace="/layouts/adminLayout.html :: footer"></div>
+    </article>
+</main>
+
+<div th:replace="/layouts/adminLayout.html :: commonJs"></div>
+<!-- editor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+<!-- custom js -->
+<script th:inline="javascript">
+    let updateForm = $("#updateForm");
+    let enrollForm = $("#enrollForm");
+
+    $(function () {
+        initializeClassicEditor();
+        initializeFileInput();
+        initializeSaveButton();
+        initializeCategoryOptions();
+        initializeMoveButtons();
+        setDefaultDiscount();
+        initializeDiscountInput();
+        initializePriceInput();
+
+        /* 경고 메시지 출력 */
+        let errorMessage = [[${errorMessage}]];
+        if (errorMessage !== null) {
+            alert(errorMessage);
+        }
+
+        /* 위지웍 에디터 초기화 */
+        function initializeClassicEditor() {
+            ClassicEditor.create(document.querySelector('.text_editor'))
                 .catch(error => {
                     console.error(error);
                 });
+        }
 
-            /* 파일 유효성 검사 */
-            let errorMessage = [[${ errorMessage }]];
-            if (errorMessage != null) {
-                alert(errorMessage);
-            }
-
+        /* 파일 유효성 검사 */
+        function initializeFileInput() {
             $(".real_input").on("change", function () {
-                let fileName = $(this).val().split("\\").pop(); // 이미지 파일명
-                let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1); // 확장자 추출
-                fileExt = fileExt.toLowerCase(); // 소문자 변환
+                let fileName = $(this).val().split("\\").pop();
+                let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
-                if (fileExt !== "jpg" && fileExt !== "jpeg" && fileExt !== "gif" && fileExt !== "png" && fileExt !== "bmp") {
+                if (!["jpg", "jpeg", "gif", "png", "bmp"].includes(fileExt)) {
                     alert("이미지 파일만 등록이 가능합니다.");
-                    return
+                    return;
                 }
 
-                $(this).siblings(".fake_input").attr('value', fileName);
-            })
-
-            $(".del_file").click(function () {
-                let index = $(this).attr("data-index")
-                $(this).siblings(".fake_input").val("상품 이미지 " + index);
-                $(this).siblings(".real_input").val("");
+                $(this).siblings(".fake_input").val(fileName);
             });
 
-            /* 상품 등록 버튼 */
+            /* 이미지 삭제 버튼 */
+            $(".del_file").click(function () {
+                let itemImgId = $(this).attr("data-itemImgId");
+                if (confirm("이미지를 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: "/admin/items/" + itemImgId,
+                        type: "patch",
+                        success(res) {
+                            alert(res);
+                            $(this).siblings(".fake_input").val("상품 이미지 " + $(this).attr("data-index"));
+                            $(this).siblings(".real_input").val("delete");
+                        },
+                        error(request) {
+                            alert(request.responseText);
+                        }
+                    });
+                }
+                return false;
+            });
+
+            /* 파일 업로드 취소 버튼 */
+            $(".img_cancel_btn").click(function () {
+                $(this).siblings(".fake_input").val("상품 이미지 " + $(this).attr("data-index"));
+                $(this).siblings(".real_input").val("");
+            });
+        }
+
+        /* 상품 등록 버튼 초기화 */
+        function initializeSaveButton() {
+            let form = $("#enrollForm");
             $(".enroll_btn").on("click", function (e) {
                 e.preventDefault();
+                validateAndSubmitForm(form);
+            });
+        }
 
-                let itemSellStatusChk = false;
-                let categoryChk = false;
-                let itemNmChk = false;
-                let priceChk = false;
-                let discountChk = false;
-                let stockNumberChk = false;
-                let itemDetailChk = false;
+        function validateAndSubmitForm(form) {
+            let itemSellStatusVal = $(".sell_status_select").val();
+            let parentCateVal = $(".parent_cate_select").val();
+            let childCateVal = $(".child_cate_select").val();
+            let itemNmVal = $(".name_input").val();
+            let priceVal = $(".price_input").val();
+            let discountVal = $(".discount_interface").val();
+            let stockNumberVal = $(".stock_number_input").val();
+            let itemDetailVal = $("p").html();
 
-                let itemSellStatus = $(".sell_status").val();
-                let category = $(".child_cate").val();
-                let itemNm = $(".name_input").val();
-                let price = $(".price_input").val();
-                let discount = $(".discount_interface").val();
-                let stockNumber = $(".stock_input").val();
-                let itemDetail = $("p").html();
+            if (itemSellStatusVal === 'none') {
+                alert("판매 상태를 선택하세요.");
+                $('.sell_status_select').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                // 공란 체크
-                if (itemSellStatus !== 'none') {
-                    $(".sell_status_warn").css('display', 'none');
-                    itemSellStatusChk = true;
-                } else {
-                    $(".sell_status_warn").css('display', 'block');
-                    itemSellStatusChk = false;
-                }
+            if (parentCateVal === '0') {
+                alert("카테고리를 선택하세요.");
+                $('.parent_cate_select').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (category !== '0' ) {
-                    $(".category_warn").css('display', 'none');
-                    categoryChk = true;
-                } else {
-                    $(".category_warn").css('display', 'block');
-                    categoryChk = false;
-                }
+            if (parentCateVal !== '400' && childCateVal === '0') {
+                alert("카테고리를 선택하세요.");
+                $('.child_cate_select').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (itemNm !== "") {
-                    $(".name_warn").css('display', 'none');
-                    itemNmChk = true;
-                } else {
-                    $(".name_warn").css('display', 'block');
-                    itemNmChk = false;
-                }
+            if (itemNmVal === '') {
+                alert("상품명을 입력하세요.");
+                $('.name_input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (price !== "") {
-                    $(".price_warn").css('display', 'none');
-                    priceChk = true;
-                } else {
-                    $(".price_warn").css('display', 'block');
-                    priceChk = false;
-                }
+            if (priceVal === '') {
+                alert("가격을 입력하세요.");
+                $('.price_input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (discount !== "" && discount < 100 && discount >= 0) {
-                    $(".discount_warn").css('display', 'none');
-                    discountChk = true;
-                } else {
-                    $(".discount_warn").css('display', 'block');
-                    discountChk = false;
-                }
+            if (discountVal === '') {
+                alert("할인율을 입력하세요.");
+                $('.discount_interface').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (stockNumber !== "") {
-                    $(".stock_warn").css('display', 'none');
-                    stockNumberChk = true;
-                } else {
-                    $(".stock_warn").css('display', 'block');
-                    stockNumberChk = false;
-                }
+            if (stockNumberVal === "") {
+                alert("재고를 입력하세요.");
+                $('.stock_number_input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (itemDetail !== '<br data-cke-filler="true">') {
-                    $(".detail_warn").css('display', 'none');
-                    itemDetailChk = true;
-                } else {
-                    $(".detail_warn").css('display', 'block');
-                    itemDetailChk = false;
-                }
+            if (itemDetailVal === '<br data-cke-filler="true">') {
+                alert("상품 상세 내용을 입력하세요.");
+                $('#item_detail_textarea').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
 
-                if (itemSellStatusChk && categoryChk && itemNmChk && priceChk && discountChk && stockNumberChk && itemDetailChk) {
-                    $('#itemFormDto').submit();
-                } else {
-                    return false;
-                }
-            })
+            if (parentCateVal === '400') {
+                let childCate = $(".child_cate_select");
+                childCate.append("<option value='400'>선택</option>");
+                childCate.val(400);
+            }
+            form.submit();
+        }
 
-            /* 카테고리 */
+        /* 카테고리 초기화 (기존 카테고리 값 셋팅) */
+        function initializeCategoryOptions() {
+            let parentId = 0;
+            let childCateId = [[${itemFormDto?.categoryId}]];
+            let parentCate = $(".parent_cate_select");
+            let childCate = $(".child_cate_select");
+
             $.ajax({
-                url: "/admin/item/categories",
+                url: "/admin/items/categories",
                 type: "GET",
                 success: function (res) {
                     let cateList = JSON.parse(res);
 
-                    let cate1Arr = [];
-                    let cate1Obj = {};
-                    let cate2Arr = [];
-                    let cate2Obj = {};
+                    let cate1Arr = cateList.filter(cate => cate.tier === "1");
+                    let cate2Arr = cateList.flatMap(cate => cate.children.filter(child => child.tier === "2")
+                        .map(child => ({ id: child.id, name: child.name, parent: child.parent })));
 
-                    let parentCateSelect = $(".parent_cate");
-                    let childCateSelect = $(".child_cate");
+                    cate1Arr.forEach(cate1 => parentCate.append("<option value='" + cate1.id + "'>" + cate1.name + "</option>"));
+                    parentId = childCateId >= 500 ? 500 : childCateId >= 400 ? 400 : childCateId >= 300 ? 300 : childCateId >= 200 ? 200 : childCateId >= 100 ? 100 : 0;
+                    cate2Arr.filter(cate2 => cate2.parent === parentId).forEach(cate2 => childCate.append("<option value='" + cate2.id + "'>" + cate2.name + "</option>"));
 
-                    for (let i = 0; i < cateList.length; i++) {
-                        if (cateList[i].tier === "1") {
-                            cate1Obj = {};
-
-                            cate1Obj.id = cateList[i].id;
-                            cate1Obj.name = cateList[i].name;
-                            cate1Obj.parent = cateList[i].parent;
-                            cate1Arr.push(cate1Obj);
-                        }
-                    }
-
-                    for (let i = 0; i < cateList.length; i++) {
-                        for (let j = 0; j < cateList[i].children.length; j++) {
-                            if (cateList[i].children[j].tier === "2") {
-                                cate2Obj = {};
-
-                                cate2Obj.id = cateList[i].children[j].id;
-                                cate2Obj.name = cateList[i].children[j].name;
-                                cate2Obj.parent = cateList[i].children[j].parent;
-                                cate2Arr.push(cate2Obj);
-                            }
-                        }
-                    }
-
-                    for (let i = 0; i < cate1Arr.length; i++) {
-                        parentCateSelect.append("<option value='" + cate1Arr[i].id + "'>" + cate1Arr[i].name + "</option>");
-                    }
-
-                    /* 기존 카테고리 값 설정 */
-                    let categoryId = [[${itemFormDto.categoryId}]];
-                    let parentId = 0;
-
-                    if (categoryId >= 500) {
-                        parentId = 500;
-                    } else if (categoryId >= 400) {
-                        parentId = 400;
-                    }else if (categoryId >= 300) {
-                        parentId = 300;
-                    }else if (categoryId >= 200) {
-                        parentId = 200;
-                    } else if (categoryId >= 100) {
-                        parentId = 100;
-                    }
-
-                    for (let i = 0; i < cate2Arr.length; i++) {
-                        if (parentId === cate2Arr[i].parent) {
-                            childCateSelect.append("<option value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
-                        }
-                    }
-
-                    if (categoryId >= 500) {
-                        $('.parent_cate').val('500').prop("selected", true);
-                        $('.child_cate').val(categoryId).prop("selected", true);
-                    } else if (categoryId >= 400) {
-                        $('.parent_cate').val('400').prop("selected",true);
-                        $(".child_cate option:selected").val('400');
-                    } else if (categoryId >= 300) {
-                        $('.parent_cate').val('300').prop("selected",true);
-                        $('.child_cate').val(categoryId).prop("selected",true);
-                    } else if (categoryId >= 200) {
-                        $('.parent_cate').val('200').prop("selected",true);
-                        $('.child_cate').val(categoryId).prop("selected",true);
-                    } else if (categoryId >= 100) {
-                        $('.parent_cate').val('100').prop("selected",true);
-                        $('.child_cate').val(categoryId).prop("selected",true);
+                    /* 상품 수정 - 기존 카테고리 값 설정 */
+                    if (childCateId !== null) {
+                        let parentVal = Math.floor(childCateId / 100) * 100;
+                        $('.parent_cate_select').val(parentVal).prop("selected", true);
+                        $('.child_cate_select').val(childCateId === 400 ? '0' : childCateId).prop("selected", true);
                     }
 
                     /* 대분류 option 변경 시 중분류 option 추가 */
-                    parentCateSelect.on("change", function () {
+                    parentCate.on("change", function () {
                         let parentSelectVal = Number($(this).find("option:selected").val());
-
-                        if (parentSelectVal === 400) {
-                            childCateSelect.children().remove();
-                            childCateSelect.append("<option value='400'>선택</option>");
-                        } else {
-                            childCateSelect.children().remove();
-                            childCateSelect.append("<option value='0'>선택</option>");
-                        }
-
-                        for (let i = 0; i < cate2Arr.length; i++) {
-                            if (parentSelectVal === cate2Arr[i].parent) {
-                                childCateSelect.append("<option value='" + cate2Arr[i].id + "'>" + cate2Arr[i].name + "</option>");
-                            }
-                        }
+                        // 중분류 option 초기화 (단, 중분류가 존재하지 않는 대분류를 선택했을 시, 대분류 값을 중분류 값에 넣음)
+                        childCate.children().remove();
+                        childCate.append("<option value='" + (parentSelectVal === 400 ? '400' : '0') + "'>선택</option>");
+                        // 중분류 option 추가
+                        cate2Arr.filter(cate => cate.parent === parentSelectVal).forEach(cate => {
+                            childCate.append("<option value='" + cate.id + "'>" + cate.name + "</option>");
+                        });
                     });
                 },
-                error: function (request, status, error) {
-                    console.log(error);
-                }
-            })
-
-            /* 할인율 기본 값 0으로 셋팅 */
-            $(".discount_interface").val(0)
-
-            /* 할인율 Input 설정 */
-            $(".discount_interface").on("propertychange change keyup paste input", function () {
-
-                let userInput = $(".discount_interface");
-                let discountInput = $(".discount_input");
-
-                let discountRate = userInput.val(); // 사용자가 입력할 할인값
-                let sendDiscountRate = discountRate / 100; // 서버에 전송할 할인값
-                let itemPrice = $(".price_input").val(); // 원가
-                let discountPrice = itemPrice * (1 - sendDiscountRate); // 할인가격
-
-                if (!isNaN(discountRate)) {
-                    $(".discount_price").html(discountPrice);
-                    discountInput.val(sendDiscountRate);
+                error: function (request) {
+                    alert(request.responseText);
                 }
             });
-
-            $(".price_input").on("propertychange change keyup paste input", function () {
-
-                let userInput = $(".discount_interface");
-
-                let discountRate = userInput.val();
-                let sendDiscountRate = discountRate / 100;
-                let itemPrice = $(".price_input").val();
-                let discountPrice = itemPrice * (1 - sendDiscountRate);
-
-                if (!isNaN(discountRate)) {
-                    $(".discount_price").html(discountPrice);
-                }
-            });
-        });
-
-        function moveItemMngPage() {
-            location.href = "/admin/items";
         }
-    </script>
+
+        /* 버튼 초기화 */
+        function initializeMoveButtons() {
+            $(".cancel_btn").on("click", function(e){
+                e.preventDefault();
+                location.href = "/admin/items";
+            });
+        }
+
+        /* 할인율, 가격 셋팅 */
+        function setDefaultDiscount() {
+            let discountValue = [[${itemFormDto?.discount}]];
+            let price = [[${itemFormDto?.price}]];
+            let discountPrice = Math.floor(price * (1 - discountValue));
+
+            $(".discount_interface").val(discountValue * 100);
+            $(".discount_price").html(formatPrice(discountPrice) + "원");
+        }
+
+        /* 할인율 input 초기화 */
+        function initializeDiscountInput() {
+            $(".discount_interface").on("propertychange change keyup paste input", updatePrice);
+        }
+
+        /* 가격 input 초기화 */
+        function initializePriceInput() {
+            $(".price_input").on("propertychange change keyup paste input", updatePrice);
+        }
+
+        /* 할인율, 가격 변동 시 할인 가격 수정 */
+        function updatePrice() {
+            let userInput = $(".discount_interface");
+            let discountRate = userInput.val() / 100;
+            let itemPrice = $(".price_input").val();
+            let discountPrice = Math.floor(itemPrice * (1 - discountRate));
+
+            if (!isNaN(discountRate)) {
+                $(".discount_price").html(formatPrice(discountPrice) + "원");
+                if (userInput.hasClass("discount_interface")) {
+                    $(".discount_input").val(discountRate);
+                }
+            }
+        }
+
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    });
+</script>
 </body>
 
 </html>

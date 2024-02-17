@@ -74,28 +74,28 @@
                                  (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
                             <ul>
                                 <li class="prev" th:classappend="${orders.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(0)'">
+                                    <a th:onclick="'javascript:goToPage(0)'">
                                         <i class="fa-solid fa-angle-left"></i><i
                                             class="fa-solid fa-angle-left"></i>
                                     </a>
                                 </li>
                                 <li class="prev" th:classappend="${orders.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' +  ${orders.number - 1} + ')'">
+                                    <a th:onclick="'javascript:goToPage(' +  ${orders.number - 1} + ')'">
                                         <i class="fa-solid fa-angle-left"></i>
                                     </a>
                                 </li>
                                 <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
                                     th:classappend="${orders.number eq page - 1} ? 'active' : ''">
-                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                    <a th:onclick="'javascript:goToPage(' + ${page - 1} + ')'"
                                         th:inline="text">[[${page}]]</a>
                                 </li>
                                 <li class="next" th:classappend="${orders.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${orders.number + 1} + ')'">
+                                    <a th:onclick="'javascript:goToPage(' + ${orders.number + 1} + ')'">
                                         <i class="fa-solid fa-angle-right"></i>
                                     </a>
                                 </li>
                                 <li class="next" th:classappend="${orders.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${orders.totalPages - 1} + ')'">
+                                    <a th:onclick="'javascript:goToPage(' + ${orders.totalPages - 1} + ')'">
                                         <i class="fa-solid fa-angle-right"></i><i
                                             class="fa-solid fa-angle-right"></i>
                                     </a>
@@ -124,20 +124,22 @@
     <div th:replace="/layouts/adminLayout.html :: commonJs"></div>
     <!-- custom js -->
     <script th:inline="javascript">
-        $(function() {
-            $(".search_btn").on("click", function (e) {
-                e.preventDefault();
-                page(0);
-            });
-        })
+        $(function () {
+            initializeSearchButton();
 
-        /* 페이징 */
-        function page(page) {
-            let userIdentifier = $(".userid_input").val();
-            location.href = "/admin/orders/" + page + "?userIdentifier=" + userIdentifier;
-        }
+            function initializeSearchButton() {
+                $(".search_btn").on("click", function (e) {
+                    e.preventDefault();
+                    goToPage(0);
+                });
+            }
 
-        /* 주문 취소 */
+            function goToPage(page) {
+                let userIdentifier = $(".userid_input").val();
+                location.href = "/admin/orders/" + page + "?userIdentifier=" + userIdentifier;
+            }
+        });
+
         function cancelOrder(orderId) {
             if (confirm("선택하신 주문을 취소하시겠습니까?")) {
                 let paramData = {
@@ -151,9 +153,9 @@
                     type: "POST",
                     contentType: "application/json",
                     data: param,
-                    dataType: "json",
+                    dataType: "text",
                     cache: false,
-                    success: function (res) {
+                    success: function () {
                         alert("주문이 취소되었습니다.");
                         location.reload(true);
                     },
@@ -167,8 +169,9 @@
                     },
                 })
             } else {
-                false;
+                return false;
             }
         }
     </script>
+
 </body>

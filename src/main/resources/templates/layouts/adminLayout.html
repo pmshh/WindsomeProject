@@ -67,7 +67,7 @@
                     사이트 관리
                 </div>
                 <div class="sidebar-item">
-                    <a th:href="@{/admin/main}" class="sidebar-link" th:classappend="${currentMenu == 'home'}? active">
+                    <a th:href="@{/admin/dashboard}" class="sidebar-link" th:classappend="${currentMenu == 'home'}? active">
                         <i class="xi-cog pe-2"></i>
                         Dashboard
                     </a>
@@ -81,7 +81,7 @@
                         <i class="xi-cart-o pe-2"></i>
                         주문 관리
                     </a>
-                    <a th:href="@{/admin/account}" class="sidebar-link"
+                    <a th:href="@{/admin/members}" class="sidebar-link"
                         th:classappend="${currentMenu == 'accountManagement'}? active">
                         <i class="xi-user-o pe-2"></i>
                         회원 관리

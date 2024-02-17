@@ -11,17 +11,18 @@
                 margin-bottom: 5px;
 
                 .main_img {
-                    height: 576px;
-                    width: 432px;
+                    height: 600px;
+                    width: 470px;
                 }
             }
 
             .thumb_img_box {
                 .thumb_img {
                     height: 125px;
-                    width: 95px;
+                    width: 90px;
                     opacity: 0.6;
                     cursor: pointer;
+                    margin-right: 5px;
 
                     &:hover {
                         opacity: 1;

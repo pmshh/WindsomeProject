@@ -7,7 +7,6 @@ import com.windsome.entity.board.Qa;
 import com.windsome.repository.board.qa.QaRepository;
 import com.windsome.service.board.QaService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

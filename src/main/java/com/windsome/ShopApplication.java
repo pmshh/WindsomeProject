@@ -7,10 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@SpringBootApplication
 @EnableJpaAuditing
+@SpringBootApplication
 public class ShopApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ShopApplication.class, args);
 	}
