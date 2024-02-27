@@ -1,12 +1,12 @@
 package com.windsome.controller;
 
-import com.windsome.constant.ItemSellStatus;
-import com.windsome.dto.item.ItemFormDto;
+import com.windsome.constant.ProductSellStatus;
+import com.windsome.dto.product.ProductFormDto;
 import com.windsome.entity.Category;
-import com.windsome.repository.CategoryRepository;
-import com.windsome.repository.ItemImgRepository;
-import com.windsome.repository.ItemRepository;
-import com.windsome.service.ItemService;
+import com.windsome.repository.category.CategoryRepository;
+import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.repository.product.ProductRepository;
+import com.windsome.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
-class ItemControllerTest {
+class ProductControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired ItemRepository itemRepository;
-    @Autowired ItemImgRepository itemImgRepository;
-    @Autowired ItemService itemService;
+    @Autowired ProductRepository productRepository;
+    @Autowired ProductImageRepository productImageRepository;
+    @Autowired ProductService productService;
     @Autowired CategoryRepository categoryRepository;
 
     @Test
@@ -41,22 +41,22 @@ class ItemControllerTest {
         Category category = new Category();
         categoryRepository.save(category);
 
-        ItemFormDto itemFormDto = getItemFormDto();
-        itemFormDto.setCategoryId(category.getId());
+        ProductFormDto productFormDto = getProductFormDto();
+        productFormDto.setCategoryId(category.getId());
 
         List<MultipartFile> multipartFiles = createMultipartFiles();
 
-        Long itemId = itemService.saveItem(itemFormDto, multipartFiles);
+        Long productId = productService.createProduct(productFormDto, multipartFiles);
 
-        mockMvc.perform(get("/item/" + itemId))
+        mockMvc.perform(get("/product/" + productId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("main/item/itemDtl"))
-                .andExpect(model().attributeExists("item"));
+                .andExpect(view().name("main/product/product-detail"))
+                .andExpect(model().attributeExists("product"));
     }
 
-    private ItemFormDto getItemFormDto() {
-        return new ItemFormDto(null, "test", 10000, 0.0, "test", 100, ItemSellStatus.SELL, null, null, null);
+    private ProductFormDto getProductFormDto() {
+        return new ProductFormDto(null, "test", 10000, 0.0, "test", 100, ProductSellStatus.SELL, null, null, null);
     }
 
     List<MultipartFile> createMultipartFiles() throws Exception {

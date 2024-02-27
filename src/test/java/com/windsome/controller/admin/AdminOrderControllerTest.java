@@ -1,12 +1,15 @@
 package com.windsome.controller.admin;
 
-import com.windsome.dto.order.OrderMngDto;
+import com.windsome.WithAccount;
+import com.windsome.dto.admin.OrderManagementDTO;
+import com.windsome.service.AdminService;
 import com.windsome.service.OrderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,11 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -29,22 +32,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdminOrderController.class)
+//@WebMvcTest(AdminOrderController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @MockBean(JpaMetamodelMappingContext.class)
+@Transactional
 class AdminOrderControllerTest {
 
+    @MockBean AdminService adminService;
     @MockBean OrderService orderService;
     @Autowired MockMvc mockMvc;
 
     @Test
     @DisplayName("주문 조회 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void getOrderListTest() throws Exception {
         // Mocking
-        Page<OrderMngDto> orders = new PageImpl<>(Collections.emptyList()); // 빈 페이지 생성
-        given(orderService.getAdminPageOrderList(anyString(), any())).willReturn(orders);
+        Page<OrderManagementDTO> orders = new PageImpl<>(Collections.emptyList()); // 빈 페이지 생성
+        given(adminService.getOrderList(anyString(), any())).willReturn(orders);
 
         // Perform & Verify
         mockMvc.perform(get("/admin/orders").param("userIdentifier", "user123").with(csrf()))
@@ -53,7 +59,7 @@ class AdminOrderControllerTest {
 
     @Test
     @DisplayName("주문 취소 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void cancelOrderTest() throws Exception {
         // Mocking
         doNothing().when(orderService).cancelOrder(anyLong());

@@ -1,15 +1,16 @@
 package com.windsome.controller;
 
 import com.windsome.WithAccount;
-import com.windsome.constant.ItemSellStatus;
+import com.windsome.constant.ProductSellStatus;
+import com.windsome.constant.Role;
 import com.windsome.controller.board.ReviewController;
-import com.windsome.entity.Account;
-import com.windsome.entity.Item;
-import com.windsome.entity.ItemImg;
+import com.windsome.entity.Member;
+import com.windsome.entity.Product;
+import com.windsome.entity.ProductImage;
 import com.windsome.entity.board.Review;
-import com.windsome.repository.AccountRepository;
-import com.windsome.repository.ItemImgRepository;
-import com.windsome.repository.ItemRepository;
+import com.windsome.repository.member.MemberRepository;
+import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.repository.product.ProductRepository;
 import com.windsome.repository.board.review.ReviewRepository;
 import com.windsome.service.board.ReviewService;
 import org.junit.jupiter.api.AfterEach;
@@ -34,19 +35,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ReviewControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired
-    ReviewController reviewController;
+    @Autowired ReviewController reviewController;
     @Autowired ReviewService reviewService;
     @Autowired ReviewRepository reviewRepository;
-    @Autowired ItemRepository itemRepository;
-    @Autowired AccountRepository accountRepository;
-    @Autowired ItemImgRepository itemImgRepository;
+    @Autowired ProductRepository productRepository;
+    @Autowired MemberRepository memberRepository;
+    @Autowired ProductImageRepository productImageRepository;
 
     @AfterEach
     void afterEach() {
-        itemImgRepository.deleteAll();
-        itemRepository.deleteAll();
-        accountRepository.deleteAll();
+        productImageRepository.deleteAll();
+        productRepository.deleteAll();
+        memberRepository.deleteAll();
         reviewRepository.deleteAll();
     }
 
@@ -54,61 +54,61 @@ class ReviewControllerTest {
     @DisplayName("리뷰 게시판 화면 보이는지 테스트")
     @Test
     void reviews() throws Exception {
-        mockMvc.perform(get("/reviews"))
+        mockMvc.perform(get("/board/review"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reviewSearchDto"))
-                .andExpect(model().attributeExists("cartItemTotalCount"))
+                .andExpect(model().attributeExists("totalCartProductCount"))
                 .andExpect(model().attributeExists("maxPage"))
-                .andExpect(view().name("review/reviews"));
+                .andExpect(view().name("board/review/review-list"));
     }
 
     @WithAccount("test1234")
     @DisplayName("리뷰 상세 화면 보이는지 테스트")
     @Test
     void reviewDtl() throws Exception {
-        Review review = createReview(createItem(), createAccount());
+        Review review = createReview(createProduct(), saveMember());
 
-        mockMvc.perform(get("/review/" + review.getId()))
+        mockMvc.perform(get("/board/review/" + review.getId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("review"))
-                .andExpect(view().name("review/reviewDtl"));
+                .andExpect(view().name("board/review/review-detail"));
     }
 
     @WithAccount("test1234")
     @DisplayName("리뷰 등록 화면 보이는지 테스트")
     @Test
     void enrollReviewForm() throws Exception {
-        mockMvc.perform(get("/review/enroll"))
+        mockMvc.perform(get("/board/review/enroll"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("reviewDto"))
-                .andExpect(view().name("review/reviewEnroll"));
+                .andExpect(view().name("board/review/review-new-post"));
     }
 
     @WithAccount("test1234")
     @DisplayName("리뷰 등록 - 상품 검색 테스트")
     @Test
     void getItemList() throws Exception {
-        createItem();
+        createProduct();
 
-        mockMvc.perform(get("/review/itemList")
+        mockMvc.perform(get("/board/review/product-selection")
                         .param("searchQuery", "test"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("searchQuery"))
                 .andExpect(model().attributeExists("size"))
                 .andExpect(model().attributeExists("maxPage"))
-                .andExpect(view().name("review/itemList"));
+                .andExpect(view().name("board/review/product-selection-popup"));
     }
 
     @WithAccount("test1234")
     @DisplayName("리뷰 등록 테스트")
     @Test
     void enrollReview() throws Exception {
-        Item item = createItem();
+        Product product = createProduct();
 
-        String requestJson = "{\"itemId\":\"" + item.getId() + "\", \"title\": \"test1234\"" +
+        String requestJson = "{\"productId\":\"" + product.getId() + "\", \"title\": \"test1234\"" +
                 ", \"rating\": \"5\", \"content\": \"test1234\", \"password\": \"test1234\"}";
 
-        mockMvc.perform(post("/review/enroll")
+        mockMvc.perform(post("/board/review/enroll")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
                         .with(csrf()))
@@ -118,15 +118,15 @@ class ReviewControllerTest {
     }
 
     @WithAccount("test1234")
-    @DisplayName("리뷰 등록 테스트 - 실패 (db에 존재하지 않는 itemId 전송)")
+    @DisplayName("리뷰 등록 테스트 - 실패 (db에 존재하지 않는 productId 전송)")
     @Test
     void enrollReviewFail() throws Exception {
-        Item item = createItem();
+        Product product = createProduct();
 
-        String requestJson = "{\"itemId\":\"" + (item.getId() + 1) + "\", \"title\": \"test1234\"" +
+        String requestJson = "{\"productId\":\"" + (product.getId() + 1) + "\", \"title\": \"test1234\"" +
                 ", \"rating\": \"5\", \"content\": \"test1234\", \"password\": \"test1234\"}";
 
-        mockMvc.perform(post("/review/enroll")
+        mockMvc.perform(post("/board/review/enroll")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
                         .with(csrf()))
@@ -139,24 +139,25 @@ class ReviewControllerTest {
     @DisplayName("리뷰 수정 화면 보이는지 테스트")
     @Test
     void updateReviewForm() throws Exception {
-        Review review = createReview(createItem(), createAccount());
+        Review review = createReview(createProduct(), saveMember());
 
-        mockMvc.perform(get("/review/update/" + review.getId()))
+        mockMvc.perform(get("/board/review/update/" + review.getId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("review"))
-                .andExpect(view().name("review/reviewUpdate"));
+                .andExpect(view().name("board/review/review-update-post"));
     }
 
     @WithAccount("test1234")
     @DisplayName("리뷰 수정 테스트 - 권한 있는 사용자")
     @Test
     void updateReview() throws Exception {
-        Review review = createReview(createItem(), accountRepository.findByUserIdentifier("test1234"));
+        Product product = createProduct();
+        Review review = createReview(product, memberRepository.findByUserIdentifier("test1234"));
 
         String requestJson = "{\"reviewId\":\"" + review.getId() + "\", \"title\": \"test1234\"" +
-                ", \"content\": \"test1234\", \"password\": \"12341234\", \"rating\": \"5\"}";
+                ", \"content\": \"test1234\",  \"productId\": \"" + product.getId() + "\", \"password\": \"12341234\", \"rating\": \"5\"}";
 
-        mockMvc.perform(patch("/review/update/" + review.getId())
+        mockMvc.perform(patch("/board/review/" + review.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
                         .with(csrf()))
@@ -169,12 +170,13 @@ class ReviewControllerTest {
     @DisplayName("리뷰 수정 테스트 - 권한 없는 사용자")
     @Test
     void updateReviewFail() throws Exception {
-        Review review = createReview(createItem(), createAccount());
+        Product product = createProduct();
+        Review review = createReview(product, saveMember());
 
         String requestJson = "{\"reviewId\":\"" + review.getId() + "\", \"title\": \"test1234\"" +
-                ", \"content\": \"test1234\", \"password\": \"12341234\", \"rating\": \"5\"}";
+                ", \"content\": \"test1234\",  \"productId\": \"" + product.getId() + "\", \"password\": \"12341234\", \"rating\": \"5\"}";
 
-        mockMvc.perform(patch("/review/update/" + review.getId())
+        mockMvc.perform(patch("/board/review/" + review.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson)
                         .with(csrf()))
@@ -187,11 +189,13 @@ class ReviewControllerTest {
     @DisplayName("리뷰 삭제 테스트 - 권한 있는 사용자")
     @Test
     void deleteReviewSuccess() throws Exception {
-        Account account = accountRepository.findByUserIdentifier("test1234");
-        Review review = createReview(createItem(), account);
+        Member member = memberRepository.findByUserIdentifier("test1234");
+        Product product = createProduct();
+        Review review = createReview(product, member);
 
-        mockMvc.perform(delete("/review/delete/" + review.getId())
+        mockMvc.perform(delete("/board/review/" + review.getId())
                         .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
+                        .param("productId", String.valueOf(product.getId()))
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
@@ -202,20 +206,22 @@ class ReviewControllerTest {
     @DisplayName("리뷰 삭제 테스트 - 권한 없는 사용자")
     @Test
     void deleteReviewFail() throws Exception {
-        Review review = createReview(createItem(), createAccount());
+        Product product = createProduct();
+        Review review = createReview(product, saveMember());
 
-        mockMvc.perform(delete("/review/delete/" + review.getId())
+        mockMvc.perform(delete("/board/review/" + review.getId())
                         .contentType(MediaType.valueOf("text/plain;charset=UTF-8"))
+                        .param("productId", String.valueOf(product.getId()))
                         .with(csrf()))
                 .andExpect(status().isForbidden())
                 .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
                 .andExpect(content().string("삭제 권한이 없습니다."));
     }
 
-    public Review createReview(Item item, Account account) {
+    public Review createReview(Product product, Member member) {
         Review review = Review.builder()
-                .item(item)
-                .account(account)
+                .product(product)
+                .member(member)
                 .content("test")
                 .title("test")
                 .password("test")
@@ -224,38 +230,43 @@ class ReviewControllerTest {
         return reviewRepository.save(review);
     }
 
-    public Item createItem() {
-        Item item = Item.builder()
-                .itemNm("테스트 상품")
+    public Product createProduct() {
+        Product product = Product.builder()
+                .name("테스트 상품")
                 .price(10000)
-                .itemDetail("테스트 상품 상세 설명")
-                .itemSellStatus(ItemSellStatus.SELL)
+                .productDetail("테스트 상품 상세 설명")
+                .productSellStatus(ProductSellStatus.SELL)
                 .stockNumber(100)
                 .build();
-        itemRepository.save(item);
+        productRepository.save(product);
 
-        ItemImg itemImg = ItemImg.builder()
-                .item(item)
-                .oriImgName("test")
-                .imgName("test")
-                .imgUrl("test")
-                .repImgYn("Y")
+        ProductImage productImage = ProductImage.builder()
+                .product(product)
+                .originalImageName("test")
+                .serverImageName("test")
+                .imageUrl("test")
+                .isRepresentativeImage(true)
                 .build();
-        itemImgRepository.save(itemImg);
+        productImageRepository.save(productImage);
 
-        return item;
+        return product;
     }
 
-    public Account createAccount() {
-        Account account = Account.builder()
-                .userIdentifier("gildong123")
-                .password("gildong123")
-                .name("gildong")
-                .email("gildong@naver.com")
+    public Member saveMember() {
+        Member member = Member.builder()
+                .userIdentifier("test0000")
+                .password("test0000")
+                .name("test")
+                .email("test0000@naver.com")
                 .address1("test")
                 .address2("test")
                 .address3("test")
+                .state(Role.USER)
+                .point(0)
+                .totalPoint(0)
+                .totalOrderPrice(0)
+                .totalUsePoint(0)
                 .build();
-        return accountRepository.save(account);
+        return memberRepository.save(member);
     }
 }

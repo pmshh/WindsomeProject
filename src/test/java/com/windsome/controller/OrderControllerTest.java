@@ -1,11 +1,14 @@
 package com.windsome.controller;
 
 import com.windsome.WithAccount;
-import com.windsome.constant.ItemSellStatus;
+import com.windsome.constant.ProductSellStatus;
 import com.windsome.dto.order.OrderDto;
-import com.windsome.dto.order.OrderItemDto;
-import com.windsome.entity.Item;
-import com.windsome.repository.*;
+import com.windsome.dto.order.OrderProductDto;
+import com.windsome.entity.Product;
+import com.windsome.repository.member.MemberRepository;
+import com.windsome.repository.order.OrderRepository;
+import com.windsome.repository.orderProduct.OrderProductRepository;
+import com.windsome.repository.product.ProductRepository;
 import com.windsome.service.OrderService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -31,18 +33,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OrderControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired ItemRepository itemRepository;
+    @Autowired ProductRepository productRepository;
     @Autowired OrderService orderService;
     @Autowired OrderRepository orderRepository;
-    @Autowired OrderItemRepository orderItemRepository;
-    @Autowired AccountRepository accountRepository;
+    @Autowired OrderProductRepository orderProductRepository;
+    @Autowired MemberRepository memberRepository;
 
     @AfterEach
     void afterEach() {
-        orderItemRepository.deleteAll();
+        orderProductRepository.deleteAll();
         orderRepository.deleteAll();
-        itemRepository.deleteAll();
-        accountRepository.deleteAll();
+        productRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @WithAccount("test1234")
@@ -52,46 +54,45 @@ class OrderControllerTest {
         mockMvc.perform(get("/orders"))
                 .andExpect(model().attributeExists("orders"))
                 .andExpect(model().attributeExists("maxPage"))
-                .andExpect(view().name("order/orderHist"));
+                .andExpect(view().name("order/order-history"));
     }
 
     @WithAccount("test1234")
     @DisplayName("주문 취소 테스트")
     @Test
     void cancelOrder() throws Exception {
-        Item item = saveItem();
+        Product product = saveProduct();
 
-        OrderDto orderDto = getOrderDto(item);
+        OrderDto orderDto = getOrderDto(product);
         Long orderId = orderService.order(orderDto, "test1234");
 
-        mockMvc.perform(post("/order/" + orderId + "/cancel")
+        mockMvc.perform(patch("/orders/" + orderId + "/cancel")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().string(String.valueOf(orderId)));
+                .andExpect(content().contentType("text/plain;charset=UTF-8"))
+                .andExpect(content().string("주문이 최소되었습니다."));
     }
 
-    public Item saveItem() {
-        Item item = Item.builder()
-                .itemNm("테스트 상품")
+    public Product saveProduct() {
+        Product product = Product.builder()
+                .name("테스트 상품")
                 .price(10000)
-                .itemDetail("테스트 상품 상세 설명")
-                .itemSellStatus(ItemSellStatus.SELL)
+                .productDetail("테스트 상품 상세 설명")
+                .productSellStatus(ProductSellStatus.SELL)
                 .stockNumber(100)
                 .build();
-        return itemRepository.save(item);
+        return productRepository.save(product);
     }
 
-    public OrderDto getOrderDto(Item item) {
-        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
-        OrderItemDto orderItemDto = new OrderItemDto();
-        orderItemDto.setItemId(item.getId());
-        orderItemDto.setPrice(item.getPrice());
-        orderItemDto.setDiscount(item.getDiscount());
+    private static OrderDto getOrderDto(Product product) {
+        List<OrderProductDto> orderItemDtoList = new ArrayList<>();
+        OrderProductDto orderItemDto = new OrderProductDto();
+        orderItemDto.setProductId(product.getId());
+        orderItemDto.setPrice(product.getPrice());
+        orderItemDto.setDiscount(product.getDiscount());
         orderItemDto.setCount(10);
         orderItemDtoList.add(orderItemDto);
-        orderItemDto.initPriceAndPoint();
 
         OrderDto orderDto = new OrderDto("test", "test", "test", "test", "test", "test", orderItemDtoList, 0, 0, 10000, 500, 10000);
         orderDto.initOrderPriceInfo();

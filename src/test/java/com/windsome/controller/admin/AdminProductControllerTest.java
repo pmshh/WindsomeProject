@@ -1,16 +1,19 @@
 package com.windsome.controller.admin;
 
+import com.windsome.WithAccount;
 import com.windsome.dto.admin.PageDto;
-import com.windsome.dto.item.ItemFormDto;
-import com.windsome.dto.item.ItemSearchDto;
+import com.windsome.dto.product.ProductSearchDto;
+import com.windsome.dto.product.ProductFormDto;
 import com.windsome.exception.ProductImageDeletionException;
+import com.windsome.service.AdminService;
 import com.windsome.service.CategoryService;
-import com.windsome.service.ItemService;
+import com.windsome.service.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.nio.charset.StandardCharsets;
@@ -34,143 +38,147 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(AdminItemController.class)
+//@WebMvcTest(AdminProductController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @MockBean(JpaMetamodelMappingContext.class)
-class AdminItemControllerTest {
+@Transactional
+class AdminProductControllerTest {
 
-    @MockBean ItemService itemService;
+    @MockBean
+    ProductService productService;
+    @MockBean AdminService adminService;
     @MockBean CategoryService categoryService;
     @Autowired MockMvc mockMvc;
 
     @Test
     @DisplayName("상품 조회 기능 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void getItemList() throws Exception {
-        given(itemService.getAdminItemPage(any(ItemSearchDto.class), any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
+        given(adminService.getProductList(any(ProductSearchDto.class), any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
 
-        mockMvc.perform(get("/admin/items"))
+        mockMvc.perform(get("/admin/products"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("admin/item/itemMng"))
-                .andExpect(model().attributeExists("items"))
-                .andExpect(model().attributeExists("itemSearchDto"))
+                .andExpect(view().name("admin/product/product-management"))
+                .andExpect(model().attributeExists("products"))
+                .andExpect(model().attributeExists("productSearchDto"))
                 .andExpect(model().attributeExists("maxPage"));
     }
 
     @Test
     @DisplayName("상품 등록 화면 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void showItemFormTest() throws Exception {
-        mockMvc.perform(get("/admin/items/new"))
+        mockMvc.perform(get("/admin/products/new"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("admin/item/itemEnroll"))
-                .andExpect(model().attributeExists("itemFormDto"));
+                .andExpect(view().name("admin/product/product-create"))
+                .andExpect(model().attributeExists("productFormDto"));
     }
 
     @Test
     @DisplayName("상품 등록 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void enrollItemTest() throws Exception {
         // Mocking
-        given(itemService.saveItem(any(ItemFormDto.class), anyList())).willReturn(1L);
+        given(productService.createProduct(any(ProductFormDto.class), anyList())).willReturn(1L);
 
         // Creating MockMultipartFile
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("itemImgFile", "test.jpg", "image/jpeg", "test image content".getBytes());
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("productImageFile", "test.jpg", "image/jpeg", "test image content".getBytes());
 
         // Performing request
-        mockMvc.perform(multipart("/admin/items/new")
+        mockMvc.perform(multipart("/admin/products/new")
                         .file(mockMultipartFile)
-                        .param("itemNm", "Test 상품명")
+                        .param("productName", "Test 상품명")
                         .param("price", "10000")
                         .param("discount", "0")
-                        .param("itemDetail", "Test 상품 상세")
+                        .param("productDetail", "Test 상품 상세")
                         .param("stockNumber", "10")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/items"))
-                .andExpect(flash().attributeExists("save_result"))
-                .andExpect(flash().attribute("save_result", "save_ok"));
+                .andExpect(redirectedUrl("/admin/products"))
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(flash().attribute("message", "상품이 등록되었습니다."));
     }
 
     @Test
     @DisplayName("상품 상세 화면 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void viewItemDetailTest() throws Exception {
         // Mocking
-        Long itemId = 1L;
-        ItemFormDto itemFormDto = new ItemFormDto();
+        Long productId = 1L;
+        ProductFormDto productFormDto = new ProductFormDto();
         PageDto pageDto = new PageDto();
-        given(itemService.getItemFormDto(itemId)).willReturn(itemFormDto);
+        given(productService.getProductFormDto(productId)).willReturn(productFormDto);
 
         // Performing request
-        mockMvc.perform(get("/admin/items/{itemId}", itemId)
+        mockMvc.perform(get("/admin/products/{productId}", productId)
                         .param("page", "0")
                         .param("searchDateType", "")
                         .param("searchBy", "")
                         .param("searchQuery", ""))
                 .andExpect(status().isOk())
-                .andExpect(view().name("admin/item/itemForm"))
+                .andExpect(view().name("admin/product/product-form"))
                 .andExpect(model().attributeExists("type"))
                 .andExpect(model().attribute("type", "detail"))
-                .andExpect(model().attributeExists("itemFormDto"))
+                .andExpect(model().attributeExists("productFormDto"))
                 .andExpect(model().attributeExists("pageDto"));
     }
 
     @Test
     @DisplayName("상품 수정 화면 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void showUpdateItemFormTest() throws Exception {
         // Mocking
-        Long itemId = 1L;
-        ItemFormDto itemFormDto = new ItemFormDto();
+        Long productId = 1L;
+        ProductFormDto productFormDto = new ProductFormDto();
         PageDto pageDto = new PageDto();
-        given(itemService.getItemFormDto(itemId)).willReturn(itemFormDto);
+        given(productService.getProductFormDto(productId)).willReturn(productFormDto);
 
         // Performing request
-        mockMvc.perform(get("/admin/items/{itemId}/edit", itemId)
+        mockMvc.perform(get("/admin/products/{productId}/edit", productId)
                         .param("page", "0"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("admin/item/itemForm"))
+                .andExpect(view().name("admin/product/product-form"))
                 .andExpect(model().attributeExists("type"))
                 .andExpect(model().attribute("type", "update"))
-                .andExpect(model().attributeExists("itemFormDto"))
+                .andExpect(model().attributeExists("productFormDto"))
                 .andExpect(model().attributeExists("pageDto"));
     }
 
     @Test
     @DisplayName("상품 수정 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void updateItemTest() throws Exception {
         // Mocking
-        given(itemService.updateItem(any(ItemFormDto.class), anyList())).willReturn(1L);
+        given(productService.updateProduct(any(ProductFormDto.class), anyList())).willReturn(1L);
 
         // Creating MockMultipartFile
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("itemImgFile", "test.jpg", "image/jpeg", "test image content".getBytes());
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("productImageFile", "test.jpg", "image/jpeg", "test image content".getBytes());
 
         // Performing request
-        mockMvc.perform(multipart("/admin/items/{itemId}", 1L)
+        mockMvc.perform(multipart("/admin/products/{productId}", 1L)
                         .file(mockMultipartFile)
-                        .param("itemNm", "test")
+                        .param("productName", "test")
                         .param("price", "10000")
-                        .param("itemDetail", "Test 상세 설명")
+                        .param("productDetail", "Test 상세 설명")
                         .param("stockNumber", "10")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/items"))
-                .andExpect(flash().attributeExists("update_result"))
-                .andExpect(flash().attribute("update_result", "update_ok"));
+                .andExpect(redirectedUrl("/admin/products"))
+                .andExpect(flash().attributeExists("message"))
+                .andExpect(flash().attribute("message", "상품을 수정했습니다."));
     }
 
     @Test
     @DisplayName("상품 이미지 삭제 성공 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void deleteItemImageSuccessTest() throws Exception {
         // Mocking - 이미지 삭제가 성공하는 경우
-        doNothing().when(itemService).deleteItemImg(anyLong());
+        doNothing().when(productService).deleteProductImage(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/items/{itemImgId}", 123L).with(csrf())
+        mockMvc.perform(patch("/admin/products/{productImageId}", 123L).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -179,13 +187,13 @@ class AdminItemControllerTest {
 
     @Test
     @DisplayName("상품 이미지 삭제 실패 - 존재하지 않는 이미지")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void deleteItemImageFailureNotFoundTest() throws Exception {
         // Mocking - 존재하지 않는 이미지 삭제 시 EntityNotFoundException이 발생하는 경우
-        doThrow(EntityNotFoundException.class).when(itemService).deleteItemImg(anyLong());
+        doThrow(EntityNotFoundException.class).when(productService).deleteProductImage(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/items/{itemImgId}", 123L).with(csrf())
+        mockMvc.perform(patch("/admin/products/{productImageId}", 123L).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -194,14 +202,14 @@ class AdminItemControllerTest {
 
     @Test
     @DisplayName("상품 이미지 삭제 실패 - 이미지 삭제 중 에러 발생")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void deleteItemImageFailureErrorTest() throws Exception {
         // Mocking - 이미지 삭제 중 에러가 발생하는 경우
         String errorMessage = "이미지 삭제 중 에러가 발생했습니다.";
-        doThrow(new ProductImageDeletionException(errorMessage)).when(itemService).deleteItemImg(anyLong());
+        doThrow(new ProductImageDeletionException(errorMessage)).when(productService).deleteProductImage(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/items/{itemImgId}", 123L)
+        mockMvc.perform(patch("/admin/products/{productImageId}", 123L)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -211,13 +219,13 @@ class AdminItemControllerTest {
 
     @Test
     @DisplayName("상품 삭제 테스트 - 성공")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void deleteItemSuccessTest() throws Exception {
         // Mocking - 상품 삭제가 성공하는 경우
-        doNothing().when(itemService).deleteItem(anyLong());
+        doNothing().when(productService).deleteProduct(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/items/{itemId}", 123L)
+        mockMvc.perform(delete("/admin/products/{productId}", 123L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -227,13 +235,13 @@ class AdminItemControllerTest {
 
     @Test
     @DisplayName("상품 삭제 테스트 - 실패")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void deleteItemFailureTest() throws Exception {
         // Mocking - 일치하는 상품 정보가 없는 경우
-        doThrow(new Exception()).when(itemService).deleteItem(anyLong());
+        doThrow(new Exception()).when(productService).deleteProduct(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/items/{itemId}", 123L)
+        mockMvc.perform(delete("/admin/products/{productId}", 123L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -243,10 +251,10 @@ class AdminItemControllerTest {
 
     @Test
     @DisplayName("카테고리 조회 테스트")
-    @WithMockUser(username = "admin", roles = "ADMIN")
+    @WithAccount("admin1234")
     void getItemCategoriesTest() throws Exception {
         // Perform & Verify
-        mockMvc.perform(get("/admin/items/categories").with(csrf()))
+        mockMvc.perform(get("/admin/products/categories").with(csrf()))
                 .andExpect(status().isOk());
     }
 

@@ -1,6 +1,7 @@
 package com.windsome.entity;
 
-import com.windsome.repository.AccountRepository;
+import com.windsome.constant.Role;
+import com.windsome.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,36 +11,50 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class AccountTest {
 
-    @Autowired
-    AccountRepository accountRepository;
-
-    @PersistenceContext
-    EntityManager em;
+    @Autowired MemberRepository memberRepository;
+    @PersistenceContext EntityManager em;
 
     @Test
     @DisplayName("Auditing 테스트")
     @WithMockUser(username = "test", roles = "USER")
     public void auditingTest() {
-        Account account = new Account();
-        accountRepository.save(account);
+        // Given
+        Member member = saveMember();
 
+        // When
+        Member saveMember = memberRepository.save(member);
         em.flush();
         em.clear();
 
-        Account findAccount = accountRepository.findById(account.getId())
-                .orElseThrow(EntityNotFoundException::new);
+        // Then
+        assertNotNull(saveMember.getRegTime());
+        assertNotNull(saveMember.getUpdateTime());
+    }
 
-        System.out.println("account.getRegTime() = " + account.getRegTime());
-        System.out.println("account.getUpdateTime() = " + account.getUpdateTime());
-
+    public Member saveMember() {
+        Member member = Member.builder()
+                .userIdentifier("test1234")
+                .password("test1234")
+                .name("test")
+                .email("test1234@naver.com")
+                .address1("test")
+                .address2("test")
+                .address3("test")
+                .state(Role.USER)
+                .point(0)
+                .totalPoint(0)
+                .totalOrderPrice(0)
+                .totalUsePoint(0)
+                .build();
+        return memberRepository.save(member);
     }
 }

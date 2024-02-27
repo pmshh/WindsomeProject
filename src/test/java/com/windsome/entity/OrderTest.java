@@ -1,10 +1,11 @@
 package com.windsome.entity;
 
-import com.windsome.constant.ItemSellStatus;
-import com.windsome.repository.AccountRepository;
-import com.windsome.repository.ItemRepository;
-import com.windsome.repository.OrderItemRepository;
-import com.windsome.repository.OrderRepository;
+import com.windsome.constant.ProductSellStatus;
+import com.windsome.constant.Role;
+import com.windsome.repository.member.MemberRepository;
+import com.windsome.repository.orderProduct.OrderProductRepository;
+import com.windsome.repository.order.OrderRepository;
+import com.windsome.repository.product.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -24,16 +25,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderTest {
 
     @Autowired OrderRepository orderRepository;
-    @Autowired ItemRepository itemRepository;
-    @Autowired AccountRepository accountRepository;
-    @Autowired OrderItemRepository orderItemRepository;
+    @Autowired ProductRepository productRepository;
+    @Autowired MemberRepository memberRepository;
+    @Autowired OrderProductRepository orderProductRepository;
     @PersistenceContext EntityManager em;
 
     @Test
     @DisplayName("고아객체 제거 테스트")
     public void orphanRemovalTest() {
         Order order = this.createOrder();
-        order.getOrderItems().remove(0);
+        order.getOrderProducts().remove(0);
         em.flush();
     }
 
@@ -43,14 +44,14 @@ class OrderTest {
         Order order = new Order();
 
         for (int i = 0; i < 3; i++) {
-            Item item = this.createItem();
-            itemRepository.save(item);
-            OrderItem orderItem = new OrderItem();
-            orderItem.setItem(item);
-            orderItem.setCount(10);
-            orderItem.setPrice(1000);
-            orderItem.setOrder(order);
-            order.getOrderItems().add(orderItem);
+            Product product = this.createProduct();
+            productRepository.save(product);
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setProduct(product);
+            orderProduct.setCount(10);
+            orderProduct.setPrice(1000);
+            orderProduct.setOrder(order);
+            order.getOrderProducts().add(orderProduct);
         }
 
         orderRepository.saveAndFlush(order);
@@ -58,54 +59,71 @@ class OrderTest {
 
         Order savedOrder = orderRepository.findById(order.getId())
                 .orElseThrow(EntityNotFoundException::new);
-        assertEquals(3, savedOrder.getOrderItems().size());
+        assertEquals(3, savedOrder.getOrderProducts().size());
     }
 
     @Test
     @DisplayName("지연 로딩 테스트")
     public void lazyLoadingTest() {
         Order order = this.createOrder();
-        Long orderItemId = order.getOrderItems().get(0).getId();
+        Long orderItemId = order.getOrderProducts().get(0).getId();
         em.flush();
         em.clear();
 
-        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+        OrderProduct orderProduct = orderProductRepository.findById(orderItemId)
                 .orElseThrow(EntityNotFoundException::new);
-        System.out.println("Order Class : " + orderItem.getOrder().getClass());
+        System.out.println("Order Class : " + orderProduct.getOrder().getClass());
         System.out.println(" ================================ ");
-        orderItem.getOrder().getOrderDate();
+        orderProduct.getOrder().getOrderDate();
         System.out.println(" ================================ ");
     }
 
-    public Item createItem() {
-        Item item = new Item();
-        item.setItemNm("테스트 상품");
-        item.setPrice(10000);
-        item.setItemDetail("상세 설명");
-        item.setItemSellStatus(ItemSellStatus.SELL);
-        item.setStockNumber(100);
-        return item;
+    public Product createProduct() {
+        Product product = new Product();
+        product.setName("테스트 상품");
+        product.setPrice(10000);
+        product.setProductDetail("상세 설명");
+        product.setProductSellStatus(ProductSellStatus.SELL);
+        product.setStockNumber(100);
+        return product;
     }
 
     public Order createOrder() {
         Order order = new Order();
 
         for (int i = 0; i < 3; i++) {
-            Item item = createItem();
-            itemRepository.save(item);
-            OrderItem orderItem = new OrderItem();
-            orderItem.setItem(item);
-            orderItem.setCount(10);
-            orderItem.setPrice(1000);
-            orderItem.setOrder(order);
-            order.getOrderItems().add(orderItem);
+            Product product = createProduct();
+            productRepository.save(product);
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setProduct(product);
+            orderProduct.setCount(10);
+            orderProduct.setPrice(1000);
+            orderProduct.setOrder(order);
+            order.getOrderProducts().add(orderProduct);
         }
 
-        Account account = new Account();
-        accountRepository.save(account);
+        Member member = saveMember();
 
-        order.setAccount(account);
+        order.setMember(member);
         orderRepository.save(order);
         return order;
+    }
+
+    public Member saveMember() {
+        Member member = Member.builder()
+                .userIdentifier("test1234")
+                .password("test1234")
+                .name("test")
+                .email("test1234@naver.com")
+                .address1("test")
+                .address2("test")
+                .address3("test")
+                .state(Role.USER)
+                .point(0)
+                .totalPoint(0)
+                .totalOrderPrice(0)
+                .totalUsePoint(0)
+                .build();
+        return memberRepository.save(member);
     }
 }

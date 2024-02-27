@@ -1,8 +1,8 @@
 package com.windsome.controller;
 
-import com.windsome.dto.account.SignUpFormDto;
-import com.windsome.repository.AccountRepository;
-import com.windsome.service.AccountService;
+import com.windsome.dto.member.SignUpRequestDTO;
+import com.windsome.repository.member.MemberRepository;
+import com.windsome.service.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,12 +29,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MainControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired AccountService accountService;
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    MemberService memberService;
+    @Autowired MemberRepository memberRepository;
 
     @BeforeEach
     void beforeEach() {
-        SignUpFormDto signUpFormDto = SignUpFormDto.builder()
+        SignUpRequestDTO signUpRequestDTO = SignUpRequestDTO.builder()
                 .userIdentifier("test1234")
                 .email("test1234@email.com")
                 .name("gildong")
@@ -43,12 +44,12 @@ class MainControllerTest {
                 .address2("test")
                 .address3("test")
                 .build();
-        accountService.saveNewAccount(signUpFormDto);
+        memberService.createAccount(signUpRequestDTO);
     }
 
     @AfterEach
     void afterEach() {
-        accountRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @DisplayName("로그인 성공 - 입력값 정상")
@@ -66,7 +67,7 @@ class MainControllerTest {
     @DisplayName("로그인 실패 - 입력값 오류")
     @Test
     void login_fail() throws Exception {
-        String urlEncode = URLEncoder.encode("아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해 주세요.", StandardCharsets.UTF_8);
+        String urlEncode = URLEncoder.encode("아이디 또는 비밀번호를 잘못 입력했습니다.<br>입력하신 내용을 다시 확인해주세요.", StandardCharsets.UTF_8);
 
         mockMvc.perform(post("/login")
                         .param("userId", "test1234@gmail.com")
