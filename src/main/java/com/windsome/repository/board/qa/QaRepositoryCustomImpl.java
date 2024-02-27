@@ -31,8 +31,8 @@ public class QaRepositoryCustomImpl implements QaRepositoryCustom {
                         new QQaListDto(
                                 qa.id,
                                 qa.title,
-                                qa.account.name,
-                                qa.account.state,
+                                qa.member.name,
+                                qa.member.state,
                                 qa.regTime,
                                 qa.secretYN,
                                 qa.originNo,
@@ -61,11 +61,11 @@ public class QaRepositoryCustomImpl implements QaRepositoryCustom {
         } else if (StringUtils.equals(qaSearchDto.getSearchDateType(), "content")) {
             return qa.content.like("%" + qaSearchDto.getSearchQuery() + "%");
         } else if (StringUtils.equals(qaSearchDto.getSearchDateType(), "name")) {
-            return qa.account.name.like("%" + qaSearchDto.getSearchQuery() + "%");
+            return qa.member.name.like("%" + qaSearchDto.getSearchQuery() + "%");
         } else if (StringUtils.equals(qaSearchDto.getSearchDateType(), "")) {
             return qa.title.like("%" + qaSearchDto.getSearchQuery() + "%")
                     .or(qa.content.like("%" + qaSearchDto.getSearchQuery() + "%"))
-                    .or(qa.account.name.like("%" + qaSearchDto.getSearchQuery() + "%"));
+                    .or(qa.member.name.like("%" + qaSearchDto.getSearchQuery() + "%"));
         }
         return null;
     }

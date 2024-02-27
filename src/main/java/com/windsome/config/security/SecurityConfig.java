@@ -36,6 +36,7 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .antMatchers("/h2-console/**")
                 .antMatchers("/node_modules/**")
+                .antMatchers("/imgs/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -43,7 +44,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/logout", "/signUp", "/check-email", "/check/**", "/find/**", "/update/**/", "/item/**", "/imgs/**", "/board/**").permitAll()
+                .antMatchers("/", "/login", "/logout", "/members/new/**", "/members/check-userid", "/members/email-verification",
+                        "/forgot-credentials/**", "/product/**", "/board/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 

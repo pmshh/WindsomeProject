@@ -1,0 +1,104 @@
+.notice-detail-body {
+    width: 80%;
+    margin: 0 auto;
+
+    .table-box {
+        width: 100%;
+        border-bottom: 1px solid #e5e5e5;
+
+        table {
+            width: 100%;
+            position: relative;
+            margin: 10px 0 0;
+            border: 1px solid #e5e5e5;
+            border-right: none;
+            border-left: none;
+            border-top-color: #fff;
+            color: #fff;
+            line-height: 1.7;
+            font-size: 12px;
+
+            td {
+                padding: 8px 10px 7px;
+                border-top: 1px solid #e5e5e5;
+                color: #353535;
+                vertical-align: middle;
+                word-break: break-all;
+                word-wrap: break-word;
+            }
+
+            td.board-title {
+                height: 80px;
+                font-weight: bold;
+                font-size: 16px;
+                letter-spacing: 0.01em;
+                line-height: 24px;
+
+                span {
+                    padding-left: 15px;
+                    padding-top: 5px;
+                    display: inline-block;
+                    word-break: keep-all;
+                }
+            }
+
+            td.board-date-con {
+                border-bottom: 1px solid #e5e5e5;
+
+                li {
+                    display: inline-block;
+                    margin: 0;
+                    padding: 8px 15px 8px;
+                    vertical-align: top;
+                    line-height: 28px;
+                    color: #666;
+
+                    span.txtNum {
+                        display: inline-block;
+                        font-size: 11px;
+                        color: #939393;
+                        word-break: normal;
+                    }
+                }
+            }
+        }
+
+        .detail {
+            line-height: 1.8;
+            font-size: 13px;
+            padding: 40px 25px;
+            border-top: none;
+            margin: -9px 0 0;
+            word-break: break-all;
+
+            .article {
+                word-wrap: break-word;
+
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    .btn-box {
+        width: 100%;
+        margin: 10px 0 40px;
+        padding: 10px 0;
+        text-align: center;
+
+        button.cancel-btn {
+            float: left;
+        }
+
+        button.update-btn,
+        button.del-btn {
+            float: right;
+            margin-left: 5px;
+        }
+    }
+
+    .board-movement {
+        @include board-movement();
+    }
+}

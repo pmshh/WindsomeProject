@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>MODIFY</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body update-member-body mt-5">
+
+                        <form class="profile-form" id="profileForm" th:action="@{'/members/' + ${memberId} + '/update'}" th:object="${profileFormDto}" method="post">
+                            <table class="col-header-table-color">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{userIdentifier}">아이디 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="id-input-box">
+                                                <input class="id-input" th:field="*{userIdentifier}" type="text"
+                                                    minlength="5" maxlength="20" readonly="readonly">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{password}">비밀번호 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="pw-input-box">
+                                                <input class="pw-input" th:field="*{password}" type="password" minlength="8" maxlength="20"><span class="pw-result-text">8~20자의 영문대소문자,숫자,특수문자 사용</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{passwordConfirm}">비밀번호 확인 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="pw-confirm-input-box">
+                                                <input class="pw-confirm-input" th:field="*{passwordConfirm}"
+                                                       type="password" minlength="8" maxlength="20"><span class="pw-confirm-result-text">*패스워드를 한번 더 입력하시기 바랍니다.</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{name}">이름 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="name-input-box">
+                                                <input class="name-input" th:field="*{name}" type="text">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{email}">이메일 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <div class="mail-input-box mb-1">
+                                                <input class="mail-input" th:field="*{email}" type="text">
+                                                 @
+                                                <input class="mail-input2" type="text">
+                                                <select class="mail-select" name="mail-select">
+                                                    <option value="1" selected>직접입력</option>
+                                                    <option value="naver.com">naver.com</option>
+                                                    <option value="hanmail.net">hanmail.net</option>
+                                                    <option value="hotmail.com">hotmail.com</option>
+                                                    <option value="nate.com">nate.com</option>
+                                                    <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                    <option value="empas.com">empas.com</option>
+                                                    <option value="dreamwiz.com">dreamwiz.com</option>
+                                                    <option value="freechal.com">freechal.com</option>
+                                                    <option value="lycos.co.kr">lycos.co.kr</option>
+                                                    <option value="korea.com">korea.com</option>
+                                                    <option value="gmail.com">gmail.com</option>
+                                                    <option value="hanmir.com">hanmir.com</option>
+                                                    <option value="paran.com">paran.com</option>
+                                                </select>
+                                                <button type="button" class="send-mail white-btn-w100-h30">인증번호 발송</button>
+                                            </div>
+                                            <div class="mail-check-box">
+                                                <input class="mail-confirm-input" disabled="disabled">
+                                                <button type="button" class="check-number white-btn-w100-h30" onclick="confirmNumber()">인증번호 확인</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{address1}">주소 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input th:field="*{address1}" class="address-input-1 mb-1"
+                                                readonly="readonly">
+                                            <button type="button" class="find-addr white-btn-w90-h30"
+                                                onclick="addressAPI()">주소 찾기</button>
+                                            <div class="clearfix"></div>
+                                            <input th:field="*{address2}" class="address-input-2 d-block w-50 mb-1"
+                                                readonly="readonly">
+                                            <input th:field="*{address3}" class="address-input-3 d-block w-50 mb-1"
+                                                readonly="readonly">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="btn-box">
+                                <button class="modify-btn black-btn-w130-h40" type="submit">회원정보수정</button>
+                                <button class="white-btn-w130-h40" type="button" onclick="location.href='/'">취소</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과유무 변수 */
+        let code = "";                                                              // 이메일 인증번호 저장 변수
+        let checkPw = false;                                                        // 비번
+        let checkPwConfirm = false;                                                 // 비번 확인
+        let checkPwMatch = false;                                                   // 비번 일치 확인
+        let checkName = false;                                                      // 이름
+        let checkMail = false;                                                      // 이메일
+        let checkMailConfirm = false;                                               // 이메일 인증번호 확인
+        let checkAddress = false                                                    // 주소
+        let beforeEmail = [[${profileFormDto.email}]];                              // 기존 이메일
+
+        $(function () {
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+
+            /* 회원 이메일 값 셋팅 */
+            let email = [[${profileFormDto.email}]];
+            let emailArr = email.split("@");
+
+            $(".mail-input").val(emailArr[0]);
+            $(".mail-input2").val(emailArr[1]);
+
+            /* 회원 정보 수정 */
+            $(".modify-btn").click(function () {
+                /* 입력값 변수 */
+                let pwVal = $('.pw-input').val();                                       // 비밀번호
+                let pwConfirmVal = $('.pw-confirm-input').val();                        // 비밀번호 확인
+                let nameVal = $('.name-input').val();                                   // 이름
+                let mailVal1 = $(".mail-input").val();                                  // 이메일 앞부분
+                let mailVal2 = $(".mail-input2").val();                                 // 이메일 뒷부분
+                let fullEmail = mailVal1 + '@' + mailVal2;
+                let addressVal = $('.address-input-3').val();                           // 주소
+                let form = $("#profileForm");
+
+                /* 비밀번호 빈값 검사 */
+                if (pwVal === "") {
+                    alert("비밀번호를 입력하세요.");
+                    $('.pw-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 비밀번호 확인 빈값 검사 */
+                if (pwConfirmVal === "") {
+                    alert("비밀번호 확인을 입력하세요.");
+                    $('.pw-confirm-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 비밀번호 공백 존재 여부 검사 */
+                if (hasBlank(pwVal) || hasBlank(pwConfirmVal)) {
+                    alert("비밀번호는 공백 없이 입력해주세요.");
+                    $('.pw-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 이름 빈값 검사 */
+                if (nameVal === "") {
+                    alert("이름을 입력하세요.");
+                    $('.name-input').focus();
+                    window.scrollTo(0, 0);
+                    checkName = false;
+                    return false;
+                } else {
+                    checkName = true;
+                }
+
+                /* 이메일 빈값 검사 */
+                if (mailVal1 === '' || mailVal2 === '') {
+                    alert("이메일을 입력하세요.");
+                    $('.mail-input').focus();
+                    window.scrollTo(0, 0);
+                    checkMail = false;
+                    return false;
+                } else {
+                    checkMail = true;
+                }
+
+                /* 주소 빈값 검사 */
+                if (addressVal === "") {
+                    alert("주소를 입력하세요.");
+                    $('.address-input-1').focus();
+                    window.scrollTo(0, 0);
+                    checkAddress = false;
+                    return false;
+                } else {
+                    checkAddress = true;
+                }
+
+                /* 이메일 변경 검사 */
+                if (beforeEmail === fullEmail) {
+                    checkMailConfirm = true;
+                    finalEmail = beforeEmail; // 이메일을 변경하지 않을 경우 기존 이메일 값을 그대로 서버에 전송
+                } else if (checkMailConfirm === false && beforeEmail !== fullEmail) {
+                    alert("이메일을 인증해주세요.");
+                    $('.mail-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 이메일 인증 여부 검사 */
+                if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
+                    alert("이메일을 인증해주세요.");
+                    $('.mail-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (!checkPwMatch) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    $(".pw-input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkPw && checkPwConfirm && checkPwMatch && checkMail && checkMailConfirm && checkName && checkAddress) {
+                    $(".mail-input").val(finalEmail);
+                    form.submit();
+                }
+                return false;
+            });
+
+            // 이메일 전송
+            $(".send-mail").click(function () {
+                let mailVal1 = $(".mail-input").val();
+                let mailVal2 = $(".mail-input2").val();
+                let fullEmail = mailVal1 + "@" + mailVal2;
+                let mailConfirmInput = $(".mail-confirm-input"); // 인증 번호 입력란
+
+                if (confirm("인증번호를 전송하시겠습니까?")) {
+                    if (checkMailForm(fullEmail)) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/members/email-verification",
+                            data: {
+                                email: fullEmail,
+                            },
+                            success: function (res) {
+                                mailConfirmInput.css("background-color", "white");
+                                mailConfirmInput.attr("disabled", false);
+                                code = res;
+                            },
+                            error: function (request) {
+                                alert(request.responseText);
+                            }
+                        });
+                    } else {
+                        alert("올바른 이메일을 입력해주세요.");
+                    }
+                } else {
+                    return false;
+                }
+            })
+
+            /* 비밀번호 유효성 검사 */
+            $('.pw-input').on("propertychange change keyup paste input", function () {
+                let pwVal = $('.pw-input').val();
+                let pwConfirmVal = $('.pw-confirm-input').val();
+                let pwResultText = $('.pw-result-text');
+                let pwConfirmResultText = $('.pw-confirm-result-text');
+
+                // 값을 입력한 경우
+                if (pwVal.length !== 0) {
+                    if (strongPassword(pwVal)) {
+                        pwResultText.css("color", "#0000ff");
+                        pwResultText.html("사용 가능한 비밀번호입니다.");
+                        checkPw = true;
+
+                        if (isMatch(pwVal, pwConfirmVal)) { // 비밀번호 확인을 먼저 입력하고 비밀번호를 입력하는 경우 실패 메시지 뜨는 것 방지
+                            pwConfirmResultText.css("color", "#0000ff");
+                            pwConfirmResultText.html("비밀번호가 일치합니다.")
+                            checkPwMatch = true;
+                        } else if (!isMatch(pwVal, pwConfirmVal) && pwConfirmVal !== '') {
+                            pwConfirmResultText.css("color", "#d43301");
+                            pwConfirmResultText.html("비밀번호가 일치하지 않습니다.");
+                            checkPwMatch = false;
+                        }
+                    }
+                    else {
+                        pwResultText.css("color", "#d43301");
+                        pwResultText.html("숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.");
+                        checkPw = false;
+                    }
+                }
+                // 값을 입력하지 않은 경우 (지웠을 때)
+                // 모든 메시지를 가린다.
+                else {
+                    pwResultText.css("color", "#d43301");
+                    pwResultText.html("8~20자의 영문대소문자,숫자,특수문자 사용");
+                    checkPw = false;
+                }
+            })
+
+            /* 비밀번호 일치 검사 */
+            $(".pw-confirm-input").on("keyup", function () {
+                let pwVal = $('.pw-input').val();
+                let pwConfirmVal = $('.pw-confirm-input').val();
+                let pwConfirmResultText = $('.pw-confirm-result-text');
+
+                if (pwConfirmVal.length !== 0) { // 사용자가 값을 입력했을 때 동작
+                    if(strongPassword(pwConfirmVal)) { // 글자 입력 제한 검사를 통과한 경우
+                        if (isMatch(pwVal, pwConfirmVal)) { // (비밀번호, 비밀번호 확인) 값이 일치하는 경우
+                            pwConfirmResultText.css("color", "#0000ff");
+                            pwConfirmResultText.html("비밀번호가 일치합니다.")
+                            checkPwConfirm = true;
+                            checkPwMatch = true;
+                        }
+                        else { // (비밀번호,비밀번호 확인) 값이 일치하지 않는 경우
+                            pwConfirmResultText.css("color", "#d43301");
+                            pwConfirmResultText.html("비밀번호가 일치하지 않습니다.")
+                            checkPwConfirm = false;
+                            checkPwMatch = false;
+                        }
+                    } else { // 글자 입력 제한 검사를 통과하지 못한 경우
+                        pwConfirmResultText.css("color", "#d43301");
+                        pwConfirmResultText.html("숫자, 영문자, 특수문자(!@#$%^*+=-)를 포함해야 합니다.")
+                        checkPwConfirm = false;
+                        checkPwMatch = false;
+                    }
+                } else { // 사용자가 값을 모두 지웠을 때 동작 (모든 메시지를 가림)
+                    pwConfirmResultText.css("color", "black");
+                    pwConfirmResultText.html("*패스워드를 한번 더 입력하시기 바랍니다.");
+                    checkPwConfirm = false;
+                    checkPwMatch = false;
+                }
+            });
+
+            /* 이메일 입력 방식 선택 */
+            $('.mail-select').on("change", function () {
+                $(".mail-select option:selected").each(function () {
+                    if ($(this).val() === '1') {
+                        $(".mail-input2").val('');
+                        $(".mail-input2").attr("disabled",false);
+                    } else {
+                        $(".mail-input2").val($(this).text());
+                        $(".mail-input2").attr("disabled",true);
+                    }
+                });
+            });
+        });
+
+        /* 비밀번호 : 8글자 이상, 영문, 숫자, 특수문자 사용 */
+        function strongPassword (str) {
+            return /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/.test(str);
+        }
+
+        /* 비밀번호 확인 : 비밀번호와 비밀번호 확인 일치 */
+        function isMatch (password1, password2) {
+            return password1 === password2;
+        }
+
+        /* 비밀번호, 비밀번호 확인 : 공백 입력 X */
+        function hasBlank (str) {
+            return /\s/g.test(str);
+        }
+
+        /* 인증 번호 일치 여부 */
+        function confirmNumber() {
+            let mailConfirmInputVal = $(".mail-confirm-input").val(); // 사용자가 입력한 인증 번호
+
+            if (mailConfirmInputVal === code) {
+                alert("인증되었습니다.");
+                finalEmail = $(".mail-input").val() + '@' + $(".mail-input2").val();
+                checkMailConfirm = true;
+            } else {
+                alert("인증번호를 다시 확인해주세요.");
+                checkMailConfirm = false;
+            }
+        }
+
+        /* 입력 이메일 형식 유효성 검사 */
+        function checkMailForm(email) {
+            let form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return form.test(email);
+        }
+
+        /* 다음 주소 연동 API */
+        function addressAPI() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    let addr = ''; // 주소 변수
+                    let extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        addr += extraAddr;
+                    } else {
+                        addr += ' ';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    $(".address-input-1").val(data.zonecode);
+                    $(".address-input-2").val(addr);
+                    // 커서를 상세주소 필드로 이동한다.
+                    $(".address-input-3").attr("readonly", false);
+                    $(".address-input-3").focus();
+                }
+            }).open();
+        }
+    </script>
+</body>

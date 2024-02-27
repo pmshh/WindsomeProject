@@ -32,7 +32,7 @@ public class NoticeRepositoryCustomImpl implements NoticeRepositoryCustom {
                                 notice.id,
                                 notice.title,
                                 notice.content,
-                                notice.account.name,
+                                notice.member.name,
                                 notice.regTime,
                                 notice.noticeYN
                         )
@@ -58,11 +58,11 @@ public class NoticeRepositoryCustomImpl implements NoticeRepositoryCustom {
         } else if (StringUtils.equals(noticeSearchDto.getSearchDateType(), "content")) {
             return notice.content.like("%" + noticeSearchDto.getSearchQuery() + "%");
         } else if (StringUtils.equals(noticeSearchDto.getSearchDateType(), "name")) {
-            return notice.account.name.like("%" + noticeSearchDto.getSearchQuery() + "%");
+            return notice.member.name.like("%" + noticeSearchDto.getSearchQuery() + "%");
         } else if (StringUtils.equals(noticeSearchDto.getSearchDateType(), "")) {
             return notice.title.like("%" + noticeSearchDto.getSearchQuery() + "%")
                     .or(notice.content.like("%" + noticeSearchDto.getSearchQuery() + "%"))
-                    .or(notice.account.name.like("%" + noticeSearchDto.getSearchQuery() + "%"));
+                    .or(notice.member.name.like("%" + noticeSearchDto.getSearchQuery() + "%"));
         }
         return null;
     }

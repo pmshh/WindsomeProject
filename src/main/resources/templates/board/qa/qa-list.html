@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="section-body def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>Q&A</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="qa-body mt-5">
+                        <div class="qa-list-container">
+                            <table class="row-header-table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 150px;" scope="col">번호</th>
+                                    <th style="width: auto;" scope="col">제목</th>
+                                    <th style="width: 180px;" scope="col">작성자</th>
+                                    <th style="width: 180px;" scope="col">작성일</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:if="${#lists.isEmpty(qaList.getContent())}">
+                                    <td colspan="4" class="empty-message">
+                                        <span class="message">등록된 Q&A가 없습니다.</span>
+                                    </td>
+                                </tr>
+                                <tr th:each="qa, status:${qaList.getContent()}">
+                                    <td>
+                                        <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
+                                    </td>
+                                    <td class="left">
+                                        <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><span th:text="${qa.title}"></span></a>
+                                        <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                        <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                        <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                        <i class="xi-lock-o"></i>
+                                    </td>
+                                    <td>
+                                        <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
+                                        <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
+                                    </td>
+                                    <td>
+                                        <span class="txtNum gray-col fz11" th:text="${qa.regDate}">2024-02-06</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="button-container">
+                            <button class="white-btn-w65-h30 write-btn">글쓰기</button>
+                        </div>
+
+                        <div class="pagination-container"
+                             th:with="start=${(qaList.number/maxPage)*maxPage + 1}, end=(${(qaList.totalPages == 0) ? 1 :
+                                             (start + (maxPage - 1) < qaList.totalPages ? start + (maxPage - 1) : qaList.totalPages)})">
+                            <ul>
+                                <li class="prev" th:classappend="${qaList.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i
+                                            class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${qaList.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' +  ${qaList.number - 1} + ')'">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${qaList.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                       th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${qaList.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${qaList.number + 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${qaList.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${qaList.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="search-input-container" th:object="${qaSearchDto}">
+                            <i class="fa-solid fa-angle-right"></i>
+                            <span class="txt">검색어</span>
+                            <select class="search-date-type" th:field="*{searchDateType}">
+                                <option value="">(전체)</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="name">작성자</option>
+                            </select>
+                            <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                            <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+            setSearchParameters(); // 검색어 유지 함수
+
+            /* 게시글 등록 화면으로 이동 */
+            $(".write-btn").click(function () {
+                location.href = '/board/qa/enroll';
+            });
+
+            /* 게시글 검색 */
+            $(".search-btn").click(function () {
+                page(0);
+            });
+        });
+
+        function showMessage() {
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+        }
+
+        function setSearchParameters() {
+            let query = [[${qaSearchDto.searchQuery}]];
+            let type = [[${qaSearchDto.searchDateType}]];
+            $(".search-query").val(query);
+            $(".search-date-type").val(type).prop("selected", true);
+        }
+
+        /* page 이동 */
+        function page(page) {
+            let searchDateType = $(".search-date-type").val();
+            let searchQuery = $(".search-query").val();
+            location.href = "/board/qa?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+        }
+    </script>
+</body>

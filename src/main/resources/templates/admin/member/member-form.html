@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="admin-main-area">
+    <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='memberManagement')"></div>
+
+    <article class="admin-content-area">
+        <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+        <!-- section start -->
+        <section class="admin-section-area">
+            <div class="container-fluid">
+
+                <div class="section-header">
+                    <h2 th:if="${viewName} == 'dtlPage'">회원 상세 정보</h2>
+                    <h2 th:if="${viewName} == 'updatePage'">회원 정보 수정</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="section-body member-form-body">
+                    <form id="profileForm" th:action="@{'/admin/members/' + ${memberDetails.id}}" th:object="${memberDetails}" method="post">
+                        <table class="col-header-table-color">
+                            <colgroup>
+                                <col style="width:20%;">
+                                <col style="width: auto;">
+                            </colgroup>
+                            <tbody>
+                            <input type="hidden" th:field="*{id}" th:value="${memberDetails.id}">
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{userIdentifier}">아이디 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="id-input-box">
+                                        <input th:if="${viewName} == 'dtlPage'" class="id-input" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20" readonly>
+                                        <input th:if="${viewName} == 'updatePage'" class="id-input" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${viewName} == 'updatePage'">
+                                <th scope="row">
+                                    <label th:for="*{password}">비밀번호 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="pw-input-box">
+                                        <input class="pw-input" th:field="*{password}" type="password" minlength="8" maxlength="20">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{name}">이름 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="name-input-box">
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="name-input" th:field="*{name}" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="name-input" th:field="*{name}" type="text">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{email}">이메일 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="mail-input-box mb-1">
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="mail-input" th:field="*{email}" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="mail-input" th:field="*{email}" type="text">
+                                        @
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="mail-input2" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="mail-input2" type="text">
+                                        <select th:if="${viewName} == 'updatePage'" class="mail-select" name="mail-select">
+                                            <option value="1" selected>직접입력</option>
+                                            <option value="naver.com">naver.com</option>
+                                            <option value="hanmail.net">hanmail.net</option>
+                                            <option value="hotmail.com">hotmail.com</option>
+                                            <option value="nate.com">nate.com</option>
+                                            <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                            <option value="empas.com">empas.com</option>
+                                            <option value="dreamwiz.com">dreamwiz.com</option>
+                                            <option value="freechal.com">freechal.com</option>
+                                            <option value="lycos.co.kr">lycos.co.kr</option>
+                                            <option value="korea.com">korea.com</option>
+                                            <option value="gmail.com">gmail.com</option>
+                                            <option value="hanmir.com">hanmir.com</option>
+                                            <option value="paran.com">paran.com</option>
+                                        </select>
+                                        <button th:if="${viewName} == 'updatePage'" type="button" class="send-mail white-btn-w100-h30">인증번호 발송</button>
+                                    </div>
+                                    <div th:if="${viewName} == 'updatePage'" class="mail-check-box">
+                                        <input class="mail-confirm-input" disabled="disabled">
+                                        <button type="button" class="check-number white-btn-w100-h30" onclick="confirmNumber()">인증번호 확인</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{address1}">주소 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <input th:field="*{address1}" class="address-input-1 mb-1" readonly="readonly">
+                                    <button th:if="${viewName} == 'updatePage'" type="button" class="find-addr white-btn-w90-h30" onclick="addressAPI()">주소 찾기</button>
+                                    <div class="clearfix"></div>
+                                    <input th:field="*{address2}" class="address-input-2 d-block w-50 mb-1" readonly="readonly">
+                                    <input th:field="*{address3}" class="address-input-3 d-block w-50 mb-1" readonly="readonly">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{totalOrderPrice}">총 주문 금액 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="total-order-price-box">
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="total-order-price-input" th:field="*{totalOrderPrice}" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="total-order-price-input" th:field="*{totalOrderPrice}" type="text">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{point}">보유 포인트 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="point-input-box">
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="point-input" th:field="*{point}" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="point-input" th:field="*{point}" type="text">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{totalUsePoint}">총 사용 포인트 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="total-use-point-input-box">
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="total-use-point-input" th:field="*{totalUsePoint}" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="total-use-point-input" th:field="*{totalUsePoint}" type="text">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    <label th:for="*{totalPoint}">총 적립 포인트 <span>*</span></label>
+                                </th>
+                                <td>
+                                    <div class="total-point-input-box">
+                                        <input th:if="${viewName} == 'dtlPage'" readonly class="total-point-input" th:field="*{totalPoint}" type="text">
+                                        <input th:if="${viewName} == 'updatePage'" class="total-point-input" th:field="*{totalPoint}" type="text">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="btn-box">
+                            <button th:if="${viewName} == 'dtlPage'" th:data-memberId="${memberDetails.id}" class="black-btn-w130-h40 modify-btn" type="button">회원정보수정</button>
+                            <button th:if="${viewName} == 'updatePage'" class="black-btn-w130-h40 save-btn" type="button">저장</button>
+                            <button class="white-btn-w130-h40 cancel-btn" type="button" th:data-memberId="${memberDetails.id}">취소</button>
+                            <button th:if="${viewName} == 'updatePage'" class="white-btn-w130-h40 del-btn" type="button" th:data-memberId="${memberDetails.id}">회원 삭제</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <div th:replace="/layouts/admin-layout.html :: footer"></div>
+    </article>
+</main>
+
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- custom js -->
+    <script th:inline="javascript">
+        let code = ""; // 이메일 인증번호 저장 변수
+
+        /* 유효성 검사 통과 유무 변수 */
+        let checkId = false;
+        let checkPw = false;
+        let checkName = false;
+        let checkMail = false;
+        let checkMailConfirm = false;
+        let checkAddress = false;
+        let beforeEmail = [[${memberDetails.email}]]; // 서버에서 회원의 이메일 정보 가져와서, 이메일 입력란에 입력된 이메일과 비교하여 일치하면 검증 거치지 않고 통과.
+        let finalEmail = "";
+        let checkTotalOrderPrice = false;
+        let checkPoint = false;
+        let checkTotalUsePoint = false;
+        let checkTotalPoint = false;
+
+        $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+            initializeEmail(); // 회원의 이메일 정보를 가져와서 이메일 입력 필드에 초기화하는 함수
+
+            /* 저장 버튼 클릭 처리 */
+            $(".save-btn").click(saveProfile);
+
+            /* 이메일 인증번호 발송 버튼 클릭 처리 */
+            $(".send-mail").click(sendMail);
+
+            /* 이메일 선택 체인지 처리 */
+            $('.mail-select').on("change", setEmailInputMode);
+
+            /* 회원정보 수정 버튼 클릭 처리 */
+            $(".modify-btn").click(modifyProfile);
+
+            /* 취소 버튼 클릭 처리 */
+            $(".cancel-btn").click(cancelProfile);
+
+            /* 회원 삭제 버튼 클릭 처리 */
+            $(".del-btn").click(deleteProfile);
+        });
+
+        function showMessage() {
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+        }
+
+        function initializeEmail() {
+            let email = [[${memberDetails.email}]];
+            let emailArr = email.split("@");
+
+            $(".mail-input").val(emailArr[0]);
+            $(".mail-input2").val(emailArr[1]);
+        }
+
+        /* 회원 정보 수정 함수 */
+        function saveProfile() {
+            let idVal = $(".id-input").val();
+            let pwVal = $('.pw-input').val();
+            let nameVal = $('.name-input').val();
+            let mailVal1 = $(".mail-input").val();
+            let mailVal2 = $(".mail-input2").val();
+            let fullEmail = mailVal1 + '@' + mailVal2;
+            let addressVal = $('.address-input-3').val();
+            let totalOrderPriceVal = $(".total-order-price-input").val();
+            let pointVal = $(".point-input").val();
+            let totalUsePointVal = $(".total-use-point-input").val();
+            let totalPointVal = $(".total-point-input").val();
+            let form = $('#profileForm');
+
+            if (idVal === "") {
+                alert("아이디를 입력하세요.");
+                $('.id-input').focus();
+                return false;
+            } else {
+                checkId = true;
+            }
+
+            if (pwVal === "") {
+                checkPw = true;
+            } else {
+                if (hasBlank(pwVal)) {
+                    alert("비밀번호는 공백 없이 입력해주세요.");
+                    $('.pw-input').focus();
+                    return false;
+                }
+                checkPw = true;
+            }
+
+            if (nameVal === "") {
+                alert("이름을 입력하세요.");
+                $('.name-input').focus();
+                return false;
+            } else {
+                checkName = true;
+            }
+
+            if (mailVal1 === '' || mailVal2 === '') {
+                alert("이메일을 입력하세요.");
+                $('.mail-input').focus();
+                return false;
+            } else {
+                checkMail = true;
+            }
+
+            if (addressVal === "") {
+                alert("주소를 입력하세요.");
+                $('.address-input-1').focus();
+                return false;
+            } else {
+                checkAddress = true;
+            }
+
+            if (totalOrderPriceVal === "") {
+                alert("총 주문 금액을 입력하세요.");
+                $('.total-order-price-input').focus();
+                return false;
+            } else {
+                checkTotalOrderPrice = true;
+            }
+
+            if (pointVal === "") {
+                alert("보유 포인트를 입력하세요.");
+                $('.point-input').focus();
+                return false;
+            } else {
+                checkPoint = true;
+            }
+
+            if (totalUsePointVal === "") {
+                alert("총 사용 포인트를 입력하세요.");
+                $('.total-use-point-input').focus();
+                return false;
+            } else {
+                checkTotalUsePoint = true;
+            }
+
+            if (totalPointVal === "") {
+                alert("총 적립 포인트를 입력하세요.");
+                $('.total-point-input').focus();
+                return false;
+            } else {
+                checkTotalPoint = true;
+            }
+
+            /* 이메일 변경 검사 */
+            if (beforeEmail === fullEmail) {
+                checkMailConfirm = true;
+                finalEmail = beforeEmail; // 이메일을 변경하지 않을 경우 기존 이메일 값을 그대로 서버에 전송
+            } else if (checkMailConfirm === false && beforeEmail !== fullEmail) {
+                alert("이메일을 인증해주세요.");
+                $('.mail-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
+
+            /* 이메일 인증 여부 검사 */
+            if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
+                alert("이메일을 인증해주세요.");
+                $('.mail-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
+
+            if (checkId && checkPw && checkName && checkMail && checkMailConfirm && checkAddress && checkTotalOrderPrice && checkPoint && checkTotalUsePoint && checkTotalPoint) {
+                $(".mail-input").val(finalEmail);
+                if (pwVal === '') {
+                    $(".pw-input").attr("disabled", true);
+                }
+                form.submit();
+            }
+        }
+
+        /* 이메일 전송 함수 */
+        function sendMail() {
+            let mailVal1 = $(".mail-input").val();
+            let mailVal2 = $(".mail-input2").val();
+            let fullEmail = mailVal1 + "@" + mailVal2;
+            let mailConfirmInput = $(".mail-confirm-input");
+
+            if (confirm("인증번호를 전송하시겠습니까?")) {
+                if (validateEmailFormat(fullEmail)) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/members/email-verification",
+                        data: {
+                            email: fullEmail
+                        },
+                        success: function (data) {
+                            mailConfirmInput.css("background-color", "white");
+                            mailConfirmInput.attr("disabled", false);
+                            code = data;
+                        },
+                        error: function (request) {
+                            alert(request.responseText);
+                        }
+                    });
+                } else {
+                    alert("올바른 이메일을 입력해주세요.");
+                }
+            } else {
+                return false;
+            }
+        }
+
+        /* 이메일 입력 모드 설정 함수 */
+        function setEmailInputMode() {
+            let mailVal = $(".mail-input2");
+            $(".mail-select option:selected").each(function () {
+                if ($(this).val() === '1') {
+                    // 직접 입력 모드일 경우 입력 필드를 비워두고 활성화
+                    mailVal.val('');
+                    mailVal.attr("disabled",false);
+                } else {
+                    // 선택한 이메일 도메인을 입력 필드에 설정하고 비활성화
+                    mailVal.val($(this).text());
+                    mailVal.attr("disabled",true);
+                }
+            });
+        }
+
+        /* 회원 정보 수정 화면으로 이동하는 함수 */
+        function modifyProfile() {
+            let memberId = $(this).attr("data-memberId");
+            location.href = '/admin/members/' + memberId + '/edit';
+        }
+
+        /* 회원 관리 페이지로 이동하는 함수 */
+        function cancelProfile() {
+            location.href = '/admin/members';
+        }
+
+        /* 회원 삭제 함수 */
+        function deleteProfile() {
+            if (confirm("정말로 회원을 삭제하시겠습니까?")) {
+                let memberId = $(this).attr("data-memberId");
+                $.ajax({
+                    url: '/admin/members/' + memberId,
+                    type: 'delete',
+                    success(res) {
+                        alert(res);
+                        location.href = '/admin/members';
+                    },
+                    error(request) {
+                        alert(request.responseText);
+                    },
+                })
+            }
+        }
+
+        /* 주어진 문자열에 공백이 있는지 확인하는 함수 */
+        function hasBlank (str) {
+            return /\s/g.test(str);
+        }
+
+        /* 이메일 형식을 검증 함수 */
+        function validateEmailFormat(email) {
+            let form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return form.test(email);
+        }
+
+        /* 사용자가 입력한 인증 번호 검사 함수 */
+        function confirmNumber() {
+            let mailConfirmInputVal = $(".mail-confirm-input").val(); // 사용자가 입력한 인증 번호
+
+            if (mailConfirmInputVal === code) {
+                alert("인증되었습니다.");
+                finalEmail = $(".mail-input").val() + '@' + $(".mail-input2").val();
+                checkMailConfirm = true;
+            } else {
+                alert("인증번호를 다시 확인해주세요.");
+                checkMailConfirm = false;
+            }
+        }
+
+        /* 주소 API 호출 함수 */
+        function addressAPI() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    let addr = ''; // 주소 변수
+                    let extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        addr += extraAddr;
+                    } else {
+                        addr += ' ';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    $(".address-input-1").val(data.zonecode);
+                    $(".address-input-2").val(addr);
+                    // 커서를 상세주소 필드로 이동한다.
+                    $(".address-input-3").attr("readonly", false);
+                    $(".address-input-3").focus();
+                }
+            }).open();
+        }
+    </script>
+</body>
+</html>

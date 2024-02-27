@@ -1,20 +1,20 @@
 package com.windsome.controller;
 
-import com.windsome.config.security.CurrentAccount;
-import com.windsome.dto.cart.CartItemDto;
-import com.windsome.entity.Account;
+import com.windsome.config.security.CurrentMember;
+import com.windsome.dto.cart.CartProductDto;
+import com.windsome.entity.Member;
 import com.windsome.service.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,59 +26,55 @@ public class CartController {
      * 장바구니 화면
      */
     @GetMapping("/cart")
-    public String cartHist(@CurrentAccount Account account, Model model) {
-        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
-        model.addAttribute("cartItems", cartService.getCartList(account.getUserIdentifier()));
-        return "cart/cartList";
+    public String getCartProducts(@CurrentMember Member member, Model model) {
+        model.addAttribute("cartProducts", cartService.getCartProducts(member.getUserIdentifier()));
+        return "cart/cart-list";
     }
 
     /**
-     * 장바구니 상품 등록
+     * 장바구니 상품 추가
      */
     @PostMapping("/cart")
-    public ResponseEntity<Object> cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, @CurrentAccount Account account) {
+    public ResponseEntity<String> addCartProduct(@Valid CartProductDto cartProductDto, BindingResult bindingResult, @CurrentMember Member member) {
         if (bindingResult.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors) {
-                sb.append(fieldError.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(sb.toString());
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining()));
         }
 
-        Long cartItemId;
-
         try {
-            cartItemId = cartService.addCart(cartItemDto, account.getUserIdentifier());
+            cartService.addCartProduct(cartProductDto, member.getUserIdentifier());
+            return ResponseEntity.ok().body("장바구니에 상품이 추가되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.ok().body(cartItemId);
     }
 
     /**
-     * 장바구니 상품 개수 변경
+     * 장바구니 상품 개수 수정
      */
-    @PatchMapping("/cartItem/{cartItemId}")
-    public ResponseEntity<Object> updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, @CurrentAccount Account account) {
+    @PatchMapping("/cart/{cartProductId}")
+    public ResponseEntity<String> updateCartProductQuantity(@PathVariable("cartProductId") Long productId, int count, @CurrentMember Member member) {
         if (count <= 0) {
             return ResponseEntity.badRequest().body("최소 1개 이상 담아주세요.");
-        } else if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
+        }
+
+        if (cartService.validateCartModificationPermission(productId, member.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
-        cartService.updateCartItemCount(cartItemId, count);
-        return ResponseEntity.ok().body(cartItemId);
+
+        cartService.updateCartItemQuantity(productId, count);
+        return ResponseEntity.ok().body("장바구니 상품의 개수가 수정되었습니다.");
     }
 
     /**
      * 장바구니 상품 삭제
      */
-    @DeleteMapping("/cartItem/{cartItemId}")
-    public ResponseEntity<Object> deleteCartItem(@PathVariable("cartItemId") Long cartItemId, @CurrentAccount Account account) {
-        if (cartService.validateCartItem(cartItemId, account.getUserIdentifier())) {
+    @DeleteMapping("/cart/{cartProductId}")
+    public ResponseEntity<String> deleteCartProduct(@PathVariable("cartProductId") Long productId, @CurrentMember Member member) {
+        if (cartService.validateCartModificationPermission(productId, member.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
-        cartService.deleteCartItem(cartItemId);
-        return ResponseEntity.ok().body(cartItemId);
+        cartService.deleteCartProduct(productId);
+        return ResponseEntity.ok().body("장바구니 상품이 삭제되었습니다.");
     }
 }

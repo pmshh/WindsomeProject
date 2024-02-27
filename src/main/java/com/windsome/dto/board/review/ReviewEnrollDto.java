@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ReviewEnrollDto {
 
-    private Long itemId; // 상품 id
+    private Long productId; // 상품 id
 
     private String title; // 제목
 

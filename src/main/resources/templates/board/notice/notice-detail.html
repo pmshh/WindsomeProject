@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>NOTICE</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body notice-detail-body mt-5">
+                        <div class="table-box">
+                            <table>
+                                <colgroup>
+                                    <col style="width:130px;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td colspan="2" class="board-title">
+                                        <span th:text="${noticeDtlList.get(0).title}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="board-date-con">
+                                        <ul class="etcArea">
+                                            <li th:text="${noticeDtlList.get(0).createdBy}"></li>
+                                            <li><span class="txtNum" th:text="${#temporals.format(noticeDtlList.get(0).regTime, 'yyyy-MM-dd')}"></span> </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="detail">
+                                <div class="article" th:utext="${noticeDtlList.get(0).content}"></div>
+                            </div>
+                        </div>
+
+                        <div class="btn-box">
+                            <button class="white-btn-w90-h30 cancel-btn" type="button">목록</button>
+                            <button sec:authorize="hasRole('ADMIN')" class="black-btn-w90-h30 del-btn" type="button">삭제</button>
+                            <button sec:authorize="hasRole('ADMIN')" class="white-btn-w90-h30 update-btn" type="button">수정</button>
+                        </div>
+
+                        <div class="board-movement">
+                            <ul th:if="${noticeDtlList.size() == 3}">
+                                <li class="prev">
+                                    <strong>이전글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(2).noticeId}}"><span th:text="${noticeDtlList.get(2).title}"></span></a>
+                                </li>
+                                <li class="next">
+                                    <strong>다음글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
+
+                            <!-- 이전글만 존재하는 경우 -->
+                            <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId > noticeDtlList.get(1).noticeId}">
+                                <li class="only-prev">
+                                    <strong>이전글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
+
+                            <!-- 다음글만 존재하는 경우 -->
+                            <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
+                                <li class="next">
+                                    <strong>다음글</strong>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(function () {
+            /* 게시글 삭제 */
+            $(".del-btn").click(function () {
+                if (confirm("게시글을 삭제하시겠습니까?")) {
+                    let noticeId = [[${noticeDtlList.get(0).noticeId}]];
+
+                    $.ajax({
+                        url: "/board/notice/" + noticeId,
+                        type: "DELETE",
+                        success(result) {
+                            alert(result);
+                            location.href = '/board/notice';
+                        },
+                        error(request) {
+                            alert(request.responseText);
+                        }
+                    })
+                }
+                return false;
+            });
+
+            /* 공지사항 게시판으로 이동 */
+            $(".cancel-btn").click(function () {
+                let page = [[${page}]];
+                if (page !== null) {
+                    location.href = '/board/notice?page=' + page;
+                }
+                location.href = '/board/notice?page=0';
+            });
+
+            /* 게시글 수정 화면으로 이동 */
+            $(".update-btn").click(function () {
+                let page = [[${page}]];
+                let noticeId = [[${noticeDtlList.get(0).noticeId}]];
+                if (page !== null) {
+                    location.href = '/board/notice/update/' + noticeId + '?page=' + page;
+                }
+                location.href = '/board/notice/update/' + noticeId + '?page=0';
+            });
+        });
+    </script>
+</body>

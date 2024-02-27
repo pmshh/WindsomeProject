@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class OrderPageDto {
-    private List<OrderPageItemDto> orders;
+    private List<OrderPageProductDto> orders;
 }

@@ -1,0 +1,86 @@
+.member-form-body {
+    form {
+        width: 80%;
+
+        table {
+            tbody {
+                td {
+                    span {
+                        margin-top: 2px;
+                    }
+
+                    .mail-select {
+                        width: 125px;
+                    }
+
+                    .pw-input-box {
+                        color: #d43301;
+
+                        .pw-result-text {
+                            margin-left: 4px;
+                        }
+                    }
+
+                    .pw-confirm-input-box {
+                        .pw-confirm-result-text {
+                            margin-left: 4px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .btn-box {
+            padding: 10px 0;
+            text-align: center;
+            display: block;
+            margin-top: 30px;
+            position: relative;
+
+            .del-btn {
+                position: absolute;
+                top: 10px;
+                right: 0;
+                background-color: #DC3545;
+                border: 1px solid transparent !important;
+                color: white;
+
+                &:hover {
+                    background-color: #db5562;
+                    border: 1px solid transparent !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1100px) {
+    .member-form-body {
+        form {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .member-form-body {
+        form {
+            width: 100%;
+
+            table {
+                colgroup {
+                    col:nth-child(1) {
+                        width: 25% !important;
+                    }
+                }
+            }
+
+            .btn-box {
+                button {
+                    font-size: 11px;
+                    width: 90px;
+                }
+            }
+        }
+    }
+}

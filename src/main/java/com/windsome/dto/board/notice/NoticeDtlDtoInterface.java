@@ -8,6 +8,6 @@ public interface NoticeDtlDtoInterface {
     String getTitle();
     String getContent();
     boolean getNoticeYN();
-    Long getAccountId();
+    Long getMemberId();
     LocalDateTime getRegTime();
 }

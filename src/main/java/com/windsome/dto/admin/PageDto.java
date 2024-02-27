@@ -1,6 +1,6 @@
 package com.windsome.dto.admin;
 
-import com.windsome.constant.ItemSellStatus;
+import com.windsome.constant.ProductSellStatus;
 import lombok.Data;
 
 @Data
@@ -10,7 +10,7 @@ public class PageDto {
 
     private String searchDateType;
 
-    private ItemSellStatus searchSellStatus;
+    private ProductSellStatus searchSellStatus;
 
     private String searchBy;
 

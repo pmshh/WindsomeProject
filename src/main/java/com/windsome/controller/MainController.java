@@ -1,11 +1,9 @@
 package com.windsome.controller;
 
-import com.windsome.config.security.CurrentAccount;
-import com.windsome.dto.item.ItemSearchDto;
-import com.windsome.entity.*;
+import com.windsome.dto.product.ProductSearchDto;
 import com.windsome.service.CartService;
 import com.windsome.service.CategoryService;
-import com.windsome.service.ItemService;
+import com.windsome.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,24 +18,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MainController {
 
-    private final ItemService itemService;
+    private final ProductService productService;
     private final CategoryService categoryService;
-    private final CartService cartService;
 
     /**
      * 메인 화면
      */
     @GetMapping("/")
-    public String home(@CurrentAccount Account account, ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
+    public String home(ProductSearchDto productSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 9);
-        Long cartItemTotalCount = null;
-        if (account != null) {
-            cartItemTotalCount = cartService.getCartItemTotalCount(account);
-        }
-        model.addAttribute("cartItemTotalCount", cartItemTotalCount);
-        model.addAttribute("items", itemService.getMainItemPage(itemSearchDto, pageable));
-        model.addAttribute("categories", categoryService.getMainCategoryDto());
-        model.addAttribute("itemSearchDto", itemSearchDto);
+        model.addAttribute("products", productService.getMainPageProducts(productSearchDto, pageable));
+        model.addAttribute("categories", categoryService.fetchCategories());
+        model.addAttribute("productSearchDto", productSearchDto);
         model.addAttribute("maxPage", 10);
         return "main/main";
     }
@@ -50,6 +42,6 @@ public class MainController {
                         @RequestParam(value = "exception", required = false) String exception, Model model) {
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
-        return "account/login";
+        return "member/login";
     }
 }

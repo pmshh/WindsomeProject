@@ -17,12 +17,12 @@ public class Cart extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    public static Cart createCart(Account account) {
+    public static Cart createCart(Member member) {
         Cart cart = new Cart();
-        cart.setAccount(account);
+        cart.setMember(member);
         return cart;
     }
 }

@@ -1,6 +1,6 @@
 package com.windsome.dto.board.review;
 
-import com.windsome.entity.ItemImg;
+import com.windsome.entity.ProductImage;
 import com.windsome.entity.board.Review;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,11 +26,11 @@ public class ReviewDtlPageReviewDto {
     /**
      * 상품 정보
      */
-    private String imgUrl;
+    private String imageUrl;
 
-    private Long itemId;
+    private Long productId;
 
-    private String itemNm;
+    private String productName;
 
     private int price;
 
@@ -38,7 +38,7 @@ public class ReviewDtlPageReviewDto {
 
     private int salePrice;
 
-    public static ReviewDtlPageReviewDto createReviewDtlPageDto(Review review, ItemImg itemImg) {
+    public static ReviewDtlPageReviewDto createReviewDtlPageDto(Review review, ProductImage productImage) {
         ReviewDtlPageReviewDto reviewDtlPageReviewDto = new ReviewDtlPageReviewDto();
         reviewDtlPageReviewDto.setReviewId(review.getId());
         reviewDtlPageReviewDto.setTitle(review.getTitle());
@@ -46,12 +46,12 @@ public class ReviewDtlPageReviewDto {
         reviewDtlPageReviewDto.setContent(review.getContent());
         reviewDtlPageReviewDto.setPassword(review.getPassword());
 
-        reviewDtlPageReviewDto.setImgUrl(itemImg.getImgUrl());
-        reviewDtlPageReviewDto.setItemId(review.getItem().getId());
-        reviewDtlPageReviewDto.setItemNm(review.getItem().getItemNm());
-        reviewDtlPageReviewDto.setPrice(review.getItem().getPrice());
-        reviewDtlPageReviewDto.setDiscount(review.getItem().getDiscount());
-        reviewDtlPageReviewDto.setSalePrice((int) Math.floor(review.getItem().getPrice() * (1 - review.getItem().getDiscount())));
+        reviewDtlPageReviewDto.setImageUrl(productImage.getImageUrl());
+        reviewDtlPageReviewDto.setProductId(review.getProduct().getId());
+        reviewDtlPageReviewDto.setProductName(review.getProduct().getName());
+        reviewDtlPageReviewDto.setPrice(review.getProduct().getPrice());
+        reviewDtlPageReviewDto.setDiscount(review.getProduct().getDiscount());
+        reviewDtlPageReviewDto.setSalePrice((int) Math.floor(review.getProduct().getPrice() * (1 - review.getProduct().getDiscount())));
         return reviewDtlPageReviewDto;
     }
 }

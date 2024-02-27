@@ -35,7 +35,7 @@ public class AdminBoardController {
         model.addAttribute("fixTopNoticeList", noticeService.getFixTopNoticeList());
         model.addAttribute("maxPage", 10);
         model.addAttribute("page", page.orElse(0));
-        return "admin/board/noticeMng";
+        return "admin/board/notice-board-management";
     }
 
     /**
@@ -76,7 +76,7 @@ public class AdminBoardController {
         model.addAttribute("qaSearchDto", qaSearchDto);
         model.addAttribute("maxPage", 10);
         model.addAttribute("page", page.orElse(0));
-        return "admin/board/qaMng";
+        return "admin/board/qa-board-management";
     }
 
     /**
@@ -100,7 +100,7 @@ public class AdminBoardController {
         model.addAttribute("reviews", reviewService.getReviews(reviewSearchDto, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("reviewSearchDto", reviewSearchDto);
         model.addAttribute("maxPage", 10);
-        return "admin/board/reviewMng";
+        return "admin/board/review-board-management";
     }
 
     /**

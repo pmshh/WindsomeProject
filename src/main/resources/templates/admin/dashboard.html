@@ -2,68 +2,68 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/layouts/adminLayout.html :: head"></div>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
 </head>
 
 <body>
-    <main class="admin_main_area">
-        <div th:replace="/layouts/adminLayout.html :: sidebar(currentMenu='home')"></div>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='home')"></div>
 
-        <article class="admin_content_area bg_gray">
-            <div th:replace="/layouts/adminLayout.html :: nav"></div>
+        <article class="admin-content-area bg-gray">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
 
             <!-- section start -->
-            <section class="admin_section_area">
+            <section class="admin-section-area">
                 <div class="container-fluid">
 
-                    <div class="section_header">
+                    <div class="section-header">
                         <h2>Dashboard</h2>
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section_body dashboard_body">
+                    <div class="section-body dashboard-body">
                         <div class="row gy-4">
                             <!-- shop data -->
-                            <div class="col-md-6 col-xl-3 info_wrap">
-                                <div class="info_box">
-                                    <div class="txt_box">
+                            <div class="stats-summary-container col-md-6 col-xl-3">
+                                <div class="info-box">
+                                    <div class="txt-box">
                                         <span class="title">회원 수</span>
-                                        <strong th:text="${dashboardData?.totalAccount}"></strong>
+                                        <strong th:text="${dashboardData?.totalMembers}"></strong>
                                     </div>
-                                    <div class="icon_box">
+                                    <div class="icon-box">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3 info_wrap">
-                                <div class="info_box">
-                                    <div class="txt_box">
+                            <div class="stats-summary-container col-md-6 col-xl-3">
+                                <div class="info-box">
+                                    <div class="txt-box">
                                         <span class="title">상품 수</span>
-                                        <strong th:text="${dashboardData?.totalItem}"></strong>
+                                        <strong th:text="${dashboardData?.totalProducts}"></strong>
                                     </div>
-                                    <div class="icon_box">
+                                    <div class="icon-box">
                                         <i class="fa-solid fa-cart-shopping"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3 info_wrap">
-                                <div class="info_box">
-                                    <div class="txt_box">
+                            <div class="stats-summary-container col-md-6 col-xl-3">
+                                <div class="info-box">
+                                    <div class="txt-box">
                                         <span class="title">고객 문의</span>
-                                        <strong th:text="${dashboardData?.totalQa}"></strong>
+                                        <strong th:text="${dashboardData?.totalQaPosts}"></strong>
                                     </div>
-                                    <div class="icon_box">
+                                    <div class="icon-box">
                                         <i class="fa-solid fa-envelope"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3 info_wrap">
-                                <div class="info_box">
-                                    <div class="txt_box">
+                            <div class="stats-summary-container col-md-6 col-xl-3">
+                                <div class="info-box">
+                                    <div class="txt-box">
                                         <span class="title">전체 총 수입</span>
                                         <strong th:text="${#numbers.formatInteger(dashboardData?.totalSales, 1, 'COMMA')}"></strong><span class="txt"> 원</span>
                                     </div>
-                                    <div class="icon_box">
+                                    <div class="icon-box">
                                         <i class="fa-solid fa-coins"></i>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
 
                             <!-- 카테고리별 판매 건수 -->
                             <div class="col-xl-12 col-xxl-4">
-                                <div class="chart_box">
+                                <div class="chart-container">
                                     <div class="header">
                                         <span>카테고리별 판매 건수</span>
                                     </div>
@@ -83,12 +83,12 @@
 
                             <!-- 최근 고객 문의 -->
                             <div class="col-xl-12 col-xxl-8">
-                                <div class="table_box">
+                                <div class="recent-posts-container">
                                     <div class="header">
                                         <span>최근 고객 문의</span>
                                     </div>
                                     <div class="body">
-                                        <table class="row_header_table">
+                                        <table class="row-header-table">
                                             <thead>
                                             <tr>
                                                 <th style="width: 150px;" scope="col">번호</th>
@@ -98,15 +98,22 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
+                                            <tr th:if="${#lists.isEmpty(qaList.getContent())}">
+                                                <td colspan="4" class="empty-message">
+                                                    <span class="message">등록된 Q&A가 없습니다.</span>
+                                                </td>
+                                            </tr>
+
                                             <tr th:each="qa, status:${qaList.getContent()}">
                                                 <td>
                                                     <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
                                                 </td>
                                                 <td class="left">
-                                                    <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><span th:text="${qa.title}"></span></a>
-                                                    <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                                    <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                                    <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/secret?qaId=' + ${qa.qaId} + '&page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                    <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/' + ${qa.qaId}}"><span th:text="${qa.title}"></span></a>
+                                                    <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                    <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                    <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
                                                     <i class="xi-lock-o"></i>
                                                 </td>
                                                 <td>
@@ -114,26 +121,23 @@
                                                     <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
                                                 </td>
                                                 <td>
-                                                    <span class="txtNum gray_col fz11" th:text="${qa.regDate}">2024-02-06</span>
+                                                    <span class="txtNum gray-col fz11" th:text="${qa.regDate}">2024-02-06</span>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <div th:if="${#lists.isEmpty(orders.getContent())}" class="message_wrap">
-                                            <span class="message">등록된 Q&A가 없습니다.</span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 최근 등록 상품 -->
                             <div class="col-12">
-                                <div class="table_box">
+                                <div class="recent-products-container">
                                     <div class="header">
                                         <span>최근 등록 상품</span>
                                     </div>
                                     <div class="body">
-                                        <table class="row_header_table">
+                                        <table class="row-header-table">
                                             <thead>
                                             <tr>
                                                 <th style="width: 80px;" scope="col">번호</th>
@@ -144,78 +148,85 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="item, status: ${items.getContent()}">
+
+                                            <tr th:if="${#lists.isEmpty(products.getContent())}">
+                                                <td colspan="5" class="empty-message">
+                                                    <span class="message">등록된 상품이 없습니다.</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr th:each="product, status: ${products.getContent()}">
                                                 <td th:text="${status.index + 1}">
                                                 </td>
                                                 <td class="left">
-                                                    <a th:href="'/admin/item/'+${item.id}"
-                                                       th:text="${item.itemNm}"></a>
+                                                    <a th:href="'/product/'+${product.id}"
+                                                       th:text="${product.name}"></a>
                                                 </td>
-                                                <td th:text="${item.itemSellStatus.name == T(com.windsome.constant.ItemSellStatus).SELL.name} ? '판매' : '품절'">
+                                                <td th:text="${product.productSellStatus.name == T(com.windsome.constant.ProductSellStatus).SELL.name} ? '판매' : '품절'">
                                                 </td>
-                                                <td th:text="${item.createdBy}"></td>
-                                                <td th:text="${#temporals.format(item.regTime, 'yyyy-MM-dd HH:mm:ss')}" class="gray_col fz11">
+                                                <td th:text="${product.createdBy}"></td>
+                                                <td th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd HH:mm:ss')}" class="gray-col fz11">
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <div th:if="${#lists.isEmpty(items.getContent())}" class="message_wrap">
-                                            <span class="message">등록된 상품이 없습니다.</span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 최근 주문 내역 -->
                             <div class="col-12">
-                                <div class="table_box big_table_box">
+                                <div class="recent-orders-container big-table">
                                     <div class="header">
                                         <span>최근 주문 내역</span>
                                     </div>
                                     <div class="body">
-                                        <table class="row_header_table">
+                                        <table class="row-header-table">
                                             <thead>
-                                                <tr>
-                                                    <th style="width: 80px;" scope="col">주문 번호</th>
-                                                    <th style="width: 110px;" scope="col">이미지</th>
-                                                    <th style="width: auto;" scope="col">상품정보</th>
-                                                    <th style="width: 110px;" scope="col">주문 상태</th>
-                                                    <th style="width: 110px;" scope="col">주문자 아이디</th>
-                                                    <th style="width: 110px;" scope="col">주문 날짜</th>
-                                                    <th style="width: 110px;" scope="col">취소</th>
-                                                </tr>
+                                            <tr>
+                                                <th style="width: 80px;" scope="col">주문 번호</th>
+                                                <th style="width: 110px;" scope="col">이미지</th>
+                                                <th style="width: auto;" scope="col">상품정보</th>
+                                                <th style="width: 110px;" scope="col">주문 상태</th>
+                                                <th style="width: 110px;" scope="col">주문자 아이디</th>
+                                                <th style="width: 110px;" scope="col">주문 날짜</th>
+                                                <th style="width: 110px;" scope="col">취소</th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <th:block th:each="order, status: ${orders.getContent()}">
-                                                    <tr th:each="orderItem, status: ${order.orderItemDtoList}">
+                                            <tr th:if="${#lists.isEmpty(orders.getContent())}">
+                                                <td colspan="7" class="empty-message">
+                                                    <span class="message">주문 내역이 없습니다.</span>
+                                                </td>
+                                            </tr>
 
-                                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}" th:text="${order.orderId}"></td>
-                                                        <td class="thumb">
-                                                            <a th:href="${'/item/' + orderItem.itemId}">
-                                                                <img th:src="${orderItem.imgUrl}">
-                                                            </a>
-                                                        </td>
-                                                        <td class="product left top">
-                                                            <strong class="name">
-                                                                <a th:href="${'/item/' + orderItem.itemId}" th:text="${orderItem.itemNm}"></a>
-                                                            </strong>
-                                                            <div class="option">[옵션: 선택 X]</div>
-                                                        </td>
-                                                        <td th:text="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name ? '배송 준비중' : '주문 취소'}"></td>
-                                                        <td th:text="${order.buyerId}"></td>
-                                                        <td th:text="${order.orderDate}" class="gray_col fz11"></td>
-                                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderItemDtoList)}">
-                                                            <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}" class="black_btn_w65_h30" type="button"
+                                            <th:block th:each="order, status: ${orders.getContent()}">
+                                                <tr th:each="orderProduct, status: ${order.orderProductDtoList}">
+
+                                                    <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}" th:text="${order.orderId}"></td>
+                                                    <td class="thumb">
+                                                        <a th:href="${'/product/' + orderProduct.productId}">
+                                                            <img th:src="${orderProduct.imageUrl}">
+                                                        </a>
+                                                    </td>
+                                                    <td class="product left top">
+                                                        <strong class="name">
+                                                            <a th:href="${'/product/' + orderProduct.productId}" th:text="${orderProduct.productName}"></a>
+                                                        </strong>
+                                                        <div class="option">[옵션: 선택 X]</div>
+                                                    </td>
+                                                    <td th:text="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name ? '배송 준비중' : '주문 취소'}"></td>
+                                                    <td th:text="${order.buyerId}"></td>
+                                                    <td th:text="${order.orderDate}" class="gray-col fz11"></td>
+                                                    <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}">
+                                                        <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}" class="black-btn-w65-h30" type="button"
                                                                 th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
-                                                            <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
-                                                        </td>
-                                                    </tr>
-                                                </th:block>
+                                                        <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
+                                                    </td>
+                                                </tr>
+                                            </th:block>
                                             </tbody>
                                         </table>
-                                        <div th:if="${#lists.isEmpty(orders.getContent())}" class="message_wrap">
-                                            <span class="message">주문 내역이 없습니다.</span>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -224,103 +235,92 @@
                 </div>
             </section>
 
-            <div th:replace="/layouts/adminLayout.html :: footer"></div>
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
         </article>
     </main>
-    <div th:replace="/layouts/adminLayout.html :: commonJs"></div>
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
 
     <!-- custom js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- chart.js -->
     <script th:inline="javascript">
         $(function () {
+            /* 차트 생성 */
             const ctx = document.getElementById('myChart');
-            const dashboardData = [[${dashboardData.numOfSalesByCateList}]];
-            const param = extractSalesCount(dashboardData);
-
+            const dashboardData = [[${dashboardData.categorySalesList}]];
+            const param = [];
+            for (let key in dashboardData) {
+                let val = dashboardData[key].count;
+                param.push(val);
+            }
             createChart(ctx, param);
 
-            function extractSalesCount(data) {
-                const param = [];
-                for (let key in data) {
-                    let val = data[key].count;
-                    param.push(val);
-                }
-                return param;
-            }
-
-            function createChart(ctx, param) {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
-                        datasets: [{
-                            data: param,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                        },
-                        indexAxis: 'y',
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
         });
 
+        /* 주문 취소 함수 */
         function cancelOrder(orderId) {
             if (confirm("선택하신 주문을 취소하시겠습니까?")) {
-                let paramData = {
-                    orderId: orderId,
-                };
-
-                let param = JSON.stringify(paramData);
-
                 $.ajax({
                     url: "/admin/order/" + orderId + "/cancel",
                     type: "POST",
-                    contentType: "application/json",
-                    data: param,
                     dataType: "text",
-                    cache: false,
                     success: function () {
                         alert("주문이 취소 되었습니다.");
                         location.reload(true);
                     },
-                    error: function (request) {
-                        if (request.status === '401') {
+                    error: function (xhr) {
+                        if (xhr.status === 200) {
                             alert('로그인 후 이용해주세요.');
-                            location.href = '/login';
+                            location.href = "/login";
                         } else {
-                            alert(request.responseText);
+                            alert(xhr.responseText);
                         }
                     },
                 })
             } else {
                 false;
             }
+        }
+
+        /* 차트 생성 함수 */
+        function createChart(ctx, param) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACC'],
+                    datasets: [{
+                        data: param,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                    },
+                    indexAxis: 'y',
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>

@@ -1,4 +1,4 @@
-.items_header {
+.products-header {
     margin: 40px auto 40px;
 
     h2 {
@@ -13,8 +13,8 @@
         margin: 20px auto;
     }
 
-    .little_category {
-        .menu_category {
+    .little-category {
+        .menu-category {
             text-align: center;
             font-size: 13px;
             width: 100%;
@@ -40,16 +40,16 @@
     }
 }
 
-.items_body {
+.products-body {
     width: 80%;
     margin: 0 auto;
 
-    .search_result {
+    .search-result {
         padding: 50px;
         text-align: center;
         font-size: 12px;
 
-        .search_input {
+        .search-input {
             position: relative;
             width: 400px;
             display: inline-block;
@@ -81,33 +81,33 @@
             }
         }
 
-        .content_count {
+        .content-count {
             font-size: 12px;
         }
     }
 
-    .normal_menu {
+    .normal-menu {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
 
-        .item_total,
-        .item_filter {
+        .product-total,
+        .product-filter {
             font-size: 11px;
             line-height: 25px;
             color: #aaa;
             letter-spacing: 0.02em;
         }
 
-        .item_total {
+        .product-total {
             span {
                 font-weight: bold;
                 color: #000;
             }
         }
 
-        .item_filter {
+        .product-filter {
             li {
                 display: inline-block;
                 margin-left: 12px;
@@ -120,8 +120,8 @@
         }
     }
 
-    .products_wrap {
-        .product_dtl {
+    .products-wrap {
+        .product-dtl {
             margin-bottom: 7%;
 
             .desc {
@@ -135,36 +135,45 @@
                 }
 
                 .discount,
-                .no_discount {
-                    .item_price {
+                .no-discount {
+                    .product-price {
                         font-size: 12px;
                         color: #000000;
                     }
 
-                    .discount_price {
+                    .discount-price {
                         font-size: 12px;
                         color: #333333;
                         font-weight: bold;
                     }
 
-                    .discount_rate {
+                    .discount-rate {
                         font-size: 12px;
                         color: #e06f18;
                         font-weight: bold;
                     }
                 }
 
-                .no_discount {
-                    .item_price {
+                .no-discount {
+                    .product-price {
                         text-decoration: line-through;
                     }
                 }
             }
         }
 
-        .message_wrap {
-            @include board_message_wrap();
+        .empty-message {
+            padding: 110px 0;
+            border-bottom: 1px solid #e5e5e5;
             border-top: 1px solid #e5e5e5;
+            text-align: center;
+
+            .message {
+                font-size: 11px;
+                color: #707070;
+                font-weight: bold;
+            }
+
         }
     }
 

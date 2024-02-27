@@ -1,7 +1,7 @@
 package com.windsome.controller.admin;
 
 import com.windsome.dto.board.qa.QaSearchDto;
-import com.windsome.dto.item.ItemSearchDto;
+import com.windsome.dto.product.ProductSearchDto;
 import com.windsome.service.*;
 import com.windsome.service.board.QaService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class AdminDashboardController {
 
     private final AdminService adminService;
-    private final ItemService itemService;
-    private final OrderService orderService;
     private final QaService qaService;
 
     /**
@@ -30,8 +28,8 @@ public class AdminDashboardController {
     public String getDashboard(Model model) {
         Pageable pageable = PageRequest.of(0, 3);
         model.addAttribute("dashboardData", adminService.getDashboardData());
-        model.addAttribute("items", itemService.getAdminItemPage(new ItemSearchDto(), pageable));
-        model.addAttribute("orders", orderService.getAdminPageOrderList("", pageable));
+        model.addAttribute("products", adminService.getProductList(new ProductSearchDto(), pageable));
+        model.addAttribute("orders", adminService.getOrderList("", pageable));
         model.addAttribute("qaList", qaService.getQaList(new QaSearchDto(), pageable));
         return "admin/dashboard";
     }

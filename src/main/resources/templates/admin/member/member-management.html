@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="admin-main-area">
+    <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='memberManagement')"></div>
+
+    <article class="admin-content-area">
+        <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+        <!-- section start -->
+        <section class="admin-section-area">
+            <div class="container-fluid">
+
+                <div class="section-header">
+                    <h2>회원 관리</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="section-body member-mng-body">
+                    <div class="member-list-container">
+                        <table class="row-header-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 80px;" scope="col">번호</th>
+                                <th style="width: 110px;" scope="col">권한</th>
+                                <th style="width: auto;" scope="col">회원 정보</th>
+                                <th style="width: 150px;" scope="col">가입 날짜</th>
+                                <th style="width: 150px;" scope="col">선택</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${#lists.isEmpty(memberInfoDto.getContent())}">
+                                <td colspan="5" class="empty-message">
+                                    <span class="message">등록된 회원이 없습니다.</span>
+                                </td>
+                            </tr>
+
+                            <tr th:each="member, status :${memberInfoDto.getContent()}">
+                                <td>
+                                    <span th:text="${memberInfoDto.getTotalElements() - (memberInfoDto.getSize() * memberInfoDto.getNumber()) - status.index}"></span>
+                                </td>
+                                <td th:text="${member.state.name == T(com.windsome.constant.Role).ADMIN.name ? '관리자' : '일반 회원'}"></td>
+                                <td class="left top user-info pl20">
+                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|이름: ${member.name}|"></span></a>
+                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|아이디: ${member.userIdentifier}|"></span></a>
+                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|이메일: ${member.email}|"></span></a>
+                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|보유 포인트: ${#numbers.formatInteger(member.point, 0, 'COMMA')}|"></span></a>
+                                </td>
+                                <td th:text="${#temporals.format(member.regTime, 'yyyy-MM-dd')}" class="gray-col fz11">2024-02-15</td>
+                                <td class="center">
+                                    <button th:if="${member.state.name == T(com.windsome.constant.Role).ADMIN.name}" class="black-btn-w90-h30 update-role-btn" th:value="${T(com.windsome.constant.Role).USER.name}" th:data-memberId="${member.id}">관리자 해제</button>
+                                    <button th:if="${member.state.name == T(com.windsome.constant.Role).USER.name}" class="white-btn-w90-h30 update-role-btn" th:value="${T(com.windsome.constant.Role).ADMIN.name}" th:data-memberId="${member.id}">관리자 설정</button>
+                                    <button class="white-btn-w90-h30 update-btn" th:data-memberId="${member.id}">회원 수정</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-container"
+                         th:with="start=${(memberInfoDto.number/maxPage)*maxPage + 1},
+                                end=(${(memberInfoDto.totalPages == 0) ? 1 :
+                                (start + (maxPage - 1) < memberInfoDto.totalPages ? start + (maxPage - 1) : memberInfoDto.totalPages)})">
+                        <ul>
+                            <li class="prev" th:classappend="${memberInfoDto.first} ? 'disabled'">
+                                <a th:onclick="'javascript:page(0)'">
+                                    <i class="fa-solid fa-angle-left"></i><i
+                                        class="fa-solid fa-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="prev" th:classappend="${memberInfoDto.first} ? 'disabled'">
+                                <a th:onclick="'javascript:page(' +  ${memberInfoDto.number - 1} + ')'">
+                                    <i class="fa-solid fa-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                th:classappend="${memberInfoDto.number eq page - 1} ? 'active' : ''">
+                                <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                   th:inline="text">[[${page}]]</a>
+                            </li>
+                            <li class="next" th:classappend="${memberInfoDto.last} ? 'disabled'">
+                                <a th:onclick="'javascript:page(' + ${memberInfoDto.number + 1} + ')'">
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="next" th:classappend="${memberInfoDto.last} ? 'disabled'">
+                                <a th:onclick="'javascript:page(' + ${memberInfoDto.totalPages - 1} + ')'">
+                                    <i class="fa-solid fa-angle-right"></i><i
+                                        class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="search-input-container" th:object="${memberListSearchDto}">
+                        <i class="fa-solid fa-angle-right"></i>
+                        <span class="txt">검색어</span>
+                        <select class="search-state-type" th:field="*{searchStateType}">
+                            <option value="">권한(전체)</option>
+                            <option th:value="${T(com.windsome.constant.Role).USER.name}">일반 회원</option>
+                            <option th:value="${T(com.windsome.constant.Role).ADMIN.name}">관리자</option>
+                        </select>
+                        <select class="search-type" th:field="*{searchType}">
+                            <option value="userIdentifier">아이디</option>
+                            <option value="name">이름</option>
+                            <option value="email">이메일</option>
+                        </select>
+                        <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                        <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div th:replace="/layouts/admin-layout.html :: footer"></div>
+    </article>
+</main>
+
+<div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <!-- custom js -->
+    <script th:inline="javascript">
+        $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+            initRoleUpdateButtons();
+
+            /* 회원 수정 버튼 클릭 처리 */
+            $(".update-btn").click(handleUpdateButtonClick);
+
+            /* 검색 버튼 클릭 처리 */
+            $(".search-btn").click(handleSearchButtonClick);
+
+            /* 검색어 입력창 체인지 처리 */
+            $(".search-query").keydown(handleInputChange)
+        });
+
+        function showMessage() {
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+        }
+
+        /* 검색어에 엔터 입력하면 검색하는 기능 */
+        function handleInputChange() {
+            if (e.keyCode === 13) {
+                search();
+            }
+        }
+
+        /* 검색 기능 */
+        function handleSearchButtonClick() {
+            e.preventDefault();
+            search();
+        }
+
+        /* 회원 수정 화면으로 이동하는 함수 */
+        function handleUpdateButtonClick() {
+            let memberId = $(this).attr("data-memberId");
+                location.href = '/admin/members/' + memberId + '/edit';
+        }
+
+        /* 관리자 권한 부여/해제 함수 */
+        function initRoleUpdateButtons() {
+            $(".update-role-btn").click(function () {
+                let memberId = $(this).attr("data-memberId");
+                let role = $(this).val();
+
+                if (confirm("관리자 권한을 수정하시겠습니까?")) {
+                    $.ajax({
+                        url: '/admin/members/' + memberId,
+                        type: 'patch',
+                        data: {
+                            role: role
+                        },
+                        success(res) {
+                            alert(res);
+                            location.reload(true);
+                        },
+                        error(request) {
+                            alert(request.responseText);
+                        },
+                    });
+                }
+                return false;
+            });
+        }
+
+        /* 페이지 이동 함수 */
+        function page(page) {
+            let searchStateType = $(".search-state-type").val();
+            let searchType = $(".search-type").val();
+            let searchQuery = $(".search-query").val();
+            location.href = "/admin/members?page=" + page + "&searchStateType=" + searchStateType + "&searchType=" + searchType + "&searchQuery=" + searchQuery;
+        }
+
+        /* 검색 함수 */
+        function search() {
+            if ($(".search-query").val() === '') {
+                alert("검색어를 입력해주세요.");
+                return false;
+            }
+            page(0);
+        }
+    </script>
+</body>

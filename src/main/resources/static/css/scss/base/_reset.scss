@@ -3,13 +3,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import url("https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
-@font-face {
-    font-family: 'JeonjuCraftMjB';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/JeonjuCraftMjB.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -50,6 +43,10 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
+}
+
+.ck-content {
+    min-height: 400px;
 }
 
 // input::-ms-clear,

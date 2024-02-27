@@ -1,9 +1,9 @@
 package com.windsome.controller.board;
 
-import com.windsome.config.security.CurrentAccount;
+import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.qa.CommentEnrollDto;
 import com.windsome.dto.board.qa.CommentUpdateDto;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.service.board.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,12 +24,12 @@ public class CommentController {
      * 댓글 등록
      */
     @PostMapping("/comment/enroll")
-    public ResponseEntity<String> enrollComment(@CurrentAccount Account account, CommentEnrollDto commentEnrollDto) {
-        if (account == null) {
+    public ResponseEntity<String> enrollComment(@CurrentMember Member member, CommentEnrollDto commentEnrollDto) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
         try {
-            commentService.enrollComment(commentEnrollDto, account);
+            commentService.enrollComment(commentEnrollDto, member);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 게시글입니다.");
         }
@@ -40,13 +40,13 @@ public class CommentController {
      * 댓글 수정
      */
     @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<String> updateComment(@CurrentAccount Account account, CommentUpdateDto commentUpdateDto) {
-        if (account == null) {
+    public ResponseEntity<String> updateComment(@CurrentMember Member member, CommentUpdateDto commentUpdateDto) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
 
         try {
-            if (commentService.validateComment(account, commentUpdateDto.getCommentId())) {
+            if (commentService.validateComment(member, commentUpdateDto.getCommentId())) {
                 return ResponseEntity.badRequest().body("댓글 수정 권한이 없습니다.");
             }
             commentService.updateComment(commentUpdateDto);
@@ -60,13 +60,13 @@ public class CommentController {
      * 댓글 삭제
      */
     @DeleteMapping("/comment/{commentId}")
-    public ResponseEntity<String> deleteComment(@CurrentAccount Account account, @PathVariable Long commentId) {
-        if (account == null) {
+    public ResponseEntity<String> deleteComment(@CurrentMember Member member, @PathVariable Long commentId) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
 
         try {
-            if (commentService.validateComment(account, commentId)) {
+            if (commentService.validateComment(member, commentId)) {
                 return ResponseEntity.badRequest().body("댓글 수정 권한이 없습니다.");
             }
             commentService.deleteComment(commentId);

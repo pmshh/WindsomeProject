@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='orderManagement')"></div>
+
+        <article class="admin-content-area">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="admin-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>주문 관리</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body order-mng-body">
+                        <div class="order-list-container">
+                            <table class="row-header-table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 80px;" scope="col">주문 번호</th>
+                                    <th style="width: 110px;" scope="col">이미지</th>
+                                    <th style="width: auto;" scope="col">상품 정보</th>
+                                    <th style="width: 110px;" scope="col">주문자 아이디</th>
+                                    <th style="width: 110px;" scope="col">주문 날짜</th>
+                                    <th style="width: 110px;" scope="col">주문 상태</th>
+                                    <th style="width: 110px;" scope="col">취소</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${#lists.isEmpty(orders.getContent())}">
+                                    <td colspan="7" class="empty-message">
+                                        <span class="message">주문 내역이 없습니다.</span>
+                                    </td>
+                                </tr>
+
+                                <th:block th:each="order, status: ${orders.getContent()}">
+                                    <tr th:each="orderProduct, status: ${order.orderProductDtoList}">
+                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}" th:text="${order.orderId}"></td>
+                                        <td class="thumb">
+                                            <a th:href="${'/product/' + orderProduct.productId}">
+                                                <img th:src="${orderProduct.imageUrl}">
+                                            </a>
+                                        </td>
+                                        <td class="product left-top">
+                                            <strong class="name">
+                                                <a th:href="${'/product/' + orderProduct.productId}" th:text="${orderProduct.productName}"></a>
+                                            </strong>
+                                            <div class="option">[옵션: 선택 X]</div>
+                                        </td>
+                                        <td th:text="${order.buyerId}"></td>
+                                        <td th:text="${order.orderDate}"></td>
+                                        <td th:text="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name ? '주문' : '취소'}"></td>
+                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}">
+                                            <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}" class="black-btn-w65-h30" type="button"
+                                                    th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                            <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pagination-container"
+                            th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                                 end=(${(orders.totalPages == 0) ? 1 :
+                                 (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
+                            <ul>
+                                <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:goToPage(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i
+                                            class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:goToPage(' +  ${orders.number - 1} + ')'">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${orders.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:goToPage(' + ${page - 1} + ')'"
+                                        th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:goToPage(' + ${orders.number + 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:goToPage(' + ${orders.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="search-input-container">
+                            <i class="fa-solid fa-angle-right"></i>
+                            <span class="txt">검색어</span>
+                            <select class="search-type">
+                                <option value="">아이디</option>
+                            </select>
+                            <input class="userid-input" name="userIdentifier" type="text"
+                                   placeholder="주문자 아이디를 입력해주세요">
+                            <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <!-- custom js -->
+    <script th:inline="javascript">
+        $(function () {
+            /* 검색 버튼 클릭 처리 */
+            $(".search-btn").click(handleSearchButtonClick);
+        });
+
+        /* 주문 취소 함수 */
+        function cancelOrder(orderId) {
+            if (confirm("선택하신 주문을 취소하시겠습니까?")) {
+                $.ajax({
+                    url: "/admin/order/" + orderId + "/cancel",
+                    type: "POST",
+                    dataType: "text",
+                    success: function () {
+                        alert("주문이 취소되었습니다.");
+                        location.reload(true);
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 200) {
+                            alert('로그인 후 이용해주세요.');
+                            location.href = "/login";
+                        } else {
+                            alert(xhr.responseText);
+                        }
+                    },
+                })
+            } else {
+                return false;
+            }
+        }
+
+        /* 검색 함수 */
+        function handleSearchButtonClick(e) {
+            e.preventDefault();
+            goToPage(0);
+        }
+
+        /* 페이지 이동 함수 */
+        function goToPage(page) {
+            let userIdentifier = $(".userid-input").val();
+            location.href = "/admin/orders/" + page + "?userIdentifier=" + userIdentifier;
+        }
+    </script>
+
+</body>

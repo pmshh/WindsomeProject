@@ -12,7 +12,7 @@ public class ReviewUpdateDto {
 
     private Long reviewId;
 
-    private Long itemId;
+    private Long productId;
 
     private String title;
 

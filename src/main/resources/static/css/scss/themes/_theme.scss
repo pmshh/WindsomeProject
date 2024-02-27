@@ -1,9 +1,9 @@
 /***** main *****/
-.def_main_area {
+.def-main-area {
     min-height: 100vh;
 
     /***** sidebar *****/
-    .def_sidebar_area {
+    .def-sidebar-area {
         position: fixed;
         top: 0;
         left: 0;
@@ -17,7 +17,7 @@
         z-index: 100;
         transition: 0.2s linear;
 
-        .sidebar_logo {
+        .sidebar-logo {
             // display: none;
             font-family: 'JeonjuCraftMjB';
 
@@ -29,7 +29,7 @@
             }
         }
 
-        .sidebar_nav {
+        .sidebar-nav {
             height: 40px;
             margin: 20px 0 30px;
 
@@ -60,7 +60,7 @@
             }
         }
 
-        .sidebar_menu {
+        .sidebar-menu {
             display: flex;
             margin-bottom: 50px;
 
@@ -102,7 +102,7 @@
             .category ul li {
                 position: relative;
 
-                .sub_category {
+                .sub-category {
                     position: absolute;
                     display: none;
                     width: 170px;
@@ -135,12 +135,12 @@
                 }
             }
 
-            .category ul li:hover .sub_category {
+            .category ul li:hover .sub-category {
                 display: block;
             }
         }
 
-        .search_form {
+        .search-form {
             margin-bottom: 30px;
 
             form>input {
@@ -166,25 +166,25 @@
 
         }
 
-        .menu_cs>ul>li:nth-child(1) {
+        .menu-cs>ul>li:nth-child(1) {
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 15px;
         }
 
-        .menu_cs>ul>li:nth-child(2) {
+        .menu-cs>ul>li:nth-child(2) {
             font-size: 11px;
         }
     }
 
     /***** content *****/
-    .def_content_area {
+    .def-content-area {
         flex: 1 1 0;
         padding-top: 70px;
         padding-left: 300px;
 
         /***** navigation *****/
-        .def_nav_area {
+        .def-nav-area {
             position: fixed;
             top: 0;
             left: 0;
@@ -202,7 +202,7 @@
                 justify-content: center;
                 align-items: center;
 
-                .menu_link {
+                .menu-link {
                     display: flex;
                     gap: 30px;
 
@@ -225,7 +225,7 @@
                             border: none;
                         }
 
-                        .account_menu {
+                        .member-menu {
                             position: absolute;
                             display: none;
                             width: 140px;
@@ -256,18 +256,18 @@
                         }
                     }
 
-                    li.account_menu {
+                    li.member-menu {
                         cursor: pointer;
                         position: relative;
                     }
 
-                    li.account_menu:hover .account_menu {
+                    li.member-menu:hover .member-menu {
                         display: block;
                     }
                 }
             }
 
-            .menu_toggle {
+            .menu-toggle {
                 display: none;
 
                 input {
@@ -323,11 +323,11 @@
         }
 
         /***** section *****/
-        .def_section_area {
+        .def-section-area {
 
             .container,
             .container-fluid {
-                .section_header {
+                .section-header {
                     margin: 40px auto 60px;
 
                     h2 {
@@ -343,7 +343,7 @@
                     }
                 }
 
-                .section_body {
+                .section-body {
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -356,8 +356,8 @@
 
 /***** sidebar toggle *****/
 @media (max-width: 1200px) {
-    .def_main_area {
-        .def_sidebar_area {
+    .def-main-area {
+        .def-sidebar-area {
             position: fixed;
             left: -300px;
             width: 100%;
@@ -367,15 +367,15 @@
             }
         }
 
-        .def_content_area {
+        .def-content-area {
             padding-left: 0;
 
-            .def_nav_area {
+            .def-nav-area {
                 .menu {
                     display: none;
                 }
 
-                .menu_toggle {
+                .menu-toggle {
                     display: block;
                 }
             }

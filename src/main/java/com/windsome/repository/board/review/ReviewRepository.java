@@ -15,16 +15,16 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long>, QuerydslPredicateExecutor<Review>, ReviewRepositoryCustom {
 
-    List<Review> findByItemIdOrderByIdDesc(Long itemId, Pageable pageable);
+    List<Review> findByProductIdOrderByIdDesc(Long productId, Pageable pageable);
 
-    Long countByItemId(Long itemId);
+    Long countByProductId(Long productId);
 
     Page<Review> findAll(Pageable pageable);
 
-    Review findByItemId(Long itemId);
+    Review findByProductId(Long productId);
 
-    @Query(value = "select avg(r.rating) from Review r where r.item.id = :itemId")
-    BigDecimal getRatingAvg(@Param("itemId") Long itemId);
+    @Query(value = "select avg(r.rating) from Review r where r.product.id = :productId")
+    BigDecimal getRatingAvg(@Param("productId") Long productId);
 
-    boolean existsByItemIdAndAccountId(Long itemId, Long accountId);
+    boolean existsByProductIdAndMemberId(Long productId, Long memberId);
 }

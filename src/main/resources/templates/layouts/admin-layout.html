@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:fragment="head">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Winsome</title>
+    <!-- bootstrap css -->
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- fontawesome css -->
+    <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css"/>
+    <!-- xeicon -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <!-- custom css -->
+    <link rel="stylesheet" href="/css/css/style.css">
+
+    <!-- jQuery -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- fontawesome js -->
+    <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <!-- jdenticon js -->
+    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+</th:block>
+
+<body>
+    <main class="admin-main-area">
+        <aside class="admin-sidebar-area" th:fragment="sidebar (currentMenu)">
+            <div class="sidebar-logo">
+                <h2>WINDSOME</h2>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="profile-img">
+                    <svg th:data-jdenticon-value="${#authentication.name}" width="36" height="36"></svg>
+                </div>
+                <div class="profile-name">
+                    <div class="name-box">
+                        <button type="button" class="toggle-btn"><span th:text="${#authentication.name}"></span><i
+                                class="fa-solid fa-sort-down"></i></button>
+                    </div>
+                    <div class="logout-box">
+                        <ul>
+                            <li sec:authorize="isAuthenticated()">
+                                <form action="#" th:action="@{/logout}" method="post">
+                                    <button type="submit">
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-header">
+                    사이트 관리
+                </div>
+                <div class="sidebar-item">
+                    <a th:href="@{/admin/dashboard}" class="sidebar-link" th:classappend="${currentMenu == 'home'}? active">
+                        <i class="xi-cog pe-2"></i>
+                        Dashboard
+                    </a>
+                    <a th:href="@{/admin/products}" class="sidebar-link"
+                        th:classappend="${currentMenu == 'productManagement'}? active">
+                        <i class="xi-shop pe-2"></i>
+                        상품 관리
+                    </a>
+                    <a th:href="@{/admin/orders}" class="sidebar-link"
+                        th:classappend="${currentMenu == 'orderManagement'}? active">
+                        <i class="xi-cart-o pe-2"></i>
+                        주문 관리
+                    </a>
+                    <a th:href="@{/admin/members}" class="sidebar-link"
+                        th:classappend="${currentMenu == 'memberManagement'}? active">
+                        <i class="xi-user-o pe-2"></i>
+                        회원 관리
+                    </a>
+                    <a class="sidebar-link collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#sub-menu" role="button">
+                        <i class="xi-list pe-2"></i>
+                        게시판 관리
+                    </a>
+                    <div class="collapse sub-menu" id="sub-menu">
+                        <a th:href="@{/admin/board/notice}" th:classappend="${currentMenu == 'noticeManagement'}? active">Notice</a>
+                        <a th:href="@{/admin/board/qa}" th:classappend="${currentMenu == 'qaManagement'}? active">Q&A</a>
+                        <a th:href="@{/admin/board/review}" th:classappend="${currentMenu == 'reviewManagement'}? active">Review</a>
+                    </div>
+                    <hr class="line">
+                    <a th:href="@{/}" class="sidebar-link">
+                        <i class="xi-log-out pe-2"></i>
+                        나가기
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <article class="admin-content-area">
+            <!-- navigation -->
+            <nav th:fragment="nav" class="admin-nav-area">
+                <div class="menu">
+                    <ul class="menu-link">
+                        <li>
+                            <a th:href="@{/}">
+                                <i class="xi-log-out" style="font-size: 24px;"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-toggle">
+                    <input type="checkbox" id="hamburger">
+                    <label for="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </label>
+                </div>
+            </nav>
+
+            <!-- footer -->
+            <footer th:fragment="footer" class="def-footer-area">
+                <div class="footer-header">
+                    <ul>
+                        <li><a onclick="alert('준비중입니다.');">HOME</a></li>
+                        <li><a onclick="alert('준비중입니다.');">COMPANY</a></li>
+                        <li><a onclick="alert('준비중입니다.');">AGREEMENT</a></li>
+                        <li><a onclick="alert('준비중입니다.');">PRIVACY</a></li>
+                        <li><a onclick="alert('준비중입니다.');">GUIDE</a></li>
+                    </ul>
+                </div>
+                <div class="footer-address">
+                    <span>TEL: 070-0000-0000</span>
+                    <span class="shop-black"></span>
+                    <span>ADDRESS: 서울특별시 서초구 언남16길 13 윈섬 WINDSOME</span>
+                </div>
+                <div class="footer-copyright">
+                    Copyright &copy <strong>윈섬 WINDSOME</strong>. All rights reserved.
+                </div>
+            </footer>
+        </article>
+    </main>
+
+    <script th:inline="javascript" th:fragment="commonJs">
+        $(function () {
+            /* csrf token */
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+
+            /* 스크롤 시 navbar 투명 */
+            $(window).scroll(function () {
+                if ($(this).scrollTop() == 0)
+                    $('.admin-nav-area').css('opacity', '1');
+                else
+                    $('.admin-nav-area').css('opacity', '.6');
+            });
+
+            <!-- sidebar toggle 기능 -->
+            let toggleBtn = $('.menu-toggle');
+            let sidebar = $('.admin-sidebar-area');
+            toggleBtn.click(function (e) {
+                e.preventDefault();
+                sidebar.toggleClass("active");
+            });
+
+            <!--프로필 toggle 기능-->
+            $('.toggle-btn').click(function () {
+                $('.logout-box').toggleClass('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

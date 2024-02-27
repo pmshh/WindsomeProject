@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container">
+
+                    <div class="section-header">
+                        <h2>LOGIN</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body login-body">
+                        <div class="login-form">
+                            <form id="loginForm" th:action="@{/login}" method="post">
+                                <input id="userId" name="userId" type="text" placeholder="아이디">
+                                <input id="password" name="password" type="password" placeholder="비밀번호">
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me" checked>
+                                    <label class="form-check-label" style="font-size: 14px" for="rememberMe">로그인 유지</label>
+                                </div>
+                                <div class="error-message-container">
+                                    <span th:if="${error}" class="error-message" th:utext="${exception}"></span>
+                                </div>
+                                <button class="login_button" type="submit">로그인</button>
+                            </form>
+                        </div>
+                        <div class="login-find">
+                            <div class="txt">
+                                <a th:href="@{'/forgot-credentials?action=find-id'}">아이디 찾기</a>
+                            </div>
+                            <div class="txt">
+                                <a th:href="@{'/forgot-credentials?action=find-pw'}">비밀번호 찾기</a>
+                            </div>
+                            <div class="join-txt">
+                                <a th:href="@{/members/new}">회원가입</a>
+                            </div>
+                        </div>
+                        <!--                <ul class="sns-login">-->
+                        <!--                    <li class="kakao">-->
+                        <!--                        <a href="">-->
+                        <!--                            <i class="xi-kakaotalk"></i>-->
+                        <!--                            <span>카카오계정 로그인</span>-->
+                        <!--                        </a>-->
+                        <!--                    </li>-->
+                        <!--                    <li class="naver">-->
+                        <!--                        <a href="">-->
+                        <!--                            <i class="xi-naver-square"></i>-->
+                        <!--                            <span>네이버 로그인</span>-->
+                        <!--                        </a>-->
+                        <!--                    </li>-->
+                        <!--                </ul>-->
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+</body>
+
+<div th:replace="/layouts/default-layout.html :: commonJs"></div>
+<script th:inline="javascript">
+
+    // 유효성 검사 통과 유무 변수
+    let checkUserId = false;
+    let checkPassword = false;
+
+    $(function () {
+
+        $(".login_button").click(function () {
+            let userIdInput = $("#userId");
+            let passwordInput = $("#password");
+
+            if (userIdInput.val() == '') {
+                alert("아이디를 입력하세요.");
+                checkUserId = false;
+                userIdInput.focus();
+                return false;
+            } else {
+                checkUserId = true;
+            }
+
+            if (passwordInput.val() == '') {
+                alert("비밀번호를 입력하세요.");
+                checkPassword = false;
+                passwordInput.focus();
+                return false;
+            } else {
+                checkPassword = true;
+            }
+
+            if (checkUserId && checkPassword) {
+                $("#loginForm").submit();
+            }
+        });
+    });
+</script>

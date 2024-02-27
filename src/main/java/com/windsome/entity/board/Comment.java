@@ -1,7 +1,7 @@
 package com.windsome.entity.board;
 
 import com.windsome.dto.board.qa.CommentEnrollDto;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
 
@@ -19,8 +19,8 @@ public class Comment extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "qa_id")
@@ -31,9 +31,9 @@ public class Comment extends BaseTimeEntity {
 
     private boolean secretYN;
 
-    public static Comment toEntity(CommentEnrollDto commentEnrollDto, Qa qa, Account account) {
+    public static Comment toEntity(CommentEnrollDto commentEnrollDto, Qa qa, Member member) {
         return Comment.builder()
-                .account(account)
+                .member(member)
                 .qa(qa)
                 .content(commentEnrollDto.getContent())
                 .secretYN(commentEnrollDto.isSecretYN())

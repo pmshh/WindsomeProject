@@ -16,8 +16,8 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>, QuerydslP
 
     List<Notice> findAllByNoticeYNOrderByRegTimeDesc(boolean noticeYN);
 
-    @Query(value = "select n.notice_id as noticeId, n.title, n.content, n.noticeyn, n.account_id as accountId, n.reg_time as regTime from notice n where n.notice_id = :noticeId" +
-            " union all (select n.notice_id as noticeId, n.title, n.content, n.noticeyn, n.account_id as accountId, n.reg_time as regTime from Notice n where n.notice_id < :noticeId order by n.notice_id desc limit 1)" +
-            " union all (select n.notice_id as noticeId, n.title, n.content, n.noticeyn, n.account_id as accountId, n.reg_time as regTime from Notice n where n.notice_id > :noticeId order by n.notice_id asc limit 1)", nativeQuery = true)
+    @Query(value = "select n.notice_id as noticeId, n.title, n.content, n.noticeyn as noticeYN, n.member_id as memberId, n.reg_time as regTime from Notice n where n.notice_id = :noticeId" +
+            " union all (select n.notice_id as noticeId, n.title, n.content, n.noticeyn as noticeYN, n.member_id as memberId, n.reg_time as regTime from Notice n where n.notice_id < :noticeId order by n.notice_id desc limit 1)" +
+            " union all (select n.notice_id as noticeId, n.title, n.content, n.noticeyn as noticeYN, n.member_id as memberId, n.reg_time as regTime from Notice n where n.notice_id > :noticeId order by n.notice_id asc limit 1)", nativeQuery = true)
     List<NoticeDtlDtoInterface> getNoticeDtl(@Param("noticeId") Long noticeId);
 }

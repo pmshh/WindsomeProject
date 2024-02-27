@@ -1,16 +1,13 @@
 package com.windsome.controller;
 
-import com.windsome.config.security.CurrentAccount;
-import com.windsome.constant.OrderStatus;
+import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.order.OrderDto;
-import com.windsome.dto.order.OrderHistDto;
 import com.windsome.dto.order.OrderPageDto;
-import com.windsome.entity.Account;
-import com.windsome.repository.AccountRepository;
+import com.windsome.entity.Member;
+import com.windsome.repository.member.MemberRepository;
 import com.windsome.service.CartService;
 import com.windsome.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,59 +25,54 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
-    private final CartService cartService;
-    private final AccountRepository accountRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 주문 조회 화면
      */
-    @GetMapping(value = {"/orders", "/orders/{page}"})
-    public String orderHist(@PathVariable("page") Optional<Integer> page, @CurrentAccount Account account, Model model) {
+    @GetMapping("/orders")
+    public String showOrderList(Optional<Integer> page, @CurrentMember Member member, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 5);
-        Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(account.getUserIdentifier(), pageable);
-
-        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
-        model.addAttribute("orders", ordersHistDtoList);
+        model.addAttribute("orders", orderService.getOrderList(member.getUserIdentifier(), pageable));
         model.addAttribute("maxPage", 5);
-        return "order/orderHist";
+        return "order/order-history";
     }
 
     /**
      * 주문서 작성 화면
      */
-    @GetMapping("/order")
-    public String orderForm(OrderPageDto orderPageDto, @CurrentAccount Account account, Model model) {
-        model.addAttribute("cartItemTotalCount", cartService.getCartItemTotalCount(account));
-        model.addAttribute("orders", orderService.getOrderItemsInfo(orderPageDto.getOrders()));
-        model.addAttribute("account", accountRepository.findById(account.getId()).orElseThrow(EntityNotFoundException::new));
-        return "order/orderForm";
+    @GetMapping("/orders/new")
+    public String createOrderForm(OrderPageDto orderPageDto, @CurrentMember Member member, Model model) {
+        model.addAttribute("orders", orderService.getOrderProductDetails(orderPageDto.getOrders()));
+        model.addAttribute("member", memberRepository.findById(member.getId()).orElseThrow(EntityNotFoundException::new));
+        return "order/order-form";
     }
 
     /**
      * 상품 주문
      */
-    @PostMapping("/order")
-    public String order(OrderDto orderDto, @CurrentAccount Account account, RedirectAttributes redirectAttributes) {
+    @PostMapping("/orders/new")
+    public String createOrder(OrderDto orderDto, @CurrentMember Member member, RedirectAttributes redirectAttributes) {
         try {
-            orderService.order(orderDto, account.getUserIdentifier());
+            orderService.order(orderDto, member.getUserIdentifier());
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "상품 등록 중 오류가 발생하였습니다.");
-            return "redirect:/";
+            redirectAttributes.addFlashAttribute("message", "상품 주문 도중 오류가 발생하였습니다.");
+            return "redirect:/orders";
         }
         redirectAttributes.addFlashAttribute("message", "상품이 주문되었습니다.");
-        return "redirect:/";
+        return "redirect:/orders";
     }
 
     /**
      * 주문 취소
      */
-    @PostMapping("/order/{orderId}/cancel")
-    public ResponseEntity<Object> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentAccount Account account) {
-        if (!orderService.validateOrder(orderId, account.getUserIdentifier())) {
+    @PatchMapping("/orders/{orderId}/cancel")
+    public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentMember Member member) {
+        if (!orderService.verifyOrderCancellationPermission(orderId, member.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 취소 권한이 없습니다.");
         }
 
         orderService.cancelOrder(orderId);
-        return ResponseEntity.ok().body(orderId);
+        return ResponseEntity.ok().body("주문이 최소되었습니다.");
     }
 }

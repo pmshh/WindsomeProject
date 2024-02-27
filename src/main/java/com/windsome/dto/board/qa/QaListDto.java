@@ -2,13 +2,13 @@ package com.windsome.dto.board.qa;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.windsome.constant.Role;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
+@NoArgsConstructor
 public class QaListDto {
 
     private Long qaId; // qa 기본키
@@ -24,7 +24,9 @@ public class QaListDto {
     private boolean secretYN; // 비밀 글 설정 여부
 
     private Long originNo; // 원글 번호
+
     private int groupOrd; // 원글(답글 포함)에 대한 순서
+
     private int groupLayer; // 답글 계층
 
     @QueryProjection

@@ -4,7 +4,7 @@ import com.windsome.constant.Role;
 import com.windsome.dto.board.qa.CommentEnrollDto;
 import com.windsome.dto.board.qa.CommentDto;
 import com.windsome.dto.board.qa.CommentUpdateDto;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.board.Comment;
 import com.windsome.entity.board.Qa;
 import com.windsome.repository.board.qa.CommentRepository;
@@ -28,10 +28,11 @@ public class CommentService {
     /**
      * 댓글 등록
      */
-    public void enrollComment(CommentEnrollDto commentEnrollDto, Account account) {
+    public Long enrollComment(CommentEnrollDto commentEnrollDto, Member member) {
         Qa qa = qaRepository.findById(commentEnrollDto.getQaId()).orElseThrow(EntityNotFoundException::new);
-        Comment comment = Comment.toEntity(commentEnrollDto, qa, account);
-        commentRepository.save(comment);
+        Comment comment = Comment.toEntity(commentEnrollDto, qa, member);
+        Comment savedComment = commentRepository.save(comment);
+        return savedComment.getId();
     }
 
     /**
@@ -39,17 +40,17 @@ public class CommentService {
      */
     public List<CommentDto> getCommentDtoList(Long qaId) {
         return commentRepository.findByQaId(qaId).stream()
-                .map(comment -> new CommentDto(comment.getId(), comment.getAccount().getUserIdentifier(), comment.getAccount().getName(), comment.getAccount().getState(), comment.getRegTime(), comment.getContent(), comment.isSecretYN()))
+                .map(comment -> new CommentDto(comment.getId(), comment.getMember().getUserIdentifier(), comment.getMember().getName(), comment.getMember().getState(), comment.getRegTime(), comment.getContent(), comment.isSecretYN()))
                 .collect(Collectors.toList());
     }
 
     /**
      * 댓글 수정/삭제 권한 검증
      */
-    public boolean validateComment(Account account, Long commentId) {
+    public boolean validateComment(Member member, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(EntityNotFoundException::new);
         // 댓글 작성자 본인이거나, 관리자인 경우 삭제 가능
-        return !(comment.getAccount().getUserIdentifier().equals(account.getUserIdentifier()) || account.getState() == Role.ADMIN);
+        return !(comment.getMember().getUserIdentifier().equals(member.getUserIdentifier()) || member.getState() == Role.ADMIN);
     }
 
     /**

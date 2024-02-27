@@ -1,18 +1,17 @@
 package com.windsome.dto.cart;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter @Setter
 @ToString
+@NoArgsConstructor
 public class CartDetailDto {
 
-    private Long cartItemId;
+    private Long cartProductId; // cart에 담긴 상품 id
 
-    private Long itemId;
+    private Long productId; // 상품 id
 
-    private String itemNm;
+    private String productName;
 
     private int stockNumber;
 
@@ -30,12 +29,12 @@ public class CartDetailDto {
 
     private int totalPoint;
 
-    private String imgUrl;
+    private String imageUrl;
 
-    public CartDetailDto(Long cartItemId, Long itemId, String itemNm, int stockNumber, double discount, int count, int price, String imgUrl) {
-        this.cartItemId = cartItemId;
-        this.itemId = itemId;
-        this.itemNm = itemNm;
+    public CartDetailDto(Long cartProductId, Long productId, String productName, int stockNumber, double discount, int count, int price, String imageUrl) {
+        this.cartProductId = cartProductId;
+        this.productId = productId;
+        this.productName = productName;
         this.stockNumber = stockNumber;
         this.discount = discount;
         this.count = count;
@@ -44,6 +43,6 @@ public class CartDetailDto {
         this.totalPrice = salePrice * count;
         this.point = (int) Math.floor(salePrice * 0.05);
         this.totalPoint = point * count;
-        this.imgUrl = imgUrl;
+        this.imageUrl = imageUrl;
     }
 }

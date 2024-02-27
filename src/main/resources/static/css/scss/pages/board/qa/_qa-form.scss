@@ -1,0 +1,97 @@
+.qaForm-body {
+    form {
+        width: 70%;
+
+        table {
+            tbody {
+                td {
+                    select {
+                        width: 30%;
+                        height: 29px;
+                        padding: 2px 4px;
+                        border: 1px solid #d5d5d5;
+                    }
+
+                    textarea {
+                        width: 100%;
+                        height: 400px;
+                        padding: 2px 4px;
+                        border: 1px solid #d5d5d5;
+
+                        &:focus::placeholder {
+                            color: transparent;
+                        }
+                    }
+
+                    .password-input {
+                        width: 30%;
+                    }
+
+                    &.check {
+                        input {
+                            width: 13px;
+                            height: 13px;
+                            border: 0;
+                            font-size: 100%;
+                            color: #353535;
+                            vertical-align: middle;
+                        }
+
+                        label {
+                            margin: 0 4px 0 2px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .btn-box,
+        .btn-box-add-float {
+            padding: 10px 0;
+            text-align: center;
+            display: block;
+            margin-top: 50px;
+        }
+
+        .btn-box-add-float {
+            .cancel-btn {
+                float: left;
+            }
+
+            .del-btn,
+            .update-btn {
+                float: right;
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+.ck {
+    p {
+        margin: 0;
+    }
+}
+
+@media (max-width: 1200px) {
+    .qaForm-body {
+
+        form {
+            width: 90%;
+        }
+    }
+}
+
+@media (max-width: 992px) {
+    .qaForm-body {
+        form {
+            width: 100%;
+
+            .btn-box {
+                button.del-btn {
+                    width: 50px;
+                }
+            }
+        }
+    }
+}

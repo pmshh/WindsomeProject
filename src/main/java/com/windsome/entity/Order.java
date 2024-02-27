@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "orders")
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString
+@ToString(exclude = "orderProducts")
 public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,8 @@ public class Order {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private LocalDateTime orderDate;
 
@@ -48,17 +48,11 @@ public class Order {
     private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderProduct> orderProducts = new ArrayList<>();
 
-    public void addOrderItem(List<OrderItem> orderItemList) {
-        for (OrderItem orderItem : orderItemList) {
-            orderItem.setOrder(this);
-        }
-    }
-
-    public static Order createOrder(Account account, List<OrderItem> orderItemList, OrderDto orderDto) {
+    public static Order createOrder(Member member, List<OrderProduct> orderProductList, OrderDto orderDto) {
         Order order = Order.builder()
-                .account(account)
+                .member(member)
                 .totalOrderPrice(orderDto.getOrderFinalSalePrice())
                 .deliveryCost(orderDto.getDeliveryCost())
                 .usePoint(orderDto.getUsePoint())
@@ -68,19 +62,24 @@ public class Order {
                 .tel(orderDto.getTel())
                 .email(orderDto.getEmail())
                 .req(orderDto.getReq())
-                .orderItems(orderItemList)
                 .orderStatus(OrderStatus.READY)
                 .orderDate(LocalDateTime.now())
                 .build();
-        order.addOrderItem(orderItemList);
+        order.addOrderProduct(orderProductList);
         return order;
+    }
+
+    public void addOrderProduct(List<OrderProduct> orderProducts) {
+        for (OrderProduct orderProduct : orderProducts) {
+            orderProduct.setOrder(this);
+        }
     }
 
     public void cancelOrder() {
         this.orderStatus = OrderStatus.CANCEL;
 
-        for (OrderItem orderItem : orderItems) {
-            orderItem.cancel();
+        for (OrderProduct orderProduct : orderProducts) {
+            orderProduct.cancel();
         }
     }
 }

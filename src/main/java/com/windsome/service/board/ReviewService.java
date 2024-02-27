@@ -2,11 +2,9 @@ package com.windsome.service.board;
 
 import com.windsome.dto.board.review.*;
 import com.windsome.entity.*;
-import com.windsome.entity.board.Qa;
 import com.windsome.entity.board.Review;
-import com.windsome.repository.AccountRepository;
-import com.windsome.repository.ItemImgRepository;
-import com.windsome.repository.ItemRepository;
+import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.repository.product.ProductRepository;
 import com.windsome.repository.board.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,36 +32,35 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final ItemRepository itemRepository;
-    private final AccountRepository accountRepository;
-    private final ItemImgRepository itemImgRepository;
+    private final ProductRepository productRepository;
+    private final ProductImageRepository productImageRepository;
 
     /**
      * 리뷰 등록
      */
-    public void enrollReview(ReviewEnrollDto reviewEnrollDto, Account account){
-        Item item = itemRepository.findById(reviewEnrollDto.getItemId()).orElseThrow(EntityExistsException::new);
-        Review review = Review.createReview(reviewEnrollDto, item, account);
+    public void enrollReview(ReviewEnrollDto reviewEnrollDto, Member member){
+        Product product = productRepository.findById(reviewEnrollDto.getProductId()).orElseThrow(EntityExistsException::new);
+        Review review = Review.createReview(reviewEnrollDto, product, member);
         reviewRepository.save(review);
     }
 
     /**
      * 리뷰 등록 화면 - 상품 검색(상품 리스트 조회)
      */
-    public PageImpl<ItemListDto> getItemList(ItemSearchDto searchDto, Pageable pageable) {
-        List<ItemListDto> content = itemRepository.getReviewPageItemList(searchDto.getSearchQuery(), pageable);
-        Long count = itemRepository.getReviewPageItemListCount(searchDto.getSearchQuery());
+    public PageImpl<ProductListDto> getProductList(ProductSearchDto searchDto, Pageable pageable) {
+        List<ProductListDto> content = productRepository.getReviewPageItemList(searchDto.getSearchQuery(), pageable);
+        Long count = productRepository.getReviewPageItemListCount(searchDto.getSearchQuery());
 
-        return new PageImpl<ItemListDto>(content, pageable, count);
+        return new PageImpl<ProductListDto>(content, pageable, count);
     }
 
     /**
      * 리뷰 등록 화면 - 상품 상세 화면에서 리뷰 작성 화면 접근 시, 리뷰 등록 화면에 해당 상품 정보 출력
      */
-    public ItemDto getItem(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-        ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(itemId, "Y");
-        return ItemDto.createReviewEnrollPageItemDto(item, itemImg.getImgUrl());
+    public ProductDto getProduct(Long itemId) {
+        Product product = productRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        ProductImage productImage = productImageRepository.findByProductIdAndIsRepresentativeImage(itemId, true);
+        return ProductDto.createProductDto(product, productImage.getImageUrl());
     }
 
     /**
@@ -71,8 +68,8 @@ public class ReviewService {
      */
     public ReviewDtlPageReviewDto getReviewDtl(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
-        ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(review.getItem().getId(), "Y");
-        return ReviewDtlPageReviewDto.createReviewDtlPageDto(review, itemImg);
+        ProductImage productImage = productImageRepository.findByProductIdAndIsRepresentativeImage(review.getProduct().getId(), true);
+        return ReviewDtlPageReviewDto.createReviewDtlPageDto(review, productImage);
     }
 
     /**
@@ -95,17 +92,9 @@ public class ReviewService {
     /**
      * 리뷰 수정/삭제 권한 검증
      */
-    public boolean validateReview(Long reviewId, String userIdentifier) {
-        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
-        Review review = new Review();
-        try {
-            review = reviewRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
-        } catch (Exception e) {
-            return true;
-        }
-        Account savedAccount = review.getAccount();
-
-        return !StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
+    public boolean validateReviewOwnership(Long reviewId, Member member) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
+        return !StringUtils.equals(member.getUserIdentifier(), review.getMember().getUserIdentifier());
     }
 
     /**
@@ -118,35 +107,35 @@ public class ReviewService {
     /**
      * 상품 상세 화면 - 리뷰 조회
      */
-    public Page<ItemDtlPageReviewDto> getItemDtlPageReviews(Long itemId, Pageable pageable) {
-        List<Review> content = reviewRepository.findByItemIdOrderByIdDesc(itemId, pageable);
+    public Page<ProductReviewDTO> getProductReviewList(Long productId, Pageable pageable) {
+        List<Review> content = reviewRepository.findByProductIdOrderByIdDesc(productId, pageable);
 
-        List<ItemDtlPageReviewDto> itemDtlPageReviewDtoList = new ArrayList<>();
+        List<ProductReviewDTO> productReviewDTOList = new ArrayList<>();
         for (Review review : content) {
-            Item item = itemRepository.findById(review.getItem().getId()).orElseThrow(EntityNotFoundException::new);
+            Product product = productRepository.findById(review.getProduct().getId()).orElseThrow(EntityNotFoundException::new);
 
-            ItemDtlPageReviewDto itemDtlPageReviewDto = ItemDtlPageReviewDto.createItemDtlPageReviewDto(review, item);
-            itemDtlPageReviewDtoList.add(itemDtlPageReviewDto);
+            ProductReviewDTO productReviewDTO = ProductReviewDTO.createProductReviewDTO(review, product);
+            productReviewDTOList.add(productReviewDTO);
         }
-        Long totalCount = reviewRepository.countByItemId(itemId);
+        Long totalCount = reviewRepository.countByProductId(productId);
 
-        return new PageImpl<ItemDtlPageReviewDto>(itemDtlPageReviewDtoList, pageable, totalCount);
+        return new PageImpl<ProductReviewDTO>(productReviewDTOList, pageable, totalCount);
     }
 
     /**
      * 상품 리뷰 평균 평점
      */
-    public void setRatingAvg(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-        item.setRatingAvg(reviewRepository.getRatingAvg(itemId));
-        itemRepository.save(item);
+    public void setRatingAvg(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
+        product.setAverageRating(reviewRepository.getRatingAvg(productId));
+        productRepository.save(product);
     }
 
     /**
      * 리뷰 존재 여부 반환
      */
-    public boolean existsByItemIdAndAccountId(Long itemId, Long accountId) {
-        return reviewRepository.existsByItemIdAndAccountId(itemId, accountId);
+    public boolean checkExistingReview(Long productId, Long memberId) {
+        return reviewRepository.existsByProductIdAndMemberId(productId, memberId);
     }
 
     /**

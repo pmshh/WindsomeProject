@@ -6,6 +6,7 @@ import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class OrderDto {
 
     private String address1;
@@ -20,7 +21,7 @@ public class OrderDto {
 
     private String req; // 배송 메시지
 
-    private List<OrderItemDto> orders;
+    private List<OrderProductDto> orders;
 
     private int deliveryCost;
 
@@ -37,7 +38,7 @@ public class OrderDto {
      * 가격 관련 정보 초기화
      */
     public void initOrderPriceInfo() {
-        for(OrderItemDto order : orders) {
+        for(OrderProductDto order : orders) {
             orderSalePrice += order.getTotalSalePrice();
             orderSavePoint += order.getTotalSavePoint();
         }

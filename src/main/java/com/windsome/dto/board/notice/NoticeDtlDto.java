@@ -1,6 +1,5 @@
 package com.windsome.dto.board.notice;
 
-import com.windsome.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

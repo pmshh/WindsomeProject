@@ -2,7 +2,7 @@ package com.windsome.entity.board;
 
 import com.windsome.dto.board.qa.QaEnrollDto;
 import com.windsome.dto.board.qa.QaUpdateDto;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
 
@@ -21,8 +21,8 @@ public class Qa extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String title;
 
@@ -40,13 +40,14 @@ public class Qa extends BaseTimeEntity {
     private int groupOrd; // 원글(답글 포함)에 대한 순서
     private int groupLayer; // 답글 계층
 
-    public static Qa createQa(QaEnrollDto qaEnrollDto, Account account) {
+    public static Qa createQa(QaEnrollDto qaEnrollDto, Member member) {
         Qa qa = Qa.builder()
-                .account(account)
+                .member(member)
                 .title(qaEnrollDto.getTitle())
                 .content(qaEnrollDto.getContent())
                 .password(qaEnrollDto.getPassword())
                 .secretYN(qaEnrollDto.isSecretYN())
+                .originNo(qaEnrollDto.getOriginNo())
                 .build();
         qa.setRegTime(LocalDateTime.now());
         qa.setUpdateTime(LocalDateTime.now());

@@ -1,0 +1,357 @@
+.qa-dtl-body {
+    width: 80%;
+    margin: 0 auto;
+
+    .table-box {
+        border-bottom: 1px solid #e5e5e5;
+        width: 100%;
+
+        table {
+            width: 100%;
+            position: relative;
+            margin: 10px 0 0;
+            border: 1px solid #e5e5e5;
+            border-right: none;
+            border-left: none;
+            border-top-color: #fff;
+            color: #fff;
+            line-height: 1.7;
+            font-size: 12px;
+
+            td {
+                padding: 8px 10px 7px;
+                border-top: 1px solid #e5e5e5;
+                color: #353535;
+                vertical-align: middle;
+                word-break: break-all;
+                word-wrap: break-word;
+            }
+
+            td.board-title {
+                height: 80px;
+                font-weight: bold;
+                font-size: 16px;
+                letter-spacing: 0.01em;
+                line-height: 24px;
+
+                span {
+                    padding-left: 15px;
+                    padding-top: 5px;
+                    display: inline-block;
+                    word-break: keep-all;
+                }
+            }
+
+            td.board-date-con {
+                border-bottom: 1px solid #e5e5e5;
+
+                li {
+                    display: inline-block;
+                    margin: 0;
+                    padding: 8px 15px 8px;
+                    vertical-align: top;
+                    line-height: 28px;
+                    color: #666;
+
+                    span.txtNum {
+                        display: inline-block;
+                        font-size: 11px;
+                        color: #939393;
+                        word-break: normal;
+                    }
+                }
+            }
+        }
+
+        .detail {
+            line-height: 1.8;
+            font-size: 13px;
+            padding: 40px 25px;
+            border-top: none;
+            margin: -9px 0 0;
+            word-break: break-all;
+
+            .article {
+                word-wrap: break-word;
+
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    .password-box {
+        width: 100%;
+        font-size: 12px;
+        color: #353535;
+        padding: 8px 10px 7px;
+        border-bottom: 1px solid #e5e5e5;
+
+        .pw-txt {
+            margin-right: 15px;
+        }
+
+        .password-input {
+            height: 30px;
+            padding: 2px 4px;
+            border: 1px solid #ddd;
+        }
+
+        .help {
+            margin-left: 10px;
+            line-height: 1.5;
+
+            i {
+                padding-right: 5px;
+                color: #F65B56;
+                font-size: 18px;
+                vertical-align: middle;
+                padding-bottom: 5px;
+            }
+
+        }
+    }
+
+    .btn-box {
+        width: 100%;
+        margin: 10px 0 40px;
+        padding: 10px 0;
+        text-align: center;
+
+        .list-btn {
+            float: left;
+        }
+
+        .update-btn,
+        .reply-btn,
+        .del-btn {
+            float: right;
+            margin-left: 5px;
+        }
+    }
+
+    .comment-box {
+        width: 100%;
+
+        .comment-list {
+            border: 1px solid #e5e5e5;
+            border-top: 0;
+
+            ul {
+                li {
+                    position: relative;
+                    margin: 20px 0 0 0;
+                    border-top: 1px solid #e5e5e5;
+                    color: #555;
+                    line-height: 175%;
+                    font-size: 12px;
+
+                    .comment-top {
+                        overflow: hidden;
+                        padding: 30px 40px 0px;
+                        border-bottom: 0px solid #e9e9e9;
+
+                        .name {
+                            font-weight: normal;
+                            float: left;
+                        }
+
+                        .date {
+                            margin: 1px 10px 0 15px;
+                            font-size: 11px;
+                            color: #bbb;
+                        }
+                    }
+
+                    .btn {
+                        position: absolute;
+                        top: 23px;
+                        right: 40px;
+                        line-height: 175%;
+                        font-size: 12px;
+                        border: none;
+
+                        a {
+                            display: inline-block;
+                            padding: 4px 8px;
+                            border: 1px solid #e2e2e2;
+                            font-size: 12px;
+                            line-height: 18px;
+                            vertical-align: middle;
+                            word-spacing: -0.5px;
+                            text-align: center;
+                            color: #222;
+                            background-color: #fff;
+
+                            &:hover {
+                                border: 1px solid black;
+                            }
+                        }
+                    }
+
+                    .comment-update-form {
+                        display: block;
+                        margin: 30px 40px;
+                        padding: 20px 40px 20px;
+                        border: 1px solid #e9e9e9;
+                        background-color: #fbfafa;
+                        color: #353535;
+                        font-size: 12px;
+
+                        .input {
+                            margin: 10px 0;
+
+                            strong {
+                                margin: 0 0 10px 0;
+                            }
+
+                            .secret-box {
+                                display: inline-block;
+                                margin-left: 10px;
+
+                                input {
+                                    margin: -4px 0 0 0;
+                                    vertical-align: middle;
+                                }
+                            }
+                        }
+
+                        .view {
+                            position: relative;
+                            margin: 10px 0 0;
+                            padding: 0 170px 0 0;
+
+                            textarea {
+                                height: 100px;
+                                width: 100%;
+                                padding: 2px 2px 2px 4px;
+                                border: 1px solid #ddd;
+                                line-height: 175%;
+                                color: #353535;
+                            }
+
+                            .submit {
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+
+                                a {
+                                    line-height: 18px;
+                                    padding: 14px 20px;
+                                    min-width: 80px;
+                                    font-weight: normal;
+                                    font-size: 14px;
+                                    display: inline-block;
+                                    border: 1px solid #e2e2e2;
+                                    text-align: center;
+                                    color: #222;
+                                    background-color: #fff;
+                                    transition: 0.1s all ease-in-out;
+
+                                    &:hover {
+                                        border: 1px solid black;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+
+                    .comment {
+                        clear: both;
+                        padding: 20px 40px;
+                        word-break: break-all;
+
+                        span {
+                            color: #555;
+                            line-height: 175%;
+                            font-size: 12px;
+                        }
+
+                        i {
+                            font-size: 16px;
+                            vertical-align: top;
+                            margin-right: 3px;
+                        }
+                    }
+
+                    &:last-child {
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+        }
+
+        .comment-write {
+            width: 100%;
+            margin: 30px 0 0;
+            padding: 20px 40px 30px;
+            border: 1px solid #e9e9e9;
+            background-color: #fbfafa;
+            color: #353535;
+            font-size: 12px;
+
+            .input {
+                margin: 10px 0;
+
+                strong {
+                    // display: inline-block;
+                    margin: 0 0 10px 0;
+                }
+
+                .secret-box {
+                    display: inline-block;
+                    margin-left: 10px;
+
+                    input {
+                        margin: -4px 0 0 0;
+                        vertical-align: middle;
+                    }
+                }
+            }
+
+            .view {
+                position: relative;
+                margin: 10px 0 0;
+                padding: 0 95px 0 0;
+
+                textarea {
+                    height: 100px;
+                    width: 100%;
+                    padding: 2px 2px 2px 4px;
+                    border: 1px solid #ddd;
+                    line-height: 1.5;
+                }
+
+                a {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    line-height: 76px;
+                    padding: 14px 20px;
+                    min-width: 80px;
+                    font-weight: normal;
+                    font-size: 14px;
+                    display: inline-block;
+                    border: 1px solid #e2e2e2;
+                    text-align: center;
+                    color: #222;
+                    background-color: #fff;
+                    height: 100px;
+                    transition: 0.1s all ease-in-out;
+
+                    &:hover {
+                        border: 1px solid black;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .board-movement {
+        @include board-movement();
+    }
+
+}

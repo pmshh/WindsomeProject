@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>NOTICE</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body notice-body mt-5">
+                        <div class="notice-list-container">
+                            <table class="row-header-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 150px;" scope="col">번호</th>
+                                        <th style="width: auto;" scope="col">제목</th>
+                                        <th style="width: 180px;" scope="col">작성자</th>
+                                        <th style="width: 180px;" scope="col">작성일</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="notice">
+                                    <tr th:if="${#lists.isEmpty(noticeList.getContent())}">
+                                        <td colspan="4" class="empty-message">
+                                            <span class="message">등록된 공지사항이 없습니다.</span>
+                                        </td>
+                                    </tr>
+                                    <tr th:each="fixTopNotice, status:${fixTopNoticeList}">
+                                        <td>
+                                            <span>공지</span>
+                                        </td>
+                                        <td class="left fix-top-notice-title">
+                                            <a th:href="@{'/board/notice/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
+                                        </td>
+                                        <td>
+                                            <span th:text="${fixTopNotice.member.name}"></span>
+                                        </td>
+                                        <td class="fz11 gray-col">
+                                            <span th:text="${#temporals.format(fixTopNotice.regTime, 'yyyy-MM-dd')}"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <tbody>
+                                    <tr th:each="notice, status:${noticeList.getContent()}">
+                                        <td>
+                                            <span th:text="${noticeList.getTotalElements() - (noticeList.getSize() * noticeList.getNumber()) - status.index}"></span>
+                                        </td>
+                                        <td class="left">
+                                            <a th:href="@{'/board/notice/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
+                                        </td>
+                                        <td>
+                                            <span th:text="${notice.createdBy}"></span>
+                                        </td>
+                                        <td class="fz11 gray-col">
+                                            <span th:text="${notice.regDate}">2024-02-06</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="button-container" sec:authorize="hasRole('ADMIN')">
+                            <button class="white-btn-w65-h30 write-btn">글쓰기</button>
+                        </div>
+
+                        <div class="pagination-container"
+                             th:with="start=${(noticeList.number/maxPage)*maxPage + 1}, end=(${(noticeList.totalPages == 0) ? 1 :
+                                         (start + (maxPage - 1) < noticeList.totalPages ? start + (maxPage - 1) : noticeList.totalPages)})">
+                            <ul>
+                                <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i
+                                            class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' +  ${noticeList.number - 1} + ')'">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${noticeList.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                       th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${noticeList.number + 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${noticeList.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="search-input-container" th:object="${noticeSearchDto}">
+                            <i class="fa-solid fa-angle-right"></i>
+                            <span class="txt">검색어</span>
+                            <select class="search-date-type" th:field="*{searchDateType}">
+                                <option value="">(전체)</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="name">작성자</option>
+                            </select>
+                            <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                            <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+
+            /* 게시글 작성 화면으로 이동 */
+            $(".write-btn").click(function () {
+                location.href = '/board/notice/enroll';
+            });
+
+            /* 검색 기능 */
+            $(".search-btn").on("click", function (e) {
+                e.preventDefault();
+                if ($(".search-query").val() === '') {
+                    alert("검색어를 입력해주세요.");
+                    return false;
+                }
+                page(0);
+            });
+        });
+
+        function showMessage() {
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+        }
+
+        /* page 이동 */
+        function page(page) {
+            let searchDateType = $(".search-date-type").val();
+            let searchQuery = $(".search-query").val();
+            location.href = "/board/notice?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+        }
+    </script>
+</body>

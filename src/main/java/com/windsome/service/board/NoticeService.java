@@ -2,9 +2,9 @@ package com.windsome.service.board;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.board.notice.*;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.board.Notice;
-import com.windsome.repository.AccountRepository;
+import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.board.notice.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
-    private final AccountRepository accountRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 공지사항 게시판 - 일반 공지사항 조회
@@ -39,19 +40,22 @@ public class NoticeService {
     /**
      * 공지사항 등록
      */
-    public void enrollNotice(NoticeDto noticeDto, Account account) {
-        Notice notice = Notice.createNotice(noticeDto, account);
-        noticeRepository.save(notice);
+    public Long enrollNotice(NoticeDto noticeDto, Member member) {
+        Notice notice = Notice.createNotice(noticeDto, member);
+        Notice savedNotice = noticeRepository.save(notice);
+        return savedNotice.getId();
     }
 
     /**
      * 공지사항 상세 화면 - 공지사항 조회
      */
     public List<NoticeDtlDto> getNoticeDtl(Long noticeId) {
-        return noticeRepository.getNoticeDtl(noticeId)
-                .stream()
-                .map(n -> new NoticeDtlDto(n, accountRepository.findById(n.getAccountId()).orElseThrow(EntityNotFoundException::new).getName()))
-                .collect(Collectors.toList());
+        List<NoticeDtlDto> list = new ArrayList<>();
+        for (NoticeDtlDtoInterface n : noticeRepository.getNoticeDtl(noticeId)) {
+            NoticeDtlDto noticeDtlDto = new NoticeDtlDto(n, memberRepository.findById(n.getMemberId()).orElseThrow(EntityNotFoundException::new).getName());
+            list.add(noticeDtlDto);
+        }
+        return list;
     }
 
     /**
@@ -71,7 +75,7 @@ public class NoticeService {
     }
 
     /**
-     * 공지사항 삭제
+     * 게시글 삭제 (단건 삭제)
      */
     public void deleteNotice(Long noticeId) {
         noticeRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
@@ -81,12 +85,12 @@ public class NoticeService {
     /**
      * 관리자 권한 검증
      */
-    public boolean isAdmin(Account account) {
-        return account.getState().equals(Role.ADMIN);
+    public boolean isAdmin(Member member) {
+        return member.getState().equals(Role.ADMIN);
     }
 
     /**
-     * 게시글 삭제
+     * 게시글 삭제 (여러건 삭제)
      */
     public void deleteNotices(Long[] noticeIds) {
         for (Long noticeId : noticeIds) {

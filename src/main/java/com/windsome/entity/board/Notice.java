@@ -2,7 +2,7 @@ package com.windsome.entity.board;
 
 import com.windsome.dto.board.notice.NoticeDto;
 import com.windsome.dto.board.notice.NoticeUpdateDto;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
 
@@ -20,8 +20,8 @@ public class Notice extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String title;
 
@@ -30,9 +30,9 @@ public class Notice extends BaseTimeEntity {
 
     private boolean noticeYN;
 
-    public static Notice createNotice(NoticeDto noticeDto, Account account) {
+    public static Notice createNotice(NoticeDto noticeDto, Member member) {
         Notice notice = Notice.builder()
-                .account(account)
+                .member(member)
                 .title(noticeDto.getTitle())
                 .content(noticeDto.getContent())
                 .noticeYN(noticeDto.noticeYN)

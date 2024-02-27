@@ -24,7 +24,7 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String errorMessage = null;
         if (exception instanceof BadCredentialsException) {
-            errorMessage = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해 주세요.";
+            errorMessage = "아이디 또는 비밀번호를 잘못 입력했습니다.<br>입력하신 내용을 다시 확인해주세요.";
         } else if (exception instanceof InternalAuthenticationServiceException) {
             errorMessage = "내부적으로 발생한 시스템 문제로 인해 요청을 처리할 수 없습니다. 관리자에게 문의하세요.";
         } else if (exception instanceof UsernameNotFoundException) {

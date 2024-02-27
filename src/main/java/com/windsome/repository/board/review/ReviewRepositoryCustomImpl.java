@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.windsome.dto.board.review.QReviewListDto;
 import com.windsome.dto.board.review.ReviewListDto;
 import com.windsome.dto.board.review.ReviewSearchDto;
-import com.windsome.entity.QItemImg;
+import com.windsome.entity.QProductImage;
 import com.windsome.entity.board.QReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,6 @@ import java.util.List;
 
 import static com.windsome.entity.board.QReview.*;
 
-
 @RequiredArgsConstructor
 public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
@@ -27,7 +26,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     @Override
     public Page<ReviewListDto> getReviews(ReviewSearchDto reviewSearchDto, Pageable pageable) {
         QReview review = QReview.review;
-        QItemImg itemImg = QItemImg.itemImg;
+        QProductImage productImage = QProductImage.productImage;
 
         List<ReviewListDto> content = queryFactory
                 .select(
@@ -35,20 +34,20 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                                 review.id,
                                 review.title,
                                 review.rating,
-                                review.account.name,
+                                review.member.name,
                                 review.regDate,
                                 review.hits,
-                                itemImg.imgUrl,
-                                review.item.id,
-                                review.item.itemNm,
-                                review.item.price,
-                                review.item.discount
+                                productImage.imageUrl,
+                                review.product.id,
+                                review.product.name,
+                                review.product.price,
+                                review.product.discount
                         )
                 )
                 .from(review)
-                .join(itemImg)
-                .on(itemImg.item.id.eq(review.item.id))
-                .where(itemImg.repImgYn.eq("Y"))
+                .join(productImage)
+                .on(productImage.product.id.eq(review.product.id))
+                .where(productImage.isRepresentativeImage.eq(true))
                 .where(like(reviewSearchDto))
                 .orderBy(review.id.desc())
                 .offset(pageable.getOffset())
@@ -58,9 +57,9 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
         JPAQuery<Long> total = queryFactory
                 .select(review.count())
                 .from(review)
-                .join(itemImg)
-                .on(itemImg.item.id.eq(review.item.id))
-                .where(itemImg.repImgYn.eq("Y"))
+                .join(productImage)
+                .on(productImage.product.id.eq(review.product.id))
+                .where(productImage.isRepresentativeImage.eq(true))
                 .where(like(reviewSearchDto));
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
@@ -72,11 +71,11 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
         } else if (StringUtils.equals(reviewSearchDto.getSearchDateType(), "content")) {
             return review.content.like("%" + reviewSearchDto.getSearchQuery() + "%");
         } else if (StringUtils.equals(reviewSearchDto.getSearchDateType(), "name")) {
-            return review.account.name.like("%" + reviewSearchDto.getSearchQuery() + "%");
+            return review.member.name.like("%" + reviewSearchDto.getSearchQuery() + "%");
         } else if (StringUtils.equals(reviewSearchDto.getSearchDateType(), "")) {
             return review.title.like("%" + reviewSearchDto.getSearchQuery() + "%")
                     .or(review.content.like("%" + reviewSearchDto.getSearchQuery() + "%"))
-                    .or(review.account.name.like("%" + reviewSearchDto.getSearchQuery() + "%"));
+                    .or(review.member.name.like("%" + reviewSearchDto.getSearchQuery() + "%"));
         }
         return null;
     }

@@ -1,8 +1,8 @@
 package com.windsome.controller.board;
 
-import com.windsome.config.security.CurrentAccount;
+import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.qa.*;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.board.Qa;
 import com.windsome.repository.board.qa.QaRepository;
 import com.windsome.service.board.QaService;
@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,7 +38,7 @@ public class QaController {
         model.addAttribute("qaSearchDto", qaSearchDto);
         model.addAttribute("maxPage", 10);
         model.addAttribute("page", page.orElse(0));
-        return "/board/qa/qa";
+        return "board/qa/qa-list";
     }
 
     /**
@@ -47,19 +48,19 @@ public class QaController {
     public String enrollQaForm(@RequestParam(value = "qaId", required = false) Long qaId, Model model) {
         model.addAttribute("qaEnrollDto", new QaEnrollDto());
         model.addAttribute("qaId", qaId);
-        return "/board/qa/qaEnroll";
+        return "board/qa/qa-new-post";
     }
 
     /**
      * Q&A 등록
      */
     @PostMapping("/qa/enroll")
-    public ResponseEntity<String> enrollQa(@CurrentAccount Account account, QaEnrollDto qaEnrollDto) {
-        if (account == null) {
+    public ResponseEntity<String> enrollQa(@CurrentMember Member member, QaEnrollDto qaEnrollDto) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
         try {
-            qaService.enrollQa(qaEnrollDto, account);
+            qaService.enrollQa(qaEnrollDto, member);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("게시글을 등록하던 도중 오류가 발생하였습니다.");
         }
@@ -69,28 +70,28 @@ public class QaController {
     /**
      * Q&A 비밀글 - 비밀번호 입력 화면
      */
-    @GetMapping("/qa/secret")
-    public String secretForm(Long qaId, Model model) {
+    @GetMapping("/qa/{qaId}/password-verification")
+    public String secretForm(@PathVariable(value = "qaId") Long qaId, Model model) {
         model.addAttribute("qaId", qaId);
         try {
             Qa qa = qaRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
             model.addAttribute("password", qa.getPassword());
         } catch (EntityNotFoundException e) {
             model.addAttribute("message", "존재하지 않는 게시글입니다.");
-            return "/board/qa/qaSecret";
+            return "board/qa/qa-secret-post-verification";
         }
-        return "/board/qa/qaSecret";
+        return "board/qa/qa-secret-post-verification";
     }
 
     /**
-     * Q&A 비밀글 - 비밀번호 입력
+     * Q&A 비밀글 - 비밀번호 검증
      */
-    @PostMapping("/qa/secret")
-    public ResponseEntity<String> secret(@CurrentAccount Account account, Long qaId, String password) {
-        if (account == null) {
+    @PostMapping("/qa/{qaId}/password-verification")
+    public ResponseEntity<String> secret(@CurrentMember Member member, @PathVariable(value = "qaId") Long qaId, String password) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
-        if (!qaService.validatePost(account, qaId, password)) {
+        if (qaService.validatePost(member, qaId, password)) {
             return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
         }
         return ResponseEntity.ok().body("ok");
@@ -100,25 +101,25 @@ public class QaController {
      * Q&A 상세 화면
      */
     @GetMapping("/qa/{qaId}")
-    public String qaDtl(@PathVariable(value = "qaId") Long qaId, @RequestParam(required = false) String password, @CurrentAccount Account account, Model model) {
+    public String qaDtl(@PathVariable(value = "qaId") Long qaId, @RequestParam(required = false) String password, @CurrentMember Member member, Model model) {
         try {
             // 비밀번호 검사를 하지 않고, url을 통해 직접 접근한 경우
             Qa qa = qaRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
             if (password == null) {
-                return "redirect:/board/qa/secret?qaId=" + qaId;
+                return "redirect:/board/qa/" + qaId + "/password-verification";
             } else if (!password.equals(qa.getPassword())) {
-                return "redirect:/board/qa/secret?qaId=" + qaId;
+                return "redirect:/board/qa/" + qaId + "/password-verification";
             }
 
-            model.addAttribute("account", account);
+            model.addAttribute("member", member);
             model.addAttribute("commentDtoList", qaService.getCommentList(qaId));
             model.addAttribute("qaDtlDtoList", qaService.getQaDtl(qaId));
             model.addAttribute("password", password);
         } catch (EntityNotFoundException e) {
             model.addAttribute("message", "존재하지 않는 게시글입니다.");
-            return "/board/qa/qaDtl";
+            return "board/qa/qa-detail";
         }
-        return "/board/qa/qaDtl";
+        return "board/qa/qa-detail";
     }
 
     /**
@@ -130,25 +131,25 @@ public class QaController {
             // 비밀번호를 입력 하지 않고, url을 통해 직접 접근한 경우
             Qa qa = qaRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
             if (password == null) {
-                return "redirect:/board/qa/secret?qaId=" + qaId;
+                return "redirect:/board/qa/" + qaId + "/password-verification";
             } else if (!password.equals(qa.getPassword())) {
-                return "redirect:/board/qa/secret?qaId=" + qaId;
+                return "redirect:/board/qa/" + qaId + "/password-verification";
             }
 
             model.addAttribute("qaUpdateDto", qaService.getQaForUpdate(qaId));
         } catch (EntityNotFoundException e) {
             model.addAttribute("message", "존재하지 않는 게시글입니다.");
-            return "/board/qa/qaUpdate";
+            return "board/qa/qa-update-post";
         }
-        return "/board/qa/qaUpdate";
+        return "board/qa/qa-update-post";
     }
 
     /**
      * Q&A 수정
      */
     @PatchMapping("/qa/{qaId}")
-    public ResponseEntity<String> updateQa(@CurrentAccount Account account, QaUpdateDto qaUpdateDto, Long qaId) {
-        if (account == null) {
+    public ResponseEntity<String> updateQa(@CurrentMember Member member, QaUpdateDto qaUpdateDto, Long qaId) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
 
@@ -164,8 +165,8 @@ public class QaController {
      * Q&A 삭제
      */
     @DeleteMapping("/qa/{qaId}")
-    public ResponseEntity<String> deleteQa(@CurrentAccount Account account, Long qaId, String password) {
-        if (account == null) {
+    public ResponseEntity<String> deleteQa(@CurrentMember Member member, Long qaId, String password) {
+        if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
 

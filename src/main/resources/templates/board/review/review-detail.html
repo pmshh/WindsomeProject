@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>리뷰 상세</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body review-form-body mt-5">
+
+                        <div class="product-info-wrap">
+                            <span class="thumbnail">
+                                <a th:href="${'/product/' + review.productId}">
+                                    <img class="product-img" th:src="${review.imageUrl}">
+                                </a>
+                            </span>
+                            <div class="information">
+                                <h3>
+                                    <a th:href="${'/product/' + review.productId}" th:text="${review.productName}"></a>
+                                </h3>
+                                <div class="price">
+                                    <span class="price" th:unless="${review.discount > 0}" th:text="|${#numbers.formatInteger(review.price, 0, 'COMMA')}원|"></span>
+                                    <span class="beforePrice" th:if="${review.discount > 0}" th:text="|${#numbers.formatInteger(review.price, 0, 'COMMA')}원|"></span>
+                                    <span class="salePrice" th:if="${review.discount > 0}" th:text="|${#numbers.formatInteger(review.salePrice, 0, 'COMMA')}원|"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="review-form-wrap">
+                            <form th:object="${review}" method="post">
+                                <table class="col-header-table-basic">
+                                    <colgroup>
+                                        <col style="width:15%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{title}">제목 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="title-input" type="text" th:field="*{title}" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{rating}">평점 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <fieldset class="rate">
+                                                <input type="radio" id="rating10" name="rating" value="5" onclick="return false;"><label for="rating10"></label>
+                                                <input type="radio" id="rating9" name="rating" value="4.5" onclick="return false;"><label for="rating9" class="half" ></label>
+                                                <input type="radio" id="rating8" name="rating" value="4" onclick="return false;"><label for="rating8"></label>
+                                                <input type="radio" id="rating7" name="rating" value="3.5" onclick="return false;"><label for="rating7" class="half" ></label>
+                                                <input type="radio" id="rating6" name="rating" value="3" onclick="return false;"><label for="rating6"></label>
+                                                <input type="radio" id="rating5" name="rating" value="2.5" onclick="return false;"><label for="rating5" class="half" ></label>
+                                                <input type="radio" id="rating4" name="rating" value="2" onclick="return false;"><label for="rating4"></label>
+                                                <input type="radio" id="rating3" name="rating" value="1.5" onclick="return false;"><label for="rating3" class="half" ></label>
+                                                <input type="radio" id="rating2" name="rating" value="1" onclick="return false;"><label for="rating2"></label>
+                                                <input type="radio" id="rating1" name="rating" value="0.5" onclick="return false;"><label for="rating1" class="half" ></label>
+                                            </fieldset>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{content}">내용 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <textarea class="content-input" th:field="*{content}" readonly></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <label th:for="*{password}">비밀번호 <span>*</span></label>
+                                        </th>
+                                        <td>
+                                            <input class="password-input" th:field="*{password}" type="password">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="btn-box-add-float">
+                                    <button class="white-btn-w130-h40 cancel-btn" type="button">목록</button>
+                                    <button class="white-btn-w130-h40 del-btn" type="button">삭제</button>
+                                    <button th:data-reviewId="${review.reviewId}" class="black-btn-w130-h40 update-btn" type="button">수정</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(function() {
+            /* 리뷰 수정 */
+            $(".update-btn").on("click", function () {
+                let password = [[${review.password}]];
+                let passwordVal = $(".password-input").val();
+
+                if (passwordVal === '') {
+                    alert("비밀번호를 입력하세요.");
+                    $('.password-input').focus();
+                } else if (passwordVal === password) {
+                    let reviewId = $(this).attr("data-reviewId");
+                    location.href = "/board/review/update/" + reviewId;
+                } else {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    $('.password-input').focus();
+                }
+            });
+
+            /* 리뷰 삭제 */
+            $(".del-btn").on("click", function () {
+                let reviewId = [[${review.reviewId}]];
+                let password = [[${review.password}]];
+                let productId = [[${review.productId}]];
+                let passwordVal = $(".password-input").val();
+
+                if (passwordVal === '') {
+                    alert("비밀번호를 입력하세요.");
+                    $('.password-input').focus();
+                } else if (passwordVal === password) {
+                    if (confirm("리뷰를 삭제하시겠습니까?")) {
+                        $.ajax({
+                            url: "/board/review/delete/" + reviewId + "?productId=" + productId,
+                            type: "DELETE",
+                            dataType: "text",
+                            cache: false,
+                            success: function (result, status) {
+                                alert(result);
+                                location.href = '/board/review';
+                            },
+                            error: function (xhr) {
+                                if (xhr.status === 200) {
+                                    alert('로그인 후 이용해주세요.');
+                                    location.href = "/login";
+                                } else {
+                                    alert(xhr.responseText);
+                                }
+                            },
+                        });
+                    } else {
+                        false;
+                    }
+                } else {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    $('.password-input').focus();
+                }
+            });
+
+            /* 리뷰 게시판으로 이동 */
+            $(".cancel-btn").on("click", function () {
+                location.href = '/board/review';
+            });
+
+            /* 리뷰 평점 값 초기화 */
+            $("input:radio[name=rating]").each(function() {
+                let reviewRating = [[${review.rating}]]; // 2.5
+                let ratingVal = Number($(this).val());
+
+                if (ratingVal === reviewRating) {
+                    $(this).prop("checked", true);
+                }
+            });
+        });
+    </script>
+</body>

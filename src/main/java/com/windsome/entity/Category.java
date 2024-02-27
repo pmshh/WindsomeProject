@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
+@Builder @AllArgsConstructor @NoArgsConstructor
+@ToString(exclude = {"parent", "children"})
 public class Category {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private Long id;
 
     private String name;

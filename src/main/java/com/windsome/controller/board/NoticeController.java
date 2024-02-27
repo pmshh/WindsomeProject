@@ -1,8 +1,8 @@
 package com.windsome.controller.board;
 
-import com.windsome.config.security.CurrentAccount;
+import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.notice.*;
-import com.windsome.entity.Account;
+import com.windsome.entity.Member;
 import com.windsome.entity.board.Notice;
 import com.windsome.service.board.NoticeService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class NoticeController {
         model.addAttribute("noticeSearchDto", new NoticeSearchDto());
         model.addAttribute("maxPage", 10);
         model.addAttribute("page", page.orElse(0));
-        return "board/notice/notice";
+        return "board/notice/notice-list";
     }
 
     /**
@@ -49,19 +49,19 @@ public class NoticeController {
     @GetMapping("/notice/enroll")
     public String enrollNoticeForm(Model model) {
         model.addAttribute("noticeDto", new NoticeDto());
-        return "board/notice/noticeEnroll";
+        return "board/notice/notice-new-post";
     }
 
     /**
      * 공지사항 등록
      */
     @PostMapping("/notice/enroll")
-    public String enrollNotice(NoticeDto noticeDto, @CurrentAccount Account account, RedirectAttributes redirectAttr, Model model) {
-        if (!noticeService.isAdmin(account)) {
+    public String enrollNotice(NoticeDto noticeDto, @CurrentMember Member member, RedirectAttributes redirectAttr, Model model) {
+        if (!noticeService.isAdmin(member)) {
             model.addAttribute("message", "작성 권한이 없습니다.");
-            return "board/notice/noticeEnroll";
+            return "board/notice/notice-new-post";
         }
-        noticeService.enrollNotice(noticeDto, account);
+        noticeService.enrollNotice(noticeDto, member);
         redirectAttr.addFlashAttribute("message", "게시글이 등록되었습니다.");
         return "redirect:/board/notice";
     }
@@ -74,7 +74,7 @@ public class NoticeController {
         List<NoticeDtlDto> noticeDtlList = noticeService.getNoticeDtl(noticeId);
         model.addAttribute("noticeDtlList", noticeDtlList);
         model.addAttribute("page", page);
-        return "board/notice/noticeDtl";
+        return "board/notice/notice-detail";
     }
 
     /**
@@ -87,10 +87,10 @@ public class NoticeController {
             model.addAttribute("notice", notice);
         } catch (EntityNotFoundException e) {
             model.addAttribute("message", "존재하지 않는 게시글입니다.");
-            return "board/notice/noticeDtl";
+            return "board/notice/notice-detail";
         }
         model.addAttribute("page", page);
-        return "board/notice/noticeUpdate";
+        return "board/notice/notice-update-post";
     }
 
     /**
@@ -111,8 +111,8 @@ public class NoticeController {
      * 공지사항 삭제
      */
     @DeleteMapping("/notice/{noticeId}")
-    public ResponseEntity<String> deleteNotice(@PathVariable(value = "noticeId") Long noticeId, @CurrentAccount Account account) {
-        if (!noticeService.isAdmin(account)) {
+    public ResponseEntity<String> deleteNotice(@PathVariable(value = "noticeId") Long noticeId, @CurrentMember Member member) {
+        if (!noticeService.isAdmin(member)) {
             return ResponseEntity.badRequest().body("삭제 권한이 없습니다.");
         }
 

@@ -1,37 +1,21 @@
-@mixin board_message_wrap() {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 110px 0;
-    text-align: center;
-    border-bottom: 1px solid #e5e5e5;
-
-    .message {
-        font-size: 11px;
-        color: #707070;
-        font-weight: bold;
-    }
-}
-
-@mixin board_btn_box() {
+@mixin button-container() {
     width: 100%;
     margin: 20px auto 0;
     display: flex;
     justify-content: end;
     align-items: center;
 
-    .posts_del_btn,
-    .all_post_del_btn {
+    .posts-del-btn,
+    .all-post-del-btn {
         margin-left: 5px;
     }
 
-    .write_btn {
+    .write-btn {
         margin-left: 30px;
     }
 }
 
-@mixin board_search_box() {
+@mixin search-input-container() {
     width: 100%;
     padding: 20px 0 20px 10px;
     color: #2e2e2e;
@@ -41,11 +25,11 @@
         margin-right: 22px;
     }
 
-    .search_type,
-    .search_date_type,
-    .search_state_type,
-    .search_sell_status,
-    .search_by {
+    .search-type,
+    .search-date-type,
+    .search-state-type,
+    .search-sell-status,
+    .search-by {
         margin: 2px 2px 0 0;
         width: 80px;
         height: 30px;
@@ -56,17 +40,17 @@
         color: #353535;
     }
 
-    .search_type,
-    .search_date_type,
-    .search_state_type {
+    .search-type,
+    .search-date-type,
+    .search-state-type {
         width: 100px;
     }
 
-    .search_sell_status {
+    .search-sell-status {
         width: 120px;
     }
 
-    .search_by {
+    .search-by {
         width: 80px;
     }
 
@@ -89,7 +73,7 @@
         opacity: 0;
     }
 
-    button.search_btn {
+    button.search-btn {
         width: 72px !important;
         font-size: 12px !important;
         color: #353535;
@@ -98,7 +82,7 @@
     }
 }
 
-@mixin board_movement() {
+@mixin board-movement() {
     width: 100%;
     border-top: 1px solid #eaeaea;
     border-bottom: 1px solid #eaeaea;
@@ -130,7 +114,7 @@
             text-decoration: none;
         }
 
-        &.only_prev {
+        &.only-prev {
             border: 0;
         }
 

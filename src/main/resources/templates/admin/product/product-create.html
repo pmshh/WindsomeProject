@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='productManagement')"></div>
+
+        <article class="admin-content-area">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="admin-section-area">
+                <div class="container">
+
+                    <div class="section-header">
+                        <h2>상품 등록</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body product-form-body">
+                        <!-- 상품 등록 폼 -->
+                        <form id="enrollForm" th:action="@{/admin/products/new}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
+                            <table style="table-layout: fixed !important;">
+                                <colgroup>
+                                    <col style="width:20%;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <input class="id-input" th:type="hidden" th:field="*{id}">
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{productSellStatus}">판매 상태 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <select class="sell-status-select" th:field="*{productSellStatus}">
+                                            <option selected value="none">선택</option>
+                                            <option value="SELL">판매중</option>
+                                            <option value="SOLD-OUT">품절</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label>카테고리 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <select class="parent-cate-select">
+                                            <option selected value="0">선택</option>
+                                        </select>
+                                        <select th:field="*{categoryId}" class="child-cate-select">
+                                            <option selected value="0">선택</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{productName}">상품명 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <input class="name-input" type="text" th:field="*{productName}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{price}">가격 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <input class="price-input" type="text" th:field="*{price}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{discount}">할인율 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <input class="discount-interface" maxlength="2" th:value="*{discount}">
+                                        <input class="discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}">
+                                        <span class="discount-text">할인 적용된 가격 : <span class="discount-price"></span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{stockNumber}">재고 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <input class="stock-number-input" th:field="*{stockNumber}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <label th:for="*{productDetail}">상품 상세 내용 <span>*</span></label>
+                                    </th>
+                                    <td>
+                                        <textarea th:field="*{productDetail}" class="text-editor"></textarea>
+                                    </td>
+                                </tr>
+                                <tr th:each="num: ${#numbers.sequence(1,5)}">
+                                    <th scope="row">
+                                        <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
+                                    </th>
+                                    <td>
+                                        <input class="fake-input" type="text" th:value="${'상품 이미지 ' + num}">
+                                        <label class="white-btn-w90-h40 find-file" th:for="${'imageg' + num}">파일 찾기</label>
+                                        <input type="file" class="real-input" name="productImageFile" th:id="${'imageg' + num}">
+                                        <button class="black-btn-w90-h40 img-cancel-btn" type="button" th:data-index="${num}">취소</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="btn-box">
+                                <button class="black-btn-w130-h40 enroll-btn" type="button">등록</button>
+                                <button class="white-btn-w130-h40 cancel-btn" type="button">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <!-- editor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+    <!-- custom js -->
+    <script th:inline="javascript">
+
+        $(function () {
+            initializeClassicEditor();
+            initializeFileInput();
+            initializeSaveButton();
+            initializeCategoryOptions();
+            initializeMoveButtons();
+            setDefaultDiscount();
+            initializeDiscountInput();
+            initializePriceInput();
+
+            /* 경고 메시지 출력 */
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+
+            /* 위지웍 에디터 초기화 */
+            function initializeClassicEditor() {
+                ClassicEditor.create(document.querySelector('.text-editor'))
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+
+            /* 파일 유효성 검사 */
+            function initializeFileInput() {
+                $(".real-input").on("change", function () {
+                    let fileName = $(this).val().split("\\").pop();
+                    let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+
+                    if (!["jpg", "jpeg", "gif", "png", "bmp"].includes(fileExt)) {
+                        alert("이미지 파일만 등록이 가능합니다.");
+                        return;
+                    }
+
+                    $(this).siblings(".fake-input").val(fileName);
+                });
+
+                /* 이미지 삭제 버튼 */
+                $(".del-file").click(function () {
+                    let productImgId = $(this).attr("data-productImgId");
+                    if (confirm("이미지를 삭제하시겠습니까?")) {
+                        $.ajax({
+                            url: "/admin/products/" + productImgId,
+                            type: "patch",
+                            success(res) {
+                                alert(res);
+                                $(this).siblings(".fake-input").val("상품 이미지 " + $(this).attr("data-index"));
+                                $(this).siblings(".real-input").val("delete");
+                            },
+                            error(request) {
+                                alert(request.responseText);
+                            }
+                        });
+                    }
+                    return false;
+                });
+
+                /* 파일 업로드 취소 버튼 */
+                $(".img-cancel-btn").click(function () {
+                    $(this).siblings(".fake-input").val("상품 이미지 " + $(this).attr("data-index"));
+                    $(this).siblings(".real-input").val("");
+                });
+            }
+
+            /* 상품 등록 버튼 초기화 */
+            function initializeSaveButton() {
+                let form = $("#enrollForm");
+                $(".enroll-btn").on("click", function (e) {
+                    e.preventDefault();
+                    validateAndSubmitForm(form);
+                });
+            }
+
+            function validateAndSubmitForm(form) {
+                let productSellStatusVal = $(".sell-status-select").val();
+                let parentCateVal = $(".parent-cate-select").val();
+                let childCateVal = $(".child-cate-select").val();
+                let productNameVal = $(".name-input").val();
+                let priceVal = $(".price-input").val();
+                let discountVal = $(".discount-interface").val();
+                let stockNumberVal = $(".stock-number-input").val();
+                let productDetailVal = $("p").html();
+
+                if (productSellStatusVal === 'none') {
+                    alert("판매 상태를 선택하세요.");
+                    $('.sell-status-select').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (parentCateVal === '0') {
+                    alert("카테고리를 선택하세요.");
+                    $('.parent-cate-select').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (parentCateVal !== '400' && childCateVal === '0') {
+                    alert("카테고리를 선택하세요.");
+                    $('.child-cate-select').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (productNameVal === '') {
+                    alert("상품명을 입력하세요.");
+                    $('.name-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (priceVal === '') {
+                    alert("가격을 입력하세요.");
+                    $('.price-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (discountVal === '') {
+                    alert("할인율을 입력하세요.");
+                    $('.discount-interface').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (stockNumberVal === "") {
+                    alert("재고를 입력하세요.");
+                    $('.stock-number-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (productDetailVal === '<br data-cke-filler="true">') {
+                    alert("상품 상세 내용을 입력하세요.");
+                    $('#product-detail-textarea').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (parentCateVal === '400') {
+                    let childCate = $(".child-cate-select");
+                    childCate.append("<option value='400'>선택</option>");
+                    childCate.val(400);
+                }
+                form.submit();
+            }
+
+            /* 카테고리 초기화 (기존 카테고리 값 셋팅) */
+            function initializeCategoryOptions() {
+                let parentId = 0;
+                let childCateId = [[${productFormDto?.categoryId}]];
+                let parentCate = $(".parent-cate-select");
+                let childCate = $(".child-cate-select");
+
+                $.ajax({
+                    url: "/admin/products/categories",
+                    type: "GET",
+                    success: function (res) {
+                        let cateList = JSON.parse(res);
+
+                        let cate1Arr = cateList.filter(cate => cate.tier === "1");
+                        let cate2Arr = cateList.flatMap(cate => cate.children.filter(child => child.tier === "2")
+                            .map(child => ({ id: child.id, name: child.name, parent: child.parent })));
+
+                        cate1Arr.forEach(cate1 => parentCate.append("<option value='" + cate1.id + "'>" + cate1.name + "</option>"));
+                        parentId = childCateId >= 500 ? 500 : childCateId >= 400 ? 400 : childCateId >= 300 ? 300 : childCateId >= 200 ? 200 : childCateId >= 100 ? 100 : 0;
+                        cate2Arr.filter(cate2 => cate2.parent === parentId).forEach(cate2 => childCate.append("<option value='" + cate2.id + "'>" + cate2.name + "</option>"));
+
+                        /* 상품 수정 - 기존 카테고리 값 설정 */
+                        if (childCateId !== null) {
+                            let parentVal = Math.floor(childCateId / 100) * 100;
+                            $('.parent-cate-select').val(parentVal).prop("selected", true);
+                            $('.child-cate-select').val(childCateId === 400 ? '0' : childCateId).prop("selected", true);
+                        }
+
+                        /* 대분류 option 변경 시 중분류 option 추가 */
+                        parentCate.on("change", function () {
+                            let parentSelectVal = Number($(this).find("option:selected").val());
+                            // 중분류 option 초기화 (단, 중분류가 존재하지 않는 대분류를 선택했을 시, 대분류 값을 중분류 값에 넣음)
+                            childCate.children().remove();
+                            childCate.append("<option value='" + (parentSelectVal === 400 ? '400' : '0') + "'>선택</option>");
+                            // 중분류 option 추가
+                            cate2Arr.filter(cate => cate.parent === parentSelectVal).forEach(cate => {
+                                childCate.append("<option value='" + cate.id + "'>" + cate.name + "</option>");
+                            });
+                        });
+                    },
+                    error: function (request) {
+                        alert(request.responseText);
+                    }
+                });
+            }
+
+            /* 버튼 초기화 */
+            function initializeMoveButtons() {
+                $(".cancel-btn").on("click", function(e){
+                    e.preventDefault();
+                    location.href = "/admin/products";
+                });
+            }
+
+            /* 할인율, 가격 셋팅 */
+            function setDefaultDiscount() {
+                let discountValue = [[${productFormDto?.discount}]];
+                let price = [[${productFormDto?.price}]];
+                let discountPrice = Math.floor(price * (1 - discountValue));
+
+                $(".discount-interface").val(discountValue * 100);
+                $(".discount-price").html(formatPrice(discountPrice) + "원");
+            }
+
+            /* 할인율 input 초기화 */
+            function initializeDiscountInput() {
+                $(".discount-interface").on("propertychange change keyup paste input", updatePrice);
+            }
+
+            /* 가격 input 초기화 */
+            function initializePriceInput() {
+                $(".price-input").on("propertychange change keyup paste input", updatePrice);
+            }
+
+            /* 할인율, 가격 변동 시 할인 가격 수정 */
+            function updatePrice() {
+                let userInput = $(".discount-interface");
+                let discountRate = userInput.val() / 100;
+                let productPrice = $(".price-input").val();
+                let discountPrice = Math.floor(productPrice * (1 - discountRate));
+
+                if (!isNaN(discountRate)) {
+                    $(".discount-price").html(formatPrice(discountPrice) + "원");
+                    if (userInput.hasClass("discount-interface")) {
+                        $(".discount-input").val(discountRate);
+                    }
+                }
+            }
+
+            function formatPrice(price) {
+                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+        });
+    </script>
+</body>
+
+</html>

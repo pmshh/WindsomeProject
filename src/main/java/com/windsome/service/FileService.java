@@ -13,11 +13,13 @@ import java.util.UUID;
 @Transactional
 public class FileService {
 
-    // 업로드 하면서 파일명 반환
+    /**
+     * 파일 서버에 업로드
+     */
     public String uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception {
         UUID uuid = UUID.randomUUID();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        String savedFileName = uuid.toString() + extension;
+        String savedFileName = uuid + extension;
         String fileUploadFullUrl = uploadPath + "/" + savedFileName;
 
         FileOutputStream fos = new FileOutputStream(fileUploadFullUrl);
@@ -27,6 +29,9 @@ public class FileService {
         return savedFileName;
     }
 
+    /**
+     * 파일 삭제
+     */
     public void deleteFile(String filePath) throws Exception {
         File deleteFile = new File(filePath);
 

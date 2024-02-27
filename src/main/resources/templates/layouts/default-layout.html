@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:fragment="head">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Winsome</title>
+    <!-- bootstrap css -->
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- fontawesome css -->
+    <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css"/>
+    <!-- xeicon -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <!-- custom css -->
+    <link rel="stylesheet" href="/css/css/style.css">
+
+    <!-- jQuery -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- fontawesome js -->
+    <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+</th:block>
+
+<body>
+    <main class="def-main-area">
+        <!-- sidebar -->
+        <aside th:fragment="sidebar" class="def-sidebar-area" >
+            <div class="sidebar-logo">
+                <a th:href="@{/}">
+                    <h1>WINDSOME</h1>
+                </a>
+            </div>
+            <div class="sidebar-nav">
+                <ul>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}">LOGIN</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <form action="#" th:action="@{/logout}" method="post">
+                            <button type="submit">
+                                <span>LOGOUT</span>
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <a sec:authorize="!isAuthenticated()" th:href="@{/members/register}">JOIN</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/cart}">CART</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/orders}">ORDER</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/mypage}">MYPAGE</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-menu">
+                <div class="category">
+                    <h2>CATEGORY</h2>
+                    <ul>
+                        <li>
+                            <a th:href="@{/}">ALL</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/?category=100&searchQuery=none}">OUTER</a>
+                            <div class="sub-category">
+                                <ul>
+                                    <li><a th:href="@{/?category=101&searchQuery=none}">Padding & Jumper</a></li>
+                                    <li><a th:href="@{/?category=102&searchQuery=none}">Coat & Jacket</a></li>
+                                    <li><a th:href="@{/?category=103&searchQuery=none}">Cardigan</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a th:href="@{/?category=200&searchQuery=none}">TOP</a>
+                            <div class="sub-category">
+                                <ul>
+                                    <li><a th:href="@{/?category=201&searchQuery=none}">Knitwear</a></li>
+                                    <li><a th:href="@{/?category=202&searchQuery=none}">T-Shirt</a></li>
+                                    <li><a th:href="@{/?category=203&searchQuery=none}">Shirt</a></li>
+                                    <li><a th:href="@{/?category=204&searchQuery=none}">MTM & Hoodie</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a th:href="@{/?category=300&searchQuery=none}">BOTTOM</a>
+                            <div class="sub-category">
+                                <ul>
+                                    <li><a th:href="@{/?category=301&searchQuery=none}">Jean & Denim</a></li>
+                                    <li><a th:href="@{/?category=302&searchQuery=none}">Trousers</a></li>
+                                    <li><a th:href="@{/?category=303&searchQuery=none}">Sweat Pants</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a th:href="@{/?category=400&searchQuery=none}">SHOES</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/?category=500&searchQuery=none}">ACC</a>
+                            <div class="sub-category">
+                                <ul>
+                                    <li><a th:href="@{/?category=501&searchQuery=none}">Eyewear</a></li>
+                                    <li><a th:href="@{/?category=502&searchQuery=none}">Hat</a></li>
+                                    <li><a th:href="@{/?category=503&searchQuery=none}">Bag</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="boardinfo">
+                    <h2>COMMUNITY</h2>
+                    <ul>
+                        <li>
+                            <a th:href="@{/board/notice}">NOTICE</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/board/qa}">Q&A</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/board/review}">REVIEW</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="search-form">
+                <form th:action="@{/}" method="get">
+                    <input name="searchQuery" type="search" placeholder="Search">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass fz16"></i></button>
+                </form>
+            </div>
+            <div class="menu-cs">
+                <ul>
+                    <li>
+                        T.070-0000-0000
+                    </li>
+                    <li>
+                        mon-fri 09:00pm-18:00pm
+                        <br>
+                        sat,sun,holiday off
+                        <br>
+                        <br>
+                        예금주 : 주식회사 윈섬
+                        <br>
+                        우리 1002-449-862316
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- content -->
+        <article class="def-content-area">
+
+            <!-- nav -->
+            <nav th:fragment="nav" class="def-nav-area">
+                <div class="menu">
+                    <ul class="menu-link">
+                        <li sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{/admin/dashboard}">Admin</a>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()">
+                            <a th:href="@{/login}">Login</a>
+                        </li>
+                        <li sec:authorize="isAuthenticated()">
+                            <form action="#" th:action="@{/logout}" method="post">
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>
+                        <li class="member-menu">
+                            <a href="#none">My Account</a>
+                            <div class="member-menu">
+                                <ul>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/members/register}">Join</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{'/members/' + ${currentMember.id} + '/edit'}">Modify</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Modify</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/mypage}">Mypage</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Mypage</a>
+                                    </li>
+                                    <li sec:authorize="isAuthenticated()">
+                                        <a th:href="@{/orders}">Order Check</a>
+                                    </li>
+                                    <li sec:authorize="!isAuthenticated()">
+                                        <a th:href="@{/login}">Order Check</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a th:href="@{/cart}">Cart /
+                                <span th:if="${not #strings.isEmpty(totalCartProductCount)}"
+                                    th:text="${totalCartProductCount}">3</span>
+                                <span th:if="${#strings.isEmpty(totalCartProductCount)}">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-toggle">
+                    <input type="checkbox" id="hamburger">
+                    <label for="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </label>
+                </div>
+            </nav>
+
+            <!-- footer -->
+            <footer th:fragment="footer" class="def-footer-area">
+                <div class="footer-header">
+                    <ul>
+                        <li><a class="footer-header-link">HOME</a></li>
+                        <li><a class="footer-header-link">COMPANY</a></li>
+                        <li><a class="footer-header-link">AGREEMENT</a></li>
+                        <li><a class="footer-header-link">PRIVACY</a></li>
+                        <li><a class="footer-header-link">GUIDE</a></li>
+                    </ul>
+                </div>
+                <div class="footer-address">
+                    <span>TEL: 070-0000-0000</span>
+                    <span class="shop-black"></span>
+                    <span>ADDRESS: 서울특별시 서초구 언남16길 13 윈섬 WINDSOME</span>
+                </div>
+                <div class="footer-copyright">
+                    Copyright &copy <strong>윈섬 WINDSOME</strong>. All rights reserved.
+                </div>
+            </footer>
+        </article>
+    </main>
+</body>
+    <script th:inline="javascript" th:fragment="commonJs">
+        $(function () {
+            /* csrf token */
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+
+            /* 스크롤 시 navbar 투명 */
+            $(window).scroll(function () {
+                if ($(this).scrollTop() == 0)
+                    $('.def-nav-area').css('opacity', '1');
+                else
+                    $('.def-nav-area').css('opacity', '.6');
+            });
+
+            /* sidebar toggle 기능 */
+            let toggleBtn = $('.menu-toggle');
+            let sidebar = $('.def-sidebar-area');
+            toggleBtn.click(function (e) {
+                e.preventDefault();
+                sidebar.toggleClass("active");
+            })
+
+            $(".footer-header-link").on("click", function () {
+                alert("준비중입니다.");
+            });
+        });
+    </script>
+</html>

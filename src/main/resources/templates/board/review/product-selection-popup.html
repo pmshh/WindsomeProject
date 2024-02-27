@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+
+    <style>
+        /* product-list-title */
+        .product-list-title {
+            padding: 12px 35px 12px 19px;
+            color: #fff;
+            background: #222;
+        }
+        .product-list-title h1 {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* product-list-body */
+        .product-list-body {
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        /* product-list-body -> search-form */
+        .product-list-body .search-form .search-box {
+            padding: 20px;
+            margin: 0 auto;
+            border: 1px solid #e5e5e5;
+            color: #404040;
+            text-align: center;
+        }
+        .product-list-body .search-form .search-box select {
+            height: 30px;
+            min-height: 30px;
+            border: 1px solid #ddd;
+            padding: 0 20px 0 10px;
+            vertical-align: middle;
+        }
+        .product-list-body .search-form .search-box input {
+            width: 240px;
+            height: 30px;
+            vertical-align: middle;
+            line-height: 24px;
+            padding: 2px 4px;
+            border: 1px solid #ddd;
+            color: #353535;
+            font-size: 12px;
+        }
+        .product-list-body .search-form .search-box button {
+            font-size: 12px;
+        }
+
+        .product-list-body .search-form .result-box {
+            overflow: hidden;
+            margin: 10px 0 0;
+            padding: 10px 0;
+            text-align: right;
+            line-height: 30px;
+        }
+        .product-list-body .search-form .result-box p {
+            margin: 0;
+            padding: 0;
+        }
+        .product-list-body .search-form .result-box .total {
+            float: left;
+            color: #222;
+        }
+        .product-list-body .search-form .result-box .total strong {
+            font-weight: bold;
+        }
+        .product-list-body .search-form .result-box .limit select {
+            height: 30px;
+            line-height: 29px;
+            min-height: 30px;
+            border: 1px solid #ddd;
+            padding: 0 20px 0 10px;
+            background: white;
+        }
+
+        /* product-list-body -> product-list-box */
+        .product-list-body .product-list-box table {
+            margin: 10px 0 0;
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 12px;
+            letter-spacing: 0.0em;
+            width: 100%;
+        }
+        .product-list-body .product-list-box table thead {}
+        .product-list-body .product-list-box table thead tr {}
+        .product-list-body .product-list-box table thead tr th {
+            padding: 9px 0 8px;
+            border-bottom: 1px solid #e5e5e5;
+            color: #353535;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: normal;
+        }
+
+        .product-list-body .product-list-box table tbody {}
+        .product-list-body .product-list-box table tbody.center {
+            text-align: center;
+        }
+        .product-list-body .product-list-box table tbody tr {}
+        .product-list-body .product-list-box table tbody tr td {
+            border-top: 1px solid #e5e5e5;
+            padding: 15px 10px 14px;
+        }
+        .product-list-body .product-list-box table tbody tr td span.productNm {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .product-list-body .product-list-box table tbody tr td span.salePrice {
+            margin-left: 3px;
+        }
+        .product-list-body .product-list-box table tbody tr .thumb img {
+            max-width: 78px;
+            border: 1px solid #d6d6d6;
+            vertical-align: middle;
+        }
+        .product-list-body .product-list-box table tbody tr .left {
+            padding-left: 20px;
+            text-align: left;
+        }
+        .product-list-body .product-list-box table tbody tr td button {
+            display: inline-block;
+            box-sizing: border-box;
+            padding: 4px 8px;
+            border-radius: 0;
+            font-size: 12px;
+            line-height: 18px;
+            font-weight: normal;
+            vertical-align: middle;
+            word-spacing: -0.5px;
+            letter-spacing: 0;
+            text-align: center;
+            white-space: nowrap;
+            color: #222;
+            width: 40px;
+            height: 30px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="product-list-wrap">
+        <div class="product-list-title">
+            <h1>상품검색</h1>
+        </div>
+        <div class="product-list-body">
+
+            <!-- search-form start -->
+            <form class="search-form">
+                <div class="search-box">
+                    <select id="search-type" name="search-type">
+                        <option value="name">상품명</option>
+                    </select>
+                    <input type="text" name="searchQuery">
+                    <button class="black-btn-w65-h30 search-button">검색하기</button>
+                </div>
+                <div class="result-box">
+                    <p class="total">
+                        총 <strong th:text="${products.getTotalElements()}">0</strong>개 의 상품이 검색되었습니다.
+                    </p>
+                    <p class="limit">
+                        <select class="limit">
+                            <option value="5">5개씩 보기</option>
+                            <option value="10">10개씩 보기</option>
+                            <option value="20">20개씩 보기</option>
+                            <option value="30">30개씩 보기</option>
+                        </select>
+                    </p>
+                </div>
+            </form>
+
+            <!-- product-list-box start -->
+            <div class="product-list-box">
+                <table>
+                    <colgroup>
+                        <col style="width: 100px">
+                        <col style="width: auto">
+                        <col style="width: 80px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="col">상품 이미지</th>
+                        <th scope="col">상품 정보</th>
+                        <th scope="col">선택</th>
+                    </tr>
+                    </thead>
+                    <tbody class="center">
+                    <tr th:each="product, state : ${products.getContent()}">
+                        <td class="thumb">
+                            <img th:src="${product.imageUrl}">
+                        </td>
+                        <td class="left">
+                            <span class="productName" th:text="${product.productName}"></span>
+                            <span th:if="${product.discount == 0}" class="price" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|" style="font-weight: bold"></span>
+                            <span th:unless="${product.discount == 0}" class="before-salePrice" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|" style="text-decoration: line-through"></span>
+                            <span th:unless="${product.discount == 0}" class="salePrice" th:text="|${#numbers.formatInteger((product.price * (1 - product.discount)), 0, 'COMMA')}원|" style="font-weight: bold"></span>
+
+                        </td>
+                        <td>
+                            <button class="white-btn-w65-h30 pick-btn" th:data-imageUrl="${product.imageUrl}" th:data-productId="${product.productId}"
+                                    th:data-productName="${product.productName}" th:data-price="${product.price}" th:data-discount="${product.discount}"
+                                    th:data-salePrice="${product.salePrice}">선택</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- pagination start -->
+            <div class="pagination-container"
+                 th:with="start=${(products.number/maxPage)*maxPage + 1}, end=(${(products.totalPages == 0) ? 1 :
+                 (start + (maxPage - 1) < products.totalPages ? start + (maxPage - 1) : products.totalPages)})">
+                <ul>
+                    <li class="prev" th:classappend="${products.first} ? 'disabled'">
+                        <a th:onclick="'javascript:page(0)'">
+                            <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
+                        </a>
+                    </li>
+                    <li class="prev" th:classappend="${products.first} ? 'disabled'">
+                        <a th:onclick="'javascript:page(' +  ${products.number - 1} + ')'">
+                            <i class="fa-solid fa-angle-left"></i>
+                        </a>
+                    </li>
+                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                        th:classappend="${products.number eq page - 1} ? 'active' : ''">
+                        <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                           th:inline="text">[[${page}]]</a>
+                    </li>
+                    <li class="next" th:classappend="${products.last} ? 'disabled'">
+                        <a th:onclick="'javascript:page(' + ${products.number + 1} + ')'">
+                            <i class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="next" th:classappend="${products.last} ? 'disabled'">
+                        <a th:onclick="'javascript:page(' + ${products.totalPages - 1} + ')'">
+                            <i class="fa-solid fa-angle-right"></i><i
+                                class="fa-solid fa-angle-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(function() {
+            setSearchParameters(); // 검색어, 상품 검색 개수 값 유지
+
+            /* 검색 */
+            $(".search-button").on("click", function (e) {
+                e.preventDefault();
+                let selectVal = $(".limit option:selected").val();
+                let searchQuery = $("input[name='searchQuery']").val();
+                if (searchQuery === '') {
+                    alert("검색어를 입력해주세요.")
+                    return false;
+                }
+                location.href = "/board/review/product-selection?searchQuery=" + searchQuery + "&size=" + selectVal;
+            });
+
+            /* 상품 선택 버튼 */
+            $(".pick-btn").on("click", function () {
+                let imageUrl = $(this).attr("data-imageUrl");
+                let productId = $(this).attr("data-productId");
+                let productName = $(this).attr("data-productName");
+                let price = $(this).attr("data-price");
+                let formatPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                let discount = $(this).attr("data-discount");
+                let salePrice = $(this).attr("data-salePrice");
+                let formatSalePrice = salePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+
+                // 부모 화면 - 기존 info 정보 삭제
+                $(opener.document).find(".thumbnail").remove();
+                $(opener.document).find(".information").remove();
+                $(opener.document).find(".hiddenProductId").remove();
+
+                // 부모 화면 - 새로운 info 정보 추가
+                let newTag = "<span class='thumbnail'>";
+                newTag +=       "<a href=/product/" + productId + ">";
+                newTag +=           "<img class='product-img' src=" + imageUrl + ">"
+                newTag +=       "</a>"
+                newTag +=   "</span>"
+                newTag +=   "<div class='information'>";
+                newTag +=       "<h3>";
+                newTag +=           "<a href=/product/" + productId + ">" + productName + "</a>";
+                newTag +=       "</h3>";
+                newTag +=       "<div class='price'>";
+                if(discount > 0) {
+                    newTag +=       "<span class='beforePrice'>" + formatPrice + "원</span>";
+                    newTag +=       "<span class='salePrice'>" + formatSalePrice + "원</span>";
+                } else {
+                    newTag +=       "<span class='price'>" + formatPrice + "원</span>";
+                }
+                newTag +=       "</div>";
+                newTag +=       "<button class='white-btn-w90-h40 new-find-product-btn'>상품정보선택</button>";
+                newTag +=   "</div>";
+                newTag +=   "<input class='hiddenProductId' type=hidden value=" + productId + ">";
+                $(opener.document).find(".product-info-wrap").append(newTag);
+
+                window.close();
+            });
+
+            /* 상품 검색 개수 변경 */
+            $(".limit").on("change", function () {
+                let selectVal = $("#limit option:selected").val();
+                let searchQuery = $("input[name='searchQuery']").val();
+                if (searchQuery === '') {
+                    searchQuery = null;
+                }
+                location.href = "/board/review/product-selection?searchQuery=" + searchQuery + "&size=" + selectVal;
+            });
+        });
+
+        function setSearchParameters() {
+            let searchQuery = [[${searchQuery}]];
+            if (searchQuery === 'null') {
+                searchQuery = '';
+            }
+
+            $("input[name='searchQuery']").val(searchQuery);
+            let size = [[${size}]];
+            $("#limit").val(size).prop("selected", true);
+        }
+
+        /* 페이지 이동 */
+        function page(page) {
+            let searchQuery = $("input[name='searchQuery']").val();
+            let selectVal = $("#limit option:selected").val();
+            location.href = "/board/review/product-selection?page=" + page + "&searchQuery=" + searchQuery + "&size=" + selectVal;
+        }
+    </script>
+</body>
+</html>

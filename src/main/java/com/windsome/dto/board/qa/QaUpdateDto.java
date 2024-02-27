@@ -1,12 +1,12 @@
 package com.windsome.dto.board.qa;
 
 import com.windsome.entity.board.Qa;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class QaUpdateDto {
 
     private Long qaId;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>아이디 찾기 결과</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body userid-lookup-result-body mt-5">
+
+                        <div class="message-box">
+                            <p th:if="${result != null}"><i class="fa-solid fa-circle-user"></i>회원님의 아이디는 <span th:text="${result}"></span> 입니다.</p>
+                            <p th:if="${result == null}"><i class="fa-solid fa-circle-user"></i>일치하는 정보가 없습니다.</p>
+                        </div>
+
+                        <div class="btn-box">
+                            <button onclick="location.href='/login'">로그인페이지 이동</button>
+                            <button onclick="location.href='/forgot-credentials?type=findPw'">비밀번호 찾기</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+</body>
+</html>

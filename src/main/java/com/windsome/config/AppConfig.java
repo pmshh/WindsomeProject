@@ -1,5 +1,6 @@
 package com.windsome.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NameTokenizers;
 import org.springframework.context.annotation.Bean;
@@ -24,5 +25,10 @@ public class AppConfig {
                 .setSourceNameTokenizer(NameTokenizers.UNDERSCORE);
 
         return modelMapper;
+    }
+
+    @Bean
+    public ObjectMapper  objectMapper() {
+        return new ObjectMapper();
     }
 }

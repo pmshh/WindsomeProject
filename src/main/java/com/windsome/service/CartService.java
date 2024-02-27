@@ -1,22 +1,21 @@
 package com.windsome.service;
 
 import com.windsome.dto.cart.CartDetailDto;
-import com.windsome.dto.cart.CartItemDto;
-import com.windsome.entity.Account;
+import com.windsome.dto.cart.CartProductDto;
 import com.windsome.entity.Cart;
-import com.windsome.entity.CartItem;
-import com.windsome.entity.Item;
-import com.windsome.repository.AccountRepository;
-import com.windsome.repository.CartItemRepository;
-import com.windsome.repository.CartRepository;
-import com.windsome.repository.ItemRepository;
+import com.windsome.entity.CartProduct;
+import com.windsome.entity.Member;
+import com.windsome.entity.Product;
+import com.windsome.repository.cartProduct.CartProductRepository;
+import com.windsome.repository.cart.CartRepository;
+import com.windsome.repository.member.MemberRepository;
+import com.windsome.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,73 +23,77 @@ import java.util.List;
 @Transactional
 public class CartService {
 
-    private final ItemRepository itemRepository;
-    private final AccountRepository accountRepository;
+    private final ProductRepository productRepository;
+    private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private final CartProductRepository cartProductRepository;
 
+    /**
+     * 장바구니 화면 조회
+     */
     @Transactional(readOnly = true)
-    public List<CartDetailDto> getCartList(String userIdentifier) {
-        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
+    public List<CartDetailDto> getCartProducts(String userIdentifier) {
+        Member member = memberRepository.findByUserIdentifier(userIdentifier);
+        Cart cart = cartRepository.findByMemberId(member.getId());
 
-        Account account = accountRepository.findByUserIdentifier(userIdentifier);
-        Cart cart = cartRepository.findByAccountId(account.getId());
-        if (cart == null) {
-            return cartDetailDtoList;
-        }
-
-        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
-
-        return cartDetailDtoList;
+        return cart != null ? cartProductRepository.findCartDetailDtoList(cart.getId()) : Collections.emptyList();
     }
 
-    public Long addCart(CartItemDto cartItemDto, String userIdentifier) {
-        Item item = itemRepository.findById(cartItemDto.getItemId()).orElseThrow(EntityNotFoundException::new);
-        Account account = accountRepository.findByUserIdentifier(userIdentifier);
+    /**
+     * 장바구니 상품 추가
+     */
+    public void addCartProduct(CartProductDto cartProductDto, String userIdentifier) {
+        Product product = productRepository.findById(cartProductDto.getProductId()).orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findByUserIdentifier(userIdentifier);
 
-        Cart cart = cartRepository.findByAccountId(account.getId());
+        Cart cart = cartRepository.findByMemberId(member.getId());
         if (cart == null) {
-            cart = Cart.createCart(account);
+            cart = Cart.createCart(member);
             cartRepository.save(cart);
         }
 
-        CartItem savedCartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());
+        CartProduct savedCartProduct = cartProductRepository.findByCartIdAndProductId(cart.getId(), product.getId());
 
-        if (savedCartItem != null) {
-            savedCartItem.addCount(cartItemDto.getCount());
-            return savedCartItem.getId();
+        if (savedCartProduct != null) {
+            savedCartProduct.addCount(cartProductDto.getCount());
         } else {
-            CartItem cartItem = CartItem.createCartItem(cart, item, cartItemDto.getCount());
-            cartItemRepository.save(cartItem);
-            return cartItem.getId();
+            CartProduct cartProduct = CartProduct.createCartProduct(cart, product, cartProductDto.getCount());
+            cartProductRepository.save(cartProduct);
         }
     }
 
+    /**
+     * 장바구니 수정/삭제 권한 검증
+     */
     @Transactional(readOnly = true)
-    public boolean validateCartItem(Long cartItemId, String userIdentifier) {
-        Account currentAccount = accountRepository.findByUserIdentifier(userIdentifier);
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        Account savedAccount = cartItem.getCart().getAccount();
+    public boolean validateCartModificationPermission(Long productId, String userIdentifier) {
+        CartProduct cartProduct = cartProductRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
+        Member savedAccount = cartProduct.getCart().getMember();
 
-        return !StringUtils.equals(currentAccount.getUserIdentifier(), savedAccount.getUserIdentifier());
+        return !userIdentifier.equals(savedAccount.getUserIdentifier());
     }
 
-    public void updateCartItemCount(Long cartItemId, int count) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        cartItem.updateCount(count);
+    /**
+     * 장바구니 상품 개수 수정
+     */
+    public void updateCartItemQuantity(Long productId, int count) {
+        CartProduct cartProduct = cartProductRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
+        cartProduct.setCount(count);
     }
 
-    public void deleteCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        cartItemRepository.delete(cartItem);
+    /**
+     * 장바구니 상품 삭제
+     */
+    public void deleteCartProduct(Long productId) {
+        cartProductRepository.deleteById(productId);
     }
 
-    public Long getCartItemTotalCount(Account account) {
-        Cart cart = cartRepository.findByAccountId(account.getId());
-        if (cart != null) {
-            return cartItemRepository.countByCartId(cart.getId());
-        } else {
-            return 0L;
-        }
+    /**
+     * 장바구니 상품 개수 조회
+     */
+    @Transactional(readOnly = true)
+    public Long getTotalCartProductCount(Member member) {
+        Cart cart = cartRepository.findByMemberId(member.getId());
+        return cart != null ? cartProductRepository.countByCartId(cart.getId()) : 0L;
     }
 }

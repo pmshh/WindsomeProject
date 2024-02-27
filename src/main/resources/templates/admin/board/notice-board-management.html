@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+<main class="admin-main-area">
+    <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='noticeManagement')"></div>
+
+    <article class="admin-content-area">
+        <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+        <!-- section start -->
+        <section class="admin-section-area">
+            <div class="container-fluid">
+
+                <div class="section-header">
+                    <h2>NOTICE</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="section-body notice-mng-body mt-5">
+                    <div class="notice-list-container">
+                        <table class="row-header-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 110px;" scope="col">
+                                    <input type="checkbox" id="check-all" name="check-all" onclick="checkAll()">
+                                    <label for="check-all">전체 선택</label>
+                                </th>
+                                <th style="width: 80px;" scope="col">번호</th>
+                                <th style="width: auto;" scope="col">제목</th>
+                                <th style="width: 110px;" scope="col">작성자</th>
+                                <th style="width: 180px;" scope="col">작성일</th>
+                                <th style="width: 180px;" scope="col">선택</th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="notice">
+                            <tr th:if="${#lists.isEmpty(noticeList.getContent())}">
+                                <td colspan="6" class="empty-message">
+                                    <span class="message">등록된 공지사항이 없습니다.</span>
+                                </td>
+                            </tr>
+                            <tr th:each="fixTopNotice, status:${fixTopNoticeList}">
+                                <td>
+                                    <input type="checkbox" disabled>
+                                </td>
+                                <td>
+                                    <span>공지</span>
+                                </td>
+                                <td class="left fix-top-notice-title">
+                                    <a th:href="@{'/board/notice/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
+                                </td>
+                                <td>
+                                    <span th:text="${fixTopNotice.member.name}"></span>
+                                </td>
+                                <td class="fz11 gray-col">
+                                    <span th:text="${#temporals.format(fixTopNotice.regTime, 'yyyy-MM-dd')}"></span>
+                                </td>
+                                <td>
+                                    <button class="white-btn-w90-h30 top-unfix-btn" th:data-noticeId="${fixTopNotice.id}">공지 내리기</button>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                            <tbody>
+                            <tr th:each="notice, status:${noticeList.getContent()}">
+                                <td>
+                                    <input type="checkbox" class="check" name="check" th:data-noticeId="${notice.noticeId}">
+                                </td>
+                                <td>
+                                    <span th:text="${noticeList.getTotalElements() - (noticeList.getSize() * noticeList.getNumber()) - status.index}"></span>
+                                </td>
+                                <td class="left">
+                                    <a th:href="@{'/board/notice/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
+                                </td>
+                                <td>
+                                    <span th:text="${notice.createdBy}"></span>
+                                </td>
+                                <td class="fz11 gray-col">
+                                    <span th:text="${notice.regDate}">2024-02-06</span>
+                                </td>
+                                <td>
+                                    <button class="white-btn-w65-h30 top-fix-btn" th:data-noticeId="${notice.noticeId}">공지 설정</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="button-container" sec:authorize="hasRole('ADMIN')">
+                        <button class="white-btn-w90-h30 posts-del-btn">선택 삭제</button>
+                        <button class="white-btn-w90-h30 all-post-del-btn">전체 삭제</button>
+                        <button class="white-btn-w65-h30 write-btn">글쓰기</button>
+                    </div>
+
+                    <div class="pagination-container"
+                         th:with="start=${(noticeList.number/maxPage)*maxPage + 1}, end=(${(noticeList.totalPages == 0) ? 1 :
+                                         (start + (maxPage - 1) < noticeList.totalPages ? start + (maxPage - 1) : noticeList.totalPages)})">
+                        <ul>
+                            <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
+                                <a th:onclick="'javascript:page(0)'">
+                                    <i class="fa-solid fa-angle-left"></i><i
+                                        class="fa-solid fa-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
+                                <a th:onclick="'javascript:page(' +  ${noticeList.number - 1} + ')'">
+                                    <i class="fa-solid fa-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                th:classappend="${noticeList.number eq page - 1} ? 'active' : ''">
+                                <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                   th:inline="text">[[${page}]]</a>
+                            </li>
+                            <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
+                                <a th:onclick="'javascript:page(' + ${noticeList.number + 1} + ')'">
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
+                                <a th:onclick="'javascript:page(' + ${noticeList.totalPages - 1} + ')'">
+                                    <i class="fa-solid fa-angle-right"></i><i
+                                        class="fa-solid fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="search-input-container" th:object="${noticeSearchDto}">
+                        <i class="fa-solid fa-angle-right"></i>
+                        <span class="txt">검색어</span>
+                        <select class="search-date-type" th:field="*{searchDateType}">
+                            <option value="">(전체)</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                            <option value="name">작성자</option>
+                        </select>
+                        <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                        <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div th:replace="/layouts/admin-layout.html :: footer"></div>
+    </article>
+</main>
+
+
+<div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <!-- custom js -->
+    <script th:inline="javascript">
+        $(function () {
+            initSubMenu(); // 서브 메뉴 초기화
+
+            /* 글쓰기 버튼 클릭 처리 */
+            $(".write-btn").click(handleWriteButtonClick);
+
+            /* 검색 버튼 클릭 처리 */
+            $(".search-btn").click(handleSearchButtonClick);
+
+            /* 선택 삭제 버튼 클릭 처리 */
+            $(".posts-del-btn").click(handleDeleteSelectedButtonClick);
+
+            /* 전체 삭제 버튼 클릭 처리 */
+            $(".all-post-del-btn").click(handleDeleteAllButtonClick);
+
+            /* 공지 내리기 버튼 클릭 처리 */
+            $(".top-unfix-btn").click(handleTopButtonClick);
+
+            /* 공지 설정 버튼 클릭 처리 */
+            $(".top-fix-btn").click(handleTopButtonClick);
+        });
+
+        function initSubMenu() {
+            $("a[data-bs-target='#sub-menu']").removeClass("collapsed");
+            $("#sub-menu").addClass("show");
+        }
+
+        /* 게시글 등록 화면으로 이동하는 함수 */
+        function handleWriteButtonClick() {
+            location.href = '/board/notice/enroll';
+        }
+
+        /* 검색 함수 */
+        function handleSearchButtonClick(e) {
+            e.preventDefault();
+            if ($(".search-query").val() === '') {
+                alert("검색어를 입력해주세요.");
+                return false;
+            }
+            page(0);
+        }
+
+        /* 선택된 게시글 삭제 함수 */
+        function handleDeleteSelectedButtonClick() {
+            let noticeIds = getSelectedNoticeIds();
+            if (noticeIds.length > 0) {
+                if (confirm("게시글을 삭제하시겠습니까?")) {
+                    deleteNotice(noticeIds);
+                }
+            } else {
+                alert("게시글을 1개 이상 선택해 주세요.")
+            }
+        }
+
+        /* 게시글 전체 삭제 함수 */
+        function handleDeleteAllButtonClick() {
+            let noticeIds = getSelectedNoticeIds();
+            if (noticeIds.length > 0) {
+                if (confirm("전체 게시글을 삭제하시겠습니까?")) {
+                    deleteNotice(noticeIds);
+                } else {
+                    // 체크 박스 전체 선택 해제
+                    $("input[name='check']").each(function () {
+                        $("input[name=check]").prop("checked", false);
+                    });
+                }
+            }
+        }
+
+        /* 게시글 상단 고정/해제 함수 */
+        function handleTopButtonClick() {
+            let noticeId = $(this).attr("data-noticeId");
+            let noticeYn = $(this).hasClass("top-fix-btn");
+            $.ajax({
+                url: '/admin/board/notice/' + noticeId,
+                type: 'patch',
+                data: {
+                    noticeId: noticeId,
+                    noticeYn: noticeYn
+                },
+                success() {
+                    alert("공지글 설정 여부가 수정되었습니다.");
+                    location.reload(true);
+                },
+                error(request) {
+                    alert(request.responseText);
+                },
+            })
+        }
+
+        /* 페이지 이동 함수 */
+        function page(page) {
+            let searchDateType = $(".search-date-type").val();
+            let searchQuery = $(".search-query").val();
+            location.href = "/admin/board/notice?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+        }
+
+        /* 체크 박스 전체 선택/해제 함수 */
+        function checkAll() {
+            if ($("#check-all").prop("checked")) {
+                $("input[name=check]").prop("checked", true);
+            } else {
+                $("input[name=check]").prop("checked", false);
+            }
+        }
+
+        /* 게시글 삭제 함수 */
+        function deleteNotice(noticeIds) {
+            $.ajax({
+                url: "/admin/board/notice",
+                type: "delete",
+                traditional: true,
+                data: {
+                    noticeIds: noticeIds
+                },
+                success(res) {
+                    alert(res);
+                    location.reload(true);
+                },
+                error(request) {
+                    alert(request.responseText);
+                }
+            });
+        }
+
+        /* 선택된 게시글 ID 조회 함수 */
+        function getSelectedNoticeIds() {
+            let noticeIds = [];
+            $("input[name='check']").each(function () {
+                if ($(this).is(':checked') === true) {
+                    noticeIds.push($(this).attr("data-noticeId"));
+                }
+            });
+            return noticeIds;
+        }
+    </script>
+
+</body>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+<main class="def-main-area">
+    <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+    <article class="def-content-area">
+        <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+        <!-- section start -->
+        <section class="def-section-area">
+            <div class="container-fluid">
+
+                <div class="section-header">
+                    <h2>Q&A</h2>
+                    <div class="divider"></div>
+                </div>
+
+                <div class="section-body qa-dtl-body mt-5">
+
+                    <div class="table-box">
+                        <table>
+                            <colgroup>
+                                <col style="width:130px;">
+                                <col style="width: auto;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td colspan="2" class="board-title">
+                                    <span th:text="${qaDtlDtoList.get(0).title}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="board-date-con">
+                                    <ul class="etcArea">
+                                        <li th:text="${qaDtlDtoList.get(0).createdBy}"></li>
+                                        <li><span class="txtNum"
+                                                  th:text="${#temporals.format(qaDtlDtoList.get(0).regTime, 'yyyy-MM-dd')}"></span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="detail">
+                            <div class="article" th:utext="${qaDtlDtoList.get(0).content}"></div>
+                        </div>
+                    </div>
+
+                    <div class="password-box">
+                        <span class="pw-txt">비밀번호</span>
+                        <input class="password-input" type="password" minlength="8" maxlength="20">
+                        <span class="help"><i class="xi-warning"></i>삭제하려면 비밀번호를 입력하세요.</span>
+                    </div>
+
+                    <div class="btn-box">
+                        <button class="white-btn-w100-h30 list-btn" type="button">목록</button>
+                        <button class="black-btn-w100-h30 reply-btn" type="button">답글</button>
+                        <button class="white-btn-w100-h30 del-btn" type="button">삭제</button>
+                        <button class="white-btn-w100-h30 update-btn" type="button">수정</button>
+                    </div>
+
+                    <div class="comment-box">
+
+                        <div class="comment-list">
+                            <ul>
+                                <li th:each="comment, status:${commentDtoList}">
+                                    <div class="comment-top">
+                                        <strong th:text="${comment.createdBy}"></strong>
+                                        <span class="date" th:text="${#temporals.format(comment.regTime, 'yyyy-MM-dd')}">2024-02-13</span>
+                                    </div>
+
+                                    <span class="btn" th:if="${comment.userIdentifier == member.userIdentifier || member.state.name == T(com.windsome.constant.Role).ADMIN.name}">
+                                        <a href="#" class="show-form-btn" th:data-commentId="${comment.commentId}">수정</a>
+                                        <a href="#" class="comment-del-btn" th:data-commentId="${comment.commentId}">삭제</a>
+                                    </span>
+
+                                    <form th:id="${'commentUpdateForm' + comment.commentId}" class="comment-update-form displaynone">
+                                        <div class="input">
+                                            <strong th:text="${member.name}"></strong>
+                                            <div class="secret-box">
+                                                <input th:id="${'updateComSecretCheck' + comment.commentId}" type="checkbox" checked>
+                                                <label th:for="${'updateComSecretCheck' + comment.commentId}">비밀댓글</label>
+                                            </div>
+                                        </div>
+                                        <div class="view">
+                                            <textarea th:text="${comment.content}" th:id="${'commentContent'+comment.commentId}"></textarea>
+                                            <span class="submit">
+                                                <a href="#" th:data-commentId="${comment.commentId}" class="comment-update-btn">수정</a>
+                                                <a href="#" class="comment-cancel-btn">취소</a>
+                                            </span>
+                                        </div>
+                                    </form>
+
+                                    <div class="comment">
+                                        <th:block th:if="${comment.secretYN == true}">
+                                            <th:block th:if="${comment.userIdentifier == member.userIdentifier || member.state.name == T(com.windsome.constant.Role).ADMIN.name}">
+                                                <i class="xi-lock-o"></i><span th:text="${comment.content}"></span>
+                                            </th:block>
+                                            <th:block th:if="${comment.userIdentifier != member.userIdentifier && member.state.name != T(com.windsome.constant.Role).ADMIN.name}">
+                                                <i class="xi-lock-o"></i><span>비밀 댓글입니다.</span>
+                                            </th:block>
+                                        </th:block>
+
+                                        <th:block th:if="${comment.secretYN == false}">
+                                            <span th:text="${comment.content}"></span>
+                                        </th:block>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="comment-write">
+                            <div class="input">
+                                <strong th:text="${member.name}"></strong>
+                                <div class="secret-box">
+                                    <input id="secret-check" type="checkbox" checked>
+                                    <label for="secret-check">비밀댓글</label>
+                                </div>
+                            </div>
+                            <div class="view">
+                                <textarea class="comment-content-input" placeholder="댓글을 남겨보세요."></textarea>
+                                <a class="comment-enroll-btn">확인</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="board-movement">
+                        <ul th:if="${qaDtlDtoList.size() == 3}">
+                            <li class="prev">
+                                <strong>이전글</strong>
+                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(2).qaId}}"><span
+                                        th:text="${qaDtlDtoList.get(2).title}"></span></a>
+                            </li>
+                            <li class="next">
+                                <strong>다음글</strong>
+                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
+                                        th:text="${qaDtlDtoList.get(1).title}"></span></a>
+                            </li>
+                        </ul>
+
+                        <!-- 이전글만 존재하는 경우 -->
+                        <ul th:if="${qaDtlDtoList.size() == 2 && qaDtlDtoList.get(0).qaId > qaDtlDtoList.get(1).qaId}">
+                            <li class="only-prev">
+                                <strong>이전글</strong>
+                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
+                                        th:text="${qaDtlDtoList.get(1).title}"></span></a>
+                            </li>
+                        </ul>
+
+                        <!-- 다음글만 존재하는 경우 -->
+                        <ul th:if="${qaDtlDtoList.size() == 2 && qaDtlDtoList.get(0).qaId < qaDtlDtoList.get(1).qaId}">
+                            <li class="next">
+                                <strong>다음글</strong>
+                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
+                                        th:text="${qaDtlDtoList.get(1).title}"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div th:replace="/layouts/default-layout.html :: footer"></div>
+    </article>
+</main>
+
+<div th:replace="/layouts/default-layout.html :: commonJs"></div>
+<!-- 사용자 JS -->
+<script th:inline="javascript">
+    let pw = [[${password}]]; // db에 저장된 게시글 비밀번호
+    let qaId = [[${qaDtlDtoList.get(0).qaId}]]; // 게시글 번호
+
+    $(function () {
+        /* Q&A 수정 */
+        $(".update-btn").click(function () {
+            let userInputPw = $(".password-input").val();
+
+            if (userInputPw === pw) {
+                location.href = '/board/qa/update/' + qaId + '?password=' + pw;
+            } else if (userInputPw === '') {
+                alert("비밀번호를 입력해 주세요.");
+            } else {
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+        });
+
+        /* Q&A 삭제 */
+        $(".del-btn").click(function () {
+            let userInputPw = $(".password-input").val();
+
+            if (userInputPw === pw) {
+                if (confirm("게시글을 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: '/board/qa/' + qaId,
+                        type: 'delete',
+                        data: {
+                            qaId: qaId,
+                            password: $(".password-input").val()
+                        },
+                        success(res) {
+                            alert(res);
+                            location.href = '/board/qa';
+                        },
+                        error(request) {
+                            alert(request.responseText);
+                        },
+                    });
+                }
+            } else if (userInputPw === '') {
+                alert("비밀번호를 입력해 주세요.");
+            } else {
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+        });
+
+        /* Q&A 답글 */
+        $(".reply-btn").click(function () {
+            location.href = '/board/qa/enroll?qaId=' + qaId;
+        });
+
+        /* qa 게시판으로 이동 */
+        $(".list-btn").click(function () {
+            location.href = '/board/qa';
+        });
+
+        /* 댓글 등록 */
+        $(".comment-enroll-btn").click(function () {
+            let content = $(".comment-content-input").val();
+            let secretYN = $("#secret-check").is(':checked');
+            if (confirm("댓글을 등록하시겠습니까?")) {
+                $.ajax({
+                    url: '/board/comment/enroll',
+                    type: 'post',
+                    data: {
+                        qaId: qaId,
+                        content: content,
+                        secretYN: secretYN,
+                    },
+                    success(res) {
+                        alert(res);
+                        location.reload(true);
+                    },
+                    error(request) {
+                        alert(request.responseText);
+                    },
+                });
+            }
+            return false;
+        });
+
+        /* 댓글 수정 버튼 클릭 시 댓글 수정 form 보이기 */
+        $(".show-form-btn").click(function (e) {
+            e.preventDefault();
+
+            $(".comment-update-form").each(function () {
+                $(this).addClass("displaynone");
+            });
+
+            let commentId = $(this).attr("data-commentId");
+            $("#commentUpdateForm" + commentId).removeClass('displaynone');
+        });
+
+        /* 댓글 수정 */
+        $(".comment-update-btn").click(function (e) {
+            e.preventDefault();
+            let commentId = $(this).attr("data-commentId");
+            let contentVal = $("#commentContent" + commentId).val();
+            let secretYN = $("#updateComSecretCheck" + commentId).is(':checked');
+            $.ajax({
+                url:'/board/comment/' + commentId,
+                type: 'patch',
+                data: {
+                    content: contentVal,
+                    secretYN: secretYN
+                },
+                success(res) {
+                    alert(res);
+                    location.reload(true);
+                },
+                error(request) {
+                    alert(request.responseText);
+                },
+            })
+        });
+
+        /* 댓글 수정 취소 */
+        $(".comment-cancel-btn").click(function (e) {
+            e.preventDefault();
+            $(".comment-update-form").each(function () {
+                $(this).addClass("displaynone");
+            });
+        });
+
+        /* 댓글 삭제 */
+        $(".comment-del-btn").click(function (e) {
+            e.preventDefault();
+            let commentId = $(this).attr("data-commentId");
+            if (confirm("댓글을 삭제하시겠습니까?")) {
+                $.ajax({
+                    url: '/board/comment/' + commentId,
+                    type: 'delete',
+                    success(res) {
+                        alert(res);
+                        location.reload(true);
+                    },
+                    error(request) {
+                        alert(request.responseText);
+                    },
+                });
+            }
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

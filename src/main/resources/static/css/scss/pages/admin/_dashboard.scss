@@ -1,9 +1,9 @@
-.dashboard_body {
+.dashboard-body {
     .row {
         width: 100%;
 
-        .info_wrap {
-            .info_box {
+        .stats-summary-container {
+            .info-box {
                 background-color: white;
                 padding: 20px 40px;
                 display: flex;
@@ -14,7 +14,7 @@
                 position: relative;
                 // box-shadow: 1px 1px 20px -10px rgb(0, 0, 0, 0.2);
 
-                .txt_box {
+                .txt-box {
                     .title {
                         display: block;
                         color: #6b6b6b;
@@ -31,7 +31,7 @@
                     }
                 }
 
-                .icon_box {
+                .icon-box {
                     svg {
                         width: 20px;
                         height: 20px;
@@ -61,10 +61,10 @@
                 }
             }
 
-            &:nth-child(1) .info_box::before,
-            &:nth-child(2) .info_box::before,
-            &:nth-child(3) .info_box::before,
-            &:nth-child(4) .info_box::before {
+            &:nth-child(1) .info-box::before,
+            &:nth-child(2) .info-box::before,
+            &:nth-child(3) .info-box::before,
+            &:nth-child(4) .info-box::before {
                 content: "";
                 width: 1px;
                 position: absolute;
@@ -75,24 +75,24 @@
                 top: 0px;
             }
 
-            &:nth-child(1) .info_box::before {
+            &:nth-child(1) .info-box::before {
                 border: 2px solid #0090F4;
             }
 
-            &:nth-child(2) .info_box::before {
+            &:nth-child(2) .info-box::before {
                 border: 2px solid #FCBB0F;
             }
 
-            &:nth-child(3) .info_box::before {
+            &:nth-child(3) .info-box::before {
                 border: 2px solid #6C41E8;
             }
 
-            &:nth-child(4) .info_box::before {
+            &:nth-child(4) .info-box::before {
                 border: 2px solid #14C470;
             }
         }
 
-        .chart_box {
+        .chart-container {
             background-color: white;
             padding: 20px;
             display: flex;
@@ -120,7 +120,9 @@
             }
         }
 
-        .table_box {
+        .recent-posts-container,
+        .recent-products-container,
+        .recent-orders-container {
             background-color: white;
             padding: 20px;
             display: flex;
@@ -146,15 +148,14 @@
                 width: 100%;
                 overflow-x: auto;
 
-                .message_wrap {
-                    @include board_message_wrap();
-                    height: 160px;
-                    padding: 0;
+                .empty-message {
+                    height: 160px !important;
+                    padding: 0 !important;
                 }
             }
         }
 
-        .big_table_box {
+        .big-table {
             min-height: 300px;
             max-height: 500px;
         }

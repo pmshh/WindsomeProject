@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container">
+
+                    <div class="section-header">
+                        <h2>아이디/비밀번호 찾기</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body find-account-body mt-5">
+
+                        <div class="tab-box">
+                            <ul>
+                                <li id="find-id-tab" class="active" data-tab="content-1">아이디 찾기</li>
+                                <li id="find-pw-tab" data-tab="content-2">비밀번호 찾기</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-box">
+                            <!-- find-id-form-box start -->
+                            <div class="find-id-form-box content-box content-1" id="content-1">
+                                <div class="little-text-box">
+                                    <p class="info-text">회원가입 시 입력한 이메일으로 아이디를 확인할 수 있습니다.</p>
+                                </div>
+
+                                <form onsubmit="return false">
+                                    <table class="col-header-table-color">
+                                        <colgroup>
+                                            <col style="width:150px;">
+                                            <col style="width:auto;">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                <label for="find-id-name">이름 <span>*</span></label>
+                                            </th>
+                                            <td>
+                                                <div class="name-input-box">
+                                                    <input class="find-id-name-input" name="find-id-name" id="find-id-name" type="text">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <label for="find-id-email">이메일 <span>*</span></label>
+                                            </th>
+                                            <td>
+                                                <div class="mail-input-box mb-1">
+                                                    <input class="find-id-email-input1" id="find-id-email" name="find-id-email" type="text">
+                                                    @
+                                                    <input class="find-id-email-input2" type="text">
+                                                    <select class="find-id-email-select">
+                                                        <option value="1" selected>직접입력</option>
+                                                        <option value="naver.com">naver.com</option>
+                                                        <option value="hanmail.net">hanmail.net</option>
+                                                        <option value="hotmail.com">hotmail.com</option>
+                                                        <option value="nate.com">nate.com</option>
+                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                        <option value="empas.com">empas.com</option>
+                                                        <option value="dreamwiz.com">dreamwiz.com</option>
+                                                        <option value="freechal.com">freechal.com</option>
+                                                        <option value="lycos.co.kr">lycos.co.kr</option>
+                                                        <option value="korea.com">korea.com</option>
+                                                        <option value="gmail.com">gmail.com</option>
+                                                        <option value="hanmir.com">hanmir.com</option>
+                                                        <option value="paran.com">paran.com</option>
+                                                    </select>
+                                                    <button type="button" class="send-mail" onclick="sendEmail('find-id')">인증번호 발송</button>
+                                                </div>
+                                                <div class="mail-check-box">
+                                                    <input class="find-id-email-confirm-input" disabled="disabled">
+                                                    <button type="button" class="check-number" onclick="confirmNumber('find-id')">인증번호
+                                                        확인
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+
+                                <div class="big-text-box">
+                                    <p class="info-text">- 인증번호가 발송되지 않은 경우 다시 한 번 인증번호 발송을 눌러주세요.</p>
+                                    <p class="info-text">- 회원정보에 등록된 이름과 이메일이 동일해야만 인증번호가 발송됩니다.</p>
+                                    <p class="info-text">- 인증번호는 입력한 이메일로 발송됩니다.</p>
+                                </div>
+
+                                <div class="btn-box">
+                                    <button class="white-btn-w130-h40" type="button" onclick="location.href='/'">취소</button>
+                                    <button class="find-id-btn black-btn-w130-h40" type="button">확인</button>
+                                </div>
+                            </div>
+
+                            <!-- find-pw-form-box start -->
+                            <div class="find-pw-form-box content-box content-2" id="content-2">
+                                <div class="little-text-box">
+                                    <p class="info-text">회원가입 시 입력한 이메일으로 비밀번호를 재설정할 수 있습니다.</p>
+                                </div>
+
+                                <form onsubmit="return false">
+                                    <table class="col-header-table-color">
+                                        <colgroup>
+                                            <col style="width:150px;">
+                                            <col style="width:auto;">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                <label for="find-pw-id">아이디 <span>*</span></label>
+                                            </th>
+                                            <td>
+                                                <div class="id-input-box">
+                                                    <input class="find-pw-id-input" name="find-pw-id" id="find-pw-id" type="text">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <label for="find-pw-name">이름 <span>*</span></label>
+                                            </th>
+                                            <td>
+                                                <div class="find-pw-name-input-box">
+                                                    <input class="find-pw-name-input" name="find-pw-name" id="find-pw-name" type="text">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                <label for="find-pw-email">이메일 <span>*</span></label>
+                                            </th>
+                                            <td>
+                                                <div class="mail-input-box mb-1">
+                                                    <input class="find-pw-email-input1" id="find-pw-email" name="find-pw-email" type="text">
+                                                    @
+                                                    <input class="find-pw-email-input2" type="text">
+                                                    <select class="find-pw-email-select">
+                                                        <option value="1" selected>직접입력</option>
+                                                        <option value="naver.com">naver.com</option>
+                                                        <option value="hanmail.net">hanmail.net</option>
+                                                        <option value="hotmail.com">hotmail.com</option>
+                                                        <option value="nate.com">nate.com</option>
+                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                        <option value="empas.com">empas.com</option>
+                                                        <option value="dreamwiz.com">dreamwiz.com</option>
+                                                        <option value="freechal.com">freechal.com</option>
+                                                        <option value="lycos.co.kr">lycos.co.kr</option>
+                                                        <option value="korea.com">korea.com</option>
+                                                        <option value="gmail.com">gmail.com</option>
+                                                        <option value="hanmir.com">hanmir.com</option>
+                                                        <option value="paran.com">paran.com</option>
+                                                    </select>
+                                                    <button type="button" class="send-mail" onclick="sendEmail('find-pw')">인증번호 발송</button>
+                                                </div>
+                                                <div class="mail-check-box">
+                                                    <input class="find-pw-email-confirm-input" disabled="disabled">
+                                                    <button type="button" class="check-number" onclick="confirmNumber('find-pw')">인증번호
+                                                        확인
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+
+                                <div class="big-text-box">
+                                    <p class="info-text">- 인증번호가 발송되지 않은 경우 다시 한 번 인증번호 발송을 눌러주세요.</p>
+                                    <p class="info-text">- 회원정보에 등록된 이름과 이메일이 동일해야만 인증번호가 발송됩니다.</p>
+                                    <p class="info-text">- 인증번호는 입력한 이메일로 발송됩니다.</p>
+                                </div>
+
+                                <div class="btn-box">
+                                    <button class="white-btn-w130-h40" type="button" onclick="location.href='/'">취소</button>
+                                    <button class="find-psas-btn black-btn-w130-h40" type="button">확인</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <form id="find-form" method="get">
+<!--        <input type="hidden" name="name">-->
+<!--        <input type="hidden" name="email">-->
+    </form>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과유무 변수 */
+        let code = "";                                                              // 이메일 인증번호 저장 변수
+        let checkId = false;                                                        // 아이디
+        let checkName = false;                                                      // 이름
+        let checkMail = false;                                                      // 이메일
+        let checkMailConfirm = false;                                               // 이메일 인증번호 확인
+        let finalEmail;                                                             // 인증된 이메일 값 저장
+
+        $(function () {
+            initializeTabs(); // 탭 active 클래스 추가
+
+            /* 아이디 찾기 */
+            $(".find-id-btn").click(function () {
+                /* 입력값 변수 */
+                let form = $("#find-form");                                                         // form
+                let nameVal = $('.find-id-name-input').val();                                       // 이름
+                let mailVal1 = $(".find-id-email-input1").val();                                    // 이메일 앞부분
+                let mailVal2 = $(".find-id-email-input2").val();                                    // 이메일 뒷부분
+
+                /* 이름 빈값 검사 */
+                if (nameVal === "") {
+                    alert("이름을 입력하세요.");
+                    $('.find-id-name-input').focus();
+                    window.scrollTo(0, 0);
+                    checkName = false;
+                    return false;
+                } else {
+                    checkName = true;
+                }
+
+                /* 이메일 빈값 검사 */
+                if (mailVal1 === '' || mailVal2 === '') {
+                    alert("이메일을 입력하세요.");
+                    $('.find-id-email-input1').focus();
+                    window.scrollTo(0, 0);
+                    checkMail = false;
+                    return false;
+                } else {
+                    checkMail = true;
+                }
+
+                /* 이메일 인증 여부 검사 */
+                if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
+                    alert("이메일을 인증해주세요.");
+                    $('.find-id-email-confirm-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkMail && checkMailConfirm && checkName) {
+                    form.append("<input type='hidden' name='name' value='" + nameVal + "'><input type='hidden' name='email' value='" + finalEmail + "'>");
+                    form.attr("action", "/forgot-credentials/userid-lookup-result-redirect");
+                    form.attr("method", "get");
+                    form.submit();
+                }
+                return false;
+            });
+
+            /* 아이디 찾기 이메일 입력 방식 선택 */
+            $('.find-id-email-select').on("change", function () {
+                let findIdEmailInput2 = $(".find-id-email-input2");
+                $(".find-id-email-select option:selected").each(function () {
+                    if ($(this).val() === '1') {
+                        findIdEmailInput2.val('');
+                        findIdEmailInput2.attr("disabled", false);
+                    } else {
+                        findIdEmailInput2.val($(this).text());
+                        findIdEmailInput2.attr("disabled", true);
+                    }
+                });
+            });
+
+            /* 비밀번호 찾기 */
+            $(".find-psas-btn").click(function () {
+                /* 입력값 변수 */
+                let form = $("#find-form");                                                         // form
+                let idVal = $('.find-pw-id-input').val();                                           // 아이디
+                let nameVal = $('.find-pw-name-input').val();                                       // 이름
+                let mailVal1 = $(".find-pw-email-input1").val();                                    // 이메일 앞부분
+                let mailVal2 = $(".find-pw-email-input2").val();                                    // 이메일 뒷부분
+
+                /* 아이디 빈값 검사 */
+                if (idVal === "") {
+                    alert("아이디를 입력하세요.");
+                    $('.find-pw-id-input').focus();
+                    window.scrollTo(0, 0);
+                    checkId = false;
+                    return false;
+                } else {
+                    checkId = true;
+                }
+
+                /* 이름 빈값 검사 */
+                if (nameVal === "") {
+                    alert("이름을 입력하세요.");
+                    $('.find-pw-name-input').focus();
+                    window.scrollTo(0, 0);
+                    checkName = false;
+                    return false;
+                } else {
+                    checkName = true;
+                }
+
+                /* 이메일 빈값 검사 */
+                if (mailVal1 === '' || mailVal2 === '') {
+                    alert("이메일을 입력하세요.");
+                    $('.find-pw-email-input1').focus();
+                    window.scrollTo(0, 0);
+                    checkMail = false;
+                    return false;
+                } else {
+                    checkMail = true;
+                }
+
+                /* 이메일 인증 여부 검사 */
+                if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
+                    alert("이메일을 인증해주세요.");
+                    $('.find-pw-email-confirm-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 최종 유효성 검사 */
+                if (checkId && checkName && checkMail && checkMailConfirm) {
+                    form.append("<input type='hidden' name='userIdentifier' value='" + idVal + "'><input type='hidden' name='name' value='" + nameVal + "'><input type='hidden' name='email' value='" + finalEmail + "'>");
+                    form.attr("action", "/forgot-credentials/password-lookup-result-redirect");
+                    form.attr("method", "get");
+                    form.submit();
+                }
+                return false;
+            });
+
+            /* 비밀번호 찾기 이메일 입력 방식 선택 */
+            $('.find-pw-email-select').on("change", function () {
+                let findPwEmailInput2 = $(".find-pw-email-input2");
+                $(".find-pw-email-select option:selected").each(function () {
+                    if ($(this).val() === '1') {
+                        findPwEmailInput2.val('');
+                        findPwEmailInput2.attr("disabled", false);
+                    } else {
+                        findPwEmailInput2.val($(this).text());
+                        findPwEmailInput2.attr("disabled", true);
+                    }
+                });
+            });
+        });
+
+        function initializeTabs() {
+            /* url 파라미터 값 참고해서 해당하는 tab에 active 클래스 추가 */
+            let action = [[${action}]];
+            let findIdTab = $("#find-id-tab");
+            let findPwTab = $("#find-pw-tab");
+            let content1 = $(".content-1");
+            let content2 = $(".content-2");
+
+            if (action === 'find-id' || action === null) {
+                findIdTab.addClass("active");
+                findPwTab.removeClass("active")
+                content1.siblings().css("display", "none");
+                content1.css("display", "block");
+            } else if (action === 'find-pw') {
+                findIdTab.removeClass("active")
+                findPwTab.addClass("active");
+                content2.siblings().css("display", "none");
+                content2.css("display", "block");
+            }
+
+            /* tab 클릭 시 active 클래스 추가 */
+            $("li").click(function () {
+                let targetTab = $(this).attr("data-tab");
+
+                $(this).siblings().removeClass("active");
+                $(this).addClass("active");
+                $("." + targetTab + "").siblings().css("display", "none");
+                $("." + targetTab + "").css("display", "block");
+            });
+        }
+
+        /* 이메일 인증 */
+        function sendEmail(param) {
+            let emailInput1Val, emailInput2Val, fullEmail, mailConfirmInput;
+            let confirmMessage = "인증번호를 전송하시겠습니까?";
+
+            // 파라미터에 따라 변수 설정
+            if (param === 'find-id') {
+                emailInput1Val = $(".find-id-email-input1").val();
+                emailInput2Val = $(".find-id-email-input2").val();
+                fullEmail = emailInput1Val + "@" + emailInput2Val;
+                mailConfirmInput = $(".find-id-email-confirm-input");
+            } else {
+                emailInput1Val = $(".find-pw-email-input1").val();
+                emailInput2Val = $(".find-pw-email-input2").val();
+                fullEmail = emailInput1Val + "@" + emailInput2Val;
+                mailConfirmInput = $(".find-pw-email-confirm-input");
+            }
+
+            if (confirm(confirmMessage)) {
+                if (checkMailForm(fullEmail)) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/forgot-credentials/email-verification",
+                        data: { email: fullEmail },
+                        success: function (data) {
+                            mailConfirmInput.css("background-color", "white");
+                            mailConfirmInput.attr("disabled", false);
+                            code = data;
+                        },
+                        error: function (request) {
+                            alert(request.responseText);
+                        }
+                    });
+                } else {
+                    alert("올바른 이메일을 입력해주세요.");
+                }
+            } else {
+                return false;
+            }
+        }
+
+        /* 이메일 인증 번호 일치 여부 */
+        function confirmNumber(action) {
+            // findId 관련 변수
+            let findIdEmailInput1 = $(".find-id-email-input1");
+            let findIdEmailInput2 = $(".find-id-email-input2");
+            let findIdEmailInput1Val = findIdEmailInput1.val();
+            let findIdEmailInput2Val = findIdEmailInput2.val();
+            let findIdEmailConfirmInput = $(".find-id-email-confirm-input");
+            let findIdEmailConfirmInputVal = findIdEmailConfirmInput.val();
+            // findPw 관련 변수
+            let findPwEmailInput1 = $(".find-pw-email-input1");
+            let findPwEmailInput2 = $(".find-pw-email-input2");
+            let findPwEmailInput1Val = findPwEmailInput1.val();
+            let findPwEmailInput2Val = findPwEmailInput2.val();
+            let findPwEmailConfirmInput = $(".find-pw-email-confirm-input");
+            let findPwEmailConfirmInputVal = findPwEmailConfirmInput.val();
+
+            if (action === 'find-id') {
+                if (findIdEmailConfirmInputVal === code) {
+                    alert("인증되었습니다.");
+                    findIdEmailInput1.attr("disabled", true);
+                    findIdEmailConfirmInput.attr("disabled", true);
+                    finalEmail = findIdEmailInput1Val + '@' + findIdEmailInput2Val;
+                    checkMailConfirm = true;
+                } else {
+                    alert("인증번호를 다시 확인해주세요.");
+                    checkMailConfirm = false;
+                }
+            } else if (action === 'find-pw') {
+                if (findPwEmailConfirmInputVal === code) {
+                    alert("인증되었습니다.");
+                    findPwEmailInput1.attr("disabled", true);
+                    findPwEmailConfirmInput.attr("disabled", true);
+                    finalEmail = findPwEmailInput1Val + '@' + findPwEmailInput2Val;
+                    checkMailConfirm = true;
+                } else {
+                    alert("인증번호를 다시 확인해주세요.");
+                    checkMailConfirm = false;
+                }
+            }
+        }
+
+        /* 입력 이메일 형식 유효성 검사 */
+        function checkMailForm(email) {
+            let form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            return form.test(email);
+        }
+    </script>
+</body>

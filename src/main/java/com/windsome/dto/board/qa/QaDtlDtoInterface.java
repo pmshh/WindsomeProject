@@ -10,5 +10,5 @@ public interface QaDtlDtoInterface {
     String getPassword();
     boolean getSecretYN();
     LocalDateTime getRegTime();
-    Long getAccountId();
+    Long getMemberId();
 }

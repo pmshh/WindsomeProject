@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>ORDER CHECK</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body order-hist-body mt-5">
+                        <div class="order-history-container">
+                            <table class="row-header-table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 130px;" scope="col">주문일자</th>
+                                    <th style="width: 80px;" scope="col">이미지</th>
+                                    <th style="width: auto;" scope="col">상품정보</th>
+                                    <th style="width: 61px;" scope="col">수량</th>
+                                    <th style="width: 111px;" scope="col">상품구매금액</th>
+                                    <th style="width: 111px;" scope="col">주문처리상태</th>
+                                    <th style="width: 111px;" scope="col">취소/교환/반품</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${#lists.isEmpty(orders.getContent())}">
+                                        <td colspan="7" class="empty-message">
+                                            <span class="message">주문 내역이 없습니다.</span>
+                                        </td>
+                                    </tr>
+                                    <th:block th:each="order, status: ${orders.getContent()}">
+                                        <tr th:each="orderProduct, status: ${order.orderProductDtoList}">
+                                            <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}" class="order-date" th:text="${order.orderDate}"></td>
+                                            <td class="thumb">
+                                                <a th:href="${'/product/' + orderProduct.productId}">
+                                                    <img th:src="${orderProduct.imageUrl}">
+                                                </a>
+                                            </td>
+                                            <td class="product left top">
+                                                <strong class="name">
+                                                    <a th:href="${'/product/' + orderProduct.productId}" th:text="${orderProduct.productName}"></a>
+                                                </strong>
+                                                <div class="option">[옵션: 선택 X]</div>
+                                            </td>
+                                            <td th:text="${orderProduct.count}"></td>
+                                            <td class="product-price">
+                                                <span th:if="${orderProduct.discount == 0}" th:text="|${#numbers.formatInteger(orderProduct.price, 0, 'COMMA')}원|"></span>
+                                                <span th:if="${orderProduct.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(orderProduct.price, 0, 'COMMA')}원|"></span>
+                                                <strong th:if="${orderProduct.discount > 0}" th:text="|${#numbers.formatInteger(orderProduct.price * (1 - orderProduct.discount), 0, 'COMMA')}원|"></strong>
+                                            </td>
+                                            <td class="state">
+                                                <span th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}">배송 준비중</span>
+                                                <span th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">주문 취소</span>
+                                            </td>
+                                            <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}">
+                                                <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}"
+                                                        class="black-btn-w65-h30 order-cancel-button" type="button" th:value="${order.orderId}"
+                                                        onclick="cancelOrder(this.value)">주문 취소</button>
+                                                <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pagination-container"
+                            th:with="start=${(orders.number/maxPage)*maxPage + 1}, end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
+                            <ul>
+                                <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' +  ${orders.number - 1} + ')'">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${orders.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                        th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${orders.number + 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${orders.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+
+            /* 주문 취소 */
+            $(".order-cancel-button").on("click", function () {
+                if (confirm("선택하신 주문을 취소하시겠습니까?")) {
+                    let orderId = $(this).val();
+
+                    $.ajax({
+                        url: "/orders/" + orderId + "/cancel",
+                        type: "patch",
+                        dataType: "text",
+                        success: function (res) {
+                            alert(res);
+                            location.href = '/orders';
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 200 || xhr.status === 403) {
+                                alert('로그인 후 이용해주세요.');
+                                location.href = "/login";
+                            } else {
+                                alert(xhr.responseText);
+                            }
+                        },
+                    })
+                } else {
+                    false;
+                }
+            });
+        });
+
+        function showMessage() {
+            let message = [[${message}]];
+            if (message !== null) {
+                alert(message);
+            }
+        }
+
+        /* 페이지 이동 함수 */
+        function page(page) {
+            location.href = "/orders/" + page;
+        }
+    </script>
+</body>
+
+</html>
