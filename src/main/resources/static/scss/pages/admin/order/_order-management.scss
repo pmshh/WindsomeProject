@@ -1,0 +1,25 @@
+@import "../../../abstracts/variables";
+
+.order-mng-body {
+    width: 90%;
+    margin: 0 auto;
+
+    .order-list-container {
+        width: 100%;
+        overflow-x: auto;
+
+        table {
+            min-width: 810px;
+        }
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}
+
+@media (max-width:1200px) {
+    .order-mng-body {
+        width: 100%;
+    }
+}

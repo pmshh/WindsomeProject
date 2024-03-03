@@ -88,44 +88,48 @@
                                         <span>최근 고객 문의</span>
                                     </div>
                                     <div class="body">
-                                        <table class="row-header-table">
-                                            <thead>
-                                            <tr>
-                                                <th style="width: 150px;" scope="col">번호</th>
-                                                <th style="width: auto;" scope="col">제목</th>
-                                                <th style="width: 180px;" scope="col">작성자</th>
-                                                <th style="width: 180px;" scope="col">작성일</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
 
-                                            <tr th:if="${#lists.isEmpty(qaList.getContent())}">
-                                                <td colspan="4" class="empty-message">
-                                                    <span class="message">등록된 Q&A가 없습니다.</span>
-                                                </td>
-                                            </tr>
+                                        <div class="table-wrapper">
+                                            <table class="base-table base-table--multi-columns">
+                                                <thead class="base-table__head">
+                                                    <tr class="base-table__row">
+                                                        <th class="base-table__header-cell" style="width: 150px;" scope="col">번호</th>
+                                                        <th class="base-table__header-cell" style="width: auto;" scope="col">제목</th>
+                                                        <th class="base-table__header-cell" style="width: 180px;" scope="col">작성자</th>
+                                                        <th class="base-table__header-cell" style="width: 180px;" scope="col">작성일</th>
+                                                    </tr>
+                                                </thead>
 
-                                            <tr th:each="qa, status:${qaList.getContent()}">
-                                                <td>
-                                                    <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
-                                                </td>
-                                                <td class="left">
-                                                    <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/' + ${qa.qaId}}"><span th:text="${qa.title}"></span></a>
-                                                    <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                                    <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                                    <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                                    <i class="xi-lock-o"></i>
-                                                </td>
-                                                <td>
-                                                    <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
-                                                    <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
-                                                </td>
-                                                <td>
-                                                    <span class="txtNum gray-col fz11" th:text="${qa.regDate}">2024-02-06</span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                <tbody class="base-table__body">
+                                                    <tr class="base-table__row" th:if="${#lists.isEmpty(qaList.getContent())}">
+                                                        <td class="base-table__cell base-table__cell--empty" colspan="4">
+                                                            <span class="base-table__message">등록된 Q&A가 없습니다.</span>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="base-table__row" th:each="qa, status:${qaList.getContent()}">
+                                                        <td class="base-table__cell">
+                                                            <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
+                                                        </td>
+                                                        <td class="base-table__cell left">
+                                                            <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/' + ${qa.qaId}}"><span th:text="${qa.title}"></span></a>
+                                                            <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                            <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                            <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/' + ${qa.qaId}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                            <i class="xi-lock-o"></i>
+                                                        </td>
+                                                        <td class="base-table__cell">
+                                                            <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
+                                                            <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
+                                                        </td>
+                                                        <td class="base-table__cell">
+                                                            <span class="txtNum gray-col txt11" th:text="${qa.regDate}">2024-02-06</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -137,96 +141,114 @@
                                         <span>최근 등록 상품</span>
                                     </div>
                                     <div class="body">
-                                        <table class="row-header-table">
-                                            <thead>
-                                            <tr>
-                                                <th style="width: 80px;" scope="col">번호</th>
-                                                <th style="width: auto;" scope="col">상품명</th>
-                                                <th style="width: 110px;" scope="col">상태</th>
-                                                <th style="width: 110px;" scope="col">등록자</th>
-                                                <th style="width: 150px;" scope="col">등록일</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
 
-                                            <tr th:if="${#lists.isEmpty(products.getContent())}">
-                                                <td colspan="5" class="empty-message">
-                                                    <span class="message">등록된 상품이 없습니다.</span>
-                                                </td>
-                                            </tr>
+                                        <div class="table-wrapper">
+                                            <table class="base-table base-table--multi-columns">
+                                                <thead class="base-table__head">
+                                                    <tr class="base-table__row">
+                                                        <th class="base-table__header-cell" style="width: 80px;" scope="col">번호</th>
+                                                        <th class="base-table__header-cell" style="width: auto;" scope="col">상품명</th>
+                                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">상태</th>
+                                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">등록자</th>
+                                                        <th class="base-table__header-cell" style="width: 150px;" scope="col">등록일</th>
+                                                    </tr>
+                                                </thead>
 
-                                            <tr th:each="product, status: ${products.getContent()}">
-                                                <td th:text="${status.index + 1}">
-                                                </td>
-                                                <td class="left">
-                                                    <a th:href="'/product/'+${product.id}"
-                                                       th:text="${product.name}"></a>
-                                                </td>
-                                                <td th:text="${product.productSellStatus.name == T(com.windsome.constant.ProductSellStatus).SELL.name} ? '판매' : '품절'">
-                                                </td>
-                                                <td th:text="${product.createdBy}"></td>
-                                                <td th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd HH:mm:ss')}" class="gray-col fz11">
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                <tbody class="base-table__body">
+                                                    <tr class="base-table__row" th:if="${#lists.isEmpty(products.getContent())}">
+                                                        <td class="base-table__cell base-table__cell--empty" colspan="5">
+                                                            <span class="base-table__message">등록된 상품이 없습니다.</span>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="base-table__row" th:each="product, status: ${products.getContent()}">
+                                                        <td class="base-table__cell">
+                                                            <span th:text="${status.index + 1}"></span>
+                                                        </td>
+                                                        <td class="base-table__cell left">
+                                                            <a th:href="'/product/'+${product.id}" th:text="${product.name}"></a>
+                                                        </td>
+                                                        <td class="base-table__cell">
+                                                            <span th:text="${product.productSellStatus}"></span>
+                                                        </td>
+                                                        <td class="base-table__cell">
+                                                            <span th:text="${product.createdBy}"></span>
+                                                        </td>
+                                                        <td class="base-table__cell">
+                                                            <span class="gray-col txt11" th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 최근 주문 내역 -->
                             <div class="col-12">
-                                <div class="recent-orders-container big-table">
+                                <div class="recent-orders-container">
                                     <div class="header">
                                         <span>최근 주문 내역</span>
                                     </div>
                                     <div class="body">
-                                        <table class="row-header-table">
-                                            <thead>
-                                            <tr>
-                                                <th style="width: 80px;" scope="col">주문 번호</th>
-                                                <th style="width: 110px;" scope="col">이미지</th>
-                                                <th style="width: auto;" scope="col">상품정보</th>
-                                                <th style="width: 110px;" scope="col">주문 상태</th>
-                                                <th style="width: 110px;" scope="col">주문자 아이디</th>
-                                                <th style="width: 110px;" scope="col">주문 날짜</th>
-                                                <th style="width: 110px;" scope="col">취소</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr th:if="${#lists.isEmpty(orders.getContent())}">
-                                                <td colspan="7" class="empty-message">
-                                                    <span class="message">주문 내역이 없습니다.</span>
-                                                </td>
-                                            </tr>
 
-                                            <th:block th:each="order, status: ${orders.getContent()}">
-                                                <tr th:each="orderProduct, status: ${order.orderProductDtoList}">
+                                        <div class="table-wrapper">
+                                            <table class="base-table base-table--multi-columns">
+                                                <thead class="base-table__head">
+                                                    <tr class="base-table__row">
+                                                        <th class="base-table__header-cell" style="width: 80px;" scope="col">주문 번호</th>
+                                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">이미지</th>
+                                                        <th class="base-table__header-cell" style="width: auto;" scope="col">상품정보</th>
+                                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">주문 상태</th>
+                                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">주문자 아이디</th>
+                                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">주문 날짜</th>
+                                                        <th class="base-table__header-cell" style="width: 180px;" scope="col">취소</th>
+                                                    </tr>
+                                                </thead>
 
-                                                    <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}" th:text="${order.orderId}"></td>
-                                                    <td class="thumb">
-                                                        <a th:href="${'/product/' + orderProduct.productId}">
-                                                            <img th:src="${orderProduct.imageUrl}">
-                                                        </a>
-                                                    </td>
-                                                    <td class="product left top">
-                                                        <strong class="name">
-                                                            <a th:href="${'/product/' + orderProduct.productId}" th:text="${orderProduct.productName}"></a>
-                                                        </strong>
-                                                        <div class="option">[옵션: 선택 X]</div>
-                                                    </td>
-                                                    <td th:text="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name ? '배송 준비중' : '주문 취소'}"></td>
-                                                    <td th:text="${order.buyerId}"></td>
-                                                    <td th:text="${order.orderDate}" class="gray-col fz11"></td>
-                                                    <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}">
-                                                        <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}" class="black-btn-w65-h30" type="button"
-                                                                th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
-                                                        <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
-                                                    </td>
-                                                </tr>
-                                            </th:block>
-                                            </tbody>
-                                        </table>
+                                                <tbody class="base-table__body">
+                                                    <tr class="base-table__row" th:if="${#lists.isEmpty(orders.getContent())}">
+                                                        <td class="base-table__cell base-table__cell--empty" colspan="7">
+                                                            <span class="base-table__message">주문 내역이 없습니다.</span>
+                                                        </td>
+                                                    </tr>
+
+                                                    <th:block th:each="order, status: ${orders.getContent()}">
+                                                        <tr class="base-table__row" th:each="orderProduct, status: ${order.orderHistProductList}">
+                                                            <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
+                                                                <span th:text="${order.orderId}"></span>
+                                                            </td>
+                                                            <td class="base-table__cell base-table__cell--thumbnail">
+                                                                <a th:href="${'/product/' + orderProduct.id}">
+                                                                    <img class="base-table__image" th:src="${orderProduct.imageUrl}">
+                                                                </a>
+                                                            </td>
+                                                            <td class="base-table__cell left top">
+                                                                <a class="base-table__product-name" th:href="${'/product/' + orderProduct.id}" th:text="${orderProduct.name}"></a>
+                                                                <div class="mt5">[옵션: 선택 X]</div>
+                                                            </td>
+                                                            <td class="base-table__cell">
+                                                                <span th:text="${order.orderStatus}"></span>
+                                                            </td>
+                                                            <td class="base-table__cell">
+                                                                <span th:text="${order.buyerId}"></span>
+                                                            </td>
+                                                            <td class="base-table__cell">
+                                                                <span th:text="${order.orderDate}"></span>
+                                                            </td>
+                                                            <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
+                                                                <button th:if="${order.orderStatus.displayName == '배송준비중'}" class="button button--black button--65x30" type="button"
+                                                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                                <div th:if="${order.orderStatus.displayName == '주문취소'}">-</div>
+                                                            </td>
+                                                        </tr>
+                                                    </th:block>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -45,7 +45,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/logout", "/members/new/**", "/members/check-userid", "/members/email-verification",
-                        "/forgot-credentials/**", "/product/**", "/board/**").permitAll()
+                        "/forgot-credentials/**", "/product/**", "/board/**", "/payment").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 

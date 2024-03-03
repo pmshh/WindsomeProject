@@ -1,0 +1,37 @@
+@import "../../../abstracts/variables";
+
+.qa-body {
+    .qa-list-container {
+        overflow-x: auto;
+
+        .table-wrapper {
+            min-width: 833px;
+            .base-table {
+                .base-table__body {
+                    .base-table__row {
+                        .base-table__cell {
+                            i {
+                                font-size: 16px;
+                                vertical-align: top;
+                                padding-top: 1px;
+                                margin-left: 3px;
+                            }
+
+                            .xi-reply {
+                                vertical-align: middle;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-container {
+        @include button-container();
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}

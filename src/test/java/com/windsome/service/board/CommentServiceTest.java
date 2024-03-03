@@ -73,11 +73,11 @@ class CommentServiceTest {
 
         Member member1 = new Member();
         member1.setId(1L);
-        member1.setState(Role.USER);
+        member1.setRole(Role.USER);
 
         Member member2 = new Member();
         member2.setId(2L);
-        member2.setState(Role.USER);
+        member2.setRole(Role.USER);
 
         Qa qa = new Qa();
         qa.setId(1L);
@@ -109,7 +109,7 @@ class CommentServiceTest {
         Member member = new Member();
         member.setId(1L);
         member.setUserIdentifier("test1234");
-        member.setState(Role.USER);
+        member.setRole(Role.USER);
 
         Qa qa = new Qa();
         qa.setId(1L);
@@ -134,12 +134,12 @@ class CommentServiceTest {
         Member member1 = new Member();
         member1.setId(1L);
         member1.setUserIdentifier("user");
-        member1.setState(Role.USER);
+        member1.setRole(Role.USER);
 
         Member admin = new Member();
         admin.setId(1L);
         admin.setUserIdentifier("admin");
-        admin.setState(Role.ADMIN);
+        admin.setRole(Role.ADMIN);
 
         Qa qa = new Qa();
         qa.setId(1L);
@@ -164,12 +164,12 @@ class CommentServiceTest {
         Member member1 = new Member();
         member1.setId(1L);
         member1.setUserIdentifier("user1");
-        member1.setState(Role.USER);
+        member1.setRole(Role.USER);
 
         Member member2 = new Member();
         member2.setId(1L);
         member2.setUserIdentifier("user2");
-        member2.setState(Role.USER);
+        member2.setRole(Role.USER);
 
         Qa qa = new Qa();
         qa.setId(1L);
@@ -194,7 +194,7 @@ class CommentServiceTest {
         Member member = new Member();
         member.setId(1L);
         member.setUserIdentifier("test1234");
-        member.setState(Role.USER);
+        member.setRole(Role.USER);
 
         when(commentRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -212,7 +212,7 @@ class CommentServiceTest {
         Member member = new Member();
         member.setId(1L);
         member.setUserIdentifier("test1234");
-        member.setState(Role.USER);
+        member.setRole(Role.USER);
 
         Qa qa = new Qa();
         qa.setId(1L);

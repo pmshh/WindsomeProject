@@ -1,7 +1,7 @@
 package com.windsome.entity;
 
 import com.windsome.constant.ProductSellStatus;
-import com.windsome.dto.product.ProductFormDto;
+import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.entity.auditing.BaseEntity;
 import com.windsome.entity.board.Review;
 import lombok.*;
@@ -52,7 +52,7 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public void updateProduct(ProductFormDto productFormDto) {
+    public void updateProduct(ProductFormDTO productFormDto) {
         this.name = productFormDto.getProductName();
         this.price = productFormDto.getPrice();
         this.stockNumber = productFormDto.getStockNumber();
@@ -61,6 +61,9 @@ public class Product extends BaseEntity {
         this.discount = productFormDto.getDiscount();
     }
 
+    /**
+     * 상품 주문 시 재고 감소
+     */
     public void removeStock(int stockNumber) {
         int restStock = this.stockNumber - stockNumber;
         if (restStock <= 0) {

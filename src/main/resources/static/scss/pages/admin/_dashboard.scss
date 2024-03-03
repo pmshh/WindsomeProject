@@ -1,0 +1,161 @@
+@import "../../abstracts/variables";
+
+.dashboard-body {
+    .row {
+        width: 100%;
+
+        .stats-summary-container {
+            .info-box {
+                background-color: white;
+                padding: 20px 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 3px;
+                width: 100%;
+                position: relative;
+                // box-shadow: 1px 1px 20px -10px rgb(0, 0, 0, 0.2);
+
+                .txt-box {
+                    .title {
+                        display: block;
+                        color: #6b6b6b;
+                        font-size: 12px;
+                    }
+
+                    .txt {
+                        font-size: 12px;
+                        color: #6b6b6b;
+                    }
+
+                    strong {
+                        font-size: 18px;
+                    }
+                }
+
+                .icon-box {
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        padding: 15px;
+                    }
+
+                    svg.fa-user {
+                        color: #0090f4;
+                        background-color: #ebf4fc;
+                    }
+
+                    svg.fa-cart-shopping {
+                        color: #fcbb0f;
+                        background-color: #fdf5d8;
+                    }
+
+                    svg.fa-envelope {
+                        color: #6c41e8;
+                        background-color: #f2eeff;
+                    }
+
+                    svg.fa-coins {
+                        color: #14c470;
+                        background-color: #e6ffeb;
+                    }
+                }
+            }
+
+            &:nth-child(1) .info-box::before,
+            &:nth-child(2) .info-box::before,
+            &:nth-child(3) .info-box::before,
+            &:nth-child(4) .info-box::before {
+                content: "";
+                width: 1px;
+                position: absolute;
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+                height: 100%;
+                left: 0px;
+                top: 0px;
+            }
+
+            &:nth-child(1) .info-box::before {
+                border: 2px solid #0090f4;
+            }
+
+            &:nth-child(2) .info-box::before {
+                border: 2px solid #fcbb0f;
+            }
+
+            &:nth-child(3) .info-box::before {
+                border: 2px solid #6c41e8;
+            }
+
+            &:nth-child(4) .info-box::before {
+                border: 2px solid #14c470;
+            }
+        }
+
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 3px;
+            width: 100%;
+            min-height: 385px;
+            max-height: 385px;
+            overflow-x: auto;
+
+            .header {
+                width: 100%;
+                text-align: left;
+                padding: 0 0 15px 0;
+
+                span {
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+            }
+
+            .body {
+                width: 100%;
+                flex: 1 1 0;
+            }
+        }
+
+        .recent-posts-container,
+        .recent-products-container,
+        .recent-orders-container {
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 3px;
+            width: 100%;
+            min-height: 385px;
+            max-height: 385px;
+
+            .header {
+                width: 100%;
+                text-align: left;
+                padding: 0 0 15px 0;
+
+                span {
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+            }
+
+            .body {
+                width: 100%;
+                overflow-x: auto;
+
+                .empty-message {
+                    height: 160px !important;
+                    padding: 0 !important;
+                }
+            }
+        }
+    }
+}

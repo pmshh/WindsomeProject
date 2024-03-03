@@ -69,12 +69,12 @@ public class CartController {
     /**
      * 장바구니 상품 삭제
      */
-    @DeleteMapping("/cart/{cartProductId}")
-    public ResponseEntity<String> deleteCartProduct(@PathVariable("cartProductId") Long productId, @CurrentMember Member member) {
-        if (cartService.validateCartModificationPermission(productId, member.getUserIdentifier())) {
+    @DeleteMapping("/cart/delete")
+    public ResponseEntity<String> deleteCartProduct(@RequestBody Long[] productIds, @CurrentMember Member member) {
+        if (cartService.validateCartDeletionPermission(productIds, member.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
-        cartService.deleteCartProduct(productId);
+        cartService.deleteCartProduct(productIds);
         return ResponseEntity.ok().body("장바구니 상품이 삭제되었습니다.");
     }
 }

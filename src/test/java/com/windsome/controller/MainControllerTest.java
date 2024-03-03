@@ -40,9 +40,9 @@ class MainControllerTest {
                 .email("test1234@email.com")
                 .name("gildong")
                 .password("test1234")
-                .address1("test")
-                .address2("test")
-                .address3("test")
+                .zipcode("test")
+                .addr("test")
+                .addrDetail("test")
                 .build();
         memberService.createAccount(signUpRequestDTO);
     }

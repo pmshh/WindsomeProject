@@ -17,6 +17,8 @@ public class ReviewListDto {
 
     private String title;
 
+    private String content;
+
     private BigDecimal rating;
 
     private String createdBy;
@@ -41,9 +43,10 @@ public class ReviewListDto {
     private int salePrice;
 
     @QueryProjection
-    public ReviewListDto(Long reviewId, String title, BigDecimal rating, String createdBy, LocalDateTime regDate, int hits, String imageUrl, Long productId, String productName, int price, double discount) {
+    public ReviewListDto(Long reviewId, String title, String content, BigDecimal rating, String createdBy, LocalDateTime regDate, int hits, String imageUrl, Long productId, String productName, int price, double discount) {
         this.reviewId = reviewId;
         this.title = title;
+        this.content = content;
         this.rating = rating;
         this.createdBy = createdBy;
         this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

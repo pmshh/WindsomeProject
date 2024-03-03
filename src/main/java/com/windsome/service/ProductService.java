@@ -1,9 +1,9 @@
 package com.windsome.service;
 
 import com.windsome.dto.product.MainPageProductDTO;
-import com.windsome.dto.product.ProductSearchDto;
-import com.windsome.dto.product.ProductFormDto;
-import com.windsome.dto.product.ProductImageDto;
+import com.windsome.dto.product.ProductSearchDTO;
+import com.windsome.dto.product.ProductFormDTO;
+import com.windsome.dto.product.ProductImageDTO;
 import com.windsome.entity.*;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.repository.category.CategoryRepository;
@@ -41,7 +41,7 @@ public class ProductService {
     /**
      * 상품 등록
      */
-    public Long createProduct(ProductFormDto productFormDto, List<MultipartFile> productImageFileList) throws Exception {
+    public Long createProduct(ProductFormDTO productFormDto, List<MultipartFile> productImageFileList) throws Exception {
         Category category = categoryRepository.findById(productFormDto.getCategoryId()).orElseThrow();
         Product product = productFormDto.toEntity();
         product.setCategory(category);
@@ -60,7 +60,7 @@ public class ProductService {
     /**
      * 상품 수정
      */
-    public Long updateProduct(ProductFormDto productFormDto, List<MultipartFile> productImageFileList) throws Exception {
+    public Long updateProduct(ProductFormDTO productFormDto, List<MultipartFile> productImageFileList) throws Exception {
         Category category = categoryRepository.findById(productFormDto.getCategoryId()).orElseThrow(EntityNotFoundException::new);
         Product product = productRepository.findById(productFormDto.getId()).orElseThrow(EntityNotFoundException::new);
         product.setCategory(category);
@@ -78,19 +78,19 @@ public class ProductService {
      * 상품 상세 조회
      */
     @Transactional(readOnly = true)
-    public ProductFormDto getProductFormDto(Long productId) {
+    public ProductFormDTO getProductFormDto(Long productId) {
         List<ProductImage> productImages = productImageRepository.findByProductIdOrderByIdAsc(productId);
 
-        List<ProductImageDto> productImageDtoList = new ArrayList<>();
+        List<ProductImageDTO> productImageDTOList = new ArrayList<>();
         for (ProductImage productImage : productImages) {
-            ProductImageDto productImageDto = ProductImageDto.toDto(productImage);
-            productImageDtoList.add(productImageDto);
+            ProductImageDTO productImageDto = ProductImageDTO.toDto(productImage);
+            productImageDTOList.add(productImageDto);
         }
 
         Product product = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
-        ProductFormDto productFormDto = ProductFormDto.toDto(product);
+        ProductFormDTO productFormDto = ProductFormDTO.toDto(product);
         productFormDto.setCategoryId(product.getCategory().getId());
-        productFormDto.setProductImageDtoList(productImageDtoList);
+        productFormDto.setProductImageDTOList(productImageDTOList);
         return productFormDto;
     }
 
@@ -98,7 +98,7 @@ public class ProductService {
      * 메인 화면 상품 리스트 조회
      */
     @Transactional(readOnly = true)
-    public Page<MainPageProductDTO> getMainPageProducts(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<MainPageProductDTO> getMainPageProducts(ProductSearchDTO productSearchDto, Pageable pageable) {
         return productRepository.getMainPageProducts(productSearchDto, pageable);
     }
 

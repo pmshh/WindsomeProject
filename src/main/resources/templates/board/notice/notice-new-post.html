@@ -23,44 +23,47 @@
 
                     <div class="section-body notice-form-body mt-5">
                         <form id="noticeEnrollForm" th:action="@{'/board/notice/enroll'}" th:object="${noticeDto}" method="post">
-                            <table class="col-header-table-basic">
-                                <colgroup>
-                                    <col style="width:15%;">
-                                    <col style="width: auto;">
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{noticeYN}">공지 여부 <span>*</span></label>
-                                    </th>
-                                    <td class="check">
-                                        <input class="noticeYN-input" type="checkbox" id="noticeYN" th:field="*{noticeYN}">
-                                        <label for="noticeYN">상단 고정</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{title}">제목 <span>*</span></label>
-                                    </th>
-                                    <td class="title">
-                                        <input class="title-input" type="text" th:field="*{title}" maxlength="50" placeholder="제목을 입력하세요.">
-                                        <span class="title-text-count">0자/50자</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{content}">내용 <span>*</span></label>
-                                    </th>
-                                    <td class="content">
-                                        <textarea class="content-input" th:field="*{content}" maxlength="500"></textarea>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--two-columns-center-aligned-padded">
+                                    <colgroup>
+                                        <col style="width:15%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{noticeYN}">공지 여부 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell check">
+                                                <input class="noticeYN-input" type="checkbox" id="noticeYN" th:field="*{noticeYN}">
+                                                <label for="noticeYN">상단 고정</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{title}">제목 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell title">
+                                                <input class="base-table__input base-table__input--big title-input" type="text" th:field="*{title}" maxlength="50" placeholder="제목을 입력하세요.">
+                                                <span class="title-text-count">0자/50자</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{content}">내용 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell content">
+                                                <textarea class="content-input" th:field="*{content}" maxlength="500"></textarea>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div class="btn-box">
-                                <button class="black-btn-w130-h40 enroll-btn" type="button">등록</button>
-                                <button class="white-btn-w130-h40" type="button" onclick="location.href='/board/notice'">취소</button>
+                                <button class="button button--black button--130x40 enroll-btn" type="button">등록</button>
+                                <button class="button button--white button--130x40" type="button" onclick="location.href='/board/notice'">취소</button>
                             </div>
                         </form>
                     </div>

@@ -1,0 +1,60 @@
+@import "../../../abstracts/variables";
+
+.review-mng-body {
+    width: 90%;
+    margin: 0 auto;
+
+    .review-list-container {
+        width: 100%;
+        overflow-x: auto;
+
+        table {
+            min-width: 1150px;
+
+            tbody {
+                tr {
+                    td {
+                        .rate {
+                            display: inline-block;
+
+                            input {
+                                display: none;
+                            }
+
+                            label {
+                                float: right;
+                                color: #ddd;
+
+                                &:before {
+                                    display: inline-block;
+                                    font-size: 1rem;
+                                    padding: .3rem .2rem;
+                                    margin: 0;
+                                    font-family: FontAwesome;
+                                    content: "\f005 ";
+                                }
+                            }
+
+                            .half:before {
+                                content: "\f089 ";
+                                position: absolute;
+                            }
+
+                            input:checked~label {
+                                color: #f73c32 !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-container {
+        @include button-container();
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}

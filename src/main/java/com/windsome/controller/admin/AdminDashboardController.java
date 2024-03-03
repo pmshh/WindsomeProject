@@ -1,7 +1,7 @@
 package com.windsome.controller.admin;
 
 import com.windsome.dto.board.qa.QaSearchDto;
-import com.windsome.dto.product.ProductSearchDto;
+import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.service.*;
 import com.windsome.service.board.QaService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class AdminDashboardController {
     public String getDashboard(Model model) {
         Pageable pageable = PageRequest.of(0, 3);
         model.addAttribute("dashboardData", adminService.getDashboardData());
-        model.addAttribute("products", adminService.getProductList(new ProductSearchDto(), pageable));
+        model.addAttribute("products", adminService.getProductList(new ProductSearchDTO(), pageable));
         model.addAttribute("orders", adminService.getOrderList("", pageable));
         model.addAttribute("qaList", qaService.getQaList(new QaSearchDto(), pageable));
         return "admin/dashboard";

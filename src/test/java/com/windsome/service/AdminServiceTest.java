@@ -5,7 +5,7 @@ import com.windsome.dto.admin.CategorySalesResult;
 import com.windsome.dto.admin.DashboardInfoDto;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.dto.member.AdminMemberDetailDTO;
-import com.windsome.dto.product.ProductSearchDto;
+import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.entity.Member;
 import com.windsome.entity.Order;
 import com.windsome.entity.Product;
@@ -117,13 +117,12 @@ class AdminServiceTest {
         assertEquals(member.getPassword(), result.getPassword());
         assertEquals(member.getName(), result.getName());
         assertEquals(member.getEmail(), result.getEmail());
-        assertEquals(member.getAddress1(), result.getAddress1());
-        assertEquals(member.getAddress2(), result.getAddress2());
-        assertEquals(member.getAddress3(), result.getAddress3());
-        assertEquals(member.getPoint(), result.getPoint());
-        assertEquals(member.getTotalPoint(), result.getTotalPoint());
-        assertEquals(member.getTotalUsePoint(), result.getTotalUsePoint());
-        assertEquals(member.getTotalOrderPrice(), result.getTotalOrderPrice());
+        assertEquals(member.getZipcode(), result.getZipcode());
+        assertEquals(member.getAddr(), result.getAddr());
+        assertEquals(member.getAddrDetail(), result.getAddrDetail());
+        assertEquals(member.getAvailablePoints(), result.getAvailablePoints());
+        assertEquals(member.getTotalUsedPoints(), result.getTotalUsedPoints());
+        assertEquals(member.getTotalEarnedPoints(), result.getTotalEarnedPoints());
     }
 
     @Test
@@ -151,13 +150,12 @@ class AdminServiceTest {
                 .password("newpassword")
                 .name("John Doe")
                 .email("john.doe@example.com")
-                .address1("Address1")
-                .address2("Address2")
-                .address3("Address3")
-                .point(100)
-                .totalPoint(1000)
-                .totalUsePoint(500)
-                .totalOrderPrice(5000)
+                .zipcode("Address1")
+                .addr("Address2")
+                .addrDetail("Address3")
+                .availablePoints(100)
+                .totalUsedPoints(1000)
+                .totalEarnedPoints(500)
                 .build();
 
         Member member = new Member();
@@ -166,13 +164,12 @@ class AdminServiceTest {
         member.setPassword(dto.getPassword());
         member.setName(dto.getName());
         member.setEmail(dto.getEmail());
-        member.setAddress1(dto.getAddress1());
-        member.setAddress2(dto.getAddress2());
-        member.setAddress3(dto.getAddress3());
-        member.setPoint(dto.getPoint());
-        member.setTotalPoint(dto.getTotalPoint());
-        member.setTotalUsePoint(dto.getTotalUsePoint());
-        member.setTotalOrderPrice(dto.getTotalOrderPrice());
+        member.setZipcode(dto.getZipcode());
+        member.setAddr(dto.getAddr());
+        member.setAddrDetail(dto.getAddrDetail());
+        member.setAvailablePoints(dto.getAvailablePoints());
+        member.setTotalUsedPoints(dto.getTotalUsedPoints());
+        member.setTotalEarnedPoints(dto.getTotalEarnedPoints());
 
         when(memberRepository.findById(dto.getId())).thenReturn(java.util.Optional.of(member));
         when(passwordEncoder.encode("newpassword")).thenReturn("$2a$10$gLKb.8YwrDpQVmbZpRiMzOaEmI6oUxgWDEO75nKoqyQKOWoBvC.Ci");
@@ -192,13 +189,12 @@ class AdminServiceTest {
         assertEquals("$2a$10$gLKb.8YwrDpQVmbZpRiMzOaEmI6oUxgWDEO75nKoqyQKOWoBvC.Ci", member.getPassword());
         assertEquals(dto.getName(), member.getName());
         assertEquals(dto.getEmail(), member.getEmail());
-        assertEquals(dto.getAddress1(), member.getAddress1());
-        assertEquals(dto.getAddress2(), member.getAddress2());
-        assertEquals(dto.getAddress3(), member.getAddress3());
-        assertEquals(dto.getPoint(), member.getPoint());
-        assertEquals(dto.getTotalPoint(), member.getTotalPoint());
-        assertEquals(dto.getTotalUsePoint(), member.getTotalUsePoint());
-        assertEquals(dto.getTotalOrderPrice(), member.getTotalOrderPrice());
+        assertEquals(dto.getZipcode(), member.getZipcode());
+        assertEquals(dto.getAddr(), member.getAddr());
+        assertEquals(dto.getAddrDetail(), member.getAddrDetail());
+        assertEquals(dto.getAvailablePoints(), member.getAvailablePoints());
+        assertEquals(dto.getTotalUsedPoints(), member.getTotalUsedPoints());
+        assertEquals(dto.getTotalEarnedPoints(), member.getTotalEarnedPoints());
     }
 
     @Test
@@ -226,7 +222,7 @@ class AdminServiceTest {
 
         Member existingMember = new Member();
         existingMember.setId(accountId);
-        existingMember.setState(Role.USER);
+        existingMember.setRole(Role.USER);
 
         when(memberRepository.findById(accountId)).thenReturn(Optional.of(existingMember));
 
@@ -237,7 +233,7 @@ class AdminServiceTest {
         verify(memberRepository, times(1)).findById(accountId);
         verify(memberRepository, times(1)).save(existingMember);
 
-        assertEquals(newRole, existingMember.getState());
+        assertEquals(newRole, existingMember.getRole());
     }
 
     @Test
@@ -265,7 +261,7 @@ class AdminServiceTest {
         // Given
         Long accountId = 1L;
         Member member = new Member();
-        member.setState(Role.USER);
+        member.setRole(Role.USER);
 
         when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(member));
 
@@ -283,7 +279,7 @@ class AdminServiceTest {
         // Given
         Long accountId = 1L;
         Member adminMember = new Member();
-        adminMember.setState(Role.ADMIN);
+        adminMember.setRole(Role.ADMIN);
 
         when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(adminMember));
 
@@ -370,7 +366,7 @@ class AdminServiceTest {
     @DisplayName("상품 조회 - 상품이 존재하는 경우")
     void testGetProductList_ProductsExist() {
         // Given
-        ProductSearchDto productSearchDto = new ProductSearchDto();
+        ProductSearchDTO productSearchDto = new ProductSearchDTO();
         Pageable pageable = mock(Pageable.class);
 
         List<Product> products = new ArrayList<>();
@@ -391,7 +387,7 @@ class AdminServiceTest {
     @DisplayName("상품 조회 - 상품이 존재하지 않는 경우")
     void testGetProductList_NoProducts() {
         // Given
-        ProductSearchDto productSearchDto = new ProductSearchDto();
+        ProductSearchDTO productSearchDto = new ProductSearchDTO();
         Pageable pageable = mock(Pageable.class);
 
         List<Product> products = new ArrayList<>();

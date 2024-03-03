@@ -23,51 +23,61 @@
 
                     <div class="section-body order-mng-body">
                         <div class="order-list-container">
-                            <table class="row-header-table">
-                                <thead>
-                                <tr>
-                                    <th style="width: 80px;" scope="col">주문 번호</th>
-                                    <th style="width: 110px;" scope="col">이미지</th>
-                                    <th style="width: auto;" scope="col">상품 정보</th>
-                                    <th style="width: 110px;" scope="col">주문자 아이디</th>
-                                    <th style="width: 110px;" scope="col">주문 날짜</th>
-                                    <th style="width: 110px;" scope="col">주문 상태</th>
-                                    <th style="width: 110px;" scope="col">취소</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:if="${#lists.isEmpty(orders.getContent())}">
-                                    <td colspan="7" class="empty-message">
-                                        <span class="message">주문 내역이 없습니다.</span>
-                                    </td>
-                                </tr>
 
-                                <th:block th:each="order, status: ${orders.getContent()}">
-                                    <tr th:each="orderProduct, status: ${order.orderProductDtoList}">
-                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}" th:text="${order.orderId}"></td>
-                                        <td class="thumb">
-                                            <a th:href="${'/product/' + orderProduct.productId}">
-                                                <img th:src="${orderProduct.imageUrl}">
-                                            </a>
-                                        </td>
-                                        <td class="product left-top">
-                                            <strong class="name">
-                                                <a th:href="${'/product/' + orderProduct.productId}" th:text="${orderProduct.productName}"></a>
-                                            </strong>
-                                            <div class="option">[옵션: 선택 X]</div>
-                                        </td>
-                                        <td th:text="${order.buyerId}"></td>
-                                        <td th:text="${order.orderDate}"></td>
-                                        <td th:text="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name ? '주문' : '취소'}"></td>
-                                        <td th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderProductDtoList)}">
-                                            <button th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).READY.name}" class="black-btn-w65-h30" type="button"
-                                                    th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
-                                            <div th:if="${order.orderStatus.name == T(com.windsome.constant.OrderStatus).CANCEL.name}">-</div>
-                                        </td>
-                                    </tr>
-                                </th:block>
-                                </tbody>
-                            </table>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" style="width: 80px;" scope="col">주문 번호</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">이미지</th>
+                                            <th class="base-table__header-cell" style="width: auto;" scope="col">상품 정보</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문자 아이디</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문 날짜</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문 상태</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">취소</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row" th:if="${#lists.isEmpty(orders.getContent())}">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="7">
+                                                <span class="base-table__message">주문 내역이 없습니다.</span>
+                                            </td>
+                                        </tr>
+
+                                        <th:block th:each="order, status: ${orders.getContent()}">
+                                            <tr class="base-table__row" th:each="orderProduct, status: ${order.orderHistProductList}">
+                                                <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
+                                                    <span th:text="${order.orderId}"></span>
+                                                </td>
+                                                <td class="base-table__cell base-table__cell--thumbnail">
+                                                    <a th:href="${'/product/' + orderProduct.id}">
+                                                        <img class="base-table__image" th:src="${orderProduct.imageUrl}">
+                                                    </a>
+                                                </td>
+                                                <td class="base-table__cell left">
+                                                    <a class="base-table__product-name" th:href="${'/product/' + orderProduct.id}" th:text="${orderProduct.name}"></a>
+                                                    <div class="mt5">[옵션: 선택 X]</div>
+                                                </td>
+                                                <td class="base-table__cell">
+                                                    <span th:text="${order.buyerId}"></span>
+                                                </td>
+                                                <td class="base-table__cell">
+                                                    <span th:text="${order.orderDate}"></span>
+                                                </td>
+                                                <td class="base-table__cell">
+                                                    <span th:text="${order.orderStatus}"></span>
+                                                </td>
+                                                <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
+                                                    <button th:if="${order.orderStatus.displayName == '배송준비중'}" class="button button--black button--65x30" type="button" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
+                                                    <div th:if="${order.orderStatus.displayName == '결제취소'}">-</div>
+                                                </td>
+                                            </tr>
+                                        </th:block>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
                         <div class="pagination-container"
@@ -113,7 +123,7 @@
                             </select>
                             <input class="userid-input" name="userIdentifier" type="text"
                                    placeholder="주문자 아이디를 입력해주세요">
-                            <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
                         </div>
                     </div>
                 </div>

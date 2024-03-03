@@ -26,19 +26,19 @@
                             <ul>
                                 <li>
                                     <strong class="title">가용 적립금</strong>
-                                    <strong class="data use"><span class="avail-point" th:text="|${#numbers.formatInteger(userSummary.point, 0, 'COMMA')}원|"></span></strong>
+                                    <strong class="data use"><span class="avail-point" th:text="|${#numbers.formatInteger(userSummary.availablePoints, 0, 'COMMA')}원|"></span></strong>
                                 </li>
                                 <li>
                                     <strong class="title">총 적립금</strong>
-                                    <strong class="data"><span class="total-point" th:text="|${#numbers.formatInteger(userSummary.totalPoint, 0, 'COMMA')}원|"></span></strong>
+                                    <strong class="data"><span class="total-point" th:text="|${#numbers.formatInteger(userSummary.totalEarnedPoints, 0, 'COMMA')}원|"></span></strong>
                                 </li>
                                 <li>
                                     <strong class="title">사용 적립금</strong>
-                                    <strong class="data"><span class="used-point" th:text="|${#numbers.formatInteger(userSummary.totalUsePoint, 0, 'COMMA')}원|"></span></strong>
+                                    <strong class="data"><span class="used-point" th:text="|${#numbers.formatInteger(userSummary.totalUsedPoints, 0, 'COMMA')}원|"></span></strong>
                                 </li>
                                 <li>
                                     <strong class="title">총 주문금액</strong>
-                                    <strong class="data"><span class="order-price" th:text="|${#numbers.formatInteger(userSummary.totalOrderPrice, 0, 'COMMA')}원|"></span></strong>
+                                    <strong class="data"><span class="order-price" th:text="|${#numbers.formatInteger(orderTotalAmount, 0, 'COMMA')}원|"></span></strong>
                                 </li>
                             </ul>
                         </div>

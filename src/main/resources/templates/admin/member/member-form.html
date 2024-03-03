@@ -24,143 +24,119 @@
 
                 <div class="section-body member-form-body">
                     <form id="profileForm" th:action="@{'/admin/members/' + ${memberDetails.id}}" th:object="${memberDetails}" method="post">
-                        <table class="col-header-table-color">
-                            <colgroup>
-                                <col style="width:20%;">
-                                <col style="width: auto;">
-                            </colgroup>
-                            <tbody>
-                            <input type="hidden" th:field="*{id}" th:value="${memberDetails.id}">
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{userIdentifier}">아이디 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="id-input-box">
-                                        <input th:if="${viewName} == 'dtlPage'" class="id-input" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20" readonly>
-                                        <input th:if="${viewName} == 'updatePage'" class="id-input" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr th:if="${viewName} == 'updatePage'">
-                                <th scope="row">
-                                    <label th:for="*{password}">비밀번호 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="pw-input-box">
-                                        <input class="pw-input" th:field="*{password}" type="password" minlength="8" maxlength="20">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{name}">이름 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="name-input-box">
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="name-input" th:field="*{name}" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="name-input" th:field="*{name}" type="text">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{email}">이메일 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="mail-input-box mb-1">
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="mail-input" th:field="*{email}" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="mail-input" th:field="*{email}" type="text">
-                                        @
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="mail-input2" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="mail-input2" type="text">
-                                        <select th:if="${viewName} == 'updatePage'" class="mail-select" name="mail-select">
-                                            <option value="1" selected>직접입력</option>
-                                            <option value="naver.com">naver.com</option>
-                                            <option value="hanmail.net">hanmail.net</option>
-                                            <option value="hotmail.com">hotmail.com</option>
-                                            <option value="nate.com">nate.com</option>
-                                            <option value="yahoo.co.kr">yahoo.co.kr</option>
-                                            <option value="empas.com">empas.com</option>
-                                            <option value="dreamwiz.com">dreamwiz.com</option>
-                                            <option value="freechal.com">freechal.com</option>
-                                            <option value="lycos.co.kr">lycos.co.kr</option>
-                                            <option value="korea.com">korea.com</option>
-                                            <option value="gmail.com">gmail.com</option>
-                                            <option value="hanmir.com">hanmir.com</option>
-                                            <option value="paran.com">paran.com</option>
-                                        </select>
-                                        <button th:if="${viewName} == 'updatePage'" type="button" class="send-mail white-btn-w100-h30">인증번호 발송</button>
-                                    </div>
-                                    <div th:if="${viewName} == 'updatePage'" class="mail-check-box">
-                                        <input class="mail-confirm-input" disabled="disabled">
-                                        <button type="button" class="check-number white-btn-w100-h30" onclick="confirmNumber()">인증번호 확인</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{address1}">주소 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <input th:field="*{address1}" class="address-input-1 mb-1" readonly="readonly">
-                                    <button th:if="${viewName} == 'updatePage'" type="button" class="find-addr white-btn-w90-h30" onclick="addressAPI()">주소 찾기</button>
-                                    <div class="clearfix"></div>
-                                    <input th:field="*{address2}" class="address-input-2 d-block w-50 mb-1" readonly="readonly">
-                                    <input th:field="*{address3}" class="address-input-3 d-block w-50 mb-1" readonly="readonly">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{totalOrderPrice}">총 주문 금액 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="total-order-price-box">
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="total-order-price-input" th:field="*{totalOrderPrice}" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="total-order-price-input" th:field="*{totalOrderPrice}" type="text">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{point}">보유 포인트 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="point-input-box">
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="point-input" th:field="*{point}" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="point-input" th:field="*{point}" type="text">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{totalUsePoint}">총 사용 포인트 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="total-use-point-input-box">
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="total-use-point-input" th:field="*{totalUsePoint}" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="total-use-point-input" th:field="*{totalUsePoint}" type="text">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <label th:for="*{totalPoint}">총 적립 포인트 <span>*</span></label>
-                                </th>
-                                <td>
-                                    <div class="total-point-input-box">
-                                        <input th:if="${viewName} == 'dtlPage'" readonly class="total-point-input" th:field="*{totalPoint}" type="text">
-                                        <input th:if="${viewName} == 'updatePage'" class="total-point-input" th:field="*{totalPoint}" type="text">
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+                        <div class="table-wrapper">
+                            <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                <colgroup>
+                                    <col style="width:200px;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody class="base-table__body">
+                                    <input type="hidden" th:field="*{id}" th:value="${memberDetails.id}">
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{userIdentifier}">아이디 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input id-input"  th:if="${viewName} == 'dtlPage'" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20" readonly>
+                                            <input class="base-table__input id-input"  th:if="${viewName} == 'updatePage'" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row" th:if="${viewName} == 'updatePage'">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{password}">비밀번호 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input pw-input" th:field="*{password}" type="password" minlength="8" maxlength="20">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{name}">이름 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input name-input" th:if="${viewName} == 'dtlPage'" readonly th:field="*{name}" type="text">
+                                            <input class="base-table__input name-input" th:if="${viewName} == 'updatePage'" th:field="*{name}" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{email}">이메일 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <div class="mail-input-box mb-1">
+                                                <input class="email-hidden-input" type="hidden" th:field="*{email}">
+                                                <input class="base-table__input mail-input" th:if="${viewName} == 'dtlPage'" readonly type="text">
+                                                <input class="base-table__input mail-input" th:if="${viewName} == 'updatePage'" type="text">
+                                                @
+                                                <input th:if="${viewName} == 'dtlPage'" readonly class="mail-input2" type="text">
+                                                <input  class="base-table__input mail-input2" th:if="${viewName} == 'updatePage'" type="text">
+                                                <select class="base-table__select mail-select" th:if="${viewName} == 'updatePage'"  name="mail-select">
+                                                    <option value="1" selected>직접입력</option>
+                                                    <option value="naver.com">naver.com</option>
+                                                    <option value="hanmail.net">hanmail.net</option>
+                                                    <option value="hotmail.com">hotmail.com</option>
+                                                    <option value="nate.com">nate.com</option>
+                                                    <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                    <option value="empas.com">empas.com</option>
+                                                    <option value="dreamwiz.com">dreamwiz.com</option>
+                                                    <option value="freechal.com">freechal.com</option>
+                                                    <option value="lycos.co.kr">lycos.co.kr</option>
+                                                    <option value="korea.com">korea.com</option>
+                                                    <option value="gmail.com">gmail.com</option>
+                                                    <option value="hanmir.com">hanmir.com</option>
+                                                    <option value="paran.com">paran.com</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{zipcode}">주소 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input zipcode-input" th:field="*{zipcode}" type="text" readonly="readonly">
+                                            <button th:if="${viewName} == 'updatePage'" type="button" class="find-addr button button--white button--90x30" onclick="addressAPI()">주소 찾기</button>
+                                            <input class="base-table__input base-table__input--big displayblock mt5 addr-input" th:field="*{addr}" type="text" readonly="readonly">
+                                            <input class="base-table__input base-table__input--big displayblock mt5 addr-detail-input" th:field="*{addrDetail}" type="text" readonly="readonly">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{availablePoints}">사용 가능한 포인트 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input point-input" th:if="${viewName} == 'dtlPage'" readonly th:field="*{availablePoints}" type="text">
+                                            <input class="base-table__input point-input" th:if="${viewName} == 'updatePage'" th:field="*{availablePoints}" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{totalEarnedPoints}">총 적립 포인트 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input total-point-input" th:if="${viewName} == 'dtlPage'" readonly th:field="*{totalEarnedPoints}" type="text">
+                                            <input class="base-table__input total-point-input" th:if="${viewName} == 'updatePage'" th:field="*{totalEarnedPoints}" type="text">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
+                                            <label th:for="*{totalUsedPoints}">총 사용 포인트 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input total-use-point-input" th:if="${viewName} == 'dtlPage'" readonly th:field="*{totalUsedPoints}" type="text">
+                                            <input class="base-table__input total-use-point-input" th:if="${viewName} == 'updatePage'" th:field="*{totalUsedPoints}" type="text">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
                         <div class="btn-box">
-                            <button th:if="${viewName} == 'dtlPage'" th:data-memberId="${memberDetails.id}" class="black-btn-w130-h40 modify-btn" type="button">회원정보수정</button>
-                            <button th:if="${viewName} == 'updatePage'" class="black-btn-w130-h40 save-btn" type="button">저장</button>
-                            <button class="white-btn-w130-h40 cancel-btn" type="button" th:data-memberId="${memberDetails.id}">취소</button>
-                            <button th:if="${viewName} == 'updatePage'" class="white-btn-w130-h40 del-btn" type="button" th:data-memberId="${memberDetails.id}">회원 삭제</button>
+                            <button th:if="${viewName} == 'dtlPage'" th:data-memberId="${memberDetails.id}" class="button button--black button--130x40 modify-btn" type="button">회원정보수정</button>
+                            <button th:if="${viewName} == 'updatePage'" class="button button--black button--130x40 save-btn" type="button">저장</button>
+                            <button class="button button--white button--130x40 cancel-btn" type="button" th:data-memberId="${memberDetails.id}">취소</button>
+                            <button th:if="${viewName} == 'updatePage'" class="button button--white button--130x40 del-btn" type="button" th:data-memberId="${memberDetails.id}">회원 삭제</button>
                         </div>
                     </form>
                 </div>
@@ -182,10 +158,7 @@
         let checkPw = false;
         let checkName = false;
         let checkMail = false;
-        let checkMailConfirm = false;
         let checkAddress = false;
-        let beforeEmail = [[${memberDetails.email}]]; // 서버에서 회원의 이메일 정보 가져와서, 이메일 입력란에 입력된 이메일과 비교하여 일치하면 검증 거치지 않고 통과.
-        let finalEmail = "";
         let checkTotalOrderPrice = false;
         let checkPoint = false;
         let checkTotalUsePoint = false;
@@ -197,9 +170,6 @@
 
             /* 저장 버튼 클릭 처리 */
             $(".save-btn").click(saveProfile);
-
-            /* 이메일 인증번호 발송 버튼 클릭 처리 */
-            $(".send-mail").click(sendMail);
 
             /* 이메일 선택 체인지 처리 */
             $('.mail-select').on("change", setEmailInputMode);
@@ -216,7 +186,7 @@
 
         function showMessage() {
             let message = [[${message}]];
-            if (message !== null) {
+            if (message) {
                 alert(message);
             }
         }
@@ -237,7 +207,7 @@
             let mailVal1 = $(".mail-input").val();
             let mailVal2 = $(".mail-input2").val();
             let fullEmail = mailVal1 + '@' + mailVal2;
-            let addressVal = $('.address-input-3').val();
+            let addressVal = $('.addr-detail-input').val();
             let totalOrderPriceVal = $(".total-order-price-input").val();
             let pointVal = $(".point-input").val();
             let totalUsePointVal = $(".total-use-point-input").val();
@@ -281,7 +251,7 @@
 
             if (addressVal === "") {
                 alert("주소를 입력하세요.");
-                $('.address-input-1').focus();
+                $('.zipcode-input').focus();
                 return false;
             } else {
                 checkAddress = true;
@@ -319,63 +289,12 @@
                 checkTotalPoint = true;
             }
 
-            /* 이메일 변경 검사 */
-            if (beforeEmail === fullEmail) {
-                checkMailConfirm = true;
-                finalEmail = beforeEmail; // 이메일을 변경하지 않을 경우 기존 이메일 값을 그대로 서버에 전송
-            } else if (checkMailConfirm === false && beforeEmail !== fullEmail) {
-                alert("이메일을 인증해주세요.");
-                $('.mail-input').focus();
-                window.scrollTo(0, 0);
-                return false;
-            }
-
-            /* 이메일 인증 여부 검사 */
-            if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
-                alert("이메일을 인증해주세요.");
-                $('.mail-input').focus();
-                window.scrollTo(0, 0);
-                return false;
-            }
-
-            if (checkId && checkPw && checkName && checkMail && checkMailConfirm && checkAddress && checkTotalOrderPrice && checkPoint && checkTotalUsePoint && checkTotalPoint) {
-                $(".mail-input").val(finalEmail);
+            if (checkId && checkPw && checkName && checkMail && checkAddress && checkTotalOrderPrice && checkPoint && checkTotalUsePoint && checkTotalPoint) {
+                $(".email-hidden-input").val(fullEmail);
                 if (pwVal === '') {
                     $(".pw-input").attr("disabled", true);
                 }
                 form.submit();
-            }
-        }
-
-        /* 이메일 전송 함수 */
-        function sendMail() {
-            let mailVal1 = $(".mail-input").val();
-            let mailVal2 = $(".mail-input2").val();
-            let fullEmail = mailVal1 + "@" + mailVal2;
-            let mailConfirmInput = $(".mail-confirm-input");
-
-            if (confirm("인증번호를 전송하시겠습니까?")) {
-                if (validateEmailFormat(fullEmail)) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/members/email-verification",
-                        data: {
-                            email: fullEmail
-                        },
-                        success: function (data) {
-                            mailConfirmInput.css("background-color", "white");
-                            mailConfirmInput.attr("disabled", false);
-                            code = data;
-                        },
-                        error: function (request) {
-                            alert(request.responseText);
-                        }
-                    });
-                } else {
-                    alert("올바른 이메일을 입력해주세요.");
-                }
-            } else {
-                return false;
             }
         }
 
@@ -429,26 +348,6 @@
             return /\s/g.test(str);
         }
 
-        /* 이메일 형식을 검증 함수 */
-        function validateEmailFormat(email) {
-            let form = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-            return form.test(email);
-        }
-
-        /* 사용자가 입력한 인증 번호 검사 함수 */
-        function confirmNumber() {
-            let mailConfirmInputVal = $(".mail-confirm-input").val(); // 사용자가 입력한 인증 번호
-
-            if (mailConfirmInputVal === code) {
-                alert("인증되었습니다.");
-                finalEmail = $(".mail-input").val() + '@' + $(".mail-input2").val();
-                checkMailConfirm = true;
-            } else {
-                alert("인증번호를 다시 확인해주세요.");
-                checkMailConfirm = false;
-            }
-        }
-
         /* 주소 API 호출 함수 */
         function addressAPI() {
             new daum.Postcode({
@@ -487,11 +386,11 @@
                     }
 
                     // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                    $(".address-input-1").val(data.zonecode);
-                    $(".address-input-2").val(addr);
+                    $(".zipcode-input").val(data.zonecode);
+                    $(".addr-input").val(addr);
                     // 커서를 상세주소 필드로 이동한다.
-                    $(".address-input-3").attr("readonly", false);
-                    $(".address-input-3").focus();
+                    $(".addr-detail-input").attr("readonly", false);
+                    $(".addr-detail-input").focus();
                 }
             }).open();
         }

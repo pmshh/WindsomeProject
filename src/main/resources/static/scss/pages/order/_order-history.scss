@@ -1,0 +1,31 @@
+@import "../../abstracts/variables";
+
+.order-hist-body {
+    .order-history-container {
+        overflow-x: auto;
+
+        .table-wrapper {
+            min-width: 860px;
+            .base-table {
+                .base-table__body {
+                    .base-table__row {
+                        .base-table__cell {
+                            height: 135px;
+
+                            &.number {
+                                letter-spacing: -0.2px;
+
+                                .order-uid {
+                                    display: block;
+                                    color: black;
+                                    text-decoration: underline;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

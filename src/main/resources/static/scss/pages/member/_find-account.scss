@@ -1,0 +1,83 @@
+@import "../../abstracts/variables";
+
+.find-account-body {
+    .tab-container {
+        width: 80%;
+
+        ul {
+            li {
+                // display: inline-block;
+                float: left;
+                width: 50%;
+                text-align: center;
+                border: 1px solid #e2e2e2;
+                cursor: pointer;
+                margin: 0;
+                line-height: 50px;
+                font-size: 16px;
+                font-weight: bold;
+                color: rgb(121, 121, 121);
+                background-color: #f8f9fa;
+
+                &#find-id-tab {
+                    border-right: none;
+                }
+            }
+
+            li.active {
+                background: white;
+                border-bottom: none;
+                color: black;
+            }
+        }
+    }
+
+    .contents-container {
+        width: 80%;
+        border: 1px solid #e2e2e2;
+        border-top: none;
+        padding: 30px 15px;
+
+        .find-id-form-box,
+        .find-pw-form-box {
+            width: 100%;
+
+            .little-text-box {
+                padding: 10px 0;
+
+                .info-text {
+                    font-size: 14px;
+                    margin: 0;
+                    padding: 0;
+                    color: rgb(85, 85, 85);
+                }
+            }
+
+            form {
+                width: 100%;
+            }
+
+            .big-text-box {
+                padding: 20px 0;
+
+                .info-text {
+                    font-size: 13px;
+                    margin: 0;
+                    padding: 0;
+                    color: rgb(85, 85, 85);
+                }
+            }
+
+            .btn-box {
+                padding: 10px 0;
+                text-align: center;
+                display: block;
+                margin-top: 30px;
+            }
+        }
+
+        .find-pw-form-box {
+            display: none;
+        }
+    }
+}

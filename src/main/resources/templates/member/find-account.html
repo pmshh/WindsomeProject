@@ -23,14 +23,14 @@
 
                     <div class="section-body find-account-body mt-5">
 
-                        <div class="tab-box">
+                        <div class="tab-container">
                             <ul>
                                 <li id="find-id-tab" class="active" data-tab="content-1">아이디 찾기</li>
                                 <li id="find-pw-tab" data-tab="content-2">비밀번호 찾기</li>
                             </ul>
                         </div>
 
-                        <div class="content-box">
+                        <div class="contents-container">
                             <!-- find-id-form-box start -->
                             <div class="find-id-form-box content-box content-1" id="content-1">
                                 <div class="little-text-box">
@@ -38,59 +38,61 @@
                                 </div>
 
                                 <form onsubmit="return false">
-                                    <table class="col-header-table-color">
-                                        <colgroup>
-                                            <col style="width:150px;">
-                                            <col style="width:auto;">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <label for="find-id-name">이름 <span>*</span></label>
-                                            </th>
-                                            <td>
-                                                <div class="name-input-box">
-                                                    <input class="find-id-name-input" name="find-id-name" id="find-id-name" type="text">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label for="find-id-email">이메일 <span>*</span></label>
-                                            </th>
-                                            <td>
-                                                <div class="mail-input-box mb-1">
-                                                    <input class="find-id-email-input1" id="find-id-email" name="find-id-email" type="text">
-                                                    @
-                                                    <input class="find-id-email-input2" type="text">
-                                                    <select class="find-id-email-select">
-                                                        <option value="1" selected>직접입력</option>
-                                                        <option value="naver.com">naver.com</option>
-                                                        <option value="hanmail.net">hanmail.net</option>
-                                                        <option value="hotmail.com">hotmail.com</option>
-                                                        <option value="nate.com">nate.com</option>
-                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
-                                                        <option value="empas.com">empas.com</option>
-                                                        <option value="dreamwiz.com">dreamwiz.com</option>
-                                                        <option value="freechal.com">freechal.com</option>
-                                                        <option value="lycos.co.kr">lycos.co.kr</option>
-                                                        <option value="korea.com">korea.com</option>
-                                                        <option value="gmail.com">gmail.com</option>
-                                                        <option value="hanmir.com">hanmir.com</option>
-                                                        <option value="paran.com">paran.com</option>
-                                                    </select>
-                                                    <button type="button" class="send-mail" onclick="sendEmail('find-id')">인증번호 발송</button>
-                                                </div>
-                                                <div class="mail-check-box">
-                                                    <input class="find-id-email-confirm-input" disabled="disabled">
-                                                    <button type="button" class="check-number" onclick="confirmNumber('find-id')">인증번호
-                                                        확인
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+
+                                    <div class="table-wrapper">
+                                        <table class="base-table base-table--two-columns base-table--two-columns-color">
+                                            <colgroup>
+                                                <col style="width:150px;">
+                                                <col style="width:auto;">
+                                            </colgroup>
+                                            <tbody class="base-table__body">
+                                                <tr class="base-table__row">
+                                                    <th class="base-table__header-cell" scope="row">
+                                                        <label for="find-id-name">이름 <span>*</span></label>
+                                                    </th>
+                                                    <td class="base-table__cell">
+                                                        <input class="base-table__input find-id-name-input" name="find-id-name" id="find-id-name" type="text">
+                                                    </td>
+                                                </tr>
+                                                <tr class="base-table__row">
+                                                    <th class="base-table__header-cell" scope="row">
+                                                        <label for="find-id-email">이메일 <span>*</span></label>
+                                                    </th>
+                                                    <td class="base-table__cell">
+                                                        <div class="mail-input-box mb-1">
+                                                            <input class="base-table__input find-id-email-input1" id="find-id-email" name="find-id-email" type="text">
+                                                            @
+                                                            <input class="base-table__input find-id-email-input2" type="text">
+                                                            <select class="base-table__select find-id-email-select">
+                                                                <option value="1" selected>직접입력</option>
+                                                                <option value="naver.com">naver.com</option>
+                                                                <option value="hanmail.net">hanmail.net</option>
+                                                                <option value="hotmail.com">hotmail.com</option>
+                                                                <option value="nate.com">nate.com</option>
+                                                                <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                                <option value="empas.com">empas.com</option>
+                                                                <option value="dreamwiz.com">dreamwiz.com</option>
+                                                                <option value="freechal.com">freechal.com</option>
+                                                                <option value="lycos.co.kr">lycos.co.kr</option>
+                                                                <option value="korea.com">korea.com</option>
+                                                                <option value="gmail.com">gmail.com</option>
+                                                                <option value="hanmir.com">hanmir.com</option>
+                                                                <option value="paran.com">paran.com</option>
+                                                            </select>
+                                                            <button type="button" class="button button--white button--90x30 send-mail" onclick="sendEmail('find-id')">인증번호 발송</button>
+                                                        </div>
+                                                        <div class="mail-check-box">
+                                                            <input class="base-table__input find-id-email-confirm-input" disabled="disabled">
+                                                            <button type="button" class="button button--white button--90x30 check-number" onclick="confirmNumber('find-id')">인증번호
+                                                                확인
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </form>
 
                                 <div class="big-text-box">
@@ -100,8 +102,8 @@
                                 </div>
 
                                 <div class="btn-box">
-                                    <button class="white-btn-w130-h40" type="button" onclick="location.href='/'">취소</button>
-                                    <button class="find-id-btn black-btn-w130-h40" type="button">확인</button>
+                                    <button class="button button--white button--130x40" type="button" onclick="location.href='/'">취소</button>
+                                    <button class="button button--black button--130x40 find-id-btn" type="button">확인</button>
                                 </div>
                             </div>
 
@@ -112,69 +114,68 @@
                                 </div>
 
                                 <form onsubmit="return false">
-                                    <table class="col-header-table-color">
-                                        <colgroup>
-                                            <col style="width:150px;">
-                                            <col style="width:auto;">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">
-                                                <label for="find-pw-id">아이디 <span>*</span></label>
-                                            </th>
-                                            <td>
-                                                <div class="id-input-box">
-                                                    <input class="find-pw-id-input" name="find-pw-id" id="find-pw-id" type="text">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label for="find-pw-name">이름 <span>*</span></label>
-                                            </th>
-                                            <td>
-                                                <div class="find-pw-name-input-box">
-                                                    <input class="find-pw-name-input" name="find-pw-name" id="find-pw-name" type="text">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <label for="find-pw-email">이메일 <span>*</span></label>
-                                            </th>
-                                            <td>
-                                                <div class="mail-input-box mb-1">
-                                                    <input class="find-pw-email-input1" id="find-pw-email" name="find-pw-email" type="text">
-                                                    @
-                                                    <input class="find-pw-email-input2" type="text">
-                                                    <select class="find-pw-email-select">
-                                                        <option value="1" selected>직접입력</option>
-                                                        <option value="naver.com">naver.com</option>
-                                                        <option value="hanmail.net">hanmail.net</option>
-                                                        <option value="hotmail.com">hotmail.com</option>
-                                                        <option value="nate.com">nate.com</option>
-                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
-                                                        <option value="empas.com">empas.com</option>
-                                                        <option value="dreamwiz.com">dreamwiz.com</option>
-                                                        <option value="freechal.com">freechal.com</option>
-                                                        <option value="lycos.co.kr">lycos.co.kr</option>
-                                                        <option value="korea.com">korea.com</option>
-                                                        <option value="gmail.com">gmail.com</option>
-                                                        <option value="hanmir.com">hanmir.com</option>
-                                                        <option value="paran.com">paran.com</option>
-                                                    </select>
-                                                    <button type="button" class="send-mail" onclick="sendEmail('find-pw')">인증번호 발송</button>
-                                                </div>
-                                                <div class="mail-check-box">
-                                                    <input class="find-pw-email-confirm-input" disabled="disabled">
-                                                    <button type="button" class="check-number" onclick="confirmNumber('find-pw')">인증번호
-                                                        확인
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-wrapper">
+                                        <table class="base-table base-table--two-columns base-table--two-columns-color">
+                                            <colgroup>
+                                                <col style="width:150px;">
+                                                <col style="width:auto;">
+                                            </colgroup>
+                                            <tbody class="base-table__body">
+                                                <tr class="base-table__row">
+                                                    <th class="base-table__header-cell" scope="row">
+                                                        <label for="find-pw-id">아이디 <span>*</span></label>
+                                                    </th>
+                                                    <td class="base-table__cell">
+                                                        <input class="base-table__input find-pw-id-input" name="find-pw-id" id="find-pw-id" type="text">
+                                                    </td>
+                                                </tr>
+                                                <tr class="base-table__row">
+                                                    <th class="base-table__header-cell" scope="row">
+                                                        <label for="find-pw-name">이름 <span>*</span></label>
+                                                    </th>
+                                                    <td class="base-table__cell">
+                                                        <input class="base-table__input find-pw-name-input" name="find-pw-name" id="find-pw-name" type="text">
+                                                    </td>
+                                                </tr>
+                                                <tr class="base-table__row">
+                                                    <th class="base-table__header-cell" scope="row">
+                                                        <label for="find-pw-email">이메일 <span>*</span></label>
+                                                    </th>
+                                                    <td class="base-table__cell">
+                                                        <div class="mail-input-box mb-1">
+                                                            <input class="base-table__input find-pw-email-input1" id="find-pw-email" name="find-pw-email" type="text">
+                                                            @
+                                                            <input class="base-table__input find-pw-email-input2" type="text">
+                                                            <select class="base-table__select find-pw-email-select">
+                                                                <option value="1" selected>직접입력</option>
+                                                                <option value="naver.com">naver.com</option>
+                                                                <option value="hanmail.net">hanmail.net</option>
+                                                                <option value="hotmail.com">hotmail.com</option>
+                                                                <option value="nate.com">nate.com</option>
+                                                                <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                                <option value="empas.com">empas.com</option>
+                                                                <option value="dreamwiz.com">dreamwiz.com</option>
+                                                                <option value="freechal.com">freechal.com</option>
+                                                                <option value="lycos.co.kr">lycos.co.kr</option>
+                                                                <option value="korea.com">korea.com</option>
+                                                                <option value="gmail.com">gmail.com</option>
+                                                                <option value="hanmir.com">hanmir.com</option>
+                                                                <option value="paran.com">paran.com</option>
+                                                            </select>
+                                                            <button type="button" class="button button--white button--90x30 send-mail" onclick="sendEmail('find-pw')">인증번호 발송</button>
+                                                        </div>
+                                                        <div class="mail-check-box">
+                                                            <input class="base-table__input find-pw-email-confirm-input" disabled="disabled">
+                                                            <button type="button" class="button button--white button--90x30 check-number" onclick="confirmNumber('find-pw')">인증번호
+                                                                확인
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </form>
 
                                 <div class="big-text-box">
@@ -184,8 +185,8 @@
                                 </div>
 
                                 <div class="btn-box">
-                                    <button class="white-btn-w130-h40" type="button" onclick="location.href='/'">취소</button>
-                                    <button class="find-psas-btn black-btn-w130-h40" type="button">확인</button>
+                                    <button class="button button--white button--130x40" type="button" onclick="location.href='/'">취소</button>
+                                    <button class="button button--black button--130x40 find-pass-btn" type="button">확인</button>
                                 </div>
                             </div>
                         </div>
@@ -282,7 +283,7 @@
             });
 
             /* 비밀번호 찾기 */
-            $(".find-psas-btn").click(function () {
+            $(".find-pass-btn").click(function () {
                 /* 입력값 변수 */
                 let form = $("#find-form");                                                         // form
                 let idVal = $('.find-pw-id-input').val();                                           // 아이디

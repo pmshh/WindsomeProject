@@ -33,6 +33,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                         new QReviewListDto(
                                 review.id,
                                 review.title,
+                                review.content,
                                 review.rating,
                                 review.member.name,
                                 review.regDate,

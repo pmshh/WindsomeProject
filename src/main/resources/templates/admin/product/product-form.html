@@ -14,7 +14,7 @@
 
             <!-- section start -->
             <section class="admin-section-area">
-                <div class="container">
+                <div class="container-fluid">
 
                     <div class="section-header">
                         <h2 th:if="${type} == 'detail'">상품 상세</h2>
@@ -25,130 +25,135 @@
                     <div class="section-body product-form-body">
                         <!-- 상품 업데이트 폼 -->
                         <form th:if="${type == 'update' || type == 'detail'}" id="updateForm" th:action="@{'/admin/products/' + ${productFormDto.id}}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
-                            <table>
-                                <colgroup>
-                                    <col style="width:20%;">
-                                    <col style="width: auto;">
-                                </colgroup>
-                                <tbody>
-                                    <input class="id-input" th:type="hidden" th:field="*{id}">
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{productSellStatus}">판매 상태 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <select th:if="${type == 'update'}" class="sell-status-select" th:field="*{productSellStatus}">
-                                                <option selected value="none">선택</option>
-                                                <option value="SELL">판매중</option>
-                                                <option value="SOLD-OUT">품절</option>
-                                            </select>
-                                            <select th:if="${type} == 'detail'" disabled class="sell-status-select" th:field="*{productSellStatus}">
-                                                <option selected value="none">선택</option>
-                                                <option value="SELL">판매중</option>
-                                                <option value="SOLD-OUT">품절</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label>카테고리 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <select th:if="${type == 'update'}" class="parent-cate-select">
-                                                <option selected value="0">선택</option>
-                                            </select>
-                                            <select th:if="${type == 'update'}"  th:field="*{categoryId}" class="child-cate-select">
-                                                <option selected value="0">선택</option>
-                                            </select>
 
-                                            <select th:if="${type == 'detail'}" class="parent-cate-select" disabled>
-                                                <option selected value="0">선택</option>
-                                            </select>
-                                            <select th:if="${type == 'detail'}" th:field="*{categoryId}" class="child-cate-select" disabled>
-                                                <option selected value="0">선택</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{productName}">상품명 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input th:if="${type == 'update'}" class="name-input" type="text" th:field="*{productName}">
-                                            <input th:if="${type == 'detail'}" readonly class="name-input" type="text" th:field="*{productName}">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{price}">가격 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input th:if="${type == 'update'}" class="price-input" type="text" th:field="*{price}">
-                                            <input th:if="${type == 'detail'}" readonly class="price-input" type="text" th:field="*{price}">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{discount}">할인율 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input th:if="${type == 'update'}" class="discount-interface" maxlength="2" th:value="*{discount}">
-                                            <input th:if="${type == 'detail'}" readonly class="discount-interface" maxlength="2" th:value="*{discount}">
-                                            <input class="discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
-                                            <span class="discount-text">할인 가격 : <span class="discount-price"></span></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{stockNumber}">재고 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input th:if="${type == 'update'}" class="stock-number-input" th:field="*{stockNumber}">
-                                            <input th:if="${type == 'detail'}" readonly class="stock-number-input" th:field="*{stockNumber}">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{productDetail}">상품 상세 내용 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <textarea th:if="${type == 'update'}" th:field="*{productDetail}" class="text-editor"></textarea>
-                                            <textarea th:if="${type == 'detail'}" th:field="*{productDetail}" disabled></textarea>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${type == 'update'}" th:each="productImageDto, status: ${productFormDto.productImageDtoList}">
-                                        <th scope="row">
-                                            <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
-                                        </th>
-                                        <td>
-                                            <input class="fake-input" type="text" th:value="${not #strings.isEmpty(productImageDto.originalImageName)} ? ${productImageDto.originalImageName} : '상품 이미지 ' + ${status.index+1}">
-                                            <input class="real-input" type="file" name="productImageFile" th:id="${'img' + status.index+1}">
-                                            <label class="white-btn-w90-h40 find-file" th:for="${'img' + status.index+1}">파일 찾기</label>
-                                            <button class="black-btn-w90-h40 del-file" type="button" th:data-index="${status.index+1}" th:data-productImageId="${productImageDto.id}">삭제</button>
-                                            <input type="hidden" name="productImageIds" th:value="${productImageDto.id}">
-                                        </td>
-                                    </tr>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                   <colgroup>
+                                       <col style="width:200px;">
+                                       <col style="width: auto;">
+                                   </colgroup>
+                                   <tbody class="base-table__body">
+                                       <input class="id-input" th:type="hidden" th:field="*{id}">
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="*{productSellStatus}">판매 상태 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <select class="base-table__select sell-status-select" th:if="${type == 'update'}" th:field="*{productSellStatus}">
+                                                   <option selected value="none">선택</option>
+                                                   <option value="AVAILABLE">판매가능</option>
+                                                   <option value="SOLD_OUT">품절</option>
+                                                   <option value="DISCONTINUED">단종</option>
+                                               </select>
+                                               <select class="base-table__select sell-status-select" th:if="${type} == 'detail'" disabled th:field="*{productSellStatus}">
+                                                   <option selected value="none">선택</option>
+                                                   <option value="AVAILABLE">판매가능</option>
+                                                   <option value="SOLD_OUT">품절</option>
+                                                   <option value="DISCONTINUED">단종</option>
+                                               </select>
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label>카테고리 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <select class="base-table__select base-table__select--big parent-cate-select" th:if="${type == 'update'}">
+                                                   <option selected value="0">선택</option>
+                                               </select>
+                                               <select class="base-table__select base-table__select--big child-cate-select" th:if="${type == 'update'}"  th:field="*{categoryId}">
+                                                   <option selected value="0">선택</option>
+                                               </select>
 
-                                    <th:block th:if="${type == 'detail'}">
-                                        <tr th:each="productImageDto, status: ${productFormDto.productImageDtoList}">
-                                            <th scope="row">
-                                                <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
-                                            </th>
-                                            <td>
-                                                <input class="fake-input" type="text" readonly="readonly" th:value="${not #strings.isEmpty(productImageDto.originalImageName)} ? ${productImageDto.originalImageName} : '상품 이미지 ' + ${status.index+1}">
-                                                <input type="file" class="real-input" name="productImageFile" th:id="${'img' + status.index+1}" readonly="readonly">
-                                                <input type="hidden" name="productImageIds" th:value="${productImageDto.id}">
-                                            </td>
-                                        </tr>
-                                    </th:block>
+                                               <select class="base-table__select base-table__select--big parent-cate-select" th:if="${type == 'detail'}" disabled>
+                                                   <option selected value="0">선택</option>
+                                               </select>
+                                               <select class="base-table__select base-table__select--big child-cate-select" th:if="${type == 'detail'}" th:field="*{categoryId}" disabled>
+                                                   <option selected value="0">선택</option>
+                                               </select>
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="*{productName}">상품명 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <input class="base-table__input base-table__input--big name-input" th:if="${type == 'update'}" type="text" th:field="*{productName}">
+                                               <input class="base-table__input base-table__input--big name-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{productName}">
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="*{price}">가격 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <input class="base-table__input base-table__input--big price-input" th:if="${type == 'update'}" type="text" th:field="*{price}">
+                                               <input class="base-table__input base-table__input--big price-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{price}">
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="*{discount}">할인율 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <input class="base-table__input base-table__input--big discount-interface" th:if="${type == 'update'}" maxlength="2" th:value="*{discount}">
+                                               <input class="base-table__input base-table__input--big discount-interface"  th:if="${type == 'detail'}" readonly maxlength="2" th:value="*{discount}">
+                                               <input class="base-table__input base-table__input--big discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
+                                               <span class="displayblock discount-text">할인 가격 : <span class="discount-price"></span></span>
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="*{stockNumber}">재고 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <input class="base-table__input base-table__input--big stock-number-input"  th:if="${type == 'update'}" th:field="*{stockNumber}">
+                                               <input class="base-table__input base-table__input--big stock-number-input"  th:if="${type == 'detail'}" readonly th:field="*{stockNumber}">
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="*{productDetail}">상품 상세 내용 <span class="required-field">*</span></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <textarea th:if="${type == 'update'}" th:field="*{productDetail}" class="text-editor"></textarea>
+                                               <textarea th:if="${type == 'detail'}" th:field="*{productDetail}" disabled></textarea>
+                                           </td>
+                                       </tr>
+                                       <tr class="base-table__row" th:if="${type == 'update'}" th:each="productImageDto, status: ${productFormDto.productImageDTOList}">
+                                           <th class="base-table__header-cell" scope="row">
+                                               <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                           </th>
+                                           <td class="base-table__cell">
+                                               <input class="fake-input" type="text" th:value="${not #strings.isEmpty(productImageDto.originalImageName)} ? ${productImageDto.originalImageName} : '상품 이미지 ' + ${status.index+1}">
+                                               <input class="real-input" type="file" name="productImageFile" th:id="${'img' + status.index+1}">
+                                               <label class="button button--white button--90x40 find-file" th:for="${'img' + status.index+1}">파일 찾기</label>
+                                               <button class="button button--black button--90x40 del-file" type="button" th:data-index="${status.index+1}" th:data-productImageId="${productImageDto.id}">삭제</button>
+                                               <input type="hidden" name="productImageIds" th:value="${productImageDto.id}">
+                                           </td>
+                                       </tr>
 
-                                </tbody>
-                            </table>
+                                       <th:block th:if="${type == 'detail'}">
+                                           <tr class="base-table__row" th:each="productImageDto, status: ${productFormDto.productImageDTOList}">
+                                               <th class="base-table__header-cell" scope="row">
+                                                   <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                               </th>
+                                               <td class="base-table__cell">
+                                                   <input class="fake-input" type="text" readonly="readonly" th:value="${not #strings.isEmpty(productImageDto.originalImageName)} ? ${productImageDto.originalImageName} : '상품 이미지 ' + ${status.index+1}">
+                                                   <input type="file" class="real-input" name="productImageFile" th:id="${'img' + status.index+1}" readonly="readonly">
+                                                   <input type="hidden" name="productImageIds" th:value="${productImageDto.id}">
+                                               </td>
+                                           </tr>
+                                       </th:block>
+                                   </tbody>
+                               </table>
+                            </div>
+
                             <div class="btn-box">
-                                <button th:if="${type == 'detail'}" class="black-btn-w130-h40 modify-btn" type="button">상품 수정</button>
-                                <button th:if="${type == 'detail'}" class="white-btn-w130-h40 list-btn" type="button">상품 목록</button>
-                                <button th:if="${type == 'update'}" class="black-btn-w130-h40 save-btn" type="button">저장</button>
-                                <button th:if="${type == 'update'}" class="white-btn-w130-h40 cancel-btn" type="button">취소</button>
+                                <button th:if="${type == 'detail'}" class="button button--black button--130x40 modify-btn" type="button">상품 수정</button>
+                                <button th:if="${type == 'detail'}" class="button button--white button--130x40 list-btn" type="button">상품 목록</button>
+                                <button th:if="${type == 'update'}" class="button button--black button--130x40 save-btn" type="button">저장</button>
+                                <button th:if="${type == 'update'}" class="button button--white button--130x40 cancel-btn" type="button">취소</button>
                             </div>
                         </form>
                     </div>

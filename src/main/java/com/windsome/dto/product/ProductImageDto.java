@@ -5,7 +5,7 @@ import lombok.Data;
 import org.modelmapper.ModelMapper;
 
 @Data
-public class ProductImageDto {
+public class ProductImageDTO {
 
     private Long id;
 
@@ -22,7 +22,7 @@ public class ProductImageDto {
      */
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static ProductImageDto toDto(ProductImage productImage) {
-        return modelMapper.map(productImage, ProductImageDto.class);
+    public static ProductImageDTO toDto(ProductImage productImage) {
+        return modelMapper.map(productImage, ProductImageDTO.class);
     }
 }

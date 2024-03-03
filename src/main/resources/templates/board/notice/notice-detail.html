@@ -29,19 +29,21 @@
                                     <col style="width: auto;">
                                 </colgroup>
                                 <tbody>
-                                <tr>
-                                    <td colspan="2" class="board-title">
-                                        <span th:text="${noticeDtlList.get(0).title}"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="board-date-con">
-                                        <ul class="etcArea">
-                                            <li th:text="${noticeDtlList.get(0).createdBy}"></li>
-                                            <li><span class="txtNum" th:text="${#temporals.format(noticeDtlList.get(0).regTime, 'yyyy-MM-dd')}"></span> </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="2" class="board-title">
+                                            <span th:text="${noticeDtlList.get(0).title}"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="board-date-con">
+                                            <ul class="etcArea">
+                                                <li th:text="${noticeDtlList.get(0).createdBy}"></li>
+                                                <li><span class="txtNum"
+                                                        th:text="${#temporals.format(noticeDtlList.get(0).regTime, 'yyyy-MM-dd')}"></span>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
 
@@ -51,36 +53,44 @@
                         </div>
 
                         <div class="btn-box">
-                            <button class="white-btn-w90-h30 cancel-btn" type="button">목록</button>
-                            <button sec:authorize="hasRole('ADMIN')" class="black-btn-w90-h30 del-btn" type="button">삭제</button>
-                            <button sec:authorize="hasRole('ADMIN')" class="white-btn-w90-h30 update-btn" type="button">수정</button>
+                            <button class="button button--white button--90x30 cancel-btn" type="button">목록</button>
+                            <button sec:authorize="hasRole('ADMIN')" class="button button--black button--90x30 del-btn"
+                                type="button">삭제</button>
+                            <button sec:authorize="hasRole('ADMIN')" class="button button--white button--90x30 update-btn"
+                                type="button">수정</button>
                         </div>
 
                         <div class="board-movement">
                             <ul th:if="${noticeDtlList.size() == 3}">
                                 <li class="prev">
                                     <strong>이전글</strong>
-                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(2).noticeId}}"><span th:text="${noticeDtlList.get(2).title}"></span></a>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(2).noticeId}}"><span
+                                            th:text="${noticeDtlList.get(2).title}"></span></a>
                                 </li>
                                 <li class="next">
                                     <strong>다음글</strong>
-                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span
+                                            th:text="${noticeDtlList.get(1).title}"></span></a>
                                 </li>
                             </ul>
 
                             <!-- 이전글만 존재하는 경우 -->
-                            <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId > noticeDtlList.get(1).noticeId}">
+                            <ul
+                                th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId > noticeDtlList.get(1).noticeId}">
                                 <li class="only-prev">
                                     <strong>이전글</strong>
-                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span
+                                            th:text="${noticeDtlList.get(1).title}"></span></a>
                                 </li>
                             </ul>
 
                             <!-- 다음글만 존재하는 경우 -->
-                            <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
+                            <ul
+                                th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
                                 <li class="next">
                                     <strong>다음글</strong>
-                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span th:text="${noticeDtlList.get(1).title}"></span></a>
+                                    <a th:href="@{'/board/notice/' + ${noticeDtlList.get(1).noticeId}}"><span
+                                            th:text="${noticeDtlList.get(1).title}"></span></a>
                                 </li>
                             </ul>
                         </div>
@@ -99,7 +109,7 @@
             /* 게시글 삭제 */
             $(".del-btn").click(function () {
                 if (confirm("게시글을 삭제하시겠습니까?")) {
-                    let noticeId = [[${noticeDtlList.get(0).noticeId}]];
+                    let noticeId = [[${ noticeDtlList.get(0).noticeId }]];
 
                     $.ajax({
                         url: "/board/notice/" + noticeId,
@@ -118,7 +128,7 @@
 
             /* 공지사항 게시판으로 이동 */
             $(".cancel-btn").click(function () {
-                let page = [[${page}]];
+                let page = [[${ page }]];
                 if (page !== null) {
                     location.href = '/board/notice?page=' + page;
                 }
@@ -127,8 +137,8 @@
 
             /* 게시글 수정 화면으로 이동 */
             $(".update-btn").click(function () {
-                let page = [[${page}]];
-                let noticeId = [[${noticeDtlList.get(0).noticeId}]];
+                let page = [[${ page }]];
+                let noticeId = [[${ noticeDtlList.get(0).noticeId }]];
                 if (page !== null) {
                     location.href = '/board/notice/update/' + noticeId + '?page=' + page;
                 }

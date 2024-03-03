@@ -19,19 +19,17 @@ public class AdminMemberDetailDTO {
 
     private String email;
 
-    private String address1;
+    private String zipcode;
 
-    private String address2;
+    private String addr;
 
-    private String address3;
+    private String addrDetail;
 
-    private int point;
+    private int availablePoints;
 
-    private int totalPoint;
+    private int totalEarnedPoints;
 
-    private int totalUsePoint;
-
-    private int totalOrderPrice;
+    private int totalUsedPoints;
 
     public static AdminMemberDetailDTO toDto(Member member) {
         return AdminMemberDetailDTO.builder()
@@ -40,13 +38,12 @@ public class AdminMemberDetailDTO {
                 .email(member.getEmail())
                 .name(member.getName())
                 .password(member.getPassword())
-                .address1(member.getAddress1())
-                .address2(member.getAddress2())
-                .address3(member.getAddress3())
-                .point(member.getPoint())
-                .totalPoint(member.getTotalPoint())
-                .totalUsePoint(member.getTotalUsePoint())
-                .totalOrderPrice(member.getTotalOrderPrice())
+                .zipcode(member.getZipcode())
+                .addr(member.getAddr())
+                .addrDetail(member.getAddrDetail())
+                .availablePoints(member.getAvailablePoints())
+                .totalEarnedPoints(member.getTotalEarnedPoints())
+                .totalUsedPoints(member.getTotalUsedPoints())
                 .build();
     }
 }

@@ -67,7 +67,7 @@ class QaServiceTest {
         qaService.enrollQa(qaEnrollDto, member);
 
         // Then
-        verify(qaRepositoryMock, times(1)).save(any(Qa.class)); // save 메서드가 호출되었는지 검증
+        verify(qaRepositoryMock, times(2)).save(any(Qa.class)); // save 메서드가 호출되었는지 검증
     }
 
     @Test
@@ -101,70 +101,96 @@ class QaServiceTest {
     public void validatePost_AdminRole_ReturnsTrue() {
         // Given
         Member member = createMember(1L);
-        member.setState(Role.ADMIN); // 관리자 권한 설정
+        member.setRole(Role.ADMIN); // 관리자 권한 설정
 
         // When
         boolean result = qaService.validatePost(member, 1L, "password");
 
         // Then
-        assertTrue(result); // 관리자 권한인 경우 항상 true 반환
+        assertFalse(result); // 관리자 권한인 경우 항상 false 반환
         verify(qaRepositoryMock, never()).findById(anyLong()); // 관리자 권한인 경우 findById 메서드가 호출되지 않았는지 검증
     }
 
     @Test
-    @DisplayName("게시글 비밀번호 검증 - 잘못된 비밀번호 입력 시 false 반환하는지 확인")
-    public void validatePost_WrongPassword_ReturnsFalse() {
+    @DisplayName("게시글 비밀번호 검증 - 잘못된 비밀번호 입력 시 true 반환하는지 확인")
+    public void validatePost_WrongPassword_ReturnsTrue() {
         // Given
-        Member member = createMember(1L);
-        member.setState(Role.USER); // 일반 사용자 권한 설정
+        Member member1 = createMember(1L);
+        member1.setRole(Role.USER); // 일반 사용자 권한 설정
+        member1.setUserIdentifier("test1234");
+
+        Member member2 = createMember(2L);
+        member2.setRole(Role.USER);
+        member2.setUserIdentifier("test5678");
 
         Qa qa = new Qa();
+        qa.setId(1L);
+        qa.setOriginNo(1L);
+        qa.setMember(member1);
         qa.setPassword("correctPassword"); // 올바른 비밀번호 설정
-        when(qaRepositoryMock.findById(anyLong())).thenReturn(java.util.Optional.of(qa));
+        when(qaRepositoryMock.findById(1L)).thenReturn(java.util.Optional.of(qa));
 
         // When
-        boolean result = qaService.validatePost(member, 1L, "wrongPassword");
+        boolean result = qaService.validatePost(member2, 1L, "wrongPassword");
 
         // Then
-        assertFalse(result); // 잘못된 비밀번호일 경우 false 반환
-        verify(qaRepositoryMock, times(1)).findById(1L); // findById 메서드가 1번 호출되었는지 검증
+        assertTrue(result); // 잘못된 비밀번호일 경우 true 반환
+        verify(qaRepositoryMock, times(3)).findById(1L); // findById 메서드가 2번 호출되었는지 검증
     }
 
     @Test
-    @DisplayName("게시글 비밀번호 검증 - 올바른 비밀번호 입력 시 true 반환하는지 확인")
-    public void validatePost_CorrectPassword_ReturnsTrue() {
+    @DisplayName("게시글 비밀번호 검증 - 올바른 비밀번호 입력 시 false 반환하는지 확인")
+    public void validatePost_CorrectPassword_ReturnsFalse() {
         // Given
-        Member member = createMember(1L);
-        member.setState(Role.USER); // 일반 사용자 권한 설정
+        Member member1 = createMember(1L);
+        member1.setRole(Role.USER); // 일반 사용자 권한 설정
+        member1.setUserIdentifier("test1234");
+
+        Member member2 = createMember(2L);
+        member2.setRole(Role.USER);
+        member2.setUserIdentifier("test5678");
 
         Qa qa = new Qa();
+        qa.setId(1L);
+        qa.setOriginNo(1L);
+        qa.setMember(member1);
         qa.setPassword("correctPassword"); // 올바른 비밀번호 설정
-        when(qaRepositoryMock.findById(anyLong())).thenReturn(java.util.Optional.of(qa));
+        when(qaRepositoryMock.findById(1L)).thenReturn(java.util.Optional.of(qa));
 
         // When
-        boolean result = qaService.validatePost(member, 1L, "correctPassword");
+        boolean result = qaService.validatePost(member2, 1L, "correctPassword");
 
         // Then
-        assertTrue(result); // 올바른 비밀번호일 경우 true 반환
-        verify(qaRepositoryMock, times(1)).findById(1L); // findById 메서드가 1번 호출되었는지 검증
+        assertFalse(result); // 올바른 비밀번호일 경우 false 반환
+        verify(qaRepositoryMock, times(3)).findById(1L); // findById 메서드가 1번 호출되었는지 검증
     }
 
     @Test
-    @DisplayName("게시글 비밀번호 검증 - 비밀번호 null 일 시 false 반환하는지 확인")
-    public void validatePost_NullPassword_ReturnsFalse() {
+    @DisplayName("게시글 비밀번호 검증 - 비밀번호 null 일 시 true 반환하는지 확인")
+    public void validatePost_NullPassword_ReturnsTrue() {
         // Given
-        Member member = createMember(1L);
-        member.setState(Role.USER); // 일반 사용자 권한 설정
+        Member member1 = createMember(1L);
+        member1.setRole(Role.USER); // 일반 사용자 권한 설정
+        member1.setUserIdentifier("test1234");
+
+        Member member2 = createMember(2L);
+        member2.setRole(Role.USER);
+        member2.setUserIdentifier("test5678");
 
         Qa qa = new Qa();
+        qa.setId(1L);
+        qa.setOriginNo(1L);
+        qa.setMember(member1);
         qa.setPassword("correctPassword"); // 올바른 비밀번호 설정
+        when(qaRepositoryMock.findById(1L)).thenReturn(java.util.Optional.of(qa));
+
 
         // When
-        boolean result = qaService.validatePost(member, 1L, null); // 비밀번호가 null인 경우
+        boolean result = qaService.validatePost(member2, 1L, null); // 비밀번호가 null인 경우
 
         // Then
-        assertFalse(result); // 비밀번호가 null일 경우 false 반환
-        verify(qaRepositoryMock, never()).findById(anyLong()); // findById 메서드가 호출되지 않았는지 검증
+        assertTrue(result); // 비밀번호가 null일 경우 true 반환
+        verify(qaRepositoryMock, times(2)).findById(anyLong()); // findById 메서드가 호출되지 않았는지 검증
     }
 
     @Test

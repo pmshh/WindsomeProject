@@ -251,14 +251,14 @@ class NoticeServiceTest {
     public void testIsAdmin_Admin() {
         // given
         Member mockMember = mock(Member.class);
-        when(mockMember.getState()).thenReturn(Role.ADMIN);
+        when(mockMember.getRole()).thenReturn(Role.ADMIN);
 
         // when
         boolean result = noticeService.isAdmin(mockMember);
 
         // then
         assertTrue(result);
-        verify(mockMember).getState();
+        verify(mockMember).getRole();
     }
 
     @Test
@@ -266,14 +266,14 @@ class NoticeServiceTest {
     public void testIsAdmin_NotAdmin() {
         // given
         Member mockMember = mock(Member.class);
-        when(mockMember.getState()).thenReturn(Role.USER);
+        when(mockMember.getRole()).thenReturn(Role.USER);
 
         // when
         boolean result = noticeService.isAdmin(mockMember);
 
         // then
         assertFalse(result);
-        verify(mockMember).getState();
+        verify(mockMember).getRole();
     }
 
     @Test

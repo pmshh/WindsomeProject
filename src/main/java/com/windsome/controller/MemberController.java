@@ -49,8 +49,9 @@ public class MemberController {
      * 회원 등록
      */
     @PostMapping("/members/new")
-    public String createMember(@Valid SignUpRequestDTO signUpRequestDTO, Errors errors, RedirectAttributes redirectAttr) {
+    public String createMember(@Valid SignUpRequestDTO signUpRequestDTO, Errors errors, RedirectAttributes redirectAttr, Model model) {
         if (errors.hasErrors()) {
+            model.addAttribute("message", "잘못된 접근입니다.");
             return "member/register";
         }
 
@@ -97,7 +98,7 @@ public class MemberController {
     @PostMapping("/members/{memberId}/update")
     public String updateMember(@CurrentMember Member member, @Valid ProfileFormDto profileFormDto, Errors errors,
                                 Model model, RedirectAttributes attributes) {
-        if (member.getState() != Role.ADMIN) {
+        if (member.getRole() != Role.ADMIN) {
             if (errors.hasErrors()) {
                 model.addAttribute(member);
                 model.addAttribute("message", "프로필을 수정하는 도중 오류가 발생하였습니다.");
@@ -107,7 +108,7 @@ public class MemberController {
 
         memberService.updateMember(member, profileFormDto);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
-        return "redirect:/members/" + member.getId() + "/update";
+        return "redirect:/members/" + member.getId() + "/edit";
     }
 
     /**
@@ -186,7 +187,8 @@ public class MemberController {
     @GetMapping("/mypage")
     public String showMyPage(@CurrentMember Member member, Model model) {
         model.addAttribute("userSummary", memberService.getUserSummary(member));
-        model.addAttribute("orderStatusCounts", memberService.getMemberOrderStatusCounts(member));
+        model.addAttribute("orderTotalAmount", memberService.getTotalOrderAmount(member));
+        model.addAttribute("orderStatusCounts", memberService.getMemberOrderStatusCounts(member)); // TODO - OrderStatus 별로 개수 조회
         return "member/mypage";
     }
 

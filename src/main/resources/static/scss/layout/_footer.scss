@@ -1,0 +1,49 @@
+@import "../abstracts/variables";
+
+.def-footer-area {
+    padding: 140px 0 90px;
+
+    .footer-header {
+        text-align: center;
+        line-height: 35px;
+        height: 35px;
+
+        ul {
+            li {
+                display: inline-block;
+                padding: 0 10px;
+
+                a {
+                    color: #333;
+                    font-family: 'Open Sasns', sans-serif;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+
+    .footer-address {
+        text-align: center;
+        padding: 22px 0 0 0;
+        color: #333;
+        line-height: 18px;
+        font-size: 11px;
+        letter-spacing: 0.05em;
+
+        span {
+            display: inline-block;
+        }
+
+        .shop-black {
+            padding: 0 3px;
+        }
+    }
+
+    .footer-copyright {
+        height: 32px;
+        color: #aaa;
+        font-size: 11px;
+        line-height: 32px;
+        text-align: center;
+    }
+}

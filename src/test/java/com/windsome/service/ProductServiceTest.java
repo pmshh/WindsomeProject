@@ -1,8 +1,8 @@
 package com.windsome.service;
 
 import com.windsome.dto.product.MainPageProductDTO;
-import com.windsome.dto.product.ProductFormDto;
-import com.windsome.dto.product.ProductSearchDto;
+import com.windsome.dto.product.ProductFormDTO;
+import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.entity.Category;
 import com.windsome.entity.Product;
 import com.windsome.entity.ProductImage;
@@ -55,7 +55,7 @@ class ProductServiceTest {
     @DisplayName("상품 등록 - productImageFileList가 파일을 포함하는 경우")
     void testCreateProduct_WithFiles() throws Exception {
         // Given
-        ProductFormDto productFormDto = new ProductFormDto();
+        ProductFormDTO productFormDto = new ProductFormDTO();
         productFormDto.setId(1L);
         productFormDto.setCategoryId(1L);
 
@@ -81,7 +81,7 @@ class ProductServiceTest {
     @DisplayName("상품 등록 - productImageFileList가 파일을 포함하지 않는 경우")
     void testCreateProduct_NoFiles() throws Exception {
         // Given
-        ProductFormDto productFormDto = new ProductFormDto();
+        ProductFormDTO productFormDto = new ProductFormDTO();
         productFormDto.setId(1L);
         productFormDto.setCategoryId(1L);
 
@@ -105,7 +105,7 @@ class ProductServiceTest {
     @DisplayName("상품 수정 - productImageFileList가 파일을 포함하는 경우")
     void testUpdateProduct_WithFiles() throws Exception {
         // Given
-        ProductFormDto productFormDto = new ProductFormDto();
+        ProductFormDTO productFormDto = new ProductFormDTO();
         productFormDto.setId(1L);
         productFormDto.setProductName("Test Name");
         productFormDto.setPrice(10000);
@@ -146,7 +146,7 @@ class ProductServiceTest {
     @DisplayName("상품 수정 - productImageFileList가 파일을 포함하지 않는 경우")
     void testUpdateProduct_NoFiles() throws Exception {
         // Given
-        ProductFormDto productFormDto = new ProductFormDto();
+        ProductFormDTO productFormDto = new ProductFormDTO();
         productFormDto.setId(1L);
         productFormDto.setProductName("Test Name");
         productFormDto.setPrice(10000);
@@ -186,7 +186,7 @@ class ProductServiceTest {
         when(productImageRepository.findByProductIdOrderByIdAsc(productId)).thenReturn(new ArrayList<>());
 
         // When
-        ProductFormDto productFormDto = productService.getProductFormDto(productId);
+        ProductFormDTO productFormDto = productService.getProductFormDto(productId);
 
         // Then
         assertEquals(productId, productFormDto.getId());
@@ -207,7 +207,7 @@ class ProductServiceTest {
     @DisplayName("메인 화면 상품 리스트 조회 - 상품이 존재하는 경우")
     void testGetMainPageProducts_ProductExists() {
         // Given
-        ProductSearchDto productSearchDto = new ProductSearchDto();
+        ProductSearchDTO productSearchDto = new ProductSearchDTO();
         Pageable pageable = Pageable.ofSize(10).withPage(0);
         Page<MainPageProductDTO> expectedPage = new PageImpl<>(Collections.singletonList(new MainPageProductDTO()));
 
@@ -224,7 +224,7 @@ class ProductServiceTest {
     @DisplayName("메인 화면 상품 리스트 조회 - 상품이 존재하지 않는 경우")
     void testGetMainPageProducts_ProductNotExists() {
         // Given
-        ProductSearchDto productSearchDto = new ProductSearchDto();
+        ProductSearchDTO productSearchDto = new ProductSearchDTO();
         Pageable pageable = Pageable.ofSize(10).withPage(0);
         Page<MainPageProductDTO> emptyPage = Page.empty();
 

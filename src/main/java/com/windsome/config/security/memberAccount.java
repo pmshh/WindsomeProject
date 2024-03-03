@@ -14,7 +14,7 @@ public class memberAccount extends User {
 
     public memberAccount(Member member) {
         // User 정보 등록
-        super(member.getUserIdentifier(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + member.getState())));
+        super(member.getUserIdentifier(), member.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_" + member.getRole())));
         this.member = member;
     }
 }

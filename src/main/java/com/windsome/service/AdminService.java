@@ -6,13 +6,13 @@ import com.windsome.dto.member.MemberListResponseDTO;
 import com.windsome.dto.member.MemberListSearchDto;
 import com.windsome.dto.admin.CategorySalesDto;
 import com.windsome.dto.admin.DashboardInfoDto;
-import com.windsome.dto.order.OrderProductDto;
-import com.windsome.dto.product.ProductSearchDto;
+import com.windsome.dto.order.OrderHistProductResponseDTO;
+import com.windsome.dto.product.ProductInfoResponseDTO;
+import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.entity.Member;
 import com.windsome.entity.Order;
 import com.windsome.entity.Product;
-import com.windsome.entity.ProductImage;
 import com.windsome.exception.AdminDeletionException;
 import com.windsome.repository.board.qa.QaRepository;
 import com.windsome.repository.member.MemberRepository;
@@ -28,7 +28,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -41,7 +40,6 @@ public class AdminService {
 
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final ProductImageRepository productImageRepository;
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
     private final QaRepository qaRepository;
@@ -100,7 +98,7 @@ public class AdminService {
      */
     public void updateMemberRole(Long accountId, Role role) {
         Member account = memberRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
-        account.setState(role);
+        account.setRole(role);
         memberRepository.save(account);
     }
 
@@ -109,7 +107,7 @@ public class AdminService {
      */
     public void deleteMember(Long accountId) throws AdminDeletionException {
         Member member = memberRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
-        if (member.getState().equals(Role.ADMIN)) {
+        if (member.getRole().equals(Role.ADMIN)) {
             throw new AdminDeletionException("관리자 권한을 가진 사용자는 삭제할 수 없습니다.");
         }
         memberRepository.delete(member);
@@ -126,10 +124,10 @@ public class AdminService {
         List<OrderManagementDTO> orderMngDtoList = orders.stream()
                 .map(order -> {
                     OrderManagementDTO orderMngDto = new OrderManagementDTO(order);
-                    orderMngDto.setOrderProductDtoList(order.getOrderProducts().stream()
+                    orderMngDto.setOrderHistProductList(order.getOrderProducts().stream()
                             .map(orderProduct -> {
-                                ProductImage productImage = productImageRepository.findByProductIdAndIsRepresentativeImage(orderProduct.getProduct().getId(), true);
-                                return new OrderProductDto(orderProduct, productImage.getImageUrl());
+                                ProductInfoResponseDTO productInfo = productRepository.getProductInfoByProductId(orderProduct.getProduct().getId());
+                                return new OrderHistProductResponseDTO(orderProduct, productInfo);
                             })
                             .collect(Collectors.toList()));
                     return orderMngDto;
@@ -142,7 +140,7 @@ public class AdminService {
      * 상품 조회
      */
     @Transactional(readOnly = true)
-    public Page<Product> getProductList(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<Product> getProductList(ProductSearchDTO productSearchDto, Pageable pageable) {
         return productRepository.findProducts(productSearchDto, pageable);
     }
 }

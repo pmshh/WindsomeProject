@@ -1,11 +1,11 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentMember;
-import com.windsome.dto.order.OrderDto;
-import com.windsome.dto.order.OrderPageDto;
+import com.windsome.dto.order.OrderDetailDTO;
+import com.windsome.dto.order.OrderRequestDTO;
+import com.windsome.dto.order.OrderPageRequestDTO;
 import com.windsome.entity.Member;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.service.CartService;
 import com.windsome.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -42,8 +42,8 @@ public class OrderController {
      * 주문서 작성 화면
      */
     @GetMapping("/orders/new")
-    public String createOrderForm(OrderPageDto orderPageDto, @CurrentMember Member member, Model model) {
-        model.addAttribute("orders", orderService.getOrderProductDetails(orderPageDto.getOrders()));
+    public String createOrderForm(OrderPageRequestDTO orderPageRequestDTO, @CurrentMember Member member, Model model) {
+        model.addAttribute("orderProducts", orderService.getOrderProductDetails(orderPageRequestDTO.getOrderProducts()));
         model.addAttribute("member", memberRepository.findById(member.getId()).orElseThrow(EntityNotFoundException::new));
         return "order/order-form";
     }
@@ -52,9 +52,9 @@ public class OrderController {
      * 상품 주문
      */
     @PostMapping("/orders/new")
-    public String createOrder(OrderDto orderDto, @CurrentMember Member member, RedirectAttributes redirectAttributes) {
+    public String createOrder(OrderRequestDTO orderRequestDTO, @CurrentMember Member member, RedirectAttributes redirectAttributes) {
         try {
-            orderService.order(orderDto, member.getUserIdentifier());
+            orderService.order(orderRequestDTO, member.getUserIdentifier());
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", "상품 주문 도중 오류가 발생하였습니다.");
             return "redirect:/orders";
@@ -68,11 +68,21 @@ public class OrderController {
      */
     @PatchMapping("/orders/{orderId}/cancel")
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentMember Member member) {
-        if (!orderService.verifyOrderCancellationPermission(orderId, member.getUserIdentifier())) {
+        if (orderService.verifyOrderCancellationPermission(orderId, member.getUserIdentifier())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 취소 권한이 없습니다.");
         }
 
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().body("주문이 최소되었습니다.");
+    }
+
+    /**
+     * 주문 상세 화면
+     */
+    @GetMapping("/orders/{orderId}")
+    public String showOrderDetail(@PathVariable(value = "orderId") Long orderId, Model model) {
+        OrderDetailDTO orderDetail = orderService.getOrderDetail(orderId);
+        model.addAttribute("orderDetail", orderDetail);
+        return "order/order-detail";
     }
 }

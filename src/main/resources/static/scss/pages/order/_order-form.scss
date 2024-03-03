@@ -1,0 +1,85 @@
+@import "../../abstracts/variables";
+
+.order-form-body {
+    .order-products-container,
+    .shopping-address-container,
+    .discount-info-container,
+    .payment-details-container,
+    .button-container {
+        overflow-x: auto;
+
+        .title {
+            display: flex;
+            justify-content: center;
+
+            h2 {
+                font-size: 12px;
+                color: $graphite;
+                width: 100%;
+                padding-left: 10px;
+                font-weight: bold;
+            }
+        }
+
+        .body {
+            min-width: 936px;
+        }
+    }
+
+    .order-products-container {
+        margin-bottom: 40px;
+    }
+
+    .shopping-address-container {
+        margin-bottom: 40px;
+
+        .body {
+            display: flex;
+            justify-content: center;
+
+            form {
+                width: 100%;
+            }
+        }
+    }
+
+    .discount-info-container {
+        margin-bottom: 40px;
+
+        .body {
+            display: flex;
+            justify-content: center;
+
+            table {
+                tbody {
+                    td {
+                        .coupon-use-btn,
+                        .point-use-all-btn {
+                            margin-bottom: 2px;
+                        }
+
+                        .point-cancel-btn {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .payment-details-container {
+    }
+
+    .button-container {
+        padding: 10px 0;
+        text-align: center;
+        display: block;
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 1300px) {
+    .order-form-body {
+        width: 100%;
+    }
+}

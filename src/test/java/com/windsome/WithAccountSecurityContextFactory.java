@@ -32,21 +32,21 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
                 .email(userIdentifier + "@email.com")
                 .name("홍길동")
                 .password("test1234")
-                .address1("test")
-                .address2("test")
-                .address3("test")
+                .zipcode("test")
+                .addr("test")
+                .addrDetail("test")
                 .build();
         memberService.createAccount(signUpRequestDTO);
 
         Member member = memberRepository.findByUserIdentifier(userIdentifier);
-        member.setState(Role.ADMIN);
+        member.setRole(Role.ADMIN);
         memberRepository.save(member);
 
         if (Objects.equals(userIdentifier, "USER")) {
-            member.setState(Role.USER);
+            member.setRole(Role.USER);
             memberRepository.save(member);
         } else if (Objects.equals(userIdentifier, "ADMIN")) {
-            member.setState(Role.ADMIN);
+            member.setRole(Role.ADMIN);
             memberRepository.save(member);
         }
 

@@ -34,21 +34,20 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                                 member.userIdentifier,
                                 member.email,
                                 member.name,
-                                member.address1,
-                                member.address2,
-                                member.address3,
-                                member.state,
-                                member.point,
-                                member.totalPoint,
-                                member.totalUsePoint,
-                                member.totalOrderPrice,
+                                member.zipcode,
+                                member.addr,
+                                member.addrDetail,
+                                member.role,
+                                member.availablePoints,
+                                member.totalUsedPoints,
+                                member.totalEarnedPoints,
                                 member.regTime
                         )
                 )
                 .from(member)
                 .where(like(memberListSearchDto.getSearchType(), memberListSearchDto.getSearchQuery()),
                         (searchStateTypeEq(memberListSearchDto.getSearchStateType())))
-                .orderBy(member.state.asc(), member.id.desc())
+                .orderBy(member.role.asc(), member.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -74,6 +73,6 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     }
 
     private BooleanExpression searchStateTypeEq(Role searchStateType) {
-        return searchStateType == null ? null : member.state.eq(searchStateType);
+        return searchStateType == null ? null : member.role.eq(searchStateType);
     }
 }

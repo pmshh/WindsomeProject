@@ -23,43 +23,60 @@
 
                 <div class="section-body member-mng-body">
                     <div class="member-list-container">
-                        <table class="row-header-table">
-                            <thead>
-                            <tr>
-                                <th style="width: 80px;" scope="col">번호</th>
-                                <th style="width: 110px;" scope="col">권한</th>
-                                <th style="width: auto;" scope="col">회원 정보</th>
-                                <th style="width: 150px;" scope="col">가입 날짜</th>
-                                <th style="width: 150px;" scope="col">선택</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:if="${#lists.isEmpty(memberInfoDto.getContent())}">
-                                <td colspan="5" class="empty-message">
-                                    <span class="message">등록된 회원이 없습니다.</span>
-                                </td>
-                            </tr>
 
-                            <tr th:each="member, status :${memberInfoDto.getContent()}">
-                                <td>
-                                    <span th:text="${memberInfoDto.getTotalElements() - (memberInfoDto.getSize() * memberInfoDto.getNumber()) - status.index}"></span>
-                                </td>
-                                <td th:text="${member.state.name == T(com.windsome.constant.Role).ADMIN.name ? '관리자' : '일반 회원'}"></td>
-                                <td class="left top user-info pl20">
-                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|이름: ${member.name}|"></span></a>
-                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|아이디: ${member.userIdentifier}|"></span></a>
-                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|이메일: ${member.email}|"></span></a>
-                                    <a th:href="@{'/admin/members/' + ${member.id}}"><span th:text="|보유 포인트: ${#numbers.formatInteger(member.point, 0, 'COMMA')}|"></span></a>
-                                </td>
-                                <td th:text="${#temporals.format(member.regTime, 'yyyy-MM-dd')}" class="gray-col fz11">2024-02-15</td>
-                                <td class="center">
-                                    <button th:if="${member.state.name == T(com.windsome.constant.Role).ADMIN.name}" class="black-btn-w90-h30 update-role-btn" th:value="${T(com.windsome.constant.Role).USER.name}" th:data-memberId="${member.id}">관리자 해제</button>
-                                    <button th:if="${member.state.name == T(com.windsome.constant.Role).USER.name}" class="white-btn-w90-h30 update-role-btn" th:value="${T(com.windsome.constant.Role).ADMIN.name}" th:data-memberId="${member.id}">관리자 설정</button>
-                                    <button class="white-btn-w90-h30 update-btn" th:data-memberId="${member.id}">회원 수정</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="base-table base-table--multi-columns">
+                                <thead class="base-table__head">
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" style="width: 50px" scope="col">
+                                            <input class="base-table__checkbox" type="checkbox" id="all-check">
+                                            <label for="all-check"> 전체 선택</label>
+                                        </th>
+                                        <th class="base-table__header-cell" style="width: 50px;" scope="col">번호</th>
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">아이디</th>
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">이름</th>
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">등급</th>
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">가입일</th>
+                                        <th class="base-table__header-cell" style="width: 200px;" scope="col">관리</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="base-table__body">
+                                    <tr class="base-table__row" th:if="${#lists.isEmpty(memberInfoDto.getContent())}">
+                                        <td class="base-table__cell base-table__cell--empty" colspan="6">
+                                            <span class="base-table__message">등록된 회원이 없습니다.</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="base-table__row" th:each="member, status :${memberInfoDto.getContent()}">
+                                        <td class="base-table__cell">
+                                            <input type="checkbox" name="check">
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="${memberInfoDto.getTotalElements() - (memberInfoDto.getSize() * memberInfoDto.getNumber()) - status.index}"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="${member.userIdentifier}"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="${member.name}"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span class="role" th:text="${member.role.name == T(com.windsome.constant.Role).ADMIN.name ? '관리자' : '일반회원'}"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="${#temporals.format(member.regTime, 'yyyy-MM-dd')}"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <button th:if="${member.role.name == T(com.windsome.constant.Role).ADMIN.name}" class="button button--black button--90x30 update-role-btn" th:value="${T(com.windsome.constant.Role).USER.name}" th:data-memberId="${member.id}">관리자 해제</button>
+                                            <button th:if="${member.role.name == T(com.windsome.constant.Role).USER.name}" class="button button--white button--90x30 update-role-btn" th:value="${T(com.windsome.constant.Role).ADMIN.name}" th:data-memberId="${member.id}">관리자 설정</button>
+                                            <button class="button button--white button--90x30 update-btn" th:data-memberId="${member.id}">회원 수정</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
                     <div class="pagination-container"
@@ -111,7 +128,7 @@
                             <option value="email">이메일</option>
                         </select>
                         <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                        <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                        <button class="search-btn button button--white button--90x30" type="button">검색</button>
                     </div>
                 </div>
             </div>
@@ -136,6 +153,14 @@
 
             /* 검색어 입력창 체인지 처리 */
             $(".search-query").keydown(handleInputChange)
+
+            $("#all-check").change(function () {
+                if($("#all-check").is(":checked")) {
+                    $("input[name=check]").prop("checked", true);
+                } else {
+                    $("input[name=check]").prop("checked", false);
+                }
+            });
         });
 
         function showMessage() {

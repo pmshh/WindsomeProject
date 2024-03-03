@@ -46,14 +46,13 @@ class AccountTest {
                 .password("test1234")
                 .name("test")
                 .email("test1234@naver.com")
-                .address1("test")
-                .address2("test")
-                .address3("test")
-                .state(Role.USER)
-                .point(0)
-                .totalPoint(0)
-                .totalOrderPrice(0)
-                .totalUsePoint(0)
+                .zipcode("test")
+                .addr("test")
+                .addrDetail("test")
+                .role(Role.USER)
+                .availablePoints(0)
+                .totalUsedPoints(0)
+                .totalEarnedPoints(0)
                 .build();
         return memberRepository.save(member);
     }

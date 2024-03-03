@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ProductSearchDto {
+public class ProductSearchDTO {
 
     private String page;
 

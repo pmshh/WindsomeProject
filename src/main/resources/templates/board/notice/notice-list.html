@@ -21,64 +21,70 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section-body notice-body mt-5">
-                        <div class="notice-list-container">
-                            <table class="row-header-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 150px;" scope="col">번호</th>
-                                        <th style="width: auto;" scope="col">제목</th>
-                                        <th style="width: 180px;" scope="col">작성자</th>
-                                        <th style="width: 180px;" scope="col">작성일</th>
-                                    </tr>
-                                </thead>
+                    <div class="section-body notice-body row">
+                        <div class="notice-list-container col-11">
 
-                                <tbody class="notice">
-                                    <tr th:if="${#lists.isEmpty(noticeList.getContent())}">
-                                        <td colspan="4" class="empty-message">
-                                            <span class="message">등록된 공지사항이 없습니다.</span>
-                                        </td>
-                                    </tr>
-                                    <tr th:each="fixTopNotice, status:${fixTopNoticeList}">
-                                        <td>
-                                            <span>공지</span>
-                                        </td>
-                                        <td class="left fix-top-notice-title">
-                                            <a th:href="@{'/board/notice/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
-                                        </td>
-                                        <td>
-                                            <span th:text="${fixTopNotice.member.name}"></span>
-                                        </td>
-                                        <td class="fz11 gray-col">
-                                            <span th:text="${#temporals.format(fixTopNotice.regTime, 'yyyy-MM-dd')}"></span>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" style="width: 150px;" scope="col">번호</th>
+                                            <th class="base-table__header-cell" style="width: auto;" scope="col">제목</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">작성자</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">작성일</th>
+                                        </tr>
+                                    </thead>
 
-                                <tbody>
-                                    <tr th:each="notice, status:${noticeList.getContent()}">
-                                        <td>
-                                            <span th:text="${noticeList.getTotalElements() - (noticeList.getSize() * noticeList.getNumber()) - status.index}"></span>
-                                        </td>
-                                        <td class="left">
-                                            <a th:href="@{'/board/notice/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
-                                        </td>
-                                        <td>
-                                            <span th:text="${notice.createdBy}"></span>
-                                        </td>
-                                        <td class="fz11 gray-col">
-                                            <span th:text="${notice.regDate}">2024-02-06</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    <tbody class="base-table__body base-table__body--notice">
+                                        <tr class="base-table__row" th:each="fixTopNotice, status:${fixTopNoticeList}">
+                                            <td class="base-table__cell">
+                                                <span>공지</span>
+                                            </td>
+                                            <td class="base-table__cell left">
+                                                <a th:href="@{'/board/notice/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${fixTopNotice.member.name}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${#temporals.format(fixTopNotice.regTime, 'yyyy-MM-dd')}"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tbody class="base-table__body">
+
+                                        <tr class="base-table__row" th:if="${#lists.isEmpty(noticeList.getContent())}">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="4">
+                                                <span class="base-table__message">등록된 공지사항이 없습니다.</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="base-table__row" th:each="notice, status:${noticeList.getContent()}">
+                                            <td class="base-table__cell">
+                                                <span th:text="${noticeList.getTotalElements() - (noticeList.getSize() * noticeList.getNumber()) - status.index}"></span>
+                                            </td>
+                                            <td class="base-table__cell left">
+                                                <a th:href="@{'/board/notice/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${notice.createdBy}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${notice.regDate}">2024-02-06</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
-                        <div class="button-container" sec:authorize="hasRole('ADMIN')">
-                            <button class="white-btn-w65-h30 write-btn">글쓰기</button>
+                        <div class="button-container col-11" sec:authorize="hasRole('ADMIN')">
+                            <button class="button button--white button--65x30 write-btn">글쓰기</button>
                         </div>
 
-                        <div class="pagination-container"
+                        <div class="pagination-container col-11"
                              th:with="start=${(noticeList.number/maxPage)*maxPage + 1}, end=(${(noticeList.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < noticeList.totalPages ? start + (maxPage - 1) : noticeList.totalPages)})">
                             <ul>
@@ -112,7 +118,7 @@
                             </ul>
                         </div>
 
-                        <div class="search-input-container" th:object="${noticeSearchDto}">
+                        <div class="search-input-container col-11" th:object="${noticeSearchDto}">
                             <i class="fa-solid fa-angle-right"></i>
                             <span class="txt">검색어</span>
                             <select class="search-date-type" th:field="*{searchDateType}">
@@ -122,7 +128,7 @@
                                 <option value="name">작성자</option>
                             </select>
                             <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                            <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
                         </div>
                     </div>
                 </div>

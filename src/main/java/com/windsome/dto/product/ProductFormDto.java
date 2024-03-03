@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductFormDto {
+public class ProductFormDTO {
 
     private Long id;
 
@@ -35,7 +35,7 @@ public class ProductFormDto {
 
     private ProductSellStatus productSellStatus;
 
-    private List<ProductImageDto> productImageDtoList = new ArrayList<>();
+    private List<ProductImageDTO> productImageDTOList = new ArrayList<>();
 
     private List<Long> productImageIds = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class ProductFormDto {
         return modelMapper.map(this, Product.class);
     }
 
-    public static ProductFormDto toDto(Product item) {
-        return modelMapper.map(item, ProductFormDto.class);
+    public static ProductFormDTO toDto(Product item) {
+        return modelMapper.map(item, ProductFormDTO.class);
     }
 }

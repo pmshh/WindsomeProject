@@ -23,45 +23,63 @@
 
                     <div class="section-body product-mng-body">
                         <div class="product-list-container">
-                            <table class="row-header-table">
-                                <thead>
-                                <tr>
-                                    <th style="width: 80px;" scope="col">번호</th>
-                                    <th style="width: auto;" scope="col">상품명</th>
-                                    <th style="width: 110px;" scope="col">상태</th>
-                                    <th style="width: 110px;" scope="col">등록자</th>
-                                    <th style="width: 110px;" scope="col">등록일</th>
-                                    <th style="width: 110px;" scope="col">선택</th>
-                                </tr>
-                                </thead>
-                                <tbody>
 
-                                <tr th:if="${#lists.isEmpty(products.getContent())}">
-                                    <td colspan="6" class="empty-message">
-                                        <span class="message">등록된 상품이 없습니다.</span>
-                                    </td>
-                                </tr>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" style="width: 110px" scope="col">
+                                                <input class="base-table__checkbox" type="checkbox" id="all-check">
+                                                <label for="all-check"> 전체 선택</label>
+                                            </th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">번호</th>
+                                            <th class="base-table__header-cell" style="width: auto;" scope="col">상품명</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">상태</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">등록자</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">등록일</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">선택</th>
+                                        </tr>
+                                    </thead>
 
-                                <tr th:each="product, status: ${products.getContent()}">
-                                    <td th:text="${products.getTotalElements() - (products.getSize() * products.getNumber()) - status.index}"> </td>
-                                    <td>
-                                        <button class="product-dtl-btn" type="button" th:value="${product.id}" th:text="${product.name}" onclick="moveProductDtlPage(this.value)"></button>
-                                    </td>
-                                    <td th:text="${product.productSellStatus.name == T(com.windsome.constant.ProductSellStatus).SELL.name} ? '판매' : '품절'">
-                                    </td>
-                                    <td th:text="${product.createdBy}"></td>
-                                    <td class="fz11 gray-col" th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd')}"></td>
-                                    <td>
-                                        <button th:data-id="${product.id}" class="black-btn-w90-h30 modify-btn" type="button">수정</button>
-                                        <button th:data-id="${product.id}" class="white-btn-w90-h30 delete-btn" type="button">삭제</button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row" th:if="${#lists.isEmpty(products.getContent())}">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="6">
+                                                <span class="base-table__message">등록된 상품이 없습니다.</span>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="base-table__row" th:each="product, status: ${products.getContent()}">
+                                            <td class="base-table__cell">
+                                                <input type="checkbox" name="check">
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${products.getTotalElements() - (products.getSize() * products.getNumber()) - status.index}"></span>
+                                            </td>
+                                            <td class="base-table__cell left">
+                                                <button class="product-dtl-btn" type="button" th:value="${product.id}" th:text="${product.name}" onclick="moveProductDtlPage(this.value)"></button>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${product.productSellStatus}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${product.createdBy}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span class="txt11 gray-col" th:text="${#temporals.format(product.regTime, 'yyyy-MM-dd')}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <button th:data-id="${product.id}" class="button button--black button--90x30 modify-btn mb5" type="button">수정</button>
+                                                <button th:data-id="${product.id}" class="button button--white button--90x30 delete-btn" type="button">삭제</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
                         <div class="button-container">
-                            <button class="white-btn-w90-h30 enroll-btn" type="button" onclick="moveProductEnrollPage()">상품 등록</button>
+                            <button class="button button--white button--90x30 enroll-btn" type="button" onclick="moveProductEnrollPage()">상품 등록</button>
                         </div>
 
                         <div class="pagination-container" th:with="start=${(products.number/maxPage)*maxPage + 1}, end=(${(products.totalPages == 0) ? 1 :
@@ -114,7 +132,7 @@
                             </select>
                             <input class="search-query" th:field="*{searchQuery}" type="text"
                                    placeholder="검색어를 입력해주세요">
-                            <button class="white-btn-w90-h30 search-btn" type="button">검색</button>
+                            <button class="button button--white button--90x30 search-btn" type="button">검색</button>
                         </div>
                     </div>
                 </div>
@@ -194,6 +212,14 @@
                     return false;
                 });
             }
+
+            $("#all-check").change(function () {
+                if($("#all-check").is(":checked")) {
+                    $("input[name=check]").prop("checked", true);
+                } else {
+                    $("input[name=check]").prop("checked", false);
+                }
+            });
         });
 
         function goToPage(page) {

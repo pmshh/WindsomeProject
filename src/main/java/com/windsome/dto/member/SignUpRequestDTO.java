@@ -18,10 +18,6 @@ public class SignUpRequestDTO {
     private String userIdentifier;
 
     @NotBlank
-    @Email
-    private String email;
-
-    @NotBlank
     private String name;
 
     @NotBlank
@@ -32,10 +28,20 @@ public class SignUpRequestDTO {
     @Length(min = 8,max = 20)
     private String passwordConfirm;
 
-    private String address1;
+    @NotBlank
+    @Email
+    private String email;
 
-    private String address2;
+    @NotBlank
+    private String tel;
 
-    private String address3;
+    @NotBlank
+    private String zipcode;
+
+    @NotBlank
+    private String addr;
+
+    @NotBlank
+    private String addrDetail;
 
 }

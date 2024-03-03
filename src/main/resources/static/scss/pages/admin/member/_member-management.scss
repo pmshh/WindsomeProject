@@ -1,0 +1,32 @@
+@import "../../../abstracts/variables";
+
+.member-mng-body {
+    width: 90%;
+    margin: 0 auto;
+
+    .member-list-container {
+        width: 100%;
+        table {
+            tbody {
+                tr {
+                    td {
+                        .role {
+                            color: #3a37db;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}
+
+@media (max-width:1200px) {
+    .member-mng-body {
+        width: 100%;
+    }
+}

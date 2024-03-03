@@ -21,105 +21,89 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section-body review-form-body mt-5">
-
-                        <!-- product-info-wrap start -->
-                        <div class="product-info-wrap" th:if="${#strings.isEmpty(review)}">
-                            <input type="hidden" class="hiddenProductId" value="0">
-                            <span class="thumbnail">
-                                <a class="product-link" style="pointer-events: none">
-                                    <img class="no-img" src="/imgs/no_image.jpg">
-                                </a>
-                            </span>
-                            <div class="information">
-                                <button id="test" class="white-btn-w90-h40 find-product-btn">상품정보선택</button>
-                                <span class="productId-warn-msg text-danger">상품을 선택해주세요.</span>
-                            </div>
-                        </div>
-                        <div class="product-info-wrap" th:if="${not #strings.isEmpty(review)}">
-                            <input type="hidden" class="hiddenProductId" th:value="${review.productId}">
-                            <span class="thumbnail">
-                                <a th:href="${'/product/' + review.productId}">
-                                    <img class="product-img" th:src="${review.imageUrl}">
-                                </a>
-                            </span>
-                            <div class="information">
-                                <h3>
-                                    <a th:href="${'/product/' + review.productId}" th:text="${review.productName}"></a>
-                                </h3>
-                                <div class="price">
-                                    <span class="price" th:unless="${review.discount > 0}"
-                                          th:text="|${#numbers.formatInteger(review.price, 0, 'COMMA')}원|"></span>
-                                    <span class="beforePrice" th:if="${review.discount > 0}"
-                                          th:text="|${#numbers.formatInteger(review.price, 0, 'COMMA')}원|"></span>
-                                    <span class="salePrice" th:if="${review.discount > 0}"
-                                          th:text="|${#numbers.formatInteger(review.salePrice, 0, 'COMMA')}원|"></span>
+                    <div class="section-body review-form-body row mt-5">
+                        <div class="review-form-wrap col-11 col-md-10 col-xxl-8">
+                            <form id="reviewEnrollForm" th:action="@{'/board/review/enroll'}" th:object="${reviewDto}" method="post">
+                                <div class="table-wrapper">
+                                    <table class="base-table base-table--post">
+                                        <colgroup>
+                                            <col style="width:15%;">
+                                            <col style="width: auto;">
+                                        </colgroup>
+                                        <tbody class="base-table__body">
+                                            <tr class="base-table__row">
+                                                <td class="base-table__cell base-table__cell--border-bottom base-table__cell--big-padding" colspan="2">
+                                                    <div class="product-info-wrap" th:if="${#strings.isEmpty(review)}">
+                                                        <input type="hidden" class="hiddenProductId" value="0">
+                                                        <span class="thumbnail">
+                                                            <a class="product-link" style="pointer-events: none">
+                                                                <img class="no-img" src="/imgs/no_image.jpg">
+                                                            </a>
+                                                        </span>
+                                                        <div class="information">
+                                                            <button id="test" class="button button--white button--90x40 find-product-btn">상품정보선택</button>
+                                                            <span class="productId-warn-msg text-danger">상품을 선택해주세요.</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-info-wrap" th:if="${not #strings.isEmpty(review)}">
+                                                        <input type="hidden" class="hiddenProductId" th:value="${review.productId}">
+                                                        <span class="thumbnail">
+                                                            <a th:href="${'/product/' + review.productId}">
+                                                                <img class="product-img" th:src="${review.imageUrl}">
+                                                            </a>
+                                                        </span>
+                                                        <div class="information">
+                                                            <h3><a th:href="${'/product/' + review.productId}" th:text="${review.productName}"></a></h3>
+                                                            <div class="price">
+                                                                <span class="price" th:unless="${review.discount > 0}" th:text="|${#numbers.formatInteger(review.price, 0, 'COMMA')}원|"></span>
+                                                                <span class="beforePrice" th:if="${review.discount > 0}" th:text="|${#numbers.formatInteger(review.price, 0, 'COMMA')}원|"></span>
+                                                                <span class="salePrice" th:if="${review.discount > 0}" th:text="|${#numbers.formatInteger(review.salePrice, 0, 'COMMA')}원|"></span>
+                                                            </div>
+                                                            <button class="button button--white button--90x40 new-find-product-btn">상품정보선택</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="base-table__row">
+                                                <th class="base-table__header-cell" scope="row">
+                                                    <label th:for="*{rating}">평점 <span>*</span></label>
+                                                </th>
+                                                <td class="base-table__cell">
+                                                    <fieldset class="rate">
+                                                        <input type="radio" id="rating10" name="rating" value="5"><label for="rating10"></label>
+                                                        <input type="radio" id="rating9" name="rating" value="4.5"><label for="rating9" class="half" ></label>
+                                                        <input type="radio" id="rating8" name="rating" value="4"><label for="rating8"></label>
+                                                        <input type="radio" id="rating7" name="rating" value="3.5"><label for="rating7" class="half" ></label>
+                                                        <input type="radio" id="rating6" name="rating" value="3"><label for="rating6"></label>
+                                                        <input type="radio" id="rating5" name="rating" value="2.5"><label for="rating5" class="half" ></label>
+                                                        <input type="radio" id="rating4" name="rating" value="2"><label for="rating4"></label>
+                                                        <input type="radio" id="rating3" name="rating" value="1.5"><label for="rating3" class="half" ></label>
+                                                        <input type="radio" id="rating2" name="rating" value="1"><label for="rating2"></label>
+                                                        <input type="radio" id="rating1" name="rating" value="0.5"><label for="rating1" class="half" ></label>
+                                                    </fieldset>
+                                                </td>
+                                            </tr>
+                                            <tr class="base-table__row">
+                                                <td class="base-table__cell base-table__cell--no-padding" colspan="2">
+                                                    <textarea class="content-input" th:field="*{content}" maxlength="200" placeholder="내용을 입력하세요."></textarea>
+                                                    <span class="content-text-count">0자/200자</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="base-table__row">
+                                                <th class="base-table__header-cell base-table__header-cell--border-top" scope="row">
+                                                    <label th:for="*{password}">비밀번호 <span>*</span></label>
+                                                </th>
+                                                <td class="base-table__cell base-table__cell--border-top">
+                                                    <input class="base-table__input password-input" th:field="*{password}" type="password">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <button class="white-btn-w90-h40 new-find-product-btn">상품정보선택</button>
-                            </div>
-                        </div>
-
-                        <!-- review-form-wrap start -->
-                        <div class="review-form-wrap">
-                            <form id="reviewEnrollForm" th:action="@{'/board/review/enroll'}" th:object="${reviewDto}"
-                                  method="post">
-                                <table class="col-header-table-basic">
-                                    <colgroup>
-                                        <col style="width:15%;">
-                                        <col style="width: auto;">
-                                    </colgroup>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{title}">제목 <span>*</span></label>
-                                        </th>
-                                        <td class="title">
-                                            <input class="title-input" type="text" th:field="*{title}" maxlength="50" placeholder="제목을 입력하세요.">
-                                            <span class="title-text-count">0자/50자</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{rating}">평점 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <fieldset class="rate">
-                                                <input type="radio" id="rating10" name="rating" value="5"><label for="rating10"></label>
-                                                <input type="radio" id="rating9" name="rating" value="4.5"><label for="rating9" class="half" ></label>
-                                                <input type="radio" id="rating8" name="rating" value="4"><label for="rating8"></label>
-                                                <input type="radio" id="rating7" name="rating" value="3.5"><label for="rating7" class="half" ></label>
-                                                <input type="radio" id="rating6" name="rating" value="3"><label for="rating6"></label>
-                                                <input type="radio" id="rating5" name="rating" value="2.5"><label for="rating5" class="half" ></label>
-                                                <input type="radio" id="rating4" name="rating" value="2"><label for="rating4"></label>
-                                                <input type="radio" id="rating3" name="rating" value="1.5"><label for="rating3" class="half" ></label>
-                                                <input type="radio" id="rating2" name="rating" value="1"><label for="rating2"></label>
-                                                <input type="radio" id="rating1" name="rating" value="0.5"><label for="rating1" class="half" ></label>
-                                            </fieldset>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{content}">내용 <span>*</span></label>
-                                        </th>
-                                        <td class="content">
-                                            <textarea class="content-input" th:field="*{content}" maxlength="200" placeholder="내용을 입력하세요."></textarea>
-                                            <span class="content-text-count">0자/200자</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <label th:for="*{password}">비밀번호 <span>*</span></label>
-                                        </th>
-                                        <td>
-                                            <input class="password-input" th:field="*{password}" type="password">
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
 
                                 <div class="btn-box">
-                                    <button class="black-btn-w130-h40 enroll-btn" type="button">등록</button>
-                                    <button class="white-btn-w130-h40 cancel-btn" type="button">취소</button>
+                                    <button class="button button--black button--130x40 enroll-btn" type="button">등록</button>
+                                    <button class="button button--white button--130x40 cancel-btn" type="button">취소</button>
                                 </div>
                             </form>
                         </div>

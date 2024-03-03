@@ -20,38 +20,35 @@ public class MemberListResponseDTO {
 
     private String name;
 
-    private String address1;
+    private String zipcode;
 
-    private String address2;
+    private String addr;
 
-    private String address3;
+    private String addrDetail;
 
-    private Role state;
+    private Role role;
 
-    private int point;
+    private int availablePoints;
 
-    private int totalPoint;
+    private int totalEarnedPoints;
 
-    private int totalUsePoint;
-
-    private int totalOrderPrice;
+    private int totalUsedPoints;
 
     private LocalDateTime regTime;
 
     @QueryProjection
-    public MemberListResponseDTO(Long id, String userIdentifier, String email, String name, String address1, String address2, String address3, Role state, int point, int totalPoint, int totalUsePoint, int totalOrderPrice, LocalDateTime regTime) {
+    public MemberListResponseDTO(Long id, String userIdentifier, String email, String name, String zipcode, String addr, String addrDetail, Role role, int availablePoints, int totalEarnedPoints, int totalUsedPoints, LocalDateTime regTime) {
         this.id = id;
         this.userIdentifier = userIdentifier;
         this.email = email;
         this.name = name;
-        this.address1 = address1;
-        this.address2 = address2;
-        this.address3 = address3;
-        this.state = state;
-        this.point = point;
-        this.totalPoint = totalPoint;
-        this.totalUsePoint = totalUsePoint;
-        this.totalOrderPrice = totalOrderPrice;
+        this.zipcode = zipcode;
+        this.addr = addr;
+        this.addrDetail = addrDetail;
+        this.role = role;
+        this.availablePoints = availablePoints;
+        this.totalEarnedPoints = totalEarnedPoints;
+        this.totalUsedPoints = totalUsedPoints;
         this.regTime = regTime;
     }
 }

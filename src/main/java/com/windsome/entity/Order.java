@@ -1,7 +1,8 @@
 package com.windsome.entity;
 
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.order.OrderDto;
+import com.windsome.constant.PaymentStatus;
+import com.windsome.dto.order.OrderRequestDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,61 +23,91 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member member; // 회원
 
-    private LocalDateTime orderDate;
+    private String orderUid; // 주문 번호
 
-    private int totalOrderPrice;
-
-    private int deliveryCost;
-
-    private int usePoint;
-
-    private String address1;
-
-    private String address2;
-
-    private String address3;
-
-    private String tel;
-
-    private String email;
-
-    private String req;
+    private LocalDateTime orderDate; // 주문 날짜
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus; // 주문 현황
+
+    private String name; // 받는분 성함
+
+    private int price; // 총 주문 금액
+
+    private String zipcode; // 우편 번호
+
+    private String addr; // 받는분 주소
+
+    private String addrDetail; // 상세 주소
+
+    private String tel; // 받는분 전화 번호
+
+    private String email; // 받는분 이메일
+
+    private String req; // 배송 요청 사항
+
+    private int earnedPoints; // 적립된 포인트 금액
+
+    private int usedPoints; // 사용한 포인트 금액
+
+    private int productCount; // 주문 상품 개수
+
+    private String repProductName; // 대표 상품
+
+    private String repProductImage; // 대표 상품 이미지
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> orderProducts = new ArrayList<>();
+    private List<OrderProduct> orderProducts = new ArrayList<>(); // 주문 상품 목록
 
-    public static Order createOrder(Member member, List<OrderProduct> orderProductList, OrderDto orderDto) {
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private Payment payment; // 결제 정보
+
+    /**
+     * Order 객체 생성
+     */
+    public static Order createOrder(Member member, List<OrderProduct> orderProductList, OrderRequestDTO orderRequestDTO, Payment payment) {
+
         Order order = Order.builder()
                 .member(member)
-                .totalOrderPrice(orderDto.getOrderFinalSalePrice())
-                .deliveryCost(orderDto.getDeliveryCost())
-                .usePoint(orderDto.getUsePoint())
-                .address1(orderDto.getAddress1())
-                .address2(orderDto.getAddress2())
-                .address3(orderDto.getAddress3())
-                .tel(orderDto.getTel())
-                .email(orderDto.getEmail())
-                .req(orderDto.getReq())
-                .orderStatus(OrderStatus.READY)
+                .orderUid(orderRequestDTO.getOrderUid())
                 .orderDate(LocalDateTime.now())
+                .orderStatus(OrderStatus.PROCESSING)
+                .name(orderRequestDTO.getName())
+                .price(orderRequestDTO.getTotalOrderPrice())
+                .zipcode(orderRequestDTO.getZipcode())
+                .addr(orderRequestDTO.getAddr())
+                .addrDetail(orderRequestDTO.getAddrDetail())
+                .tel(orderRequestDTO.getTel())
+                .email(orderRequestDTO.getEmail())
+                .req(orderRequestDTO.getReq())
+                .earnedPoints(orderRequestDTO.getEarnedPoints())
+                .usedPoints(orderRequestDTO.getUsedPoints())
+                .productCount(orderRequestDTO.getProductCount())
+                .repProductName(orderRequestDTO.getRepProductName())
+                .repProductImage(orderRequestDTO.getRepProductImage())
+                .orderProducts(orderProductList)
+                .payment(payment)
                 .build();
         order.addOrderProduct(orderProductList);
         return order;
     }
 
+    // 연관 관계 설정 (OrderProduct,Order)
     public void addOrderProduct(List<OrderProduct> orderProducts) {
         for (OrderProduct orderProduct : orderProducts) {
             orderProduct.setOrder(this);
         }
     }
 
+    /**
+     * 주문 취소
+     */
     public void cancelOrder() {
-        this.orderStatus = OrderStatus.CANCEL;
+        this.orderStatus = OrderStatus.REFUNDED;
+        this.payment.setStatus(PaymentStatus.PAYMENT_CANCELLED);
 
         for (OrderProduct orderProduct : orderProducts) {
             orderProduct.cancel();

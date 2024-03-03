@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserSummaryDTO {
 
@@ -12,23 +11,17 @@ public class UserSummaryDTO {
 
     private String name; // 회원 이름
 
-    private int totalOrderPrice; // 총 주문 금액
+    private int availablePoints; // 사용 가능한 포인트
 
-    private int point; // 현재 보유 포인트
+    private int totalEarnedPoints; // 총 적립 포인트
 
-    private int totalPoint; // 총 포인트
+    private int totalUsedPoints; // 총 사용 포인트
 
-    private int totalUsePoint; // 사용한 포인트
-
-    private int availPoint; // 사용 가능한 포인트
-
-    public UserSummaryDTO(Long memberId, String name, int totalOrderPrice, int point, int totalPoint, int totalUsePoint) {
+    public UserSummaryDTO(Long memberId, String name, int availablePoints, int totalEarnedPoints, int totalUsedPoints) {
         this.memberId = memberId;
         this.name = name;
-        this.totalOrderPrice = totalOrderPrice;
-        this.point = point;
-        this.totalPoint = totalPoint;
-        this.totalUsePoint = totalUsePoint;
-        this.availPoint = point - totalUsePoint;
+        this.availablePoints = availablePoints;
+        this.totalEarnedPoints = totalEarnedPoints;
+        this.totalUsedPoints = totalUsedPoints;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderProductRepository extends JpaRepository<OrderProduct, Long> {
@@ -21,4 +22,6 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Long
             "group by category " +
             "order by category asc", nativeQuery = true)
     List<CategorySalesResult> getCategorySalesCount();
+
+    List<OrderProduct> findByOrderId(Long orderId);
 }

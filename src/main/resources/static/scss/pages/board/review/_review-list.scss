@@ -1,0 +1,67 @@
+@import "../../../abstracts/variables";
+
+.review-body {
+    .review-list-container {
+        overflow-x: auto;
+
+        .table-wrapper {
+            min-width: 833px;
+            .base-table {
+                .base-table__head {
+                    .base-table__row {
+                        .base-table__header-cell {
+                            font-weight: bold;
+                            font-size: 11px;
+                            color: #353535;
+                        }
+                    }
+                }
+
+                .base-table__body {
+                    .base-table__row {
+                        .base-table__cell {
+                            .rate {
+                                display: inline-block;
+
+                                input {
+                                    display: none;
+                                }
+
+                                label {
+                                    float: right;
+                                    color: #ddd;
+
+                                    &:before {
+                                        display: inline-block;
+                                        font-size: 1rem;
+                                        padding: 0.3rem 0.2rem;
+                                        margin: 0;
+                                        font-family: FontAwesome;
+                                        content: "\f005 ";
+                                    }
+                                }
+
+                                .half:before {
+                                    content: "\f089 ";
+                                    position: absolute;
+                                }
+
+                                input:checked ~ label {
+                                    color: #f73c32 !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-container {
+        @include button-container();
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}

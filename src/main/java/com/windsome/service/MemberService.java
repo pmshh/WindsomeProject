@@ -22,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -43,16 +41,9 @@ public class MemberService {
      * 회원 가입
      */
     public void createAccount(SignUpRequestDTO signUpRequestDTO) {
-        Member member = Member.builder()
-                .userIdentifier(signUpRequestDTO.getUserIdentifier())
-                .email(signUpRequestDTO.getEmail())
-                .name(signUpRequestDTO.getName())
-                .password(passwordEncoder.encode(signUpRequestDTO.getPassword()))
-                .address1(signUpRequestDTO.getAddress1())
-                .address2(signUpRequestDTO.getAddress2())
-                .address3(signUpRequestDTO.getAddress3())
-                .state(Role.USER)
-                .build();
+        Member member = modelMapper.map(signUpRequestDTO, Member.class);
+        member.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
+        member.setRole(Role.USER);
         memberRepository.save(member);
     }
 
@@ -158,6 +149,13 @@ public class MemberService {
      */
     @Transactional(readOnly = true)
     public Long getMemberOrderStatusCounts(Member member) {
-        return orderRepository.countByMemberIdAndOrderStatus(member.getId(), OrderStatus.READY);
+        return orderRepository.countByMemberIdAndOrderStatus(member.getId(), OrderStatus.PROCESSING);
+    }
+
+    /**
+     * 마이 페이지 - 총 주문 금액 조회
+     */
+    public Long getTotalOrderAmount(Member member) {
+        return orderRepository.getTotalOrderAmountByMemberId(member.getId());
     }
 }

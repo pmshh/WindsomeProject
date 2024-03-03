@@ -83,7 +83,7 @@ class OrderTest {
         product.setName("테스트 상품");
         product.setPrice(10000);
         product.setProductDetail("상세 설명");
-        product.setProductSellStatus(ProductSellStatus.SELL);
+        product.setProductSellStatus(ProductSellStatus.AVAILABLE);
         product.setStockNumber(100);
         return product;
     }
@@ -115,14 +115,13 @@ class OrderTest {
                 .password("test1234")
                 .name("test")
                 .email("test1234@naver.com")
-                .address1("test")
-                .address2("test")
-                .address3("test")
-                .state(Role.USER)
-                .point(0)
-                .totalPoint(0)
-                .totalOrderPrice(0)
-                .totalUsePoint(0)
+                .zipcode("test")
+                .addr("test")
+                .addrDetail("test")
+                .role(Role.USER)
+                .availablePoints(0)
+                .totalUsedPoints(0)
+                .totalEarnedPoints(0)
                 .build();
         return memberRepository.save(member);
     }

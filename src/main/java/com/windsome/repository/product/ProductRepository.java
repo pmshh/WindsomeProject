@@ -1,6 +1,7 @@
 package com.windsome.repository.product;
 
 import com.windsome.dto.board.review.ProductListDto;
+import com.windsome.dto.product.ProductInfoResponseDTO;
 import com.windsome.entity.Product;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
 
     @Query(value = "select count(p) from Product p join ProductImage pm on p.id = pm.product.id where pm.isRepresentativeImage = true and p.name like %:name%")
     Long getReviewPageItemListCount(@Param("name") String name);
+
+    @Query(value = "select new com.windsome.dto.product.ProductInfoResponseDTO(p.name, pi.imageUrl) from Product p join ProductImage pi on pi.product.id = p.id where pi.isRepresentativeImage=true and p.id = :productId")
+    ProductInfoResponseDTO getProductInfoByProductId(@Param("productId") Long productId);
 }

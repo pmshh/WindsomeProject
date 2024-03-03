@@ -1,7 +1,7 @@
 package com.windsome.entity;
 
 import com.windsome.constant.Role;
-import com.windsome.dto.order.OrderDto;
+import com.windsome.dto.order.OrderRequestDTO;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import com.windsome.entity.board.Review;
 import lombok.*;
@@ -24,36 +24,36 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true)
     private String userIdentifier;
 
-    @Column(unique = true)
-    private String email;
-
     private String name;
 
     private String password;
 
-    private String address1;
+    @Column(unique = true)
+    private String email;
 
-    private String address2;
+    private String tel;
 
-    private String address3;
+    private String zipcode;
+
+    private String addr;
+
+    private String addrDetail;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Role state;
+    private Role role;
 
-    private int point; // 현재 보유중인 포인트 잔액
+    private int availablePoints; // 사용 가능한 포인트
 
-    private int totalPoint; // 총 적립 포인트
+    private int totalEarnedPoints; // 총 적립 포인트
 
-    private int totalUsePoint; // 총 사용 포인트
-
-    private int totalOrderPrice; // 총 주문 금액
+    private int totalUsedPoints; // 총 사용 포인트
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public void addPoint(OrderDto orderDto) {
-        int curPoint = this.point;
-        this.point = (int) (curPoint + (Math.floor(orderDto.getOrderSalePrice() * 0.05)));
+    public void addPoint(OrderRequestDTO orderRequestDTO) {
+        int curPoint = this.availablePoints;
+        this.availablePoints = (int) (curPoint + (Math.floor(orderRequestDTO.getTotalPaymentPrice() * 0.05)));
     }
 }

@@ -1,5 +1,6 @@
 package com.windsome;
 
+import com.windsome.constant.Role;
 import com.windsome.entity.Member;
 
 public class TestUtil {
@@ -11,13 +12,13 @@ public class TestUtil {
                 .password("password")
                 .name("John Doe")
                 .email("user1@example.com")
-                .address1("Address1")
-                .address2("Address2")
-                .address3("Address3")
-                .point(1000)
-                .totalPoint(1000)
-                .totalUsePoint(0)
-                .totalOrderPrice(0)
+                .zipcode("test")
+                .addr("test")
+                .addrDetail("test")
+                .role(Role.USER)
+                .availablePoints(0)
+                .totalUsedPoints(0)
+                .totalEarnedPoints(0)
                 .build();
     }
 }

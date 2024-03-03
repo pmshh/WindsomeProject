@@ -24,96 +24,101 @@
                     <div class="section-body product-form-body">
                         <!-- 상품 등록 폼 -->
                         <form id="enrollForm" th:action="@{/admin/products/new}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
-                            <table style="table-layout: fixed !important;">
-                                <colgroup>
-                                    <col style="width:20%;">
-                                    <col style="width: auto;">
-                                </colgroup>
-                                <tbody>
-                                <input class="id-input" th:type="hidden" th:field="*{id}">
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{productSellStatus}">판매 상태 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <select class="sell-status-select" th:field="*{productSellStatus}">
-                                            <option selected value="none">선택</option>
-                                            <option value="SELL">판매중</option>
-                                            <option value="SOLD-OUT">품절</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label>카테고리 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <select class="parent-cate-select">
-                                            <option selected value="0">선택</option>
-                                        </select>
-                                        <select th:field="*{categoryId}" class="child-cate-select">
-                                            <option selected value="0">선택</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{productName}">상품명 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="name-input" type="text" th:field="*{productName}">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{price}">가격 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="price-input" type="text" th:field="*{price}">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{discount}">할인율 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="discount-interface" maxlength="2" th:value="*{discount}">
-                                        <input class="discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}">
-                                        <span class="discount-text">할인 적용된 가격 : <span class="discount-price"></span></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{stockNumber}">재고 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <input class="stock-number-input" th:field="*{stockNumber}">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <label th:for="*{productDetail}">상품 상세 내용 <span>*</span></label>
-                                    </th>
-                                    <td>
-                                        <textarea th:field="*{productDetail}" class="text-editor"></textarea>
-                                    </td>
-                                </tr>
-                                <tr th:each="num: ${#numbers.sequence(1,5)}">
-                                    <th scope="row">
-                                        <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
-                                    </th>
-                                    <td>
-                                        <input class="fake-input" type="text" th:value="${'상품 이미지 ' + num}">
-                                        <label class="white-btn-w90-h40 find-file" th:for="${'imageg' + num}">파일 찾기</label>
-                                        <input type="file" class="real-input" name="productImageFile" th:id="${'imageg' + num}">
-                                        <button class="black-btn-w90-h40 img-cancel-btn" type="button" th:data-index="${num}">취소</button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                    <colgroup>
+                                        <col style="width:20%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <input class="id-input" th:type="hidden" th:field="*{id}">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{productSellStatus}">판매 상태 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <select class="base-table__select sell-status-select" th:field="*{productSellStatus}">
+                                                    <option selected value="none">선택</option>
+                                                    <option value="AVAILABLE">판매가능</option>
+                                                    <option value="SOLD_OUT">품절</option>
+                                                    <option value="DISCONTINUED">단종</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label>카테고리 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <select class="base-table__select base-table__select--big parent-cate-select">
+                                                    <option selected value="0">선택</option>
+                                                </select>
+                                                <select class="base-table__select base-table__select--big child-cate-select" th:field="*{categoryId}">
+                                                    <option selected value="0">선택</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{productName}">상품명 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input base-table__input--big name-input" type="text" th:field="*{productName}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{price}">가격 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input base-table__input--big price-input" type="text" th:field="*{price}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{discount}">할인율 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input base-table__input--big discount-interface" maxlength="2" th:value="*{discount}">
+                                                <input class="base-table__input base-table__input--big discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}">
+                                                <span class="displayblock discount-text">할인 적용된 가격 : <span class="discount-price"></span></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{stockNumber}">재고 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input base-table__input--big stock-number-input" th:field="*{stockNumber}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{productDetail}">상품 상세 내용 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <textarea th:field="*{productDetail}" class="text-editor"></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row" th:each="num: ${#numbers.sequence(1,5)}">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="${'img' + num}" th:text="${'상품 이미지 ' + num}"></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="fake-input" type="text" th:value="${'상품 이미지 ' + num}">
+                                                <label class="button button--white button--90x40 find-file" th:for="${'imageg' + num}">파일 찾기</label>
+                                                <input type="file" class="real-input" name="productImageFile" th:id="${'imageg' + num}">
+                                                <button class="button button--black button--90x40 img-cancel-btn" type="button" th:data-index="${num}">취소</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <div class="btn-box">
-                                <button class="black-btn-w130-h40 enroll-btn" type="button">등록</button>
-                                <button class="white-btn-w130-h40 cancel-btn" type="button">취소</button>
+                                <button class="button button--black button--130x40 enroll-btn" type="button">등록</button>
+                                <button class="button button--white button--130x40 cancel-btn" type="button">취소</button>
                             </div>
                         </form>
                     </div>

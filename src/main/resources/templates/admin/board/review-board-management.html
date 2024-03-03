@@ -23,83 +23,90 @@
 
                 <div class="section-body review-mng-body mt-5">
                     <div class="review-list-container">
-                        <table class="row-header-table">
-                            <thead>
-                            <tr>
-                                <th style="width: 110px;" scope="col">
-                                    <input type="checkbox" id="check-all" name="check-all" onclick="checkAll()">
-                                    <label for="check-all">전체 선택</label>
-                                </th>
-                                <th style="width: 80px;" scope="col">번호</th>
-                                <th style="width: 80px;" scope="col">상품정보</th>
-                                <th style="width: 200px;" scope="col"></th>
-                                <th style="width: auto;" scope="col">제목</th>
-                                <th style="width: 150px;" scope="col">평점</th>
-                                <th style="width: 110px;" scope="col">작성자</th>
-                                <th style="width: 110px;" scope="col">작성일</th>
-                                <th style="width: 180px;" scope="col">선택</th>
-                            </tr>
-                            </thead>
-                            <tbody class="center">
-                            <tr th:if="${#lists.isEmpty(reviews.getContent())}">
-                                <td colspan="9" class="empty-message">
-                                    <span class="message">등록된 리뷰가 없습니다.</span>
-                                </td>
-                            </tr>
-                            <tr th:each="review, status: ${reviews.getContent()}">
-                                <td>
-                                    <input type="checkbox" class="check" name="check" th:data-reviewId="${review.reviewId}">
-                                </td>
-                                <td>
-                                    <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
-                                </td>
-                                <td class="thumb">
-                                    <a th:href="${'/product/' + review.productId}">
-                                        <img th:src="${review.imageUrl}">
-                                    </a>
-                                </td>
-                                <td class="left productNm pl20">
-                                    <a th:href="${'/product/' + review.productId}">
-                                        <span th:text="${review.productName}"></span>
-                                    </a>
-                                </td>
-                                <td class="left pl20">
-                                    <a th:href="${'/board/review/' + review.reviewId}">
-                                        <span th:text="${review.title}"></span>
-                                    </a>
-                                </td>
-                                <td>
-                                    <fieldset class="rate" th:data-rating="${review.rating}">
-                                        <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;"><label th:for="${review.createdBy + 1}" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;"><label th:for="${review.createdBy + 2}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;"><label th:for="${review.createdBy + 3}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;"><label th:for="${review.createdBy + 4}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;"><label th:for="${review.createdBy + 5}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;"><label th:for="${review.createdBy + 6}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;"><label th:for="${review.createdBy + 7}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;"><label th:for="${review.createdBy + 8}" class="half" ></label>
-                                        <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;"><label th:for="${review.createdBy + 9}"></label>
-                                        <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;"><label th:for="${review.createdBy + 10}" class="half" ></label>
-                                    </fieldset>
-                                </td>
-                                <td>
-                                    <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
-                                </td>
-                                <td class="regDate">
-                                    <span th:text="${review.regDate}"></span>
-                                </td>
-                                <td>
-                                    <button class="white-btn-w65-h30 del-btn" th:data-reviewId="${review.reviewId}">삭제</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+                        <div class="table-wrapper">
+                            <table class="base-table base-table--multi-columns">
+                                <thead class="base-table__head">
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">
+                                            <input type="checkbox" id="check-all" name="check-all" onclick="checkAll()">
+                                            <label for="check-all">전체 선택</label>
+                                        </th>
+                                        <th class="base-table__header-cell" style="width: 80px;" scope="col">번호</th>
+                                        <th class="base-table__header-cell" style="width: 80px;" scope="col">상품정보</th>
+                                        <th class="base-table__header-cell" style="width: 200px;" scope="col"></th>
+                                        <th class="base-table__header-cell" style="width: auto;" scope="col">제목</th>
+                                        <th class="base-table__header-cell" style="width: 150px;" scope="col">평점</th>
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">작성자</th>
+                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">작성일</th>
+                                        <th class="base-table__header-cell" style="width: 180px;" scope="col">선택</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="base-table__body">
+                                    <tr class="base-table__row" th:if="${#lists.isEmpty(reviews.getContent())}">
+                                        <td class="base-table__cell base-table__cell--empty" colspan="9">
+                                            <span class="base-table__message">등록된 리뷰가 없습니다.</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="base-table__row" th:each="review, status: ${reviews.getContent()}">
+                                        <td class="base-table__cell">
+                                            <input type="checkbox" class="check" name="check" th:data-reviewId="${review.reviewId}">
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
+                                        </td>
+                                        <td class="base-table__cell base-table__cell--thumbnail">
+                                            <a class="base-table__link" th:href="${'/product/' + review.productId}">
+                                                <img class="base-table__image" th:src="${review.imageUrl}">
+                                            </a>
+                                        </td>
+                                        <td class="base-table__cell left pl20">
+                                            <a th:href="${'/product/' + review.productId}">
+                                                <span th:text="${review.productName}"></span>
+                                            </a>
+                                        </td>
+                                        <td class="base-table__cell left pl20">
+                                            <a th:href="${'/board/review/' + review.reviewId}">
+                                                <span th:text="${review.title}"></span>
+                                            </a>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <fieldset class="rate" th:data-rating="${review.rating}">
+                                                <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;"><label th:for="${review.createdBy + 1}" ></label>
+                                                <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;"><label th:for="${review.createdBy + 2}" class="half" ></label>
+                                                <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;"><label th:for="${review.createdBy + 3}"></label>
+                                                <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;"><label th:for="${review.createdBy + 4}" class="half" ></label>
+                                                <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;"><label th:for="${review.createdBy + 5}"></label>
+                                                <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;"><label th:for="${review.createdBy + 6}" class="half" ></label>
+                                                <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;"><label th:for="${review.createdBy + 7}"></label>
+                                                <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;"><label th:for="${review.createdBy + 8}" class="half" ></label>
+                                                <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;"><label th:for="${review.createdBy + 9}"></label>
+                                                <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;"><label th:for="${review.createdBy + 10}" class="half" ></label>
+                                            </fieldset>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <span th:text="${review.regDate}"></span>
+                                        </td>
+                                        <td class="base-table__cell">
+                                            <button class="button button--white button--65x30 del-btn" th:data-reviewId="${review.reviewId}">삭제</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
                     </div>
 
                     <div class="button-container">
-                        <button class="white-btn-w90-h30 posts-del-btn">선택 삭제</button>
-                        <button class="white-btn-w90-h30 all-post-del-btn">전체 삭제</button>
-                        <button class="white-btn-w65-h30 write-btn">글쓰기</button>
+                        <button class="button button--white button--90x30 posts-del-btn">선택 삭제</button>
+                        <button class="button button--white button--90x30 all-post-del-btn">전체 삭제</button>
+                        <button class="button button--white button--65x30 write-btn">글쓰기</button>
                     </div>
 
                     <div class="pagination-container"
@@ -146,7 +153,7 @@
                             <option value="name">작성자</option>
                         </select>
                         <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                        <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                        <button class="search-btn button button--white button--90x30" type="button">검색</button>
                     </div>
                 </div>
             </div>

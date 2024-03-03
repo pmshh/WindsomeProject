@@ -1,7 +1,7 @@
 package com.windsome.controller;
 
 import com.windsome.constant.ProductSellStatus;
-import com.windsome.dto.product.ProductFormDto;
+import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.entity.Category;
 import com.windsome.repository.category.CategoryRepository;
 import com.windsome.repository.productImage.ProductImageRepository;
@@ -41,7 +41,7 @@ class ProductControllerTest {
         Category category = new Category();
         categoryRepository.save(category);
 
-        ProductFormDto productFormDto = getProductFormDto();
+        ProductFormDTO productFormDto = getProductFormDto();
         productFormDto.setCategoryId(category.getId());
 
         List<MultipartFile> multipartFiles = createMultipartFiles();
@@ -55,8 +55,8 @@ class ProductControllerTest {
                 .andExpect(model().attributeExists("product"));
     }
 
-    private ProductFormDto getProductFormDto() {
-        return new ProductFormDto(null, "test", 10000, 0.0, "test", 100, ProductSellStatus.SELL, null, null, null);
+    private ProductFormDTO getProductFormDto() {
+        return new ProductFormDTO(null, "test", 10000, 0.0, "test", 100, ProductSellStatus.AVAILABLE, null, null, null);
     }
 
     List<MultipartFile> createMultipartFiles() throws Exception {

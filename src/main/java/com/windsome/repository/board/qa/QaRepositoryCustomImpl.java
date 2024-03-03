@@ -32,7 +32,7 @@ public class QaRepositoryCustomImpl implements QaRepositoryCustom {
                                 qa.id,
                                 qa.title,
                                 qa.member.name,
-                                qa.member.state,
+                                qa.member.role,
                                 qa.regTime,
                                 qa.secretYN,
                                 qa.originNo,

@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.windsome.constant.ProductSellStatus;
 import com.windsome.dto.product.MainPageProductDTO;
-import com.windsome.dto.product.ProductSearchDto;
+import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.QMainPageProductDTO;
 import com.windsome.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Product> findProducts(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<Product> findProducts(ProductSearchDTO productSearchDto, Pageable pageable) {
         QProduct product = QProduct.product;
 
         List<Product> content = queryFactory
@@ -55,7 +55,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public Page<MainPageProductDTO> getMainPageProducts(ProductSearchDto productSearchDto, Pageable pageable) {
+    public Page<MainPageProductDTO> getMainPageProducts(ProductSearchDTO productSearchDto, Pageable pageable) {
         QProduct product = QProduct.product;
         QProductImage productImage = QProductImage.productImage;
 
@@ -75,7 +75,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 .where(productImage.isRepresentativeImage.eq(true))
                 .where(productNameLike(productSearchDto.getSearchQuery())
                         .or(productCategoryLike(productSearchDto.getCategory()))
-                        .and(product.productSellStatus.eq(ProductSellStatus.SELL)))
+                        .and(product.productSellStatus.eq(ProductSellStatus.AVAILABLE)))
                 .orderBy(createOrderSpecifier(productSearchDto))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -91,7 +91,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }
 
-    private OrderSpecifier[] createOrderSpecifier(ProductSearchDto productSearchDto) {
+    private OrderSpecifier[] createOrderSpecifier(ProductSearchDTO productSearchDto) {
         List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
 
         if (Objects.isNull(productSearchDto.getSort()) || productSearchDto.getSort().equals("new") || productSearchDto.getSort().isEmpty()) {

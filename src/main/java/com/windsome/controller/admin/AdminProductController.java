@@ -1,8 +1,8 @@
 package com.windsome.controller.admin;
 
 import com.windsome.dto.admin.PageDto;
-import com.windsome.dto.product.ProductSearchDto;
-import com.windsome.dto.product.ProductFormDto;
+import com.windsome.dto.product.ProductSearchDTO;
+import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.service.AdminService;
 import com.windsome.service.CategoryService;
@@ -35,7 +35,7 @@ public class AdminProductController {
      * 상품 관리 - 상품 조회
      */
     @GetMapping("/products")
-    public String showProductList(ProductSearchDto productSearchDto, Optional<Integer> page, Model model) {
+    public String showProductList(ProductSearchDTO productSearchDto, Optional<Integer> page, Model model) {
         model.addAttribute("products", adminService.getProductList(productSearchDto, PageRequest.of(page.orElse(0), 10)));
         model.addAttribute("productSearchDto", productSearchDto);
         model.addAttribute("maxPage", 10);
@@ -47,7 +47,7 @@ public class AdminProductController {
      */
     @GetMapping("/products/new")
     public String showProductForm(Model model) {
-        model.addAttribute("productFormDto", new ProductFormDto());
+        model.addAttribute("productFormDto", new ProductFormDTO());
         return "admin/product/product-create";
     }
 
@@ -55,8 +55,8 @@ public class AdminProductController {
      * 상품 관리 - 상품 등록
      */
     @PostMapping("/products/new")
-    public String createProduct(@Valid ProductFormDto productFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
-                             @RequestParam("productImageFile") List<MultipartFile> productImageFileList) throws Exception {
+    public String createProduct(@Valid ProductFormDTO productFormDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes,
+                                @RequestParam("productImageFile") List<MultipartFile> productImageFileList) throws Exception {
         if (bindingResult.hasErrors()) {
             return "admin/product/product-create";
         }
@@ -87,7 +87,7 @@ public class AdminProductController {
             model.addAttribute("pageDto", pageDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
-            model.addAttribute("productFormDto", new ProductFormDto());
+            model.addAttribute("productFormDto", new ProductFormDTO());
             model.addAttribute("pageDto", pageDto);
             return "admin/product/product-form";
         }
@@ -105,7 +105,7 @@ public class AdminProductController {
             model.addAttribute("pageDto", pageDto);
         } catch (EntityNotFoundException e) {
             model.addAttribute("errorMessage", "존재하지 않는 상품입니다.");
-            model.addAttribute("productFormDto", new ProductFormDto());
+            model.addAttribute("productFormDto", new ProductFormDTO());
             model.addAttribute("pageDto", pageDto);
             return "admin/product/product-form";
         }
@@ -116,8 +116,8 @@ public class AdminProductController {
      * 상품 관리 - 상품 수정
      */
     @PostMapping("/products/{productId}")
-    public String updateProduct(@Valid ProductFormDto productFormDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                             @RequestParam("productImageFile") List<MultipartFile> productImageFileList) {
+    public String updateProduct(@Valid ProductFormDTO productFormDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                                @RequestParam("productImageFile") List<MultipartFile> productImageFileList) {
         if (bindingResult.hasErrors()) {
             return "admin/product/product-form";
         }

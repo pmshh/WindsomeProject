@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/default-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="def-main-area">
+        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+
+        <article class="def-content-area">
+            <div th:replace="/layouts/default-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="def-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>ORDER</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body order-detail-body row">
+
+                        <!-- order-info-container start -->
+                        <div class="order-info-container col-11">
+                            <div class="title">
+                                <h3>주문정보</h3>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">주문번호</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.orderUid}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">주문일자</th>
+                                            <td class="base-table__cell" th:text="${#temporals.format(orderDetail.orderDate, 'yyyy-MM-dd')}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">주문자</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.buyer}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">주문처리상태</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.orderStatus}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- payment-info-container start -->
+                        <div class="payment-info-container col-11">
+                            <div class="title">
+                                <h3>결제정보</h3>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides base-table--dark-header">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row sum">
+                                            <th class="base-table__header-cell" scope="row">총 주문금액</th>
+                                            <td class="base-table__cell">
+                                                <span class="mr20">
+                                                    <strong class="txt14" th:text="${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}"></strong>원
+                                                </span>
+                                                <a class="btn-normal show-payment-detail">내역보기</a>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">총 부가결제금액</th>
+                                            <td class="base-table__cell">
+                                                <span class="mr20">
+                                                    <span th:text="|${#numbers.formatInteger(orderDetail.usedPoints, 0, 'COMMA')}원|"></span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">적립금</th>
+                                            <td class="base-table__cell">
+                                                <span class="mr20">
+                                                    <span th:text="|${#numbers.formatInteger(orderDetail.earnedPoints, 0, 'COMMA')}원|"></span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides base-table--dark-borderd">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row sum">
+                                            <th class="base-table__header-cell" scope="row">총 결제금액</th>
+                                            <td class="base-table__cell">
+                                                <span class="txtEm">
+                                                    <strong class="txt18" th:text="${#numbers.formatInteger(orderDetail.totalPaymentPrice, 0, 'COMMA')}"></strong>원
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">결제수단</th>
+                                            <td class="base-table__cell">
+                                                <span th:text="${orderDetail.paymentMethod == 'card' ? '카드결제' : ''}"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- order-products-container start -->
+                        <div class="order-products-container col-11">
+                            <div class="title">
+                                <h3>주문 상품 정보</h3>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" style="width: 80px;" scope="col">이미지</th>
+                                            <th class="base-table__header-cell" style="width: auto;" scope="col">상품정보</th>
+                                            <th class="base-table__header-cell" style="width: 60px;" scope="col">수량</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">상품구매금액</th>
+                                            <th class="base-table__header-cell" style="width: 95px;" scope="col">배송구분</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문처리상태</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">취소/교환/반품</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row" th:each="orderProduct : ${orderDetail.orderDetailProductList}">
+                                            <td class="base-table__cell base-table__cell--thumbnail">
+                                                <a th:href="${'/product/' + orderProduct.productId}">
+                                                    <img class="base-table__image" th:src="${orderProduct.imageUrl}">
+                                                </a>
+                                            </td>
+                                            <td class="base-table__cell left top pl20">
+                                                <a class="base-table__product-name" th:href="${'/product/' + orderProduct.productId}"th:text="${orderProduct.productName}"></a>
+                                                <div class="mt5">[옵션: 선택 X]</div>
+                                            </td>
+                                            <td class="base-table__cell order-count">
+                                                <span th:text="${orderProduct.orderQuantity}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span class="txtBold" th:text="|${#numbers.formatInteger(orderProduct.productPrice, 0, 'COMMA')}원|"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:text="${orderProduct.orderProductStatus.name == 'ORDER' ? '배송준비중' : ''}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                -
+                                            </td>
+                                            <td class="base-table__cell">
+                                                -
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tfoot class="base-table__footer">
+                                        <tr class="base-table__row">
+                                            <td class="base-table__cell" colspan="7">
+                                                상품구매금액 <strong th:text="${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 2500), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}"></strong>
+                                                + 배송비 <span th:text="${orderDetail.totalOrderPrice >= 30000 ? 0 : '2,500'}"></span>
+                                                = 합계 : <strong class="ml10 txtBold txt18" th:text="|${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- shipping-info-container start -->
+                        <div class="shipping-info-container col-11">
+                            <div class="title">
+                                <h3>배송지 정보</h3>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">받으시는분</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.recipient}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">우편번호</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.zipcode}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">주소</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.address}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">휴대전화</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.tel}"></td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">배송메시지</th>
+                                            <td class="base-table__cell" th:text="${orderDetail.req}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- button-container start -->
+                        <div class="button-container col-11">
+                            <button class="button button--black button--130x40 order-list-button" onclick="location.href='/orders'">주문목록보기</button>
+                        </div>
+                    </div>
+
+                    <div class="total-detail-container displaynone">
+
+                        <div class="header">
+                            <h3>총 주문금액 상세내역</h3>
+                        </div>
+
+                        <div class="content">
+                            <p th:text="|${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|">39,000원</p>
+                            <ul class="">
+                                <li>
+                                    <strong class="term" >상품금액</strong>
+                                    <span class="desc" th:text="|${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 2500), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></span>
+                                </li>
+                                <li class="displaynone">
+                                    <strong class="term">부가세</strong>
+                                    <span class="desc">원</span>
+                                </li>
+                                <li>
+                                    <strong class="term">배송비</strong>
+                                    <span class="desc" th:text="|${orderDetail.totalOrderPrice >= 30000 ? 0 : '2,500'}원|"></span>
+                                </li>
+                                <li class="">
+                                    <strong class="term">지역별 배송비</strong>
+                                    <span class="desc">0원</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <a href="#none" class="close"><i class="fa-solid fa-x"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/default-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <!-- 사용자 JS -->
+    <script th:inline="javascript">
+        $(".show-payment-detail").click(function () {
+            $(".total-detail-container").toggleClass("displaynone");
+        });
+
+        $(".close").click(function () {
+            $(".total-detail-container").addClass("displaynone");
+        });
+    </script>
+</body>
+
+</html>

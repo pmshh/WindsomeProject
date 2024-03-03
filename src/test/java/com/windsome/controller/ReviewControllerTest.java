@@ -235,7 +235,7 @@ class ReviewControllerTest {
                 .name("테스트 상품")
                 .price(10000)
                 .productDetail("테스트 상품 상세 설명")
-                .productSellStatus(ProductSellStatus.SELL)
+                .productSellStatus(ProductSellStatus.AVAILABLE)
                 .stockNumber(100)
                 .build();
         productRepository.save(product);
@@ -258,14 +258,13 @@ class ReviewControllerTest {
                 .password("test0000")
                 .name("test")
                 .email("test0000@naver.com")
-                .address1("test")
-                .address2("test")
-                .address3("test")
-                .state(Role.USER)
-                .point(0)
-                .totalPoint(0)
-                .totalOrderPrice(0)
-                .totalUsePoint(0)
+                .zipcode("test")
+                .addr("test")
+                .addrDetail("test")
+                .role(Role.USER)
+                .availablePoints(0)
+                .totalUsedPoints(0)
+                .totalEarnedPoints(0)
                 .build();
         return memberRepository.save(member);
     }

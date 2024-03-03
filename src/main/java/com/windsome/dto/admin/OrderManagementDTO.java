@@ -1,7 +1,7 @@
 package com.windsome.dto.admin;
 
 import com.windsome.constant.OrderStatus;
-import com.windsome.dto.order.OrderProductDto;
+import com.windsome.dto.order.OrderHistProductResponseDTO;
 import com.windsome.entity.Order;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,22 +10,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Getter @Setter
 public class OrderManagementDTO {
 
-    private Long orderId;
+    private Long orderId; // 주문 id
 
-    private String orderDate;
+    private String orderUid; // 주문 번호
 
-    private OrderStatus orderStatus;
+    private String orderDate; // 주문 날짜
 
-    private String buyerId;
+    private OrderStatus orderStatus; // 주문 현황
 
-    private List<OrderProductDto> orderProductDtoList = new ArrayList<>();
+    private String buyerId; // 구매자 아이디
+
+    private List<OrderHistProductResponseDTO> orderHistProductList = new ArrayList<>(); // 주문 품목
 
     public OrderManagementDTO(Order order) {
         this.orderId = order.getId();
+        this.orderUid = order.getOrderUid();
         this.orderDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.orderStatus = order.getOrderStatus();
         this.buyerId = order.getMember().getUserIdentifier();

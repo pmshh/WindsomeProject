@@ -21,52 +21,56 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="qa-body mt-5">
-                        <div class="qa-list-container">
-                            <table class="row-header-table">
-                                <thead>
-                                <tr>
-                                    <th style="width: 150px;" scope="col">번호</th>
-                                    <th style="width: auto;" scope="col">제목</th>
-                                    <th style="width: 180px;" scope="col">작성자</th>
-                                    <th style="width: 180px;" scope="col">작성일</th>
-                                </tr>
-                                </thead>
+                    <div class="section-body qa-body row">
+                        <div class="qa-list-container col-11">
 
-                                <tbody>
-                                <tr th:if="${#lists.isEmpty(qaList.getContent())}">
-                                    <td colspan="4" class="empty-message">
-                                        <span class="message">등록된 Q&A가 없습니다.</span>
-                                    </td>
-                                </tr>
-                                <tr th:each="qa, status:${qaList.getContent()}">
-                                    <td>
-                                        <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
-                                    </td>
-                                    <td class="left">
-                                        <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><span th:text="${qa.title}"></span></a>
-                                        <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                        <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                        <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
-                                        <i class="xi-lock-o"></i>
-                                    </td>
-                                    <td>
-                                        <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
-                                        <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
-                                    </td>
-                                    <td>
-                                        <span class="txtNum gray-col fz11" th:text="${qa.regDate}">2024-02-06</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" style="width: 150px;" scope="col">번호</th>
+                                            <th class="base-table__header-cell" style="width: auto;" scope="col">제목</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">작성자</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">작성일</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row" th:if="${#lists.isEmpty(qaList.getContent())}">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="4">
+                                                <span class="base-table__message">등록된 Q&A가 없습니다.</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row" th:each="qa, status:${qaList.getContent()}">
+                                            <td class="base-table__cell">
+                                                <span th:text="${qaList.getTotalElements() - (qaList.getSize() * qaList.getNumber()) - status.index}"></span>
+                                            </td>
+                                            <td class="base-table__cell left">
+                                                <a th:if="${qa.groupLayer == 0}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><span th:text="${qa.title}"></span></a>
+                                                <a class="ml15" th:if="${qa.groupLayer == 1}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                <a class="ml30" th:if="${qa.groupLayer == 2}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                <a class="ml45" th:if="${qa.groupLayer >= 3}" th:href="@{'/board/qa/' + ${qa.qaId} + '/password-verification?page=' + ${page}}"><i class="xi-reply xi-rotate-180"></i> <span th:text="${qa.title}"></span></a>
+                                                <i class="xi-lock-o"></i>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span th:if="${qa.state.name == T(com.windsome.constant.Role).USER.name}" th:text="|${#strings.substring(qa.createdBy, 0, 1)}****|"></span>
+                                                <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span class="txtNum gray-col txt11" th:text="${qa.regDate}">2024-02-06</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
-                        <div class="button-container">
-                            <button class="white-btn-w65-h30 write-btn">글쓰기</button>
+                        <div class="button-container col-11">
+                            <button class="button button--white button--65x30 write-btn">글쓰기</button>
                         </div>
 
-                        <div class="pagination-container"
+                        <div class="pagination-container col-11"
                              th:with="start=${(qaList.number/maxPage)*maxPage + 1}, end=(${(qaList.totalPages == 0) ? 1 :
                                              (start + (maxPage - 1) < qaList.totalPages ? start + (maxPage - 1) : qaList.totalPages)})">
                             <ul>
@@ -100,7 +104,7 @@
                             </ul>
                         </div>
 
-                        <div class="search-input-container" th:object="${qaSearchDto}">
+                        <div class="search-input-container col-11" th:object="${qaSearchDto}">
                             <i class="fa-solid fa-angle-right"></i>
                             <span class="txt">검색어</span>
                             <select class="search-date-type" th:field="*{searchDateType}">
@@ -110,7 +114,7 @@
                                 <option value="name">작성자</option>
                             </select>
                             <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                            <button class="search-btn white-btn-w90-h30" type="button">검색</button>
+                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
                         </div>
                     </div>
                 </div>

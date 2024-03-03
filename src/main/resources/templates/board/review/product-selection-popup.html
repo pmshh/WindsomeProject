@@ -5,6 +5,10 @@
     <div th:replace="/layouts/default-layout.html :: head"></div>
 
     <style>
+        .product-list-wrap {
+            width: 600px;
+        }
+
         /* product-list-title */
         .product-list-title {
             padding: 12px 35px 12px 19px;
@@ -79,50 +83,6 @@
         }
 
         /* product-list-body -> product-list-box */
-        .product-list-body .product-list-box table {
-            margin: 10px 0 0;
-            border-top: 1px solid #e5e5e5;
-            border-bottom: 1px solid #e5e5e5;
-            font-size: 12px;
-            letter-spacing: 0.0em;
-            width: 100%;
-        }
-        .product-list-body .product-list-box table thead {}
-        .product-list-body .product-list-box table thead tr {}
-        .product-list-body .product-list-box table thead tr th {
-            padding: 9px 0 8px;
-            border-bottom: 1px solid #e5e5e5;
-            color: #353535;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: normal;
-        }
-
-        .product-list-body .product-list-box table tbody {}
-        .product-list-body .product-list-box table tbody.center {
-            text-align: center;
-        }
-        .product-list-body .product-list-box table tbody tr {}
-        .product-list-body .product-list-box table tbody tr td {
-            border-top: 1px solid #e5e5e5;
-            padding: 15px 10px 14px;
-        }
-        .product-list-body .product-list-box table tbody tr td span.productNm {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .product-list-body .product-list-box table tbody tr td span.salePrice {
-            margin-left: 3px;
-        }
-        .product-list-body .product-list-box table tbody tr .thumb img {
-            max-width: 78px;
-            border: 1px solid #d6d6d6;
-            vertical-align: middle;
-        }
-        .product-list-body .product-list-box table tbody tr .left {
-            padding-left: 20px;
-            text-align: left;
-        }
         .product-list-body .product-list-box table tbody tr td button {
             display: inline-block;
             box-sizing: border-box;
@@ -139,6 +99,10 @@
             color: #222;
             width: 40px;
             height: 30px;
+        }
+
+        .table-wrapper .base-table {
+            min-width: 0;
         }
 
     </style>
@@ -158,7 +122,7 @@
                         <option value="name">상품명</option>
                     </select>
                     <input type="text" name="searchQuery">
-                    <button class="black-btn-w65-h30 search-button">검색하기</button>
+                    <button class="button button--black button--65x30 search-button">검색하기</button>
                 </div>
                 <div class="result-box">
                     <p class="total">
@@ -177,39 +141,41 @@
 
             <!-- product-list-box start -->
             <div class="product-list-box">
-                <table>
-                    <colgroup>
-                        <col style="width: 100px">
-                        <col style="width: auto">
-                        <col style="width: 80px">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th scope="col">상품 이미지</th>
-                        <th scope="col">상품 정보</th>
-                        <th scope="col">선택</th>
-                    </tr>
-                    </thead>
-                    <tbody class="center">
-                    <tr th:each="product, state : ${products.getContent()}">
-                        <td class="thumb">
-                            <img th:src="${product.imageUrl}">
-                        </td>
-                        <td class="left">
-                            <span class="productName" th:text="${product.productName}"></span>
-                            <span th:if="${product.discount == 0}" class="price" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|" style="font-weight: bold"></span>
-                            <span th:unless="${product.discount == 0}" class="before-salePrice" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|" style="text-decoration: line-through"></span>
-                            <span th:unless="${product.discount == 0}" class="salePrice" th:text="|${#numbers.formatInteger((product.price * (1 - product.discount)), 0, 'COMMA')}원|" style="font-weight: bold"></span>
+                <div class="table-wrapper">
+                    <table class="base-table base-table--multi-columns">
+                        <colgroup>
+                            <col style="width: 100px">
+                            <col style="width: auto">
+                            <col style="width: 80px">
+                        </colgroup>
+                        <thead class="base-table__head">
+                            <tr class="base-table__row">
+                                <th class="base-table__header-cell" scope="col">상품 이미지</th>
+                                <th class="base-table__header-cell" scope="col">상품 정보</th>
+                                <th class="base-table__header-cell" scope="col">선택</th>
+                            </tr>
+                        </thead>
+                        <tbody class="base-table__body">
+                            <tr class="base-table__row" th:each="product, state : ${products.getContent()}">
+                                <td class="base-table__cell base-table__cell--thumbnail">
+                                    <img class="base-table__image" th:src="${product.imageUrl}">
+                                </td>
+                                <td class="base-table__cell left pl10">
+                                    <span class="base-table__product-name displayblock mb5" th:text="${product.productName}"></span>
+                                    <span th:if="${product.discount == 0}" class="price" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|" style="font-weight: bold"></span>
+                                    <span th:unless="${product.discount == 0}" class="before-salePrice" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|" style="text-decoration: line-through"></span>
+                                    <span th:unless="${product.discount == 0}" class="salePrice" th:text="|${#numbers.formatInteger((product.price * (1 - product.discount)), 0, 'COMMA')}원|" style="font-weight: bold"></span>
 
-                        </td>
-                        <td>
-                            <button class="white-btn-w65-h30 pick-btn" th:data-imageUrl="${product.imageUrl}" th:data-productId="${product.productId}"
-                                    th:data-productName="${product.productName}" th:data-price="${product.price}" th:data-discount="${product.discount}"
-                                    th:data-salePrice="${product.salePrice}">선택</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td class="base-table__cell">
+                                    <button class="button button--white button--65x30 pick-btn" th:data-imageUrl="${product.imageUrl}" th:data-productId="${product.productId}"
+                                            th:data-productName="${product.productName}" th:data-price="${product.price}" th:data-discount="${product.discount}"
+                                            th:data-salePrice="${product.salePrice}">선택</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- pagination start -->
@@ -245,7 +211,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
     </div>
 
@@ -299,7 +264,7 @@
                     newTag +=       "<span class='price'>" + formatPrice + "원</span>";
                 }
                 newTag +=       "</div>";
-                newTag +=       "<button class='white-btn-w90-h40 new-find-product-btn'>상품정보선택</button>";
+                newTag +=       "<button class='button button--white button--90x40 new-find-product-btn'>상품정보선택</button>";
                 newTag +=   "</div>";
                 newTag +=   "<input class='hiddenProductId' type=hidden value=" + productId + ">";
                 $(opener.document).find(".product-info-wrap").append(newTag);

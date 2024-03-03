@@ -63,14 +63,27 @@ public class CartService {
     }
 
     /**
-     * 장바구니 수정/삭제 권한 검증
+     * 장바구니 수정 권한 검증
      */
     @Transactional(readOnly = true)
     public boolean validateCartModificationPermission(Long productId, String userIdentifier) {
         CartProduct cartProduct = cartProductRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
         Member savedAccount = cartProduct.getCart().getMember();
+        return !(savedAccount.getUserIdentifier().equals(userIdentifier));
+    }
 
-        return !userIdentifier.equals(savedAccount.getUserIdentifier());
+    /**
+     * 장바구니 삭제 권한 검증
+     */
+    public boolean validateCartDeletionPermission(Long[] productIds, String userIdentifier) {
+        for (Long productId : productIds) {
+            CartProduct cartProduct = cartProductRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
+            Member savedAccount = cartProduct.getCart().getMember();
+            if (!savedAccount.getUserIdentifier().equals(userIdentifier)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -84,8 +97,10 @@ public class CartService {
     /**
      * 장바구니 상품 삭제
      */
-    public void deleteCartProduct(Long productId) {
-        cartProductRepository.deleteById(productId);
+    public void deleteCartProduct(Long[] productIds) {
+        for (Long productId : productIds) {
+            cartProductRepository.deleteById(productId);
+        }
     }
 
     /**

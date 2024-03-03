@@ -1,7 +1,6 @@
 package com.windsome.controller;
 
-import com.windsome.dto.product.ProductSearchDto;
-import com.windsome.service.CartService;
+import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.service.CategoryService;
 import com.windsome.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class MainController {
      * 메인 화면
      */
     @GetMapping("/")
-    public String home(ProductSearchDto productSearchDto, Optional<Integer> page, Model model) {
+    public String home(ProductSearchDTO productSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 9);
         model.addAttribute("products", productService.getMainPageProducts(productSearchDto, pageable));
         model.addAttribute("categories", categoryService.fetchCategories());

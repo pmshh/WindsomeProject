@@ -255,13 +255,13 @@ class CartServiceTest {
     @DisplayName("장바구니 상품 삭제")
     public void testDeleteCartProduct() {
         // Given
-        Long productId = 1L;
+        Long[] productIds = {1L};
 
         // When
-        cartService.deleteCartProduct(productId);
+        cartService.deleteCartProduct(productIds);
 
         // Then
-        verify(cartProductRepository, times(1)).deleteById(productId);
+        verify(cartProductRepository, times(1)).deleteById(1L);
         verifyNoMoreInteractions(cartProductRepository);
     }
 
@@ -269,13 +269,13 @@ class CartServiceTest {
     @DisplayName("삭제할 장바구니 상품이 존재하지 않을 때 예외 발생")
     public void testDeleteCartProduct_CartProductNotFound() {
         // Given
-        Long productId = 1L;
+        Long[] productIds = {1L};
 
-        doThrow(EntityNotFoundException.class).when(cartProductRepository).deleteById(productId);
+        doThrow(EntityNotFoundException.class).when(cartProductRepository).deleteById(1L);
 
         // When, Then
-        assertThrows(EntityNotFoundException.class, () -> cartService.deleteCartProduct(productId));
-        verify(cartProductRepository, times(1)).deleteById(productId);
+        assertThrows(EntityNotFoundException.class, () -> cartService.deleteCartProduct(productIds));
+        verify(cartProductRepository, times(1)).deleteById(1L);
         verifyNoMoreInteractions(cartProductRepository);
     }
 

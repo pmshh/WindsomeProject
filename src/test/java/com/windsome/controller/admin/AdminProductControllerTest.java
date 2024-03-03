@@ -2,8 +2,8 @@ package com.windsome.controller.admin;
 
 import com.windsome.WithAccount;
 import com.windsome.dto.admin.PageDto;
-import com.windsome.dto.product.ProductSearchDto;
-import com.windsome.dto.product.ProductFormDto;
+import com.windsome.dto.product.ProductSearchDTO;
+import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.service.AdminService;
 import com.windsome.service.CategoryService;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
@@ -20,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +54,7 @@ class AdminProductControllerTest {
     @DisplayName("상품 조회 기능 테스트")
     @WithAccount("admin1234")
     void getItemList() throws Exception {
-        given(adminService.getProductList(any(ProductSearchDto.class), any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
+        given(adminService.getProductList(any(ProductSearchDTO.class), any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
 
         mockMvc.perform(get("/admin/products"))
                 .andExpect(status().isOk())
@@ -81,7 +79,7 @@ class AdminProductControllerTest {
     @WithAccount("admin1234")
     void enrollItemTest() throws Exception {
         // Mocking
-        given(productService.createProduct(any(ProductFormDto.class), anyList())).willReturn(1L);
+        given(productService.createProduct(any(ProductFormDTO.class), anyList())).willReturn(1L);
 
         // Creating MockMultipartFile
         MockMultipartFile mockMultipartFile = new MockMultipartFile("productImageFile", "test.jpg", "image/jpeg", "test image content".getBytes());
@@ -107,7 +105,7 @@ class AdminProductControllerTest {
     void viewItemDetailTest() throws Exception {
         // Mocking
         Long productId = 1L;
-        ProductFormDto productFormDto = new ProductFormDto();
+        ProductFormDTO productFormDto = new ProductFormDTO();
         PageDto pageDto = new PageDto();
         given(productService.getProductFormDto(productId)).willReturn(productFormDto);
 
@@ -131,7 +129,7 @@ class AdminProductControllerTest {
     void showUpdateItemFormTest() throws Exception {
         // Mocking
         Long productId = 1L;
-        ProductFormDto productFormDto = new ProductFormDto();
+        ProductFormDTO productFormDto = new ProductFormDTO();
         PageDto pageDto = new PageDto();
         given(productService.getProductFormDto(productId)).willReturn(productFormDto);
 
@@ -151,7 +149,7 @@ class AdminProductControllerTest {
     @WithAccount("admin1234")
     void updateItemTest() throws Exception {
         // Mocking
-        given(productService.updateProduct(any(ProductFormDto.class), anyList())).willReturn(1L);
+        given(productService.updateProduct(any(ProductFormDTO.class), anyList())).willReturn(1L);
 
         // Creating MockMultipartFile
         MockMultipartFile mockMultipartFile = new MockMultipartFile("productImageFile", "test.jpg", "image/jpeg", "test image content".getBytes());

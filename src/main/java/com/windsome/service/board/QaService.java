@@ -64,7 +64,7 @@ public class QaService {
      */
     public boolean validatePost(Member member, Long qaId, String password) {
         // 관리자 권한 갖고 있을 시 바로 통과
-        if (member.getState() == Role.ADMIN) {
+        if (member.getRole() == Role.ADMIN) {
             return false;
         }
 

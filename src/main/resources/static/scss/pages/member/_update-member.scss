@@ -1,0 +1,99 @@
+@import "../../abstracts/variables";
+
+.update-member-body {
+    .profile-form {
+        width: 90%;
+        margin: 0 auto;
+
+        .base-table {
+            table {
+                width: 100%;
+                tbody {
+                    th {
+                        .required-field {
+                            color: #008bcc;
+                            font-weight: bold;
+                        }
+                    }
+
+                    td {
+                        input[type="text"],
+                        input[type="password"] {
+                            height: 30px !important;
+                            line-height: 29px !important;
+                        }
+
+                        .pw-result-text,
+                        .id-result-text {
+                            color: #d43301;
+                            margin-left: 4px;
+                        }
+
+                        .pw-confirm-result-text {
+                            margin-left: 4px;
+                        }
+
+                        span {
+                            margin-top: 2px;
+                        }
+
+                        .tel-prefix-select {
+                            width: 70px;
+                            margin-right: 3px;
+                        }
+
+                        .tel-middle-input,
+                        .tel-suffix-input {
+                            width: 70px;
+                            margin-left: 3px;
+                        }
+
+                        .email-domain-select {
+                            width: 125px;
+                        }
+
+                        .send-email,
+                        .check-number,
+                        .find-addr {
+                            width: 90px;
+                            padding: 0;
+                            height: 30px;
+                            margin-bottom: 2px;
+                            border: 1px solid #e2e2e2;
+                            background: white;
+
+                            &:hover {
+                                border: 1px solid black;
+                            }
+                        }
+
+                        .email-check-box {
+                            margin-top: 5px;
+                        }
+
+                        .addr-input,
+                        .addr-detail-input {
+                            width: 50%;
+                            display: block;
+                        }
+
+                        .addr-input {
+                            margin-top: 3px;
+                        }
+
+                        .addr-detail-input {
+                            margin-top: 5px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .btn-box {
+            padding: 10px 0;
+            text-align: center;
+            display: block;
+            margin-top: 30px;
+        }
+    }
+}

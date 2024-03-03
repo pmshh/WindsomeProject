@@ -46,34 +46,24 @@ class MemberServiceTest {
     @DisplayName("회원 가입 테스트")
     void testCreateAccount() {
         // Given
-        SignUpRequestDTO signUpRequestDTO = SignUpRequestDTO.builder()
-                .userIdentifier("testUser")
-                .email("test@example.com")
-                .name("테스트 유저")
-                .password("testPassword")
-                .address1("Address1")
-                .address2("Address2")
-                .address3("Address3")
-                .build();
+        SignUpRequestDTO signUpRequestDTO = new SignUpRequestDTO();
+        signUpRequestDTO.setName("testUser");
+        signUpRequestDTO.setPassword("testPassword");
 
-        Member member = Member.builder()
-                .userIdentifier(signUpRequestDTO.getUserIdentifier())
-                .email(signUpRequestDTO.getEmail())
-                .name(signUpRequestDTO.getName())
-                .password("encodedPassword")
-                .address1(signUpRequestDTO.getAddress1())
-                .address2(signUpRequestDTO.getAddress2())
-                .address3(signUpRequestDTO.getAddress3())
-                .state(Role.USER)
-                .build();
+        Member member = new Member();
+        member.setName("testUser");
+        member.setPassword("testPassword");
 
-        when(passwordEncoder.encode(signUpRequestDTO.getPassword())).thenReturn("encodedPassword");
+        when(modelMapper.map(signUpRequestDTO, Member.class)).thenReturn(member);
+        when(passwordEncoder.encode("testPassword")).thenReturn("encodedPassword");
 
         // When
         memberService.createAccount(signUpRequestDTO);
 
         // Then
-        verify(memberRepository, times(1)).save(member);
+        assertEquals(member.getPassword(), "encodedPassword");
+        verify(passwordEncoder).encode("testPassword");
+        verify(memberRepository).save(member);
     }
 
 
@@ -303,13 +293,13 @@ class MemberServiceTest {
         member.setId(1L);
 
         // Mocking the behavior of the order repository
-        when(orderRepository.countByMemberIdAndOrderStatus(member.getId(), OrderStatus.READY)).thenReturn(5L);
+        when(orderRepository.countByMemberIdAndOrderStatus(member.getId(), OrderStatus.PROCESSING)).thenReturn(5L);
 
         // When
         Long orderCount = memberService.getMemberOrderStatusCounts(member);
 
         // Then
         assertEquals(5L, orderCount);
-        verify(orderRepository).countByMemberIdAndOrderStatus(member.getId(), OrderStatus.READY);
+        verify(orderRepository).countByMemberIdAndOrderStatus(member.getId(), OrderStatus.PROCESSING);
     }
 }

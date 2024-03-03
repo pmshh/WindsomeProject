@@ -86,7 +86,7 @@ public class NoticeService {
      * 관리자 권한 검증
      */
     public boolean isAdmin(Member member) {
-        return member.getState().equals(Role.ADMIN);
+        return member.getRole().equals(Role.ADMIN);
     }
 
     /**

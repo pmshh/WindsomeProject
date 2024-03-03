@@ -13,10 +13,6 @@ public class ProfileFormDto {
 
     private String userIdentifier;
 
-    @Email
-    @NotBlank
-    private String email;
-
     @NotBlank
     @Length(min = 1, max = 8)
     private String name;
@@ -29,9 +25,19 @@ public class ProfileFormDto {
     @Length(min = 8,max = 20)
     private String passwordConfirm;
 
-    private String address1;
+    @Email
+    @NotBlank
+    private String email;
 
-    private String address2;
+    @NotBlank
+    private String tel;
 
-    private String address3;
+    @NotBlank
+    private String zipcode;
+
+    @NotBlank
+    private String addr;
+
+    @NotBlank
+    private String addrDetail;
 }

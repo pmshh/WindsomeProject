@@ -1,0 +1,49 @@
+@import "../../../abstracts/variables";
+
+.product-mng-body {
+    width: 90%;
+    margin: 0 auto;
+
+    .product-list-container {
+        width: 100%;
+        overflow-x: auto;
+
+        table {
+            min-width: 810px;
+
+            tbody {
+                tr {
+                    td {
+                        height: 100px;
+
+                        .product-dtl-btn {
+                            outline: none;
+                            background: white;
+                            border: none;
+
+                            &:hover {
+                                color: rgb(80, 80, 80);
+                                text-decoration: underline;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-container {
+        @include button-container();
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}
+
+@media (max-width:1200px) {
+    .product-mng-body {
+        width: 100%;
+    }
+}

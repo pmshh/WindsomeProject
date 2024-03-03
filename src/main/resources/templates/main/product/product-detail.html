@@ -16,7 +16,7 @@
 
         <!-- section start -->
         <section class="def-section-area">
-            <div class="container">
+            <div class="container-fluid">
 
                 <div class="section-header">
                     <h2>PRODUCT DETAIL</h2>
@@ -25,13 +25,13 @@
 
                 <div class="section-body product-dtl-body mt-5">
 
-                    <div class="product-dtl row justify-content-md-center">
+                    <div class="product-dtl row justify-content-center">
                         <div class="product-img-wrap col-auto">
                             <div class="main-img-box">
-                                <img id="image-box" class="main-img" th:src="${product.productImageDtoList[0].imageUrl}" alt="">
+                                <img id="image-box" class="main-img" th:src="${product.productImageDTOList[0].imageUrl}" alt="">
                             </div>
                             <div class="thumb-img-box">
-                                <img th:each="image : ${product.productImageDtoList}" th:if="${image.serverImageName != ''}"
+                                <img th:each="image : ${product.productImageDTOList}" th:if="${image.serverImageName != ''}"
                                      class="thumb-img" th:src="${image.imageUrl}" onclick="switchToMainImage(this)" alt="img">
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                             </div>
                             <div class="btn-inner">
                                 <div class="buy-btn">
-                                    <button type="button" class="buy-button">BUY NOW</button>
+                                    <button type="button" class="buy-button mb5">BUY NOW</button>
                                 </div>
                                 <div class="cart-btn">
                                     <button type="button" onclick="addCart()">CART</button>
@@ -204,8 +204,8 @@
                                 </div>
 
                                 <div class="button-container">
-                                    <button class="white-btn-w65-h30 write-btn">WRITE</button>
-                                    <button class="white-btn-w65-h30 list-btn" onclick="location.href='/reviews'">LIST</button>
+                                    <button class="button button--white button--65x30 write-btn">WRITE</button>
+                                    <button class="button button--white button--65x30 list-btn" onclick="location.href='/reviews'">LIST</button>
                                 </div>
 
                                 <div class="pagination-container"
@@ -250,8 +250,8 @@
         </section>
 
         <form th:action="@{/orders/new}" method="get" class="order-form">
-            <input type="hidden" name="orders[0].productId" th:value="${product.id}">
-            <input type="hidden" name="orders[0].count" value="">
+            <input type="hidden" name="orderProducts[0].productId" th:value="${product.id}">
+            <input type="hidden" name="orderProducts[0].count" value="">
         </form>
 
         <div th:replace="/layouts/default-layout.html :: footer"></div>
@@ -269,7 +269,7 @@
         $(".buy-button").click(function () {
             if (confirm("선택하신 상품을 주문하시겠습니까?")) {
                 let count = $(".order-count-input").val()
-                $(".order-form").find("input[name='orders[0].count']").val(count);
+                $(".order-form").find("input[name='orderProducts[0].count']").val(count);
                 $(".order-form").submit();
             } else {
                 return false;

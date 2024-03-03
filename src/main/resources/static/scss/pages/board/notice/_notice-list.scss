@@ -1,0 +1,34 @@
+@import "../../../abstracts/variables";
+
+.notice-body {
+    .notice-list-container {
+        overflow-x: auto;
+
+        .table-wrapper {
+            min-width: 833px;
+            .base-table {
+                .base-table__head {
+                    .base-table__row {
+                        .base-table__header-cell {
+                        }
+                    }
+                }
+
+                .base-table__body {
+                    .base-table__row {
+                        .base-table__cell {
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-container {
+        @include button-container();
+    }
+
+    .search-input-container {
+        @include search-input-container();
+    }
+}

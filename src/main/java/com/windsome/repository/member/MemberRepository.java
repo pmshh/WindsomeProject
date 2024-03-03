@@ -13,6 +13,9 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member>, MemberRepositoryCustom {
 
+    @Query("select new com.windsome.dto.member.UserSummaryDTO(m.id, m.name, m.availablePoints, m.totalEarnedPoints, m.totalUsedPoints) from Member m where m.userIdentifier =:userIdentifier")
+    UserSummaryDTO getUserSummary(@Param("userIdentifier") String userIdentifier);
+
     boolean existsByUserIdentifier(String userIdentifier);
 
     boolean existsByEmail(String email);
@@ -21,11 +24,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslP
 
     Member findByEmail(String email);
 
-    @Query(value = "select new com.windsome.dto.member.UserSummaryDTO(m.id, m.name, m.totalOrderPrice, m.point, m.totalPoint, m.totalUsePoint) from Member m where m.userIdentifier = :userIdentifier")
-    UserSummaryDTO getUserSummary(@Param("userIdentifier") String userIdentifier);
-
     Optional<Member> findByNameAndEmail(String name, String email);
 
     Optional<Member> findByUserIdentifierAndNameAndEmail(String userIdentifier, String name, String email);
-
 }
