@@ -2,7 +2,6 @@
 
 /***** main *****/
 .admin-main-area {
-
     /***** sidebar *****/
     .admin-sidebar-area {
         position: fixed;
@@ -35,31 +34,48 @@
             padding: 15px 0;
 
             .profile-img {
-                padding: 0 10px 0 26px;
+                padding: 0 10px 2px 26px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-                img {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
+                .xi-profile {
+                    font-size: 24px;
                 }
             }
 
             .profile-name {
                 position: relative;
-
+                width: 100%;
                 .name-box {
-                    button {
+                    display: flex;
+                    align-items: center;
+
+                    .toggle-btn {
                         background-color: transparent;
                         outline: none;
                         color: white;
                         border: none;
+                        text-align: left;
+                        width: 100%;
+                        font-size: 14px;
 
-                        span {
-                            margin-right: 7px;
+                        &::after {
+                            border: solid;
+                            border-width: 0 1px 1px 0;
+                            content: "";
+                            display: inline-block;
+                            padding: 2px;
+                            position: absolute;
+                            right: 20px;
+                            top: 8px;
+                            transform: rotate(45deg);
+                            transition: all 0.2s ease-out;
                         }
 
-                        svg {
-                            vertical-align: top;
+                        &.active::after {
+                            top: 10px;
+                            transform: rotate(-135deg);
                         }
                     }
                 }
@@ -67,25 +83,27 @@
                 .logout-box {
                     position: absolute;
                     background: white;
-                    top: 30px;
-                    width: 170px;
-                    padding: 15px;
+                    left: -15px;
+                    bottom: -70px;
+                    width: 210px;
+                    padding: 15px 0;
                     border: 1px solid #f1f1f1;
                     display: none;
                     z-index: 100;
+                    border-radius: 5px;
 
                     ul {
                         li {
                             background-color: #fff;
-                            padding: 4px 7px;
+                            padding: 4px 15px;
 
                             a {
                                 display: block;
                                 color: #000;
                                 text-align: left;
-                                font-size: 11px;
+                                font-size: 13px;
                                 line-height: 22px;
-                                letter-spacing: 0.1em;
+                                letter-spacing: 0.4px;
                             }
 
                             button {
@@ -96,9 +114,9 @@
                                 display: block;
                                 color: #000;
                                 text-align: left;
-                                font-size: 11px;
+                                font-size: 13px;
                                 line-height: 22px;
-                                letter-spacing: 0.1em;
+                                letter-spacing: 0.4px;
                             }
 
                             &:hover {
@@ -112,7 +130,6 @@
                     }
                 }
             }
-
         }
 
         .sidebar-menu {
@@ -122,7 +139,7 @@
                 color: #8a8a8a;
                 font-weight: bold;
                 letter-spacing: 0.5px;
-                padding: 1.5rem 1.5rem .375rem;
+                padding: 1.5rem 1.5rem 0.375rem;
                 margin-bottom: 10px;
             }
 
@@ -133,7 +150,7 @@
                     position: relative;
                     display: block;
                     font-size: 0.875rem;
-                    transition: all .2s ease-in-out;
+                    transition: all 0.2s ease-in-out;
                     margin-bottom: 5px;
 
                     &:hover {
@@ -141,53 +158,52 @@
                     }
 
                     &.active {
-                        color: #e06f18;
+                        background-color: #1a1a1a;
                     }
 
                     &[data-bs-toggle="collapse"]::after {
                         border: solid;
-                        border-width: 0 .075rem .075rem 0;
+                        border-width: 0 0.075rem 0.075rem 0;
                         content: "";
                         display: inline-block;
                         padding: 2px;
                         position: absolute;
-                        right: 1.5rem;
-                        top: 1.4rem;
+                        right: 20px;
+                        top: 16px;
                         transform: rotate(-135deg);
-                        transition: all .2s ease-out;
+                        transition: all 0.2s ease-out;
                     }
 
                     &[data-bs-toggle="collapse"].collapsed::after {
                         transform: rotate(45deg);
-                        transition: all .2s ease-out;
+                        transition: all 0.2s ease-out;
                     }
                 }
 
                 .sub-menu {
                     a {
-                        padding: 10px 0 10px 25px;
-                        color: #a7afb1;
+                        padding: 10px 0 10px 50px;
+                        color: white;
                         position: relative;
                         display: block;
-                        font-size: 14px;
-                        transition: all .2s ease-in-out;
+                        font-size: 13px;
+                        transition: all 0.2s ease-in-out;
+                        margin-bottom: 5px;
 
                         &:hover {
                             background-color: #1a1a1a;
                         }
 
                         &.active {
-                            color: #e06f18;
+                            background-color: #1a1a1a;
                         }
                     }
-
                 }
 
                 .line {
                     border-top: 1px solid #3b4249;
                     opacity: 1;
                 }
-
             }
         }
     }
@@ -308,7 +324,7 @@
                     }
                 }
 
-                input:checked+label {
+                input:checked + label {
                     span:nth-child(1) {
                         top: 50%;
                         transform: rotate(45deg);
@@ -328,8 +344,9 @@
 
         /***** section *****/
         .admin-section-area {
-
             .container,
+            .container-xl,
+            .container-xxl,
             .container-fluid {
                 padding-top: 110px;
 
@@ -354,6 +371,22 @@
                     justify-content: center;
                     align-items: center;
                     flex-direction: column;
+
+                    .list-total-count-container {
+                        display: flex;
+                        text-align: left;
+                        align-items: center;
+                        margin-bottom: 10px;
+                        font-size: 11px;
+                        line-height: 25px;
+                        color: #aaa;
+                        letter-spacing: 0.02em;
+
+                        span {
+                            font-weight: bold;
+                            color: #000;
+                        }
+                    }
                 }
             }
         }

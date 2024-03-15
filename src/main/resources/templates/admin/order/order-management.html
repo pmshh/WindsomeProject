@@ -21,110 +21,134 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section-body order-mng-body">
-                        <div class="order-list-container">
+                    <div class="section-body order-mng-body row">
 
-                            <div class="table-wrapper">
-                                <table class="base-table base-table--multi-columns">
-                                    <thead class="base-table__head">
+                        <div class="col-11">
+                            <div class="list-total-count-container">
+                                <span class="me-1" th:text="${orders.getTotalElements()}"></span>ORDERS
+                            </div>
+
+                            <div class="order-list-container">
+                                <div class="table-wrapper">
+                                    <table class="base-table base-table--multi-columns base-table--no-border-bottom">
+                                        <thead class="base-table__head">
                                         <tr class="base-table__row">
-                                            <th class="base-table__header-cell" style="width: 80px;" scope="col">주문 번호</th>
+                                            <th class="base-table__header-cell" style="width: 110px" scope="col">
+                                                <input class="base-table__checkbox" type="checkbox" id="all-check" name="all-check">
+                                                <label for="all-check"></label>
+                                            </th>
+                                            <th class="base-table__header-cell" style="width: 135px;" scope="col">
+                                                주문일자
+                                                <br>
+                                                [주문번호]
+                                            </th>
                                             <th class="base-table__header-cell" style="width: 110px;" scope="col">이미지</th>
                                             <th class="base-table__header-cell" style="width: auto;" scope="col">상품 정보</th>
-                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문자 아이디</th>
-                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문 날짜</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문자</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">주문상품개수</th>
                                             <th class="base-table__header-cell" style="width: 110px;" scope="col">주문 상태</th>
-                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">취소</th>
+                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">선택</th>
                                         </tr>
-                                    </thead>
+                                        </thead>
 
-                                    <tbody class="base-table__body">
+                                        <tbody class="base-table__body">
                                         <tr class="base-table__row" th:if="${#lists.isEmpty(orders.getContent())}">
-                                            <td class="base-table__cell base-table__cell--empty" colspan="7">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="8">
                                                 <span class="base-table__message">주문 내역이 없습니다.</span>
                                             </td>
                                         </tr>
 
                                         <th:block th:each="order, status: ${orders.getContent()}">
-                                            <tr class="base-table__row" th:each="orderProduct, status: ${order.orderHistProductList}">
-                                                <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
-                                                    <span th:text="${order.orderId}"></span>
+                                            <tr class="base-table__row">
+                                                <td class="base-table__cell">
+                                                    <input type="checkbox" name="check">
+                                                    <input type="hidden" class="hidden-order-id-input" th:value="${order.orderId}">
+                                                </td>
+                                                <td class="base-table__cell base-table__cell--order-uid">
+                                                    <span th:text="${order.orderDate}"></span>
+                                                    <a class="order-uid" th:href="@{'/admin/orders/' + ${order.orderId}}" th:text="${order.orderUid}"></a>
                                                 </td>
                                                 <td class="base-table__cell base-table__cell--thumbnail">
-                                                    <a th:href="${'/product/' + orderProduct.id}">
-                                                        <img class="base-table__image" th:src="${orderProduct.imageUrl}">
-                                                    </a>
+                                                    <img class="base-table__small-image" th:src="${order.repProductImage}">
                                                 </td>
-                                                <td class="base-table__cell left">
-                                                    <a class="base-table__product-name" th:href="${'/product/' + orderProduct.id}" th:text="${orderProduct.name}"></a>
-                                                    <div class="mt5">[옵션: 선택 X]</div>
+                                                <td class="base-table__cell left top">
+                                                    <strong th:if="${order.orderHistProductList.size > 1}" th:text="${order.repProductName + ' 외 ' + #lists.size(order.orderHistProductList.size) + '건'}"></strong>
+                                                    <strong th:unless="${order.orderHistProductList.size > 1}" th:text="${order.repProductName}"></strong>
                                                 </td>
                                                 <td class="base-table__cell">
                                                     <span th:text="${order.buyerId}"></span>
                                                 </td>
                                                 <td class="base-table__cell">
-                                                    <span th:text="${order.orderDate}"></span>
+                                                    <span th:text="${order.productCount}"></span>
                                                 </td>
                                                 <td class="base-table__cell">
                                                     <span th:text="${order.orderStatus}"></span>
                                                 </td>
-                                                <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
-                                                    <button th:if="${order.orderStatus.displayName == '배송준비중'}" class="button button--black button--65x30" type="button" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
-                                                    <div th:if="${order.orderStatus.displayName == '결제취소'}">-</div>
+                                                <td class="base-table__cell">
+                                                    <button class="button button--white button--65x30 order-update-btn" type="button" th:data-order-id="${order.orderId}">수정</button>
                                                 </td>
                                             </tr>
                                         </th:block>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+
+                                        <tfoot class="base-table__footer">
+                                        <tr class="base-table__row">
+                                            <td class="base-table__cell" colspan="8">
+                                                <button class="button button--white button--90x30 cancel-selected-orders-btn">선택주문취소</button>
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
 
-                        </div>
-
-                        <div class="pagination-container"
-                            th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                            <div class="pagination-container"
+                                 th:with="start=${(orders.number/maxPage)*maxPage + 1},
                                  end=(${(orders.totalPages == 0) ? 1 :
                                  (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
-                            <ul>
-                                <li class="prev" th:classappend="${orders.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:goToPage(0)'">
-                                        <i class="fa-solid fa-angle-left"></i><i
-                                            class="fa-solid fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="prev" th:classappend="${orders.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:goToPage(' +  ${orders.number - 1} + ')'">
-                                        <i class="fa-solid fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                    th:classappend="${orders.number eq page - 1} ? 'active' : ''">
-                                    <a th:onclick="'javascript:goToPage(' + ${page - 1} + ')'"
-                                        th:inline="text">[[${page}]]</a>
-                                </li>
-                                <li class="next" th:classappend="${orders.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:goToPage(' + ${orders.number + 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i>
-                                    </a>
-                                </li>
-                                <li class="next" th:classappend="${orders.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:goToPage(' + ${orders.totalPages - 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i><i
-                                            class="fa-solid fa-angle-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                                <ul>
+                                    <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:goToPage(0)'">
+                                            <i class="fa-solid fa-angle-left"></i><i
+                                                class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="prev" th:classappend="${orders.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:goToPage(' +  ${orders.number - 1} + ')'">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                        th:classappend="${orders.number eq page - 1} ? 'active' : ''">
+                                        <a th:onclick="'javascript:goToPage(' + ${page - 1} + ')'"
+                                           th:inline="text">[[${page}]]</a>
+                                    </li>
+                                    <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:goToPage(' + ${orders.number + 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="next" th:classappend="${orders.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:goToPage(' + ${orders.totalPages - 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i><i
+                                                class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="search-input-container">
+                                <i class="fa-solid fa-angle-right"></i>
+                                <span class="txt">검색어</span>
+                                <select class="search-type">
+                                    <option value="">아이디</option>
+                                </select>
+                                <input class="userid-input" name="userIdentifier" type="text"
+                                       placeholder="주문자 아이디를 입력해주세요">
+                                <button class="search-btn button button--white button--90x30" type="button">검색</button>
+                            </div>
                         </div>
 
-                        <div class="search-input-container">
-                            <i class="fa-solid fa-angle-right"></i>
-                            <span class="txt">검색어</span>
-                            <select class="search-type">
-                                <option value="">아이디</option>
-                            </select>
-                            <input class="userid-input" name="userIdentifier" type="text"
-                                   placeholder="주문자 아이디를 입력해주세요">
-                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -137,31 +161,71 @@
     <!-- custom js -->
     <script th:inline="javascript">
         $(function () {
-            /* 검색 버튼 클릭 처리 */
+
+            /* 체크박스 전체 선택 및 해제 함수 */
+            $("#all-check").change(toggleAllCheckboxes);
+
+            /* 주문 수정 버튼 클릭 이벤트 처리 */
+            $(".order-update-btn").click(goToOrderEditPage);
+
+            /* 선택 상품 삭제 버튼 클릭 이벤트 처리 */
+            $(".cancel-selected-orders-btn").click(cancelSelectedOrders);
+
+            /* 검색 버튼 클릭 이벤트 처리 */
             $(".search-btn").click(handleSearchButtonClick);
+
         });
 
-        /* 주문 취소 함수 */
-        function cancelOrder(orderId) {
-            if (confirm("선택하신 주문을 취소하시겠습니까?")) {
-                $.ajax({
-                    url: "/admin/order/" + orderId + "/cancel",
-                    type: "POST",
-                    dataType: "text",
-                    success: function () {
-                        alert("주문이 취소되었습니다.");
-                        location.reload(true);
-                    },
-                    error: function (xhr) {
-                        if (xhr.status === 200) {
-                            alert('로그인 후 이용해주세요.');
-                            location.href = "/login";
-                        } else {
-                            alert(xhr.responseText);
-                        }
-                    },
-                })
+        /* 체크박스 전체 선택 및 해제 함수 */
+        function toggleAllCheckboxes() {
+            if($("#all-check").is(":checked")) {
+                $("input[name=check]").prop("checked", true);
             } else {
+                $("input[name=check]").prop("checked", false);
+            }
+        }
+
+        /* 주문 수정 화면으로 이동하는 함수 */
+        function goToOrderEditPage() {
+            let orderId = $(this).data("order-id");
+            location.href = '/admin/orders/' + orderId + '/edit';
+        }
+
+        /* 선택된 주문 취소하는 함수 */
+        function cancelSelectedOrders() {
+            let orderIds = [];
+
+            $("input[name='check']").each(function () {
+                if ($(this).is(':checked')) {
+                    let orderId = $(this).siblings(".hidden-order-id-input").val();
+                    orderIds.push(orderId);
+                }
+            });
+
+            if (orderIds.length === 0) {
+                alert("상품을 선택해 주세요.");
+            } else {
+                if (confirm("주문을 취소하시겠습니까?")) {
+                    $.ajax({
+                        url: "/admin/orders/cancel",
+                        type: "POST",
+                        contentType: "application/json",
+                        dataType: "text",
+                        data: JSON.stringify(orderIds),
+                        success: function (res) {
+                            alert(res);
+                            location.reload(true);
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 200) {
+                                alert('로그인 후 이용해주세요.');
+                                location.href = "/login";
+                            } else {
+                                alert(xhr.responseText);
+                            }
+                        },
+                    });
+                }
                 return false;
             }
         }
@@ -175,8 +239,9 @@
         /* 페이지 이동 함수 */
         function goToPage(page) {
             let userIdentifier = $(".userid-input").val();
-            location.href = "/admin/orders/" + page + "?userIdentifier=" + userIdentifier;
+            location.href = "/admin/orders?page=" + page + "&userIdentifier=" + userIdentifier;
         }
+
     </script>
 
 </body>

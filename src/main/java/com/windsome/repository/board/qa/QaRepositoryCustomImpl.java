@@ -31,6 +31,7 @@ public class QaRepositoryCustomImpl implements QaRepositoryCustom {
                         new QQaListDto(
                                 qa.id,
                                 qa.title,
+                                qa.content,
                                 qa.member.name,
                                 qa.member.role,
                                 qa.regTime,

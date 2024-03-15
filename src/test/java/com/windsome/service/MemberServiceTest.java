@@ -1,12 +1,12 @@
 package com.windsome.service;
 
 import com.windsome.constant.OrderStatus;
-import com.windsome.constant.Role;
-import com.windsome.dto.member.ProfileFormDto;
+import com.windsome.dto.member.MemberFormDTO;
 import com.windsome.dto.member.SignUpRequestDTO;
-import com.windsome.dto.member.UpdatePasswordDto;
+import com.windsome.dto.member.UpdatePasswordDTO;
 import com.windsome.dto.member.UserSummaryDTO;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.order.Order;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.service.mail.EmailService;
@@ -26,6 +26,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.mail.MessagingException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -92,19 +97,19 @@ class MemberServiceTest {
     void testUpdateMember() {
         // Given
         Member member = new Member();
-        ProfileFormDto profileFormDto = new ProfileFormDto();
-        profileFormDto.setPassword("newPassword");
-        profileFormDto.setName("New Name");
+        MemberFormDTO memberFormDto = new MemberFormDTO();
+        memberFormDto.setPassword("newPassword");
+        memberFormDto.setName("New Name");
 
-        doNothing().when(modelMapper).map(profileFormDto, member);
-        when(passwordEncoder.encode(profileFormDto.getPassword())).thenReturn("encodedPassword");
+        doNothing().when(modelMapper).map(memberFormDto, member);
+        when(passwordEncoder.encode(memberFormDto.getPassword())).thenReturn("encodedPassword");
 
         // When
-        memberService.updateMember(member, profileFormDto);
+        memberService.updateMember(member, memberFormDto);
 
         // Then
-        verify(modelMapper, times(1)).map(profileFormDto, member);
-        verify(passwordEncoder, times(1)).encode(profileFormDto.getPassword());
+        verify(modelMapper, times(1)).map(memberFormDto, member);
+        verify(passwordEncoder, times(1)).encode(memberFormDto.getPassword());
         verify(memberRepository, times(1)).save(member);
 
         assertEquals("encodedPassword", member.getPassword());
@@ -224,7 +229,7 @@ class MemberServiceTest {
         String userIdentifier = "user123";
         String name = "John Doe";
         String email = "john@example.com";
-        UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto(userIdentifier, name, email);
+        UpdatePasswordDTO updatePasswordDto = new UpdatePasswordDTO(userIdentifier, name, email);
         Member mockMember = Member.builder()
                 .userIdentifier(userIdentifier)
                 .build();
@@ -245,7 +250,7 @@ class MemberServiceTest {
         // Given
         String userIdentifier = "user123";
         String newPassword = "newPassword";
-        UpdatePasswordDto updatePasswordDto = new UpdatePasswordDto(userIdentifier, "", "", newPassword);
+        UpdatePasswordDTO updatePasswordDto = new UpdatePasswordDTO(userIdentifier, "", "", newPassword);
         Member mockMember = Member.builder()
                 .userIdentifier(userIdentifier)
                 .build();
@@ -292,14 +297,26 @@ class MemberServiceTest {
         Member member = new Member();
         member.setId(1L);
 
-        // Mocking the behavior of the order repository
-        when(orderRepository.countByMemberIdAndOrderStatus(member.getId(), OrderStatus.PROCESSING)).thenReturn(5L);
+        List<Order> orderList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Order order = new Order();
+            order.setOrderStatus(OrderStatus.PROCESSING);
+            orderList.add(order);
+        }
+        for (int i = 0; i < 5; i++) {
+            Order order = new Order();
+            order.setOrderStatus(OrderStatus.DELIVERED);
+            orderList.add(order);
+        }
+
+        when(orderRepository.findByMemberId(anyLong())).thenReturn(orderList);
 
         // When
-        Long orderCount = memberService.getMemberOrderStatusCounts(member);
+        Map<String, Integer> memberOrderStatusCounts = memberService.getMemberOrderStatusCounts(member);
 
         // Then
-        assertEquals(5L, orderCount);
-        verify(orderRepository).countByMemberIdAndOrderStatus(member.getId(), OrderStatus.PROCESSING);
+        assertEquals(5, memberOrderStatusCounts.get("배송준비중"));
+        assertEquals(5, memberOrderStatusCounts.get("배송완료"));
+        verify(orderRepository).findByMemberId(anyLong());
     }
 }

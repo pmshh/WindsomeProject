@@ -1,6 +1,6 @@
 package com.windsome.dto.board.review;
 
-import com.windsome.entity.Product;
+import com.windsome.entity.product.Product;
 import lombok.Getter;
 import lombok.Setter;
 

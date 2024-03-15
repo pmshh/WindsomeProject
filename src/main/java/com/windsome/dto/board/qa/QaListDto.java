@@ -15,6 +15,8 @@ public class QaListDto {
 
     private String title; // 제목
 
+    private String content;  // 내용
+
     private String createdBy; // 작성자
 
     private Role state; // 사용자 권한
@@ -30,9 +32,10 @@ public class QaListDto {
     private int groupLayer; // 답글 계층
 
     @QueryProjection
-    public QaListDto(Long qaId, String title, String createdBy, Role state, LocalDateTime regDate, boolean secretYN, Long originNo, int groupOrd, int groupLayer) {
+    public QaListDto(Long qaId, String title, String content, String createdBy, Role state, LocalDateTime regDate, boolean secretYN, Long originNo, int groupOrd, int groupLayer) {
         this.qaId = qaId;
         this.title = title;
+        this.content = content;
         this.createdBy = createdBy;
         this.state = state;
         this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

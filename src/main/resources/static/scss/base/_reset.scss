@@ -55,7 +55,22 @@ input[type=text], input[type=password] {
 }
 
 select {
-    height: 30px !important;
-    line-height: 29px !important;
-    border: 1px solid #ddd !important;
+    height: 30px;
+    line-height: 29px;
+    border: 1px solid #ddd;
+}
+
+.ck.ck-editor {
+    min-width: 100%;
+    outline: none;
+}
+
+.ck.ck-content {
+    border-color: var(--ck-color-base-border) !important;
+    border-radius: none !important;
+    box-shadow: none !important;
+}
+
+.ck {
+    height: 400px;
 }

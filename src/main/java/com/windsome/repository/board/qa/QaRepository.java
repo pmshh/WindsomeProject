@@ -1,7 +1,7 @@
 package com.windsome.repository.board.qa;
 
 import com.windsome.dto.board.qa.QaDtlDtoInterface;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Qa;
 import com.windsome.entity.board.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

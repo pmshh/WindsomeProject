@@ -21,6 +21,7 @@
                 }
             }
         }
+
         &--multi-columns {
             border-top: 1px solid $border-color;
             border-bottom: 1px solid $border-color;
@@ -38,6 +39,46 @@
                 .base-table__cell {
                     border-top: 1px solid $border-color;
                     padding: 15px 0;
+
+                    .base-table__input {
+                        height: 30px;
+                        padding: 2px 4px;
+                        border: 1px solid #d5d5d5;
+                        width: 230px;
+                        outline: none;
+
+                        &--small {
+                            width: 90px;
+                        }
+
+                        &--big {
+                            width: 460px;
+                        }
+
+                        &--w100p {
+                            width: 100%;
+                        }
+
+                        &:focus::placeholder {
+                            color: transparent;
+                        }
+                    }
+
+                    .base-table__select {
+                        width: 90px;
+                        height: 30px;
+                        line-height: 30px;
+                        min-height: 30px;
+                        border: 1px solid #ddd;
+                        padding: 0 10px 0 5px;
+                        background-color: #fff;
+                        font-size: 12px;
+                        outline: none;
+
+                        &--big {
+                            width: 200px;
+                        }
+                    }
 
                     .base-table__message--red {
                         color: #d43301;
@@ -87,10 +128,14 @@
                         font-weight: bold;
                         color: black;
                     }
+
+                    .base-table__option-wrap {
+                        color: #757575;
+                    }
                 }
 
                 .base-table__cell--empty {
-                    padding: 110px 0;
+                    padding: 55px 0;
                     border-bottom: 1px solid $border-color;
 
                     .base-table__message {
@@ -105,24 +150,34 @@
                         width: 80px;
                         height: 110px;
                     }
+
+                    .base-table__small-image {
+                        width: 50px;
+                        height: 70px;
+                    }
                 }
 
                 .base-table__cell--price {
                     .base-table--total-price {
                     }
                 }
-            }
 
-            .base-table__body--notice {
-                .base-table__row {
-                    background-color: rgb(250, 250, 250);
+                .base-table__cell--order-uid {
+                    letter-spacing: -0.2px;
+
+                    .order-uid {
+                        display: block;
+                        color: black;
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
                 }
             }
 
             .base-table__footer {
                 .base-table__cell {
                     border-top: 1px solid $border-color;
-                    padding: 15px 10px 17px;
+                    padding: 20px 10px 20px;
                     text-align: right;
                 }
             }
@@ -142,7 +197,7 @@
 
                 .base-table__cell {
                     border: 1px solid $border-color;
-                    padding: 11px 0 10px 18px;
+                    padding: 15px;
                     font-weight: normal;
 
                     .base-table__input {
@@ -157,6 +212,11 @@
 
                         &--big {
                             width: 460px;
+                            max-width: 100%;
+                        }
+
+                        &--w100p {
+                            width: 100%;
                         }
 
                         &:focus::placeholder {
@@ -176,6 +236,10 @@
 
                         &--big {
                             width: 200px;
+                        }
+
+                        &--email-domain {
+                            width: 145px;
                         }
                     }
                 }
@@ -357,10 +421,14 @@
                 }
             }
         }
+
+        &--no-border-bottom {
+            border-bottom: none !important;
+        }
     }
 }
 
-input[name="check-all"] {
+input[type="checkbox"] {
     margin: -3px 0 0 0;
     vertical-align: middle;
 }

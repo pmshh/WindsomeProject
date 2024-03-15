@@ -2,7 +2,7 @@ package com.windsome.controller.board;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.notice.*;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Notice;
 import com.windsome.service.board.NoticeService;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.windsome;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.member.SignUpRequestDTO;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.service.MemberService;
 import com.windsome.config.security.CustomUserDetailsService;

@@ -1,7 +1,7 @@
 package com.windsome.entity.board;
 
 import com.windsome.dto.board.qa.CommentEnrollDto;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
 

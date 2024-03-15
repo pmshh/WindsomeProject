@@ -1,8 +1,8 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentMember;
-import com.windsome.dto.cart.CartProductDto;
-import com.windsome.entity.Member;
+import com.windsome.dto.cart.CartProductListDTO;
+import com.windsome.entity.member.Member;
 import com.windsome.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -35,14 +35,14 @@ public class CartController {
      * 장바구니 상품 추가
      */
     @PostMapping("/cart")
-    public ResponseEntity<String> addCartProduct(@Valid CartProductDto cartProductDto, BindingResult bindingResult, @CurrentMember Member member) {
+    public ResponseEntity<String> addCartProduct(@RequestBody @Valid CartProductListDTO cartProductListDTO, BindingResult bindingResult, @CurrentMember Member member) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining()));
         }
 
         try {
-            cartService.addCartProduct(cartProductDto, member.getUserIdentifier());
+            cartService.addCartProduct(cartProductListDTO, member.getUserIdentifier());
             return ResponseEntity.ok().body("장바구니에 상품이 추가되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -53,8 +53,8 @@ public class CartController {
      * 장바구니 상품 개수 수정
      */
     @PatchMapping("/cart/{cartProductId}")
-    public ResponseEntity<String> updateCartProductQuantity(@PathVariable("cartProductId") Long productId, int count, @CurrentMember Member member) {
-        if (count <= 0) {
+    public ResponseEntity<String> updateCartProductQuantity(@PathVariable("cartProductId") Long productId, int quantity, @CurrentMember Member member) {
+        if (quantity <= 0) {
             return ResponseEntity.badRequest().body("최소 1개 이상 담아주세요.");
         }
 
@@ -62,7 +62,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
 
-        cartService.updateCartItemQuantity(productId, count);
+        cartService.updateCartItemQuantity(productId, quantity);
         return ResponseEntity.ok().body("장바구니 상품의 개수가 수정되었습니다.");
     }
 

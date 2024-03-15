@@ -2,7 +2,7 @@ package com.windsome.service.board;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.board.notice.*;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Notice;
 import com.windsome.repository.board.notice.NoticeRepository;
 import com.windsome.repository.member.MemberRepository;

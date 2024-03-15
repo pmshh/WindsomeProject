@@ -1,15 +1,19 @@
 package com.windsome.service;
 
 import com.windsome.dto.cart.CartDetailDto;
-import com.windsome.dto.cart.CartProductDto;
-import com.windsome.entity.Cart;
-import com.windsome.entity.CartProduct;
-import com.windsome.entity.Member;
-import com.windsome.entity.Product;
+import com.windsome.dto.cart.CartProductDTO;
+import com.windsome.dto.cart.CartProductListDTO;
+import com.windsome.entity.*;
+import com.windsome.entity.cart.Cart;
+import com.windsome.entity.cart.CartProduct;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.product.Product;
 import com.windsome.repository.cartProduct.CartProductRepository;
 import com.windsome.repository.cart.CartRepository;
 import com.windsome.repository.member.MemberRepository;
+import com.windsome.repository.product.ColorRepository;
 import com.windsome.repository.product.ProductRepository;
+import com.windsome.repository.product.SizeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +31,8 @@ public class CartService {
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
     private final CartProductRepository cartProductRepository;
+    private final ColorRepository colorRepository;
+    private final SizeRepository sizeRepository;
 
     /**
      * 장바구니 화면 조회
@@ -35,30 +41,36 @@ public class CartService {
     public List<CartDetailDto> getCartProducts(String userIdentifier) {
         Member member = memberRepository.findByUserIdentifier(userIdentifier);
         Cart cart = cartRepository.findByMemberId(member.getId());
-
         return cart != null ? cartProductRepository.findCartDetailDtoList(cart.getId()) : Collections.emptyList();
     }
 
     /**
      * 장바구니 상품 추가
      */
-    public void addCartProduct(CartProductDto cartProductDto, String userIdentifier) {
-        Product product = productRepository.findById(cartProductDto.getProductId()).orElseThrow(EntityNotFoundException::new);
+    public void addCartProduct(CartProductListDTO cartProductListDTO, String userIdentifier) {
+        // 상품, 회원 조회
+        Product product = productRepository.findById(cartProductListDTO.getProductId()).orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByUserIdentifier(userIdentifier);
 
+        // 기존 장바구니가 존재하지 않는다면, 새로운 장바구니를 만들고 DB에 저장
         Cart cart = cartRepository.findByMemberId(member.getId());
         if (cart == null) {
             cart = Cart.createCart(member);
             cartRepository.save(cart);
         }
 
-        CartProduct savedCartProduct = cartProductRepository.findByCartIdAndProductId(cart.getId(), product.getId());
+        // 장바구니에 상품이 이미 담겨있다면, 상품의 수량을 업데이트하고, 담겨있지 않다면 새로운 상품을 장바구니에 추가
+        for (CartProductDTO cartProductDTO : cartProductListDTO.getCartProductDTOList()) {
+            CartProduct findCartProduct = cartProductRepository.findByProductIdAndColorIdAndSizeId(product.getId(), cartProductDTO.getColorId(), cartProductDTO.getSizeId());
 
-        if (savedCartProduct != null) {
-            savedCartProduct.addCount(cartProductDto.getCount());
-        } else {
-            CartProduct cartProduct = CartProduct.createCartProduct(cart, product, cartProductDto.getCount());
-            cartProductRepository.save(cartProduct);
+            if (findCartProduct != null) {
+                findCartProduct.addQuantity(cartProductDTO.getQuantity());
+            } else {
+                Color color = colorRepository.findById(cartProductDTO.getColorId()).orElseThrow(EntityNotFoundException::new);
+                Size size = sizeRepository.findById(cartProductDTO.getSizeId()).orElseThrow(EntityNotFoundException::new);
+                CartProduct cartProduct = CartProduct.createCartProduct(cart, product, color, size, cartProductDTO.getQuantity());
+                cartProductRepository.save(cartProduct);
+            }
         }
     }
 
@@ -89,9 +101,9 @@ public class CartService {
     /**
      * 장바구니 상품 개수 수정
      */
-    public void updateCartItemQuantity(Long productId, int count) {
+    public void updateCartItemQuantity(Long productId, int quantity) {
         CartProduct cartProduct = cartProductRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
-        cartProduct.setCount(count);
+        cartProduct.setQuantity(quantity);
     }
 
     /**

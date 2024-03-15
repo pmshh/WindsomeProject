@@ -1,7 +1,8 @@
 package com.windsome.service;
 
-import com.windsome.entity.ProductImage;
+import com.windsome.entity.product.ProductImage;
 import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.service.product.ProductImageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

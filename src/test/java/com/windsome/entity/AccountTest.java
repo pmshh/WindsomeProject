@@ -1,6 +1,7 @@
 package com.windsome.entity;
 
 import com.windsome.constant.Role;
+import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

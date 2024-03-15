@@ -4,9 +4,9 @@ import com.windsome.WithAccount;
 import com.windsome.constant.ProductSellStatus;
 import com.windsome.constant.Role;
 import com.windsome.controller.board.ReviewController;
-import com.windsome.entity.Member;
-import com.windsome.entity.Product;
-import com.windsome.entity.ProductImage;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.product.Product;
+import com.windsome.entity.product.ProductImage;
 import com.windsome.entity.board.Review;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.productImage.ProductImageRepository;
@@ -236,7 +236,7 @@ class ReviewControllerTest {
                 .price(10000)
                 .productDetail("테스트 상품 상세 설명")
                 .productSellStatus(ProductSellStatus.AVAILABLE)
-                .stockNumber(100)
+//                .stockNumber(100)
                 .build();
         productRepository.save(product);
 

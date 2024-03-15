@@ -2,7 +2,7 @@ package com.windsome.dto.admin;
 
 import com.windsome.constant.OrderStatus;
 import com.windsome.dto.order.OrderHistProductResponseDTO;
-import com.windsome.entity.Order;
+import com.windsome.entity.order.Order;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +23,12 @@ public class OrderManagementDTO {
 
     private String buyerId; // 구매자 아이디
 
+    private int productCount; // 주문 상품 개수
+
+    private String repProductImage; // 대표 이미지
+
+    private String repProductName; // 대표 상품명
+
     private List<OrderHistProductResponseDTO> orderHistProductList = new ArrayList<>(); // 주문 품목
 
     public OrderManagementDTO(Order order) {
@@ -31,5 +37,8 @@ public class OrderManagementDTO {
         this.orderDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.orderStatus = order.getOrderStatus();
         this.buyerId = order.getMember().getUserIdentifier();
+        this.productCount = order.getProductCount();
+        this.repProductImage = order.getRepProductImage();
+        this.repProductName = order.getRepProductName();
     }
 }

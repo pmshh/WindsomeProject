@@ -2,7 +2,7 @@ package com.windsome.service.board;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.board.qa.*;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Qa;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.board.qa.QaRepository;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

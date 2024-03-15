@@ -1,6 +1,6 @@
 package com.windsome.dto.order;
 
-import com.windsome.entity.Product;
+import com.windsome.entity.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

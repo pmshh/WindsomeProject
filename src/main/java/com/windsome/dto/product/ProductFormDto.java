@@ -1,7 +1,7 @@
 package com.windsome.dto.product;
 
 import com.windsome.constant.ProductSellStatus;
-import com.windsome.entity.Product;
+import com.windsome.entity.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class ProductFormDTO {
     private Long id;
 
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
-    private String productName;
+    private String name;
 
     @NotNull(message = "가격은 필수 입력 값입니다.")
     private Integer price;
@@ -30,25 +30,20 @@ public class ProductFormDTO {
     @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String productDetail;
 
-    @NotNull(message = "재고는 필수 입력 값입니다.")
-    private Integer stockNumber;
+    private ProductSellStatus productSellStatus; // 상품 판매 상태
 
-    private ProductSellStatus productSellStatus;
+    private List<ProductImageDTO> productImageDTOList = new ArrayList<>(); // 상품 이미지 리스트
 
-    private List<ProductImageDTO> productImageDTOList = new ArrayList<>();
+    private List<Long> productImageIds = new ArrayList<>(); // 상품 이미지 Ids
 
-    private List<Long> productImageIds = new ArrayList<>();
+    private Long categoryId; // 카테고리 id
 
-    private Long categoryId;
+    private List<OptionDTO> optionDTOList = new ArrayList<>(); // 상품 옵션(색상, 사이즈, 재고)
 
     /**
-     * Dto -> Entity, Entity -> Dto
+     * 생성자
      */
     private static ModelMapper modelMapper = new ModelMapper();
-
-    public Product toEntity() {
-        return modelMapper.map(this, Product.class);
-    }
 
     public static ProductFormDTO toDto(Product item) {
         return modelMapper.map(item, ProductFormDTO.class);

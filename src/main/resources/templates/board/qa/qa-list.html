@@ -22,20 +22,22 @@
                     </div>
 
                     <div class="section-body qa-body row">
-                        <div class="qa-list-container col-11">
 
-                            <div class="table-wrapper">
-                                <table class="base-table base-table--multi-columns">
-                                    <thead class="base-table__head">
+                        <div class="col-11">
+                            <div class="qa-list-container">
+
+                                <div class="table-wrapper">
+                                    <table class="base-table base-table--multi-columns">
+                                        <thead class="base-table__head">
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" style="width: 150px;" scope="col">번호</th>
                                             <th class="base-table__header-cell" style="width: auto;" scope="col">제목</th>
                                             <th class="base-table__header-cell" style="width: 180px;" scope="col">작성자</th>
                                             <th class="base-table__header-cell" style="width: 180px;" scope="col">작성일</th>
                                         </tr>
-                                    </thead>
+                                        </thead>
 
-                                    <tbody class="base-table__body">
+                                        <tbody class="base-table__body">
                                         <tr class="base-table__row" th:if="${#lists.isEmpty(qaList.getContent())}">
                                             <td class="base-table__cell base-table__cell--empty" colspan="4">
                                                 <span class="base-table__message">등록된 Q&A가 없습니다.</span>
@@ -60,62 +62,64 @@
                                                 <span class="txtNum gray-col txt11" th:text="${qa.regDate}">2024-02-06</span>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                             </div>
 
-                        </div>
+                            <div class="button-container">
+                                <button class="button button--white button--65x30 write-btn">글쓰기</button>
+                            </div>
 
-                        <div class="button-container col-11">
-                            <button class="button button--white button--65x30 write-btn">글쓰기</button>
-                        </div>
-
-                        <div class="pagination-container col-11"
-                             th:with="start=${(qaList.number/maxPage)*maxPage + 1}, end=(${(qaList.totalPages == 0) ? 1 :
+                            <div class="pagination-container"
+                                 th:with="start=${(qaList.number/maxPage)*maxPage + 1}, end=(${(qaList.totalPages == 0) ? 1 :
                                              (start + (maxPage - 1) < qaList.totalPages ? start + (maxPage - 1) : qaList.totalPages)})">
-                            <ul>
-                                <li class="prev" th:classappend="${qaList.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(0)'">
-                                        <i class="fa-solid fa-angle-left"></i><i
-                                            class="fa-solid fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="prev" th:classappend="${qaList.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' +  ${qaList.number - 1} + ')'">
-                                        <i class="fa-solid fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                    th:classappend="${qaList.number eq page - 1} ? 'active' : ''">
-                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                                       th:inline="text">[[${page}]]</a>
-                                </li>
-                                <li class="next" th:classappend="${qaList.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${qaList.number + 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i>
-                                    </a>
-                                </li>
-                                <li class="next" th:classappend="${qaList.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${qaList.totalPages - 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i><i
-                                            class="fa-solid fa-angle-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                                <ul>
+                                    <li class="prev" th:classappend="${qaList.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(0)'">
+                                            <i class="fa-solid fa-angle-left"></i><i
+                                                class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="prev" th:classappend="${qaList.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' +  ${qaList.number - 1} + ')'">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                        th:classappend="${qaList.number eq page - 1} ? 'active' : ''">
+                                        <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                           th:inline="text">[[${page}]]</a>
+                                    </li>
+                                    <li class="next" th:classappend="${qaList.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${qaList.number + 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="next" th:classappend="${qaList.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${qaList.totalPages - 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i><i
+                                                class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="search-input-container" th:object="${qaSearchDto}">
+                                <i class="fa-solid fa-angle-right"></i>
+                                <span class="txt">검색어</span>
+                                <select class="search-date-type" th:field="*{searchDateType}">
+                                    <option value="">(전체)</option>
+                                    <option value="title">제목</option>
+                                    <option value="content">내용</option>
+                                    <option value="name">작성자</option>
+                                </select>
+                                <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                                <button class="search-btn button button--white button--90x30" type="button">검색</button>
+                            </div>
                         </div>
 
-                        <div class="search-input-container col-11" th:object="${qaSearchDto}">
-                            <i class="fa-solid fa-angle-right"></i>
-                            <span class="txt">검색어</span>
-                            <select class="search-date-type" th:field="*{searchDateType}">
-                                <option value="">(전체)</option>
-                                <option value="title">제목</option>
-                                <option value="content">내용</option>
-                                <option value="name">작성자</option>
-                            </select>
-                            <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
-                        </div>
                     </div>
                 </div>
             </section>

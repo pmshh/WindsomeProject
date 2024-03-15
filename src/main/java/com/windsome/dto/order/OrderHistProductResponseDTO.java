@@ -2,7 +2,7 @@ package com.windsome.dto.order;
 
 import com.windsome.constant.OrderProductStatus;
 import com.windsome.dto.product.ProductInfoResponseDTO;
-import com.windsome.entity.OrderProduct;
+import com.windsome.entity.order.OrderProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,15 @@ public class OrderHistProductResponseDTO {
 
     private int price; // 가격
 
-    private int count; // 개수
+    private int orderQuantity; // 주문 개수
+
+    private Long colorId; // 색상 id
+
+    private String colorName; // 색상 이름
+
+    private Long sizeId; // 사이즈 id
+
+    private String sizeName; // 사이즈 이름
 
     private OrderProductStatus orderProductStatus; // 주문 상품 현황
 
@@ -30,7 +38,11 @@ public class OrderHistProductResponseDTO {
         this.id = orderProduct.getProduct().getId();
         this.name = productInfoDto.getName();
         this.price = orderProduct.getPrice();
-        this.count = orderProduct.getCount();
+        this.orderQuantity = orderProduct.getOrderQuantity();
+        this.colorId = orderProduct.getColor().getId();
+        this.colorName = orderProduct.getColor().getName();
+        this.sizeId = orderProduct.getSize().getId();
+        this.sizeName = orderProduct.getSize().getName();
         this.orderProductStatus = orderProduct.getOrderProductStatus();
         this.imageUrl = productInfoDto.getImageUrl();
     }

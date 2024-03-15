@@ -1,15 +1,11 @@
 @import "../../../abstracts/variables";
 
 .notice-mng-body {
-    width: 90%;
-    margin: 0 auto;
-
     .notice-list-container {
-        width: 100%;
         overflow-x: auto;
 
         table {
-            min-width: 1150px;
+            min-width: 1300px;
         }
     }
 

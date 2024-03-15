@@ -1,6 +1,5 @@
 package com.windsome.dto.order;
 
-import com.windsome.constant.OrderProductStatus;
 import com.windsome.constant.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,12 +52,17 @@ public class OrderDetailDTO {
 
     private String zipcode; // 우편 번호
 
-    private String address; // 주소
+    private String addr; // 주소
+
+    private String addrDetail; // 상세 주소
 
     private String tel; // 휴대 전화
 
     private String req; // 배송 메시지
 
+    /**
+     * 생성자
+     */
     public OrderDetailDTO(String orderUid, LocalDateTime orderDate, String buyer, OrderStatus orderStatus, int totalOrderPrice, int totalPaymentPrice, int usedPoints, int earnedPoints, String recipient, String zipcode, String addr, String addrDetail, String tel, String req) {
         this.orderUid = orderUid;
         this.orderDate = orderDate;
@@ -71,7 +75,8 @@ public class OrderDetailDTO {
         this.earnedPoints = earnedPoints;
         this.recipient = recipient;
         this.zipcode = zipcode;
-        this.address = addr + addrDetail;
+        this.addr = addr;
+        this.addrDetail = addrDetail;
         this.tel = tel;
         this.req = req;
     }

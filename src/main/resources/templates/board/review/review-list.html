@@ -23,11 +23,12 @@
 
                     <div class="section-body review-body row">
 
-                        <div class="review-list-container col-11">
+                        <div class="col-11">
+                            <div class="review-list-container">
 
-                            <div class="table-wrapper">
-                                <table class="base-table base-table--multi-columns">
-                                    <thead class="base-table__head">
+                                <div class="table-wrapper">
+                                    <table class="base-table base-table--multi-columns">
+                                        <thead class="base-table__head">
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" style="width: 110px;" scope="col">No</th>
                                             <th class="base-table__header-cell" style="width: 150px;" scope="col">Product</th>
@@ -35,11 +36,11 @@
                                             <th class="base-table__header-cell" style="width: 110px;" scope="col">Writer</th>
                                             <th class="base-table__header-cell" style="width: 150px;" scope="col">Ratings</th>
                                         </tr>
-                                    </thead>
-                                    <tbody class="base-table__body">
+                                        </thead>
+                                        <tbody class="base-table__body">
 
                                         <tr class="base-table__row" th:if="${#lists.isEmpty(reviews.getContent())}">
-                                            <td class="base-table__cell base-table__cell--empty" colspan="7">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="5">
                                                 <span class="base-table__message">등록된 리뷰가 없습니다.</span>
                                             </td>
                                         </tr>
@@ -58,7 +59,7 @@
                                             </td>
                                             <td class="base-table__cell left pl20">
                                                 <a class="base-table__link" th:href="${'/board/review/' + review.reviewId}">
-                                                    <span th:text="${review.content}"></span>
+                                                    <span class="txt11 text-secondary-emphasis" th:text="${review.content}"></span>
                                                 </a>
                                             </td>
                                             <td class="base-table__cell">
@@ -79,64 +80,66 @@
                                                 </fieldset>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
                             </div>
 
+                            <div class="button-container">
+                                <button class="button button--white button--65x30 write-btn">글쓰기</button>
+                            </div>
 
-
-                        </div>
-
-                        <div class="button-container col-11">
-                            <button class="button button--white button--65x30 write-btn">글쓰기</button>
-                        </div>
-
-                        <div class="pagination-container col-11"
-                             th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
+                            <div class="pagination-container"
+                                 th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
-                            <ul>
-                                <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(0)'">
-                                        <i class="fa-solid fa-angle-left"></i><i
-                                            class="fa-solid fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' +  ${reviews.number - 1} + ')'">
-                                        <i class="fa-solid fa-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                    th:classappend="${reviews.number eq page - 1} ? 'active' : ''">
-                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                                       th:inline="text">[[${page}]]</a>
-                                </li>
-                                <li class="next" th:classappend="${reviews.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i>
-                                    </a>
-                                </li>
-                                <li class="next" th:classappend="${reviews.last} ? 'disabled'">
-                                    <a th:onclick="'javascript:page(' + ${reviews.totalPages - 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i><i
-                                            class="fa-solid fa-angle-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                                <ul>
+                                    <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(0)'">
+                                            <i class="fa-solid fa-angle-left"></i><i
+                                                class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="prev" th:classappend="${reviews.first} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' +  ${reviews.number - 1} + ')'">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                        th:classappend="${reviews.number eq page - 1} ? 'active' : ''">
+                                        <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                           th:inline="text">[[${page}]]</a>
+                                    </li>
+                                    <li class="next" th:classappend="${reviews.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                    <li class="next" th:classappend="${reviews.last} ? 'disabled'">
+                                        <a th:onclick="'javascript:page(' + ${reviews.totalPages - 1} + ')'">
+                                            <i class="fa-solid fa-angle-right"></i><i
+                                                class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="search-input-container" th:object="${reviewSearchDto}">
+                                <i class="fa-solid fa-angle-right"></i>
+                                <span class="txt">검색어</span>
+                                <select class="search-date-type" th:field="*{searchDateType}">
+                                    <option value="">(전체)</option>
+                                    <option value="title">제목</option>
+                                    <option value="content">내용</option>
+                                    <option value="name">작성자</option>
+                                </select>
+                                <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                                <button class="search-btn button button--white button--90x30" type="button">검색</button>
+                            </div>
                         </div>
 
-                        <div class="search-input-container col-11" th:object="${reviewSearchDto}">
-                            <i class="fa-solid fa-angle-right"></i>
-                            <span class="txt">검색어</span>
-                            <select class="search-date-type" th:field="*{searchDateType}">
-                                <option value="">(전체)</option>
-                                <option value="title">제목</option>
-                                <option value="content">내용</option>
-                                <option value="name">작성자</option>
-                            </select>
-                            <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
-                        </div>
                     </div>
                 </div>
             </section>

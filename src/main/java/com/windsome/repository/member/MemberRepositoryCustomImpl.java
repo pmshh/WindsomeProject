@@ -5,9 +5,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.windsome.constant.Role;
 import com.windsome.dto.member.MemberListResponseDTO;
-import com.windsome.dto.member.MemberListSearchDto;
+import com.windsome.dto.member.MemberListSearchDTO;
 import com.windsome.dto.member.QMemberListResponseDTO;
-import com.windsome.entity.QMember;
+import com.windsome.entity.member.QMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,7 @@ import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
-import static com.windsome.entity.QMember.*;
+import static com.windsome.entity.member.QMember.*;
 
 @RequiredArgsConstructor
 public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
@@ -24,7 +24,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<MemberListResponseDTO> findMembersByCriteria(MemberListSearchDto memberListSearchDto, Pageable pageable) {
+    public Page<MemberListResponseDTO> findMembersByCriteria(MemberListSearchDTO memberListSearchDto, Pageable pageable) {
         QMember member = QMember.member;
 
         List<MemberListResponseDTO> content = queryFactory
@@ -46,7 +46,9 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 )
                 .from(member)
                 .where(like(memberListSearchDto.getSearchType(), memberListSearchDto.getSearchQuery()),
-                        (searchStateTypeEq(memberListSearchDto.getSearchStateType())))
+                        (searchStateTypeEq(memberListSearchDto.getSearchStateType())),
+                        member.isDeleted.isFalse()
+                )
                 .orderBy(member.role.asc(), member.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -56,7 +58,8 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .select(member.count())
                 .from(member)
                 .where(like(memberListSearchDto.getSearchType(), memberListSearchDto.getSearchQuery()),
-                        (searchStateTypeEq(memberListSearchDto.getSearchStateType())));
+                        (searchStateTypeEq(memberListSearchDto.getSearchStateType())),
+                        member.isDeleted.isFalse());
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }

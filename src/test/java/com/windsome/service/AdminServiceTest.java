@@ -6,14 +6,15 @@ import com.windsome.dto.admin.DashboardInfoDto;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.dto.member.AdminMemberDetailDTO;
 import com.windsome.dto.product.ProductSearchDTO;
-import com.windsome.entity.Member;
-import com.windsome.entity.Order;
-import com.windsome.entity.Product;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.order.Order;
+import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
 import com.windsome.repository.board.qa.QaRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.repository.orderProduct.OrderProductRepository;
+import com.windsome.repository.payment.PaymentRepository;
 import com.windsome.repository.product.ProductRepository;
 import com.windsome.repository.productImage.ProductImageRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -49,6 +50,7 @@ class AdminServiceTest {
 
     @Mock private MemberRepository memberRepository;
     @Mock private ProductRepository productRepository;
+    @Mock private PaymentRepository paymentRepository;
     @Mock private ProductImageRepository productImageRepository;
     @Mock private OrderRepository orderRepository;
     @Mock private OrderProductRepository orderProductRepository;
@@ -65,15 +67,15 @@ class AdminServiceTest {
         when(memberRepository.count()).thenReturn(10L);
         when(productRepository.count()).thenReturn(20L);
         when(qaRepository.count()).thenReturn(5L);
-        when(orderProductRepository.totalSales()).thenReturn(500L);
+        when(paymentRepository.getTotalPaymentPrice()).thenReturn(500L);
 
         CategorySalesResult categorySalesResult1 = mock(CategorySalesResult.class);
         when(categorySalesResult1.getCategory()).thenReturn(1L);
-        when(categorySalesResult1.getCount()).thenReturn(100L);
+        when(categorySalesResult1.getOrderQuantity()).thenReturn(100L);
 
         CategorySalesResult categorySalesResult2 = mock(CategorySalesResult.class);
         when(categorySalesResult2.getCategory()).thenReturn(2L);
-        when(categorySalesResult2.getCount()).thenReturn(200L);
+        when(categorySalesResult2.getOrderQuantity()).thenReturn(200L);
 
         List<CategorySalesResult> categorySalesResults = Arrays.asList(categorySalesResult1, categorySalesResult2);
         when(orderProductRepository.getCategorySalesCount()).thenReturn(categorySalesResults);
@@ -85,18 +87,18 @@ class AdminServiceTest {
         verify(memberRepository, times(1)).count();
         verify(productRepository, times(1)).count();
         verify(qaRepository, times(1)).count();
-        verify(orderProductRepository, times(1)).totalSales();
+        verify(paymentRepository, times(1)).getTotalPaymentPrice();
         verify(orderProductRepository, times(1)).getCategorySalesCount();
 
         assertEquals(10L, dashboardInfoDto.getTotalMembers());
         assertEquals(20L, dashboardInfoDto.getTotalProducts());
         assertEquals(5L, dashboardInfoDto.getTotalQaPosts());
-        assertEquals(500L, dashboardInfoDto.getTotalSales());
+        assertEquals(500L, dashboardInfoDto.getTotalOrderPrice());
         assertEquals(2, dashboardInfoDto.getCategorySalesList().size());
         assertEquals(1L, dashboardInfoDto.getCategorySalesList().get(0).getCategory());
-        assertEquals(100L, dashboardInfoDto.getCategorySalesList().get(0).getCount());
+        assertEquals(100L, dashboardInfoDto.getCategorySalesList().get(0).getOrderQuantity());
         assertEquals(2L, dashboardInfoDto.getCategorySalesList().get(1).getCategory());
-        assertEquals(200L, dashboardInfoDto.getCategorySalesList().get(1).getCount());
+        assertEquals(200L, dashboardInfoDto.getCategorySalesList().get(1).getOrderQuantity());
     }
 
     @Test
@@ -260,13 +262,14 @@ class AdminServiceTest {
     void testDeleteMember() throws AdminDeletionException {
         // Given
         Long accountId = 1L;
+        Long[] accountIds = {1L};
         Member member = new Member();
         member.setRole(Role.USER);
 
         when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(member));
 
         // When
-        adminService.deleteMember(accountId);
+        adminService.deleteMembers(accountIds);
 
         // Then
         verify(memberRepository, times(1)).findById(accountId);
@@ -278,6 +281,7 @@ class AdminServiceTest {
     void testDeleteMember_AdminRole() {
         // Given
         Long accountId = 1L;
+        Long[] accountIds = {1L};
         Member adminMember = new Member();
         adminMember.setRole(Role.ADMIN);
 
@@ -285,7 +289,7 @@ class AdminServiceTest {
 
         // When, Then
         AdminDeletionException exception = assertThrows(AdminDeletionException.class, () -> {
-            adminService.deleteMember(accountId);
+            adminService.deleteMembers(accountIds);
         });
 
         verify(memberRepository, times(1)).findById(accountId);
@@ -297,11 +301,12 @@ class AdminServiceTest {
     void testDeleteMember_EntityNotFoundException() {
         // Given
         Long accountId = 1L;
+        Long[] accountIds = {1L};
         when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.empty());
 
         // When, Then
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
-            adminService.deleteMember(accountId);
+            adminService.deleteMembers(accountIds);
         });
 
         verify(memberRepository, times(1)).findById(accountId);

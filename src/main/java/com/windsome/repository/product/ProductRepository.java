@@ -2,7 +2,7 @@ package com.windsome.repository.product;
 
 import com.windsome.dto.board.review.ProductListDto;
 import com.windsome.dto.product.ProductInfoResponseDTO;
-import com.windsome.entity.Product;
+import com.windsome.entity.product.Product;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

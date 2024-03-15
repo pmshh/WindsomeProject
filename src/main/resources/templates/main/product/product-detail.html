@@ -16,16 +16,18 @@
 
         <!-- section start -->
         <section class="def-section-area">
-            <div class="container-fluid">
+            <div class="container">
 
                 <div class="section-header">
                     <h2>PRODUCT DETAIL</h2>
                     <div class="divider"></div>
                 </div>
 
-                <div class="section-body product-dtl-body mt-5">
+                <div class="section-body product-dtl-body">
 
                     <div class="product-dtl row justify-content-center">
+
+                        <!-- product-img-wrap start -->
                         <div class="product-img-wrap col-auto">
                             <div class="main-img-box">
                                 <img id="image-box" class="main-img" th:src="${product.productImageDTOList[0].imageUrl}" alt="">
@@ -36,9 +38,10 @@
                             </div>
                         </div>
 
+                        <!-- product-info-wrap start -->
                         <div class="product-info-wrap col-auto">
                             <div class="product-title">
-                                <h3 th:text="${product.productName}">Black Coat</h3>
+                                <h3 th:text="${product.name}">Black Coat</h3>
                             </div>
                             <div class="product-desc">
                                 <th:block th:utext="${product.productDetail}"></th:block>
@@ -49,10 +52,8 @@
                                     <span>판매가</span>
                                 </div>
                                 <div class="con">
-                                        <span th:if="${product.discount == 0}"
-                                              th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|">가격</span>
-                                    <span th:if="${product.discount > 0}" style="text-decoration: line-through"
-                                          th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|">가격</span>
+                                    <span th:if="${product.discount == 0}" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|">가격</span>
+                                    <span th:if="${product.discount > 0}" style="text-decoration: line-through" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|">가격</span>
                                 </div>
                             </div>
 
@@ -62,73 +63,62 @@
                                         <span>할인판매가</span>
                                     </div>
                                     <div class="con">
-                                            <span
-                                                    th:text="|${#numbers.formatInteger(product.price * (1 - product.discount), 0, 'COMMA')}원|">가격</span>
+                                        <span th:text="|${#numbers.formatInteger(product.price * (1 - product.discount), 0, 'COMMA')}원|">가격</span>
                                     </div>
                                     <div class="discount-rate">
-                                            <span
-                                                    th:text="${#numbers.formatInteger(product.discount * 100, 1, 'COMMA')} + '%'"></span>
+                                        <span th:text="${#numbers.formatInteger(product.discount * 100, 1, 'COMMA')} + '%'"></span>
                                     </div>
                                 </div>
                             </th:block>
 
-                            <div class="point">
-                                <div class="title">
-                                    <span>적립 포인트</span>
-                                </div>
-                                <div class="con">
-                                    <span class="total-point"></span>
-                                </div>
+                            <table class="option-table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="col">색상</th>
+                                        <td>
+                                            <select class="color-select">
+                                                <option value="0" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                <option value="00" disabled>-------------------</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <th scope="col">사이즈</th>
+                                        <td>
+                                            <select class="size-select">
+                                                <option value="0" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                <option value="00" disabled>-------------------</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="option-products">
+                                <table>
+                                    <colgroup>
+                                        <col style="width: auto">
+                                        <col style="width: 93px">
+                                        <col style="width: 86px">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="option-products__body">
+                                        <!-- 동적 태그 생성 -->
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <div class="product-option">
-                                <!--                                    <div class="product-color">-->
-                                <!--                                        <div class="title">-->
-                                <!--                                            <span>색상</span>-->
-                                <!--                                        </div>-->
-                                <!--                                        <div class="con">-->
-                                <!--                                            <select>-->
-                                <!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
-                                <!--                                                <option value="1">블랙</option>-->
-                                <!--                                                <option value="2">챠콜</option>-->
-                                <!--                                                <option value="3">그레이</option>-->
-                                <!--                                            </select>-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <!--                                    <div class="product-size">-->
-                                <!--                                        <div class="title">-->
-                                <!--                                            <span>사이즈</span>-->
-                                <!--                                        </div>-->
-                                <!--                                        <div class="con">-->
-                                <!--                                            <select>-->
-                                <!--                                                <option selected>- [필수] 옵션을 선택해 주세요 -</option>-->
-                                <!--                                                <option value="1">S</option>-->
-                                <!--                                                <option value="2">M</option>-->
-                                <!--                                                <option value="3">L</option>-->
-                                <!--                                                <option value="4">XL</option>-->
-                                <!--                                            </select>-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <div class="product-cnt">
-                                    <div class="title">
-                                        <span>주문 수량</span>
-                                    </div>
-                                    <div class="con">
-                                        <input class="order-count-input" type="text" value="1">
-                                        <div class="cnt-btn">
-                                            <i class="xi-caret-up-min order-count-button" th:data-type="plus"></i>
-                                            <i class="xi-caret-down-min order-count-button" th:data-type="minus"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="total-box">
-                                <strong>
-                                    <em class="total-price"
-                                        th:text="|${#numbers.formatInteger(product.price, 1, 'COMMA')}원|">총 가격</em>
-                                </strong>
-                                <em class="total-order-count"></em>
+                                <strong><span class="total-price" th:text="|${#numbers.formatInteger(product.price, 1, 'COMMA')}원|">총 가격</span></strong>
+                                <span class="total-order-count"></span>
                             </div>
+
                             <div class="btn-inner">
                                 <div class="buy-btn">
                                     <button type="button" class="buy-button mb5">BUY NOW</button>
@@ -147,65 +137,69 @@
                             </div>
                             <div class="product-review-body">
                                 <div class="review-list-container">
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 10%;" scope="col">번호</th>
-                                            <th style="width: auto;" scope="col">제목</th>
-                                            <th style="width: 150px;" scope="col">평점</th>
-                                            <th style="width: 10%;" scope="col">작성자</th>
-                                            <th style="width: 10%;" scope="col">작성일</th>
-                                            <th style="width: 10%;" scope="col">조회</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
+                                    <div class="table-wrapper">
+                                        <table class="base-table base-table--multi-columns">
+                                            <thead class="base-table__head">
+                                                <tr class="base-table__row">
+                                                    <th class="base-table__header-cell" style="width: 10%;" scope="col">No</th>
+                                                    <th class="base-table__header-cell" style="width: auto;" scope="col">Subject</th>
+                                                    <th class="base-table__header-cell" style="width: 10%;" scope="col">Writer</th>
+                                                    <th class="base-table__header-cell" style="width: 150px;" scope="col">Ratings</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="base-table__body">
+                                                <tr class="base-table__row" th:if="${#lists.isEmpty(reviews.getContent())}">
+                                                    <td class="base-table__cell base-table__cell--empty" colspan="4">
+                                                        <span class="base-table__message">등록된 리뷰가 없습니다.</span>
+                                                    </td>
+                                                </tr>
 
-                                        <tr th:if="${#lists.isEmpty(reviews.getContent())}">
-                                            <td colspan="6" class="empty-message">
-                                                <span class="message">등록된 리뷰가 없습니다.</span>
-                                            </td>
-                                        </tr>
+                                                <tr class="base-table__row" th:each="review, status: ${reviews.getContent()}">
+                                                    <td class="base-table__cell">
+                                                        <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
+                                                    </td>
+                                                    <td class="base-table__cell left pl20">
+                                                        <a class="base-table__link" th:href="${'/board/review/' + review.reviewId}">
+                                                            <span th:text="${review.content}"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td class="base-table__cell">
+                                                        <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
+                                                    </td>
+                                                    <td class="base-table__cell">
+                                                        <fieldset class="rate" th:data-rating="${review.rating}">
+                                                            <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 1}" ></label>
+                                                            <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 2}" class="half" ></label>
+                                                            <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 3}"></label>
+                                                            <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 4}" class="half" ></label>
+                                                            <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 5}"></label>
+                                                            <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 6}" class="half" ></label>
+                                                            <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 7}"></label>
+                                                            <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 8}" class="half" ></label>
+                                                            <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 9}"></label>
+                                                            <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;">
+                                                            <label th:for="${review.createdBy + 10}" class="half" ></label>
+                                                        </fieldset>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                                        <tr th:each="review, status: ${reviews.getContent()}">
-                                            <td>
-                                                <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
-                                            </td>
-                                            <td class="left">
-                                                <a th:href="@{'/review/' + ${review.reviewId}}">
-                                                    <span th:text="${review.title}"></span>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <fieldset class="rate" th:data-rating="${review.rating}">
-                                                    <input type="radio" th:id="${review.createdBy + 1}" th:name="${review.reviewId}" value="5.0" onclick="return false;"><label th:for="${review.createdBy + 1}" ></label>
-                                                    <input type="radio" th:id="${review.createdBy + 2}" th:name="${review.reviewId}" value="4.5" onclick="return false;"><label th:for="${review.createdBy + 2}" class="half" ></label>
-                                                    <input type="radio" th:id="${review.createdBy + 3}" th:name="${review.reviewId}" value="4.0" onclick="return false;"><label th:for="${review.createdBy + 3}"></label>
-                                                    <input type="radio" th:id="${review.createdBy + 4}" th:name="${review.reviewId}" value="3.5" onclick="return false;"><label th:for="${review.createdBy + 4}" class="half" ></label>
-                                                    <input type="radio" th:id="${review.createdBy + 5}" th:name="${review.reviewId}" value="3.0" onclick="return false;"><label th:for="${review.createdBy + 5}"></label>
-                                                    <input type="radio" th:id="${review.createdBy + 6}" th:name="${review.reviewId}" value="2.5" onclick="return false;"><label th:for="${review.createdBy + 6}" class="half" ></label>
-                                                    <input type="radio" th:id="${review.createdBy + 7}" th:name="${review.reviewId}" value="2.0" onclick="return false;"><label th:for="${review.createdBy + 7}"></label>
-                                                    <input type="radio" th:id="${review.createdBy + 8}" th:name="${review.reviewId}" value="1.5" onclick="return false;"><label th:for="${review.createdBy + 8}" class="half" ></label>
-                                                    <input type="radio" th:id="${review.createdBy + 9}" th:name="${review.reviewId}" value="1.0" onclick="return false;"><label th:for="${review.createdBy + 9}"></label>
-                                                    <input type="radio" th:id="${review.createdBy + 10}" th:name="${review.reviewId}" value="0.5" onclick="return false;"><label th:for="${review.createdBy + 10}" class="half" ></label>
-                                                </fieldset>
-                                            </td>
-                                            <td>
-                                                <span th:text="|${#strings.substring(review.createdBy, 0, 1)}****|"></span>
-                                            </td>
-                                            <td>
-                                                <span th:text="${review.regDate}"></span>
-                                            </td>
-                                            <td>
-                                                <span th:text="${review.hits}"></span>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
 
                                 <div class="button-container">
                                     <button class="button button--white button--65x30 write-btn">WRITE</button>
-                                    <button class="button button--white button--65x30 list-btn" onclick="location.href='/reviews'">LIST</button>
+                                    <button class="button button--white button--65x30 list-btn" onclick="location.href='/board/review'">LIST</button>
                                 </div>
 
                                 <div class="pagination-container"
@@ -250,8 +244,7 @@
         </section>
 
         <form th:action="@{/orders/new}" method="get" class="order-form">
-            <input type="hidden" name="orderProducts[0].productId" th:value="${product.id}">
-            <input type="hidden" name="orderProducts[0].count" value="">
+            <!-- 동적으로 추가 -->
         </form>
 
         <div th:replace="/layouts/default-layout.html :: footer"></div>
@@ -260,54 +253,46 @@
 
 <div th:replace="/layouts/default-layout.html :: commonJs"></div>
 <script th:inline="javascript">
+    let inventories = [[${inventories}]]; // 상품의 옵션별 재고 정보가 담겨있는 데이터
+
     $(function() {
         showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
         initializeReviewRating(); // 리뷰 평점 초기화
-        initializeOrderPriceAndPoint(); // 총 주문 결제 금액 및 적립 포인트 초기화
+        initializeOrderPriceAndPoint(); // 총 주문 결제 금액 초기화
+        initializeColorSelect(); // 색상 셀렉트 옵션 값 초기화
+        displayOrderSummary(); // 총 주문 금액, 주문 개수 출력
 
-        /* 주문서 작성 화면으로 이동 */
-        $(".buy-button").click(function () {
-            if (confirm("선택하신 상품을 주문하시겠습니까?")) {
-                let count = $(".order-count-input").val()
-                $(".order-form").find("input[name='orderProducts[0].count']").val(count);
-                $(".order-form").submit();
-            } else {
-                return false;
-            }
-        });
+        /* 색상 셀렉트 옵션 선택 시, 사이즈 셀렉트 옵션 값 초기화 */
+        $('.color-select').change(initializeSizeSelect);
 
-        /* 리뷰 작성 */
-        $(".write-btn").click(function () {
-            let productId = [[${product.id}]];
+        /* 선택된 옵션을 기반으로 동적으로 제품 옵션 행을 추가 */
+        $('.size-select').change(createProductOptionRow);
 
-            $.ajax({
-                url: "/review/check/" + productId,
-                type: "POST",
-                dataType: "text",
-                cache: false,
-                success: function (result, status) {
-                    location.href = "/review/enroll?productId=" + productId;
-                },
-                error: function (request, status, error) {
-                    alert(request.responseText);
-                },
-            })
-        });
+        /* 주문 수량 조절 버튼 클릭 이벤트 처리 */
+        $(".option-products__body").on("click", ".quantity-control-btn", adjustQuantity);
 
-        /* 상품 주문 개수 입력 체인지 처리 */
-        $(".order-count-input").change(changeOrderQuantityByInput);
+        /* 옵션 삭제 버튼 클릭 이벤트 처리 */
+        $(".option-products__body").on("click", ".option-delete-btn", deleteProductOption);
 
-        /* 상품 주문 개수 조절 버튼 클릭 처리 */
-        $(".order-count-button").click(changeOrderQuantityByButton);
+        /* 주문 수량 input 이벤트 처리 */
+        $(".option-products__body").on("change", ".quantity-input", handleQuantityInput);
+
+        /* 구매 버튼 클릭 이벤트 처리 */
+        $(".buy-button").click(submitOrderForm);
+
+        /* 리뷰 작성 버튼 클릭 이벤트 처리 */
+        $(".write-btn").click(checkReviewAndRedirectToReviewEnrollPage);
     });
 
+    /* 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수 */
     function showMessage() {
         let message = [[${message}]];
-        if (message !== null) {
+        if (message) {
             alert(message);
         }
     }
 
+    /* 리뷰 평점 초기화 */
     function initializeReviewRating() {
         $(".rate").each(function () {
             let rating = $(this).attr("data-rating");
@@ -319,6 +304,7 @@
         });
     }
 
+    /* 총 주문 결제 금액 초기화 함수 */
     function initializeOrderPriceAndPoint() {
         let price = [[${ product.price }]];
         let discount = [[${ product.discount }]];
@@ -329,9 +315,6 @@
         // 총 주문 결제 금액 초기화
         $('.total-price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
         $(".total-order-count").html('(1개)');
-
-        // 적립 포인트 초기화
-        $(".total-point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
     }
 
     /* 썸네일 이미지 클릭 시 대표 이미지로 보여주는 함수 */
@@ -339,94 +322,36 @@
         $("#image-box").attr("src", img.src);
     }
 
-    /* 상품 주문 개수 변경 함수 (사용자가 직접 입력) */
-    function changeOrderQuantityByInput() {
-        let minCnt = 1;
-        let maxCnt = [[${ product.stockNumber }]]; // 현재 재고
-        let curCount = $('.order-count-input');
-        let countVal = curCount.val();
-        let totalOrderCount = $(".total-order-count");
-
-        if (countVal < minCnt) {
-            alert('수량은 1개 이상 입력해 주세요.');
-            curCount.val(1);
-            totalOrderCount.html('(' + 1 + '개)');
-            getOrderTotalPrice();
-            return;
-        } else if (countVal > maxCnt) {
-            alert('죄송합니다. 재고가 부족합니다.');
-            curCount.val(maxCnt);
-            totalOrderCount.html('(' + maxCnt + '개)');
-            getOrderTotalPrice();
-            return;
-        }
-
-        /* 적립 포인트 출력 */
-        let price = [[${ product.price }]];
-        let discount = [[${ product.discount }]];
-        let salePrice = (price * (1 - discount)) * countVal;
-        let point = Math.floor(salePrice * 0.05);
-        $(".total-point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
-
-        /* 총 주문 금액 출력 */
-        getOrderTotalPrice();
-        totalOrderCount.html('(' + countVal + '개)');
-    }
-
-    /* 상품 주문 개수 변경 함수 (버튼으로 조절) */
-    function changeOrderQuantityByButton() {
-        let minCnt = 1;
-        let curCountVal = $('.order-count-input').val() * 1;
-        let maxCnt = [[${ product.stockNumber }]];
-        let type = $(this).attr("data-type");
-
-        if (type === 'minus') {
-            curCountVal -= 1;
-            if (curCountVal < minCnt) {
-                alert('수량은 1개 이상 입력해 주세요.');
-                return;
-            }
-        } else if (type === 'plus') {
-            curCountVal += 1;
-            if (curCountVal > maxCnt) {
-                alert('죄송합니다. 재고가 부족합니다.');
-                return;
-            }
-        }
-
-        /* 적립 포인트 출력 */
-        let price = [[${ product.price }]];
-        let discount = [[${ product.discount }]];
-        let salePrice = (price * (1 - discount)) * curCountVal;
-        let point = Math.floor(salePrice * 0.05);
-        $(".total-point").text(point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
-
-        /* 총 주문 금액 출력 */
-        let totalPrice = Math.floor((price * (1 - discount)) * curCountVal);
-        $(".order-count-input").val(curCountVal);
-        $(".total-price").html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '원');
-        $(".total-order-count").html('(' + curCountVal + '개)');
-    }
-
-    /* 상품 가격 출력 */
-    function getOrderTotalPrice() {
-        let countVal = $('.order-count-input').val();
-        let price = [[${ product.price }]];
-        let discount = [[${ product.discount }]];
-        let totalPrice = Math.floor((price * (1 - discount)) * countVal);
-        $('.total-price').html(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
-    }
-
     /* 장바구니 추가 함수 */
     function addCart() {
+        let cartProductDTOList = [];
+        let productId = [[${product.id}]];
+        $(".option-products__body tr").each(function (index, element) {
+            let colorId = $(element).find('.data-info').attr("data-color-id");
+            let sizeId = $(element).find('.data-info').attr("data-size-id");
+            let quantity = $(element).find('.quantity-input').val();
+
+            let cartProductDTO = {
+                // productId: productId,
+                colorId: colorId,
+                sizeId: sizeId,
+                quantity: quantity
+            }
+            cartProductDTOList.push(cartProductDTO);
+        });
+
+        // CartProductListDTO 객체 생성 및 데이터 설정
+        let cartProductListDTO = {
+            productId: productId,
+            cartProductDTOList: cartProductDTOList
+        };
+
         $.ajax({
             url: "/cart",
             type: "POST",
-            data: {
-                productId: [[${ product.id }]],
-                count: $(".order-count-input").val()
-            },
+            contentType: 'application/json',
             dataType: "text",
+            data: JSON.stringify(cartProductListDTO),
             success: function (res) {
                 alert(res);
                 location.href = '/cart';
@@ -442,11 +367,247 @@
         })
     }
 
-    /* page 이동 */
+    /* 페이지 이동 */
     function page(page) {
         location.href = "/product/" + [[${product.id}]] + "?page=" + page + "#review";
     }
 
+    /* 재고에서 색상을 초기화하고 선택 옵션을 설정 */
+    function initializeColorSelect() {
+        const colors = [...new Set(inventories.map(inventory => `${inventory.colorId}-${inventory.colorName}`))];
+        $.each(colors, function(index, color) {
+            const [colorId, colorName] = color.split('-');
+            $('.color-select').append($('<option>', {
+                value: colorId,
+                text: colorName
+            }));
+        });
+    }
+
+    /* 색상 선택에 따라 해당하는 사이즈 옵션을 초기화하고, 품절 여부를 표시하여 사이즈 옵션을 설정 */
+    function initializeSizeSelect() {
+        let selectedColorId = $(this).val(); // 블랙
+        $('.size-select').empty().append(
+            $('<option>', {
+                value: '0',
+                text: '- [필수] 옵션을 선택해 주세요 -',
+                selected: true
+            }),
+            $('<option>', {
+                value: '0',
+                text: '-------------------',
+                disabled: true
+            })
+        );
+
+        let sizes = inventories.filter(item => item.colorId === Number(selectedColorId)).map(item => ({ sizeId: item.sizeId, sizeName: item.sizeName }));
+        $.each(sizes, function(index, size) {
+            let optionText = size.sizeName + " Size";
+            let inventory = inventories.find(item => item.colorId === Number(selectedColorId) && item.sizeId === size.sizeId);
+            if (inventory && inventory.quantity === 0) {
+                optionText += " [품절]";
+            }
+            $('.size-select').append($('<option>', {
+                value: size.sizeId,
+                text: optionText
+            }));
+        });
+    }
+
+    /* 선택된 옵션을 기반으로 동적으로 제품 옵션 행을 추가하는 함수 */
+    function createProductOptionRow() {
+        let productName = [[${product.name}]];
+        let productPrice = [[${product.price}]];
+        // 할인중인 상품인 경우 상품 가격 변수에 할인가 저장
+        let productDiscountRate = [[${product.discount}]];
+        if (productDiscountRate > 0) {
+            productPrice = productPrice * (1 - productDiscountRate);
+        }
+        let colorSelect = $(".color-select");
+        let sizeSelect = $(".size-select");
+        let colorId = parseInt(colorSelect.val());
+        let sizeId = parseInt(sizeSelect.val());
+        let colorName = $(".color-select option:selected").text();
+        let sizeName = $(".size-select option:selected").text();
+        let maxQuantity = findInventoryQuantity(colorId, sizeId); // 상품 재고
+
+        // 이미 추가된 행인지 확인
+        let isDuplicate = false;
+        $(".option-products__body tr").each(function() {
+            let existingColorId = $(this).find("input[type=hidden]").data("color-id"); // 화이트 1
+            let existingSizeId = $(this).find("input[type=hidden]").data("size-id"); // M 1
+            if (existingColorId === colorId && existingSizeId === sizeId) {
+                isDuplicate = true;
+                return false; // 중복이면 더 이상 순회할 필요 없음
+            }
+        });
+
+        // 재고가 없는 경우 품절 경고 메시지 띄우기
+        if (maxQuantity === 0) {
+            alert("선택하신 상품은 현재 품절되었습니다.\n다른 상품을 선택해주세요.");
+            return false;
+        }
+
+        // 두 셀렉트 박스에서 모두 옵션이 선택되었고, 중복이 아니면 행 추가
+        if (!isDuplicate && colorId !== '0' && sizeId !== '0') {
+            $(".option-products__body").append("" +
+                "<tr>" +
+                    "<td>" +
+                        productName + "<br>- <span>" + colorName + "/" + sizeName + " size</span>" +
+                    "</td>" +
+                    "<td>" +
+                        "<div class='quantity-controller'>" +
+                            "<input class='quantity-input' type='text' value='1'>" +
+                            "<div class='quantity-control-btn'>" +
+                                "<i class='xi-caret-up-min quantity-up-btn'></i>" +
+                                "<i class='xi-caret-down-min quantity-down-btn'></i>" +
+                                "<input class='data-info' type='hidden' data-size-name='" + sizeName + "' data-color-name='" + colorName + "' data-max-quantity='" + maxQuantity + "' data-size-id='" + sizeId + "' data-color-id='" + colorId + "'>" +
+                            "</div>" +
+                            "<i class='fa-solid fa-x option-delete-btn'></i>" +
+                        "</div>" +
+                    "</td>" +
+                    "<td class='text-end'>" +
+                        "<span class='option-products__price'>" + productPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원</span>" +
+                    "</td>" +
+                "</tr>");
+        } else {
+            alert("아래 리스트에서 이미 선택된 옵션을 삭제 후 다시 선택해 주세요.");
+        }
+
+        // 총 주문 금액, 주문 개수 출력
+        displayOrderSummary();
+    }
+
+    /* 주어진 색상 ID와 사이즈 ID에 해당하는 재고 수량을 찾아 반환 */
+    function findInventoryQuantity(colorId, sizeId) {
+        const inventory = inventories.find(item => item.colorId === Number(colorId) && item.sizeId === Number(sizeId));
+        return inventory ? inventory.quantity : 0;
+    }
+
+    /* 동적으로 생성된 주문 품목들의 주문 수량과 가격을 계산하여 총 주문 금액과 주문 개수를 화면에 표시 */
+    function displayOrderSummary() {
+        let totalPrice = 0;
+        let totalOrderCount = 0;
+
+        // 동적으로 생성된 각 주문 품목에 대해 루프를 돕니다.
+        $(".option-products__body").find("tr").each(function() {
+            let row = $(this);
+            let quantity = parseInt(row.find(".quantity-input").val()); // 주문 수량 가져오기
+            let price = parseFloat(row.find(".option-products__price").text().replace(/[^\d.]/g, '')); // 상품 가격 가져오기
+
+            // 주문 개수에 현재 품목의 주문 수량을 더합니다.
+            totalOrderCount += quantity;
+
+            // 총 상품 금액에 현재 품목의 총 가격을 더합니다.
+            totalPrice += quantity * price;
+        });
+
+        $(".total-price").text(totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
+        $(".total-order-count").text("(" + totalOrderCount + "개)");
+    }
+
+    /* 주문 수량 조절 함수 */
+    function adjustQuantity(e) {
+        let hiddenInput = $(this).children("input[type=hidden]");
+        let maxQuantity = hiddenInput.attr("data-max-quantity");
+        let quantityInput = $(this).siblings('.quantity-input'); // 주문 수량 입력 input 태그
+        let currentQuantity = parseInt(quantityInput.val()); // 사용자가 입력한 주문 수량 값
+
+        if ($(e.target).hasClass("quantity-up-btn")) {
+            increaseQuantity(quantityInput, currentQuantity, maxQuantity);
+        } else if ($(e.target).hasClass("quantity-down-btn")) {
+            decreaseQuantity(quantityInput, currentQuantity);
+        }
+
+        // 총 주문 금액, 주문 개수 출력
+        displayOrderSummary();
+    }
+
+    /* 주문 수량 증가 함수 */
+    function increaseQuantity(quantityInput, currentQuantity, maxQuantity) {
+        // 주문 수량이 최대 재고량을 초과하는 경우
+        if (currentQuantity >= maxQuantity) {
+            alert("재고가 부족합니다. 최대 주문 가능 수량은 " + maxQuantity + "개 입니다.");
+            quantityInput.val(maxQuantity); // 최대 주문 가능 수량으로 설정
+        } else {
+            quantityInput.val(currentQuantity + 1);
+        }
+    }
+
+    /* 주문 수량 감소 함수 */
+    function decreaseQuantity(quantityInput, currentQuantity) {
+        if (currentQuantity > 1) {
+            quantityInput.val(currentQuantity - 1);
+        }
+    }
+
+    /* 상품 옵션 삭제 함수 */
+    function deleteProductOption() {
+        $(this).closest("tr").remove();
+
+        // 총 주문 금액, 주문 개수 출력
+        displayOrderSummary();
+    }
+
+    /* 주문 수량 입력에 대한 유효성 검사 및 주문 요약 정보 갱신 */
+    function handleQuantityInput() {
+        let input = $(this);
+        let quantity = parseInt(input.val());
+        let maxQuantity = parseInt(input.closest('.quantity-controller').find('input[type=hidden]').data('max-quantity'));
+
+        if (isNaN(quantity) || quantity <= 0) {
+            alert("주문 수량을 확인해주세요.");
+            input.val(1); // 기본값으로 설정
+        } else if (quantity > maxQuantity) {
+            alert("재고가 부족합니다. 최대 주문 가능 수량은 " + maxQuantity + "개 입니다.");
+            input.val(maxQuantity); // 최대 주문 가능 수량으로 설정
+        }
+
+        // 총 주문 금액, 주문 개수 출력
+        displayOrderSummary();
+    }
+
+    /* 주문서 작성 화면으로 이동 함수 */
+    function submitOrderForm() {
+        if ($(".option-products__body tr").length === 0) {
+            alert("필수 옵션을 선택해주세요.");
+            return false;
+        }
+
+        $(".option-products__body tr").each(function (index, element) {
+            let productId = [[${product.id}]];
+            let colorId = $(element).find('.data-info').attr("data-color-id");
+            let colorName = $(element).find('.data-info').attr("data-color-name");
+            let sizeId = $(element).find('.data-info').attr("data-size-id");
+            let sizeName = $(element).find('.data-info').attr("data-size-name");
+            let orderQuantity = $(element).find('.quantity-input').val();
+            $(".order-form").append("<input type='hidden' name='orderProducts[" + index + "].productId' value='" + productId + "'>" +
+                "<input type='hidden' name='orderProducts[" + index + "].colorId' value='" + colorId + "'>" +
+                "<input type='hidden' name='orderProducts[" + index + "].colorName' value='" + colorName + "'>" +
+                "<input type='hidden' name='orderProducts[" + index + "].sizeId' value='" + sizeId + "'>" +
+                "<input type='hidden' name='orderProducts[" + index + "].sizeName' value='" + sizeName + "'>" +
+                "<input type='hidden' name='orderProducts[" + index + "].orderQuantity' value='" + orderQuantity + "'>");
+        });
+        $(".order-form").submit();
+    }
+
+    /* 이미 등록된 리뷰가 있는지 체크하고, 없으면 리뷰 등록 페이지로 이동 */
+    function checkReviewAndRedirectToReviewEnrollPage() {
+        let productId = [[${product.id}]];
+
+        $.ajax({
+            url: "/board/review/check/" + productId,
+            type: "POST",
+            dataType: "text",
+            cache: false,
+            success: function () {
+                location.href = "/board/review/enroll?productId=" + productId;
+            },
+            error: function (request) {
+                alert(request.responseText);
+            },
+        })
+    }
 </script>
 </body>
 

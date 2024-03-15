@@ -1,85 +1,1174 @@
-@import "../../abstracts/variables";
+.order-form-container {
+    header {
+        position: fixed;
+        z-index: 120;
+        top: 0;
+        left: 0;
+        right: 0;
+        min-width: 483px;
+        max-width: 898px;
+        width: inherit;
+        margin: 0 auto;
 
-.order-form-body {
-    .order-products-container,
-    .shopping-address-container,
-    .discount-info-container,
-    .payment-details-container,
-    .button-container {
-        overflow-x: auto;
+        .logo {
+            position: relative;
+            padding: 18px 0;
+            text-align: center;
+            vertical-align: top;
+            background: #fff;
+            border-left: 1px solid #bcbcbc;
+            border-right: 1px solid #bcbcbc;
 
+            h1 {
+                margin: 0 95px;
+                font-size: 18px;
+                font-weight: 700;
+                text-align: center;
+                color: #000;
+            }
+
+            .back-btn {
+                position: absolute;
+                top: 50%;
+                left: 15px;
+                margin-top: -10px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+        }
         .title {
-            display: flex;
-            justify-content: center;
-
-            h2 {
-                font-size: 12px;
-                color: $graphite;
-                width: 100%;
-                padding-left: 10px;
-                font-weight: bold;
-            }
-        }
-
-        .body {
-            min-width: 936px;
-        }
-    }
-
-    .order-products-container {
-        margin-bottom: 40px;
-    }
-
-    .shopping-address-container {
-        margin-bottom: 40px;
-
-        .body {
-            display: flex;
-            justify-content: center;
-
-            form {
-                width: 100%;
+            h1 {
+                background: #333 !important;
+                position: relative;
+                padding: 0 42px;
+                line-height: 61px;
+                color: #fff;
+                font-size: 20px;
+                font-weight: 500;
+                text-align: center;
+                border: 1px solid #d7d7d7;
+                border-right: 0;
+                border-left: 0;
             }
         }
     }
 
-    .discount-info-container {
-        margin-bottom: 40px;
+    form {
+        padding-top: 122px;
+        min-width: 483px;
+        max-width: 898px;
+        margin: 0 auto;
+        background: #ededed;
+        border: 1px solid #bcbcbc;
 
-        .body {
-            display: flex;
-            justify-content: center;
+        .shipping-address-container,
+        .order-products-container,
+        .discount-payment-container,
+        .payment-details-container,
+        .payment-options-container,
+        .payment-details-container,
+        .point-earn-price-container {
+            background-color: white;
+            margin-top: 10px;
 
-            table {
-                tbody {
-                    td {
-                        .coupon-use-btn,
-                        .point-use-all-btn {
-                            margin-bottom: 2px;
+            .title {
+                padding: 20px 16px;
+                position: relative;
+                cursor: pointer;
+
+                h2 {
+                    margin: 0 10px 0 0;
+                    font-size: 18px;
+                    color: #000;
+                    font-weight: 500;
+                    line-height: 27px;
+                }
+
+                &::after {
+                    position: absolute;
+                    top: 29px;
+                    transform: rotate(45deg);
+                    right: 20px;
+                    content: "";
+                    width: 12px;
+                    height: 12px;
+                    display: inline-block;
+                    border: 2px solid #bcbcbc;
+                    border-right: 0;
+                    border-bottom: 0;
+                    transition: 0.3s ease-out;
+                }
+            }
+
+            &.selected {
+                .title {
+                    &::after {
+                        transform: rotate(-135deg);
+                        top: 22px;
+                    }
+                }
+            }
+        }
+
+        .shipping-address-container {
+            .contents {
+                .address-wrapper {
+                    .tab {
+                        ul {
+                            display: flex;
+                            margin-bottom: 22px;
+                            border-top: 1px solid #d7d5d5;
+                            font-size: 16px;
+                            line-height: 24px;
+                            font-weight: normal;
+                            word-break: break-all;
+
+                            li {
+                                text-align: center;
+                                border-left: 1px solid #d7d5d5;
+                                border-bottom: 1px solid #d7d5d5;
+                                background: #f8f9fa;
+                                display: flex;
+                                flex: 1;
+                                a {
+                                    display: flex;
+                                    flex-basis: 100%;
+                                    justify-content: center;
+                                    flex-wrap: nowrap;
+                                    align-items: center;
+                                    padding: 15px 10px 14px;
+                                    color: #797979;
+                                    font-weight: 400;
+                                }
+
+                                &.selected {
+                                    border-bottom-color: #fff;
+
+                                    & a {
+                                        border-left: 0;
+                                        font-weight: 500;
+                                        color: #000;
+                                        background: #fff;
+                                    }
+                                }
+
+                                &:first-child {
+                                    border-left: 0;
+                                }
+                            }
+                        }
+                    }
+
+                    .recent-address-wrapper {
+                        font-size: 15px;
+                        padding: 0 16px 20px;
+                        position: relative;
+
+                        .address-info {
+                            padding: 9px 0 0;
+                            .name {
+                                display: block;
+                                font-weight: 500;
+                                color: #333;
+                                font-size: 16px;
+                            }
+
+                            .address {
+                                color: #383838;
+                                margin-top: 18px;
+                                letter-spacing: -0.4px;
+                            }
+
+                            .tel {
+                                display: block;
+                                margin: 8px 0 0 0;
+                                color: rgb(102, 102, 102);
+                                letter-spacing: -0.4px;
+                            }
                         }
 
-                        .point-cancel-btn {
+                        .address-list-btn {
+                            position: absolute;
+                            top: 0;
+                            right: 15px;
+                            height: 42px;
+                            padding: 0 10px;
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: #000;
+                            border: 1px solid #b5b5b5;
+                            background: #fff;
+                            line-height: 38px;
+                            vertical-align: middle;
+                            display: inline-block;
+                            letter-spacing: -0.4px;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .new-address-wrapper {
+                        padding-bottom: 13px;
+                        display: none;
+
+                        .address-options-area {
+                            display: flex;
+                            padding: 0 16px 15px;
+
+                            .custom-radio {
+                                color: #383838;
+                                font-size: 16px;
+                                text-transform: capitalize;
+                                display: block;
+                                position: relative;
+                                padding-top: 5px;
+                                padding-left: 30px;
+                                padding-right: 20px;
+                                // border-bottom: 1px solid #ebebeb;
+
+                                input {
+                                    display: none;
+                                    &:checked ~ span {
+                                        border: 6px solid #3971ff;
+                                    }
+                                }
+
+                                span {
+                                    height: 22px;
+                                    width: 22px;
+                                    border-radius: 50%;
+                                    border: 6px solid #e2e5ea;
+                                    display: block;
+                                    position: absolute;
+                                    left: 0;
+                                    top: 7px;
+
+                                    // &::after {
+                                    //     content: '';
+                                    //     height: 8px;
+                                    //     width: 8px;
+                                    //     background: #3971FF;
+                                    //     display: block;
+                                    //     position: absolute;
+                                    //     left: 50%;
+                                    //     top: 50%;
+                                    //     border-radius: 50%;
+                                    //     transition: 300ms ease-in-out 0s;
+                                    // }
+                                }
+                            }
+                        }
+
+                        .address-table-area {
+                            padding-bottom: 13px;
+                            word-break: break-all;
+                            word-wrap: break-word;
+                            color: #383838;
+
+                            table {
+                                table-layout: fixed;
+                                width: 100%;
+                                border: 0;
+                                border-spacing: 0;
+                                border-collapse: collapse;
+
+                                caption {
+                                    overflow: hidden;
+                                    width: 1px;
+                                    font-size: 1px;
+                                    line-height: 0;
+                                    text-indent: 150%;
+                                    white-space: nowrap;
+                                }
+
+                                tbody {
+                                    tr {
+                                        th {
+                                            padding: 16px 0 12px 16px;
+                                            font-weight: 400;
+                                            text-align: left;
+                                            vertical-align: top;
+                                            word-break: break-word;
+                                            font-size: 15px;
+                                            border: 0;
+
+                                            .required {
+                                                color: #73a2f0;
+                                                font-weight: bold;
+                                            }
+                                        }
+
+                                        td {
+                                            padding: 8px 16px 7px 4px;
+                                            vertical-align: middle;
+                                            border: 0;
+
+                                            .name-input {
+                                                height: 42px;
+                                                width: 100%;
+                                                padding: 10px 11px 10px 10px;
+                                                border: 1px solid #e1e1e1;
+                                                outline-style: none;
+                                                line-height: 14px;
+                                                color: #000;
+                                                font-weight: 400;
+                                                font-size: 14px;
+                                            }
+
+                                            .address-input-box {
+                                                .zipcode-wrap {
+                                                    display: flex;
+                                                    padding: 0 16px 7px 0;
+                                                    .zipcode-input {
+                                                        width: 160px;
+                                                        height: 42px;
+                                                        border: 1px solid #e1e1e1;
+                                                        padding: 10px 11px 10px 10px;
+                                                        outline-style: none;
+                                                        line-height: 14px;
+                                                        color: #000;
+                                                        font-weight: 400;
+                                                        font-size: 14px;
+                                                    }
+                                                    .find-addr-btn {
+                                                        color: #000;
+                                                        border: 1px solid #a7a7a7;
+                                                        background: #fff;
+                                                        min-width: 80px;
+                                                        height: 42px;
+                                                        line-height: 38px;
+                                                        padding: 0 12px;
+                                                        vertical-align: middle;
+                                                        font-size: 14px;
+                                                        font-weight: 400;
+                                                        display: inline-block;
+                                                        letter-spacing: -0.4px;
+                                                        margin: 0 0 0 -6px;
+                                                        letter-spacing: -0.4px;
+                                                    }
+                                                }
+                                                .addr-wrap {
+                                                    line-height: 22px;
+                                                    padding: 8px 16px 7px 0;
+                                                    .addr-input {
+                                                        width: 100%;
+                                                        height: 42px;
+                                                        border: 1px solid #e1e1e1;
+                                                        padding: 10px 11px 10px 10px;
+                                                        outline-style: none;
+                                                        line-height: 14px;
+                                                        color: #000;
+                                                        font-weight: 400;
+                                                        font-size: 14px;
+                                                    }
+                                                }
+
+                                                .addr-detail-wrap {
+                                                    line-height: 22px;
+                                                    padding: 8px 16px 7px 0;
+
+                                                    .addr-detail-input {
+                                                        width: 100%;
+                                                        height: 42px;
+                                                        border: 1px solid #e1e1e1;
+                                                        padding: 10px 11px 10px 10px;
+                                                        outline-style: none;
+                                                        line-height: 14px;
+                                                        color: #000;
+                                                        font-weight: 400;
+                                                        font-size: 14px;
+                                                    }
+                                                }
+                                            }
+
+                                            .tel-input-box {
+                                                display: flex;
+                                                justify-content: space-between;
+                                                gap: 4px;
+                                                align-items: center;
+
+                                                .tel-prefix-select {
+                                                    width: 100% !important;
+                                                    margin: 0 !important;
+                                                    max-width: 100%;
+                                                    height: 42px;
+                                                    margin: 0;
+                                                    padding: 0 20px 0 10px;
+                                                    line-height: 40px;
+                                                    color: #333;
+                                                    word-break: break-all;
+                                                    border: 1px solid #c5c5c5;
+                                                    font-size: 14px;
+                                                }
+
+                                                .tel-middle-input,
+                                                .tel-suffix-input {
+                                                    width: 100% !important;
+                                                    margin: 0 !important;
+                                                    height: 42px;
+                                                    padding: 10px 11px 10px 10px;
+                                                    border: 1px solid #e1e1e1;
+                                                    outline-style: none;
+                                                    line-height: 14px;
+                                                    color: #000;
+                                                    font-weight: 400;
+                                                    font-size: 14px;
+                                                }
+                                            }
+
+                                            .email-input-box {
+                                                display: flex;
+                                                justify-content: space-between;
+                                                gap: 4px;
+                                                align-items: center;
+
+                                                .email-input {
+                                                    width: 100% !important;
+                                                    margin: 0 !important;
+                                                    height: 42px;
+                                                    padding: 10px 11px 10px 10px;
+                                                    border: 1px solid #e1e1e1;
+                                                    outline-style: none;
+                                                    line-height: 14px;
+                                                    color: #000;
+                                                    font-weight: 400;
+                                                    font-size: 14px;
+                                                }
+
+                                                .email-domain-wrap {
+                                                    position: relative;
+                                                    display: inline-block;
+                                                    width: 100%;
+                                                    margin: 0;
+                                                    vertical-align: top;
+
+                                                    .email-domain-select {
+                                                        width: 100% !important;
+                                                        margin: 0 !important;
+                                                        max-width: 100%;
+                                                        height: 42px;
+                                                        padding: 0 20px 0 10px;
+                                                        line-height: 40px;
+                                                        color: #333;
+                                                        word-break: break-all;
+                                                        border: 1px solid #c5c5c5;
+                                                        outline: none;
+                                                        font-size: 14px;
+                                                    }
+
+                                                    .direct-input-wrap {
+                                                        overflow: hidden;
+                                                        position: absolute;
+                                                        top: 1px;
+                                                        left: 8px;
+                                                        right: 20px;
+                                                        bottom: 1px;
+                                                        display: none;
+
+                                                        .email-domain-input {
+                                                            border-color: #fff;
+                                                            height: 100%;
+                                                            padding: 0 7px 0 0;
+                                                            width: 100% !important;
+                                                            margin: 0 !important;
+                                                            outline-style: none;
+                                                            line-height: 14px;
+                                                            color: #000;
+                                                            font-weight: 400;
+                                                            font-size: 14px;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .req-wrapper {
+                    border-top: 1px solid #ebebeb;
+                    padding: 20px 16px 15px;
+
+                    select {
+                        width: 100%;
+                        padding: 0 20px 0 15px;
+                        height: 42px;
+                        margin: 0;
+                        line-height: 40px;
+                        color: #333;
+                        border: 1px solid #c5c5c5;
+                        font-size: 14px;
+                    }
+                }
+
+                .set-def-address-btn-warpper {
+                    padding: 0 16px 20px;
+                    position: relative;
+
+                    input[type="checkbox"] {
+                        margin: 0;
+                        width: 20px;
+                        height: 20px;
+                        border: 0;
+                        -webkit-appearance: none; /* 웹킷 기반 브라우저에서 기본적인 스타일 제거 */
+                        appearance: none; /* 다른 브라우저에서 기본적인 스타일 제거 */
+                        cursor: pointer;
+                        background: url(//img.echosting.cafe24.com/skin/mobile/common/bg_newCheckbox.png) no-repeat 0 0;
+                        background-size: 20px 20px;
+                        vertical-align: middle;
+
+                        &:checked {
+                            background: url(//img.echosting.cafe24.com/skin/mobile/common/bg_newCheckbox_checked.png);
+                        }
+                    }
+
+                    label {
+                        font-size: 15px;
+                        margin: 0 16px 0 6px;
+                        color: #383838;
+                        display: inline-block;
+                        min-height: 29px;
+                        line-height: 29px;
+                        vertical-align: middle;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .order-products-container {
+            .title {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding-right: 48px;
+
+                .text-box {
+                    display: none;
+                    flex: 1;
+                    text-align: right;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    font-size: 15px;
+                    font-weight: 400;
+
+                    .total {
+                        color: #333;
+                    }
+                }
+            }
+
+            .contents {
+                .order-products-info {
+                    margin-bottom: 20px;
+                    .product-info {
+                        display: flex;
+                        margin: 0 16px 15px 16px;
+                        padding: 15px 0 0;
+                        border-top: 1px dashed #d5d5d5;
+
+                        .thumbnail {
+                            width: 90px;
+                            height: 90px;
+                            margin-right: 20px;
+                            border: 1px solid #d7d5d5;
+                            img {
+                                width: 88px;
+                                height: 90px;
+                            }
+                        }
+                        .description {
+                            flex: 1;
+
+                            .name {
+                                display: block;
+                                margin: 0 0 9px;
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: #000;
+                            }
+                            .option {
+                                display: block;
+                                margin: 0 0 2px;
+                                font-size: 14px;
+                                color: #606060;
+                            }
+                            .quantity {
+                                display: block;
+                                font-size: 14px;
+                                color: #606060;
+                                margin: 0 0 14px;
+                            }
+                            .price {
+                                font-size: 15px;
+                                font-weight: 400;
+                                line-height: 22px;
+                                color: #000;
+                            }
+                        }
+                        .button-wrapper {
+                            .delete-btn {
+                                position: relative;
+                                width: 24px;
+                                height: 24px;
+                                border: 1px solid #b5b5b5;
+                                border-radius: 2px;
+                                margin: 0 0 0 4px;
+                                text-indent: 150%;
+                                font-size: 0;
+                                line-height: 0;
+                                white-space: nowrap;
+                                background: inherit;
+                                cursor: pointer;
+
+                                &::before {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 4px;
+                                    content: "";
+                                    width: 14px;
+                                    height: 1px;
+                                    background: #7b7d8a;
+                                    transform: rotate(-45deg);
+                                }
+
+                                &::after {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 4px;
+                                    content: "";
+                                    width: 14px;
+                                    height: 1px;
+                                    background: #7b7d8a;
+                                    transform: rotate(-135deg);
+                                }
+                            }
+                        }
+                        &:first-child {
+                            padding: 0;
+                            border-top: 0;
+                        }
+                    }
+                }
+
+                .delivery-price-wrapper {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 11px 16px 11px 16px;
+                    background: #f8f9fa;
+                    h3 {
+                        font-size: 14px;
+                        font-weight: normal;
+                        line-height: 20px;
+                        color: #606060;
+                        margin: 0;
+                    }
+
+                    .txt {
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #000;
+                    }
+                }
+            }
+        }
+
+        .discount-payment-container {
+            .title {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding-right: 48px;
+
+                .text-box {
+                    display: none;
+                    flex: 1;
+                    text-align: right;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    font-size: 15px;
+                    font-weight: 400;
+
+                    .total {
+                        color: #333;
+                    }
+                }
+            }
+
+            .contents {
+                .discount-code-use-wrapper {
+                    border-bottom: 1px solid #eaeaea;
+                    padding: 20px 16px;
+                    display: flex;
+
+                    .heading {
+                        font-size: 16px;
+                        font-weight: 400;
+                        color: #383838;
+                        line-height: 42px;
+                        margin-right: 22px;
+                    }
+
+                    .discount-code-input-wrapper {
+                        flex: 1;
+                        display: flex;
+                        width: 100%;
+
+                        .discount-code-input {
+                            color: #3971ff;
+                            height: 42px;
+                            width: 100%;
+                            border: 1px solid #e1e1e1;
+                            outline-style: none;
+                            line-height: 14px;
+                            font-weight: 400;
+                            padding: 10px 11px 10px 10px;
+                            font-size: 14px;
+                            text-align: right;
+                        }
+
+                        .discount-code-use-btn {
+                            white-space: nowrap;
+                            margin-left: -1px;
+                            color: #000;
+                            border: 1px solid #b5b5b5;
+                            background: #fff;
+                            height: 42px;
+                            line-height: 38px;
+                            padding: 0 12px;
+                            vertical-align: middle;
+                            font-size: 14px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+                .point-use-wrapper {
+                    border-bottom: 1px solid #eaeaea;
+                    padding: 20px 16px;
+                    text-align: right;
+
+                    .input-box {
+                        display: flex;
+
+                        .heading {
+                            font-size: 16px;
+                            font-weight: 400;
+                            color: #383838;
+                            line-height: 42px;
+                            margin-right: 22px;
+                        }
+
+                        .point-use-input-wrapper {
+                            flex: 1;
+                            display: flex;
+                            width: 100%;
+
+                            .point-use-input {
+                                color: #3971ff;
+                                height: 42px;
+                                width: 100%;
+                                border: 1px solid #e1e1e1;
+                                outline-style: none;
+                                line-height: 14px;
+                                font-weight: 400;
+                                padding: 10px 11px 10px 10px;
+                                text-align: right;
+                                font-size: 14px;
+                            }
+                            .all-point-use-btn {
+                                white-space: nowrap;
+                                margin-left: -1px;
+                                color: #000;
+                                border: 1px solid #b5b5b5;
+                                background: #fff;
+                                height: 42px;
+                                line-height: 38px;
+                                padding: 0 12px;
+                                vertical-align: middle;
+                                font-weight: 400;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+
+                    .summary {
+                        display: block;
+                        font-size: 15px;
+                        color: #383838;
+                        margin-top: 8px;
+                        text-align: right;
+                    }
+
+                    .help-message-box {
+                        margin-top: 20px;
+                        padding: 13px 20px;
+                        background-color: #f8f9fa;
+                        text-align: left;
+                        position: relative;
+                        cursor: pointer;
+
+                        .help-msg {
+                            font-size: 13px;
+                            font-weight: 400;
+                            color: #383838;
+
+                            &::after {
+                                position: absolute;
+                                display: inline-block;
+                                content: "";
+                                top: 20px;
+                                right: 20px;
+                                height: 10px;
+                                width: 10px;
+                                vertical-align: middle;
+                                border: 1px solid #7b7d8a;
+                                border-left-width: 0;
+                                border-top-width: 0;
+                                transition: 0.3s ease-out;
+                                transform: rotate(45deg);
+                                -webkit-transform: rotate(45deg);
+                                cursor: pointer;
+                            }
+                        }
+
+                        .hide {
+                            display: block;
+                            overflow: hidden;
+                            opacity: 0;
+                            height: 0;
+                            padding-top: 0;
+                            font-size: 13px;
+                            font-weight: 400;
+                            color: #383838;
+                            transition: 0.3s ease-out;
+                        }
+
+                        &.selected {
+                            .help-msg {
+                                &::after {
+                                    margin-top: 4px;
+                                    transform: rotate(-135deg);
+                                    -webkit-transform: rotate(-135deg);
+                                }
+                            }
+
+                            .hide {
+                                opacity: 1;
+                                height: auto;
+                                padding-top: 5px;
+                            }
+                        }
+                    }
+                }
+
+                .discount-applied-price-wrapper {
+                    padding: 15px 16px;
+                    color: #000;
+                    font-size: 18px;
+                    font-weight: 700;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    background: #f6f6f6;
+                    display: flex;
+                    justify-content: space-between;
+
+                    h3 {
+                        margin: 0 4px 0 0;
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        .payment-details-container {
+            .contents {
+                .total-price-wrapper {
+                    padding: 0px 16px 20px;
+                    .products-total-price-wrapper {
+                        display: flex;
+                        padding: 0 0 5px 0;
+
+                        .heading {
+                            width: 155px;
+                            span {
+                                color: #383838;
+                            }
+                        }
+
+                        .content {
+                            text-align: right;
+                            flex: 1;
+                        }
+                    }
+                    .delivery-total-price-wrapper {
+                        display: flex;
+                        padding: 0 0 5px 0;
+                        .heading {
+                            width: 155px;
+                            span {
+                                color: #383838;
+                            }
+                        }
+
+                        .content {
+                            text-align: right;
+                            flex: 1;
+                        }
+                    }
+                    .discount-total-price-wrapper {
+                        display: flex;
+                        padding: 0 0 5px 0;
+                        .heading {
+                            width: 155px;
+                            span {
+                                color: #383838;
+                            }
+                        }
+
+                        .content {
+                            text-align: right;
+                            flex: 1;
+
+                            .discount-price {
+                                color: #e04444;
+                            }
+                        }
+                    }
+                }
+
+                .order-total-price-wrapper {
+                    background-color: #f4f7ff;
+                    padding: 15px 16px;
+                    color: #000;
+                    font-size: 18px;
+                    font-weight: 700;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+
+                    .heading {
+                        margin: 0 4px 0 0;
+                        font-size: 18px;
+                        line-height: 22px;
+
+                        strong {
+                            font-weight: 500;
+                        }
+                    }
+
+                    .content {
+                        color: #333 !important;
+                        font-size: 22px;
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
+
+        .payment-options-container {
+            .contents {
+                .payment-options {
+                    padding: 0 15px 20px;
+                    font-weight: 400;
+                    color: #383838;
+                    font-size: 18px;
+
+                    .custom-radio {
+                        color: #383838;
+                        font-size: 16px;
+                        text-transform: capitalize;
+                        display: block;
+                        position: relative;
+                        padding-top: 4px;
+                        padding-left: 30px;
+                        margin: 0 0 20px;
+                        // border-bottom: 1px solid #ebebeb;
+
+                        input {
                             display: none;
+                            &:checked ~ span {
+                                border: 6px solid #3971ff;
+                            }
+                        }
+
+                        span {
+                            height: 22px;
+                            width: 22px;
+                            border-radius: 50%;
+                            border: 6px solid #e2e5ea;
+                            display: block;
+                            position: absolute;
+                            left: 0;
+                            top: 7px;
+
+                            // &::after {
+                            //     content: '';
+                            //     height: 8px;
+                            //     width: 8px;
+                            //     background: #3971FF;
+                            //     display: block;
+                            //     position: absolute;
+                            //     left: 50%;
+                            //     top: 50%;
+                            //     border-radius: 50%;
+                            //     transition: 300ms ease-in-out 0s;
+                            // }
+                        }
+                    }
+
+                    .credit-card {
+                        display: block;
+                        font-size: 15px;
+                        padding: 17px 25px;
+                        border: 1px solid #3971ff;
+                        color: #3971ff;
+                        font-weight: 700;
+                        cursor: pointer;
+                    }
+                }
+
+                .help-message-wrapper {
+                    padding: 0 16px 15px;
+                    background-color: #fafafd;
+                    .help-msg {
+                        display: block;
+                        padding: 13px 10px 13px;
+                        border: 1px solid #eaeaea;
+                        font-size: 13px;
+                        color: #797979;
+                    }
+                }
+            }
+        }
+
+        .point-earn-price-container {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #d7d5d5;
+
+            .title {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                padding-right: 48px;
+
+                .text-box {
+                    display: none;
+                    flex: 1;
+                    text-align: right;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    font-size: 15px;
+                    font-weight: 400;
+
+                    .total {
+                        color: #333;
+                    }
+                }
+            }
+
+            .contents {
+                .reward-wrapper {
+                    padding: 0 16px 20px;
+                    font-size: 16px;
+                    color: #383838;
+                    .product-reward-wrapper {
+                        display: flex;
+                        .heading {
+                            width: 160px;
+                            padding: 0 0 5px 0;
+                        }
+                        .content {
+                            flex: 1;
+                            text-align: right;
+                            padding: 0 0 5px 0;
+                        }
+                    }
+                    .member-reward-wrapper {
+                        display: flex;
+                        .heading {
+                            width: 160px;
+                            padding: 5px 0;
+                        }
+                        .content {
+                            flex: 1;
+                            text-align: right;
+                            padding: 5px 0;
+                        }
+                    }
+                    .coupon-reward-wrapper {
+                        display: flex;
+                        .heading {
+                            width: 160px;
+                            padding: 5px 0;
+                        }
+                        .content {
+                            flex: 1;
+                            text-align: right;
+                            padding: 5px 0;
+                        }
+                    }
+                }
+
+                .total-reward-wrapper {
+                    padding: 15px 16px;
+                    color: #000;
+                    font-size: 18px;
+                    font-weight: 700;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    background: #f6f6f6;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+
+                    .heading {
+                        width: 160px;
+
+                        strong {
+                            font-weight: 500;
+                        }
+                    }
+                    .content {
+                        flex: 1;
+                        text-align: right;
+                        strong {
+                            color: #333;
                         }
                     }
                 }
             }
         }
-    }
 
-    .payment-details-container {
-    }
+        .button-container {
+            .order-btn {
+                width: 100%;
+                border: 1px solid #333 !important;
+                background: #333 !important;
+                font-size: 18px;
+                font-weight: 500;
+                height: 50px;
+                line-height: 50px;
+                color: #fff;
+                letter-spacing: -0.4px;
+            }
+        }
 
-    .button-container {
-        padding: 10px 0;
-        text-align: center;
-        display: block;
-        margin-top: 30px;
-    }
-}
-
-@media (max-width: 1300px) {
-    .order-form-body {
-        width: 100%;
+        .help-area {
+            padding: 30px 16px;
+            background-color: #fafafd;
+            span {
+                letter-spacing: -1px;
+                color: #797979;
+                font-size: 13px;
+            }
+        }
     }
 }

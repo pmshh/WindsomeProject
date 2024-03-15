@@ -2,8 +2,7 @@ package com.windsome.controller.board;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.review.*;
-import com.windsome.entity.Member;
-import com.windsome.service.CartService;
+import com.windsome.entity.member.Member;
 import com.windsome.service.board.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

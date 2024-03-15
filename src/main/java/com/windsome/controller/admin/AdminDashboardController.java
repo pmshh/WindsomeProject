@@ -26,7 +26,7 @@ public class AdminDashboardController {
      */
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {
-        Pageable pageable = PageRequest.of(0, 3);
+        Pageable pageable = PageRequest.of(0, 5);
         model.addAttribute("dashboardData", adminService.getDashboardData());
         model.addAttribute("products", adminService.getProductList(new ProductSearchDTO(), pageable));
         model.addAttribute("orders", adminService.getOrderList("", pageable));

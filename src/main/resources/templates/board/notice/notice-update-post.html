@@ -17,20 +17,21 @@
                 <div class="container-fluid ">
 
                     <div class="section-header">
-                        <h2>리뷰 수정</h2>
+                        <h2>공지사항 수정</h2>
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section-body notice-form-body mt-5">
-                        <form th:object="${notice}" method="post">
+                    <div class="section-body notice-form-body row">
 
-                            <div class="table-wrapper">
-                                <table class="base-table base-table--two-columns base-table--two-columns-center-aligned-padded">
-                                    <colgroup>
-                                        <col style="width:20%;">
-                                        <col style="width: auto;">
-                                    </colgroup>
-                                    <tbody class="base-table__body">
+                        <div class="review-form-wrap col-11 col-md-10 col-xxl-8">
+                            <form th:object="${notice}" method="post">
+                                <div class="table-wrapper">
+                                    <table class="base-table base-table--post">
+                                        <colgroup>
+                                            <col style="width:20%;">
+                                            <col style="width: auto;">
+                                        </colgroup>
+                                        <tbody class="base-table__body">
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" scope="row">
                                                 <label th:for="*{noticeYN}">공지 여부 <span>*</span></label>
@@ -41,32 +42,31 @@
                                             </td>
                                         </tr>
                                         <tr class="base-table__row">
-                                            <th class="base-table__header-cell" scope="row">
+                                            <th class="base-table__header-cell base-table__header-cell--border-top" scope="row">
                                                 <label th:for="*{title}">제목 <span>*</span></label>
                                             </th>
-                                            <td class="base-table__cell title">
+                                            <td class="base-table__cell base-table__cell--border-top">
                                                 <input class="base-table__input base-table__input--big title-input" type="text" th:field="*{title}" maxlength="50" placeholder="제목을 입력하세요.">
                                                 <span class="title-text-count">0자/50자</span>
                                             </td>
                                         </tr>
                                         <tr class="base-table__row">
-                                            <th class="base-table__header-cell" scope="row">
-                                                <label th:for="*{content}">내용 <span>*</span></label>
-                                            </th>
-                                            <td class="base-table__cell check">
-                                                <textarea class="content-input" th:field="*{content}"></textarea>
+                                            <td class="base-table__cell" colspan="2">
+                                                <textarea class="content-input" th:field="*{content}" maxlength="500"></textarea>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                            <div class="btn-box">
-                                <button class="button button--black button--130x40 save-btn" type="button">저장</button>
-                                <button class="button button--white button--130x40 cancel-btn" type="button">취소</button>
-                            </div>
+                                <div class="btn-box">
+                                    <button class="button button--black button--130x40 save-btn" type="button">저장</button>
+                                    <button class="button button--white button--130x40 cancel-btn" type="button">취소</button>
+                                </div>
 
-                        </form>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </section>

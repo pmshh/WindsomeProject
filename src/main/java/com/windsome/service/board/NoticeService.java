@@ -2,7 +2,7 @@ package com.windsome.service.board;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.board.notice.*;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Notice;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.board.notice.NoticeRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

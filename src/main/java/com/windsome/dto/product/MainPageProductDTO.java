@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter @Setter
 @NoArgsConstructor
 public class MainPageProductDTO {
 
-    private Long id;
+    private Long id; // 상품 id
 
     private String productName;
 
@@ -23,6 +26,8 @@ public class MainPageProductDTO {
     private Integer price;
 
     private double discount;
+
+    private List<ProductColorCodeDTO> colorCodeDTOList = new ArrayList<>();
 
     @QueryProjection
     public MainPageProductDTO(Long id, String productName, Category category, String productDetail, String imageUrl, Integer price, double discount) {

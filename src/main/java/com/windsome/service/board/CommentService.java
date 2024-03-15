@@ -4,7 +4,7 @@ import com.windsome.constant.Role;
 import com.windsome.dto.board.qa.CommentEnrollDto;
 import com.windsome.dto.board.qa.CommentDto;
 import com.windsome.dto.board.qa.CommentUpdateDto;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Comment;
 import com.windsome.entity.board.Qa;
 import com.windsome.repository.board.qa.CommentRepository;

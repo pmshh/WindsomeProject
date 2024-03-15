@@ -65,11 +65,14 @@
                         </div>
 
                         <div class="products-wrap row g-2">
-                            <div class="col-xs-12 col-lg-6 col-xl-4 product-dtl" th:each="product, status: ${products.getContent()}">
+                            <div class="col-xs-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 product-dtl" th:each="product, status: ${products.getContent()}">
                                 <a th:href="'/product/' + ${product.id}">
                                     <img th:src="${product.imageUrl}" class="card-img-top" th:alt="${product.productName}">
                                 </a>
                                 <div class="desc">
+                                    <div class="color mb-1">
+                                        <span class="color-code" th:each="colorCodeDTO: ${product.colorCodeDTOList}" th:style="'background-color: ' + ${colorCodeDTO.colorCode}"></span>
+                                    </div>
                                     <div class="name">
                                         <a>[[${product.productName}]]</a>
                                     </div>
@@ -156,7 +159,7 @@
             let category = [[${ productSearchDto.category }]];
 
             // 카테고리가 존재하는 경우
-            if (category !== null) {
+            if (category) {
                 // 카테고리와 검색 쿼리를 포함한 URL 생성하여 페이지 새로고침
                 location.href = '/?category=' + category + '&searchQuery=' + searchQuery + '&sort=' + arg;
             }

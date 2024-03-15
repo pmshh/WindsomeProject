@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='orderManagement')"></div>
+
+        <article class="admin-content-area">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="admin-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>ORDER</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body admin-order-form-body row">
+
+                        <!-- order-info-container start -->
+                        <div class="order-info-container col-11">
+                            <div class="title">
+                                <h3>주문정보</h3>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">주문번호</th>
+                                        <td class="base-table__cell" th:text="${orderDetail.orderUid}"></td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">주문일자</th>
+                                        <td class="base-table__cell" th:text="${#temporals.format(orderDetail.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">주문자</th>
+                                        <td class="base-table__cell" th:text="${orderDetail.buyer}"></td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">주문처리상태</th>
+                                        <td class="base-table__cell">
+                                            <select class="order-status-select">
+                                                <option value="*" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                <option value="**" disabled>-------------------</option>
+                                                <option th:each="status : ${orderStatus}" th:value="${status}" th:text="${status}" th:selected="${status == orderDetail.orderStatus}"></option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- payment-info-container start -->
+                        <div class="payment-info-container col-11">
+                            <div class="title">
+                                <h3>결제정보</h3>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides base-table--dark-header">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                    <tr class="base-table__row sum">
+                                        <th class="base-table__header-cell" scope="row">총 주문금액</th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input total-order-price-input" type="text" th:value="${orderDetail.totalOrderPrice}" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">총 부가결제금액</th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input used-points-input" type="text" th:value="${orderDetail.usedPoints}" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">적립금</th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input earned-points-input" type="text" th:value="${orderDetail.earnedPoints}" readonly>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides base-table--dark-borderd">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                    <tr class="base-table__row sum">
+                                        <th class="base-table__header-cell" scope="row">총 결제금액</th>
+                                        <td class="base-table__cell">
+                                            <input class="base-table__input total-payment-price-input" type="text" th:value="${orderDetail.totalPaymentPrice}" readonly>
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">결제수단</th>
+                                        <td class="base-table__cell">
+                                            <span th:text="${orderDetail.paymentMethod == 'card' ? '카드결제' : ''}"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- order-products-container start -->
+                        <div class="order-products-container col-11">
+                            <div class="title">
+                                <h3>주문 상품 정보</h3>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" style="width: 80px;" scope="col">이미지</th>
+                                            <th class="base-table__header-cell" style="width: auto;" scope="col">상품정보</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">수량</th>
+                                            <th class="base-table__header-cell" style="width: 110px;" scope="col">상품구매금액</th>
+                                            <th class="base-table__header-cell" style="width: 150px;" scope="col">배송구분</th>
+                                            <th class="base-table__header-cell" style="width: 150px;" scope="col">주문처리상태</th>
+                                            <th class="base-table__header-cell" style="width: 150px;" scope="col">취소/교환/반품</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row" th:each="orderProduct : ${orderDetail.orderDetailProductList}">
+                                            <input type="hidden" class="hidden-order-product-id-input" th:value="${orderProduct.orderProductId}">
+                                            <td class="base-table__cell base-table__cell--thumbnail">
+                                                <a th:href="${'/product/' + orderProduct.productId}">
+                                                    <img class="base-table__image" th:src="${orderProduct.imageUrl}">
+                                                </a>
+                                            </td>
+                                            <td class="base-table__cell left top pl20">
+                                                <a class="base-table__product-name" th:href="${'/product/' + orderProduct.productId}"th:text="${orderProduct.productName}"></a>
+                                                <div class="base-table__option-wrap mt5">
+                                                    [옵션: <span class="color-name" th:text="${orderProduct.colorName}"></span>/<span class="size-name" th:text="${orderProduct.sizeName}"></span> size]
+                                                    <input type="hidden" class="hidden-color-id-input" th:value="${orderProduct.colorId}">
+                                                    <input type="hidden" class="hidden-size-id-input" th:value="${orderProduct.sizeId}">
+                                                </div>
+                                                <div class="option-change-wrap">
+                                                    <button class="option-change-btn button button--white button--65x30 mt-2">옵션변경</button>
+                                                    <div class="option-change">
+                                                        <div class="header">
+                                                            <h3>옵션변경</h3>
+                                                        </div>
+                                                        <div class="content">
+                                                            <p class="product-name">S. Paris Varsity Jacket</p>
+                                                            <div class="modify">
+                                                                <h4>상품옵션</h4>
+                                                                <ul>
+                                                                    <li>
+                                                                        <span>색상</span>
+                                                                        <select class="color-select" th:id="${'color-select-' + orderProduct.productId}" th:data-product-id="${orderProduct.productId}">
+                                                                            <option value="*" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                                            <option value="**" disabled>-------------------</option>
+                                                                        </select>
+                                                                    </li>
+                                                                    <li>
+                                                                        <span>사이즈</span>
+                                                                        <select class="size-select" th:id="${'size-select-' + orderProduct.productId}" th:data-product-id="${orderProduct.productId}">
+                                                                            <option value="*" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                                            <option value="**" disabled>-------------------</option>
+                                                                        </select>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="button-wrap">
+                                                            <button class="button button--black button--90x30 option-modify-btn" type="button">변경</button>
+                                                        </div>
+                                                        <a href="#none" class="close-btn" onclick="$('.option-change').hide();"><i class="xi-close"></i></a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <div class="base-table__cnt-wrapper">
+                                                    <input class="base-table__order-quantity-input" th:value="${orderProduct.orderQuantity}" th:data-order-quantity="${orderProduct.orderQuantity}" th:data-inventory="${orderProduct.quantity}" th:data-product-price="${orderProduct.productPrice}">
+                                                    <div class="base-table__cnt-btn-wrapper">
+                                                        <i class="base-table__order-quantity-button xi-caret-up-min" data-action="up"></i>
+                                                        <i class="base-table__order-quantity-button xi-caret-down-min" data-action="down"></i>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                <span class="txtBold" th:text="|${#numbers.formatInteger(orderProduct.productPrice, 0, 'COMMA')}원|"></span>
+                                            </td>
+                                            <td class="base-table__cell">
+        <!--                                        <span th:text="${orderProduct.orderProductStatus.name == 'ORDER' ? '배송준비중' : ''}"></span>-->
+                                                <select class="order-product-status-select">
+                                                    <option selected>-배송구분-</option>
+                                                    <option disabled>--------------------</option>
+                                                    <option th:each="status: ${orderProductStatus}" th:value="${status}" th:text="${status}" th:selected="${status == orderProduct.orderProductStatus}"></option>
+                                                </select>
+                                            </td>
+                                            <td class="base-table__cell">
+                                                -
+                                            </td>
+                                            <td class="base-table__cell">
+                                                -
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tfoot class="base-table__footer">
+                                        <tr class="base-table__row">
+                                            <td class="base-table__cell" colspan="7">
+                                                <span class="me-2">상품구매금액(<span class="tfoot-total-product-price"></span>)</span>
+                                                + <span class="mx-2">배송비(<span class="tfoot-delivery-price"></span>)</span>
+                                                = <span class="ms-2 txtBold"> 합계 : <strong class="tfoot-total-order-price"></strong></span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- shipping-info-container start -->
+                        <div class="shipping-info-container col-11">
+                            <div class="title">
+                                <h3>배송지 정보</h3>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                    <colgroup>
+                                        <col style="width:160px">
+                                        <col style="width:auto">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">받으시는분</th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input base-table__input--big recipient-input" type="text" th:value="${orderDetail.recipient}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">주소</th>
+                                            <td class="base-table__cell">
+                                                <input type="text" class="base-table__input zipcode-input" readonly="readonly">
+                                                <button type="button" class="find-addr button button--white button--90x30" onclick="addressAPI()">주소 찾기</button>
+                                                <input type="text" class="base-table__input base-table__input--big displayblock mt5 addr-input" readonly="readonly">
+                                                <input type="text" class="base-table__input base-table__input--big displayblock mt5 addr-detail-input" readonly="readonly">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">휴대전화</th>
+                                            <td class="base-table__cell">
+                                                <select class="base-table__select tel-prefix-select">
+                                                    <option value="1">선택</option>
+                                                    <option value="010" selected>010</option>
+                                                    <option value="011">011</option>
+                                                    <option value="016">016</option>
+                                                    <option value="017">017</option>
+                                                    <option value="018">018</option>
+                                                    <option value="019">019</option>
+                                                </select>
+                                                -
+                                                <input type="text" class="base-table__input base-table__input--small tel-middle-input" maxlength="4">
+                                                -
+                                                <input type="text" class="base-table__input base-table__input--small tel-suffix-input" maxlength="4">
+                                                <input type="hidden" class="base-table__input tel-hidden-input">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">배송메시지</th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input base-table__input--big req-input" type="text" th:value="${orderDetail.req}">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- button-container start -->
+                        <div class="button-container col-11">
+                            <button class="button button--black button--130x40 order-update-btn" type="button">저장</button>
+                            <button class="button button--white button--130x40 cancel-btn" onclick="location.href='/admin/orders'">취소</button>
+                        </div>
+                    </div>
+
+                    <div class="total-detail-container displaynone">
+
+                        <div class="header">
+                            <h3>총 주문금액 상세내역</h3>
+                        </div>
+
+                        <div class="content">
+                            <p th:text="|${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|">39,000원</p>
+                            <ul class="">
+                                <li>
+                                    <strong class="term" >상품금액</strong>
+                                    <span class="desc total-product-price"></span>
+                                </li>
+                                <li>
+                                    <strong class="term">배송비</strong>
+                                    <span class="desc delivery-price"></span>
+                                </li>
+                                <li class="">
+                                    <strong class="term">지역별 배송비</strong>
+                                    <span class="desc">0원</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <a href="#none" class="close"><i class="fa-solid fa-x"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <!-- 주문 수정 form -->
+    <form th:action="@{'/admin/orders/' + ${orderId}}" id="order-update-form" method="post">
+        <input type="hidden" class="hidden-order-status-input" name="orderStatus"> <!-- 주문 상태 -->
+        <!-- 주문 상품 정보 동적 생성 -->
+
+        <input type="hidden" class="hidden-total-order-price-input" name="totalOrderPrice"> <!-- 총 주문 금액 -->
+        <input type="hidden" class="hidden-total-payment-price-input" name="totalPaymentPrice"> <!-- 총 결제 금액 -->
+        <input type="hidden" class="hidden-used-points-input" name="usedPoints"> <!-- 사용한 포인트 -->
+        <input type="hidden" class="hidden-earned-points-input" name="earnedPoints"> <!-- 적립 포인트 -->
+
+        <input type="hidden" class="hidden-recipient-input" name="recipient"> <!-- 받는이 -->
+        <input type="hidden" class="hidden-zipcode-input" name="zipcode"> <!-- 우편 번호 -->
+        <input type="hidden" class="hidden-addr-input" name="addr"> <!-- 주소 -->
+        <input type="hidden" class="hidden-addr-detail-input" name="addrDetail"> <!-- 상세 주소 -->
+        <input type="hidden" class="hidden-tel-input" name="tel"> <!-- 휴대 전화 -->
+        <input type="hidden" class="hidden-req-input" name="req"> <!-- 배송 메시지 -->
+    </form>
+
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <!-- custom js -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:inline="javascript">
+        $(function () {
+            initializeColorSelect(); // 색상 셀렉트 옵션 값 초기화
+            refreshOrderPriceInfo(); // 주문 상품 정보 금액 관련 정보 업데이트
+            initializeAddressInputValues(); // 주소 입력창에 회원의 주소 값을 저장하는 함수
+            initializeTelInputValues(); // 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수
+
+            /* 색상 셀렉트 옵션 선택 시, 사이즈 셀렉트 옵션 값 초기화 */
+            $('.color-select').change(initializeSizeSelect);
+
+            /* 수량 입력창 체인지 이벤트 핸들러 */
+            $(".base-table__order-quantity-input").change(handleOrderQuantityChange);
+
+            /* 수량 조절 버튼 클릭 이벤트 핸들러 */
+            $(".base-table__order-quantity-button").click(handleOrderQuantityButtonClick);
+
+            /* 옵션 변경 요소 토글 */
+            $(".option-change-btn").click(toggleModifyOptionScreen);
+
+            /* 옵션 변경 요소 닫기 버튼 클릭 이벤트 처리 */
+            $(".close").click(closeOptionScreen);
+
+            /* 주문 상품 옵션 변경 버튼 클릭 이벤트 처리 */
+            $(".option-modify-btn").click(modifyOrderProductOptions);
+
+            /* 주문 수정 함수 */
+            $(".order-update-btn").click(updateOrder);
+        });
+
+        /* 옵션 변경 영역 토글 함수 */
+        function toggleModifyOptionScreen() {
+            $(this).siblings(".option-change").toggle();
+        }
+
+        /* 옵션 변경 화면 닫기 함수 */
+        function closeOptionScreen() {
+            $(".total-detail-container").addClass("displaynone");
+        }
+
+        /* 주문 상품 옵션 변경 함수 */
+        function modifyOrderProductOptions() {
+            let colorSelect = $(this).parent().siblings(".content").find(".color-select");
+            let sizeSelect = $(this).parent().siblings(".content").find(".size-select");
+            let colorVal = $(colorSelect).val();
+            let sizeVal = $(sizeSelect).val();
+            let colorName = $(this).parent().siblings(".content").find(".color-select option:selected").text();
+            let sizeName = $(this).parent().siblings(".content").find(".size-select option:selected").text().replace("Size", "").trim();
+
+            if (colorVal === '*' || sizeVal === '*') {
+                alert("필수 옵션을 선택해 주세요.");
+                return false;
+            }
+
+            $(this).parent().parent().parent().parent().find('.color-name').text(colorName);
+            $(this).parent().parent().parent().parent().find('.size-name').text(sizeName);
+            $(this).parent().parent().parent().parent().find('.base-table__option-wrap').find(".hidden-color-id-input").val(colorVal);
+            $(this).parent().parent().parent().parent().find('.base-table__option-wrap').find(".hidden-size-id-input").val(sizeVal);
+
+            $(".option-change").hide();
+        }
+
+        /* 재고에서 색상을 초기화하고 선택 옵션을 설정 */
+        function initializeColorSelect() {
+            $(".color-select").each(function () {
+                let productId = $(this).data("product-id");
+                $.ajax({
+                    url: "/admin/orders/inventories/" + productId,
+                    type: "get",
+                    dataType: "json",
+                    success: function (res) {
+                        const colors = [...new Set(res.map(inventory => `${inventory.colorId}-${inventory.colorName}`))];
+                        $.each(colors, function(index, color) {
+                            const [colorId, colorName] = color.split('-');
+                            $("#color-select-" +productId).append($('<option>', {
+                                value: colorId,
+                                text: colorName
+                            }));
+                        });
+                    },
+                    error: function () {
+                        alert("실패");
+                    },
+                })
+            });
+        }
+
+        /* 색상 선택에 따라 해당하는 사이즈 옵션을 초기화하고, 품절 여부를 표시하여 사이즈 옵션을 설정 */
+        function initializeSizeSelect() {
+            let selectedColorId = $(this).val(); // 블랙
+            let productId = $(this).data("product-id");
+            $('#size-select-' + productId).empty().append(
+                $('<option>', {
+                    value: '*',
+                    text: '- [필수] 옵션을 선택해 주세요 -',
+                    selected: true
+                }),
+                $('<option>', {
+                    value: '**',
+                    text: '-------------------',
+                    disabled: true
+                })
+            );
+
+            $.ajax({
+                url: "/admin/orders/inventories/" + productId,
+                type: "get",
+                dataType: "json",
+                success: function (res) {
+                    let sizes = res.filter(item => item.colorId === Number(selectedColorId)).map(item => ({ sizeId: item.sizeId, sizeName: item.sizeName }));
+                    $.each(sizes, function(index, size) {
+                        let optionText = size.sizeName + " Size";
+                        let inventory = res.find(item => item.colorId === Number(selectedColorId) && item.sizeId === size.sizeId);
+                        if (inventory && inventory.quantity === 0) {
+                            optionText += " [품절]";
+                        }
+                        $('#size-select-' + productId).append($('<option>', {
+                            value: size.sizeId,
+                            text: optionText
+                        }));
+                    });
+                },
+                error: function () {
+                    alert("실패");
+                },
+            })
+        }
+
+        /* 상품 개수 조절 함수 (입력창) */
+        function handleOrderQuantityChange() {
+            // 입력된 값이 숫자가 아니면 제거
+            $(this).val($(this).val().replace(/\D/g, ''));
+
+            let orderQuantityVal = $(this).val();
+            let minOrderQuantity = -1;
+            let beforeOrderQuantity = parseInt($(this).attr("data-order-quantity"));
+            let inventory = parseInt($(this).attr("data-inventory"));
+            let maxOrderQuantity = inventory + beforeOrderQuantity; // 현재 재고 수량 + 이전 주문 개수 = 총 재고 수량
+
+            if (orderQuantityVal < minOrderQuantity) {
+                alert('수량은 0개 이상 입력해 주세요.');
+                $(this).val(1);
+                return false;
+            } else if (orderQuantityVal > maxOrderQuantity) {
+                alert('죄송합니다. 재고가 부족합니다.');
+                $(this).val(maxOrderQuantity);
+                return false;
+            }
+            refreshOrderPriceInfo();
+        }
+
+        /* 상품 개수 조절 함수 (버튼) */
+        function handleOrderQuantityButtonClick() {
+            let orderQuantityInput = $(this).parent().siblings(".base-table__order-quantity-input");
+            let orderQuantityVal = parseInt(orderQuantityInput.val());
+            let action = $(this).attr("data-action");
+            let minOrderQuantity = 0;
+            let beforeOrderQuantity = parseInt(orderQuantityInput.attr("data-order-quantity"));
+            let inventory = parseInt(orderQuantityInput.attr("data-inventory"));
+            let maxOrderQuantity = inventory + beforeOrderQuantity; // 현재 재고 수량 + 이전 주문 개수 = 총 재고 수량
+
+            if (action === 'down') {
+                orderQuantityVal -= 1;
+                orderQuantityInput.val(orderQuantityVal);
+                if (orderQuantityVal < minOrderQuantity) {
+                    alert('수량은 0개 이상 입력해 주세요.');
+                    orderQuantityInput.val(1);
+                    return false;
+                }
+            } else if (action === 'up') {
+                orderQuantityVal += 1;
+                orderQuantityInput.val(orderQuantityVal);
+                if (orderQuantityVal > maxOrderQuantity) {
+                    alert('죄송합니다. 재고가 부족합니다.');
+                    orderQuantityInput.val(maxOrderQuantity);
+                    return false;
+                }
+            }
+            refreshOrderPriceInfo();
+        }
+
+        /* 주문 상품 정보 금액 관련 정보 업데이트 */
+        function refreshOrderPriceInfo() {
+            let totalProductPrice = 0;
+            let deliveryPrice = 3000;
+            let totalOrderPrice = 0;
+
+            $(".order-products-container .base-table__body tr").each(function () {
+                let orderQuantity = parseInt($(this).find(".base-table__order-quantity-input").val());
+                let productPrice = parseInt($(this).find(".base-table__order-quantity-input").attr("data-product-price"));
+
+                totalProductPrice += productPrice * orderQuantity;
+            });
+            if (totalProductPrice >= 30000) {
+                deliveryPrice = 0;
+            }
+            totalOrderPrice = totalProductPrice + deliveryPrice;
+            $(".tfoot-total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            $(".tfoot-delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            $(".tfoot-total-order-price").text((totalOrderPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            $(".total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            $(".delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+        }
+
+        /* 주소 입력창에 회원의 주소 값을 저장하는 함수 */
+        function initializeAddressInputValues() {
+            let buyerZipcode = [[${orderDetail.zipcode}]];
+            let buyerAddr = [[${orderDetail.addr}]];
+            let buyerAddrDetail = [[${orderDetail.addrDetail}]];
+            let zipcodeInput = $(".zipcode-input");
+            let addrInput = $(".addr-input");
+            let addrDetailInput = $(".addr-detail-input");
+            zipcodeInput.val(buyerZipcode);
+            addrInput.val(buyerAddr);
+            addrDetailInput.val(buyerAddrDetail);
+        }
+
+        /* 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수 */
+        function initializeTelInputValues() {
+            // 회원의 휴대전화 저장
+            let tel = [[${orderDetail.tel}]];
+
+            // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
+            let telPrefix = tel.substring(0, 3);
+            let middleLength = tel.length === 11 ? 4 : 3; // 중간 번호 길이 결정
+            let telMiddle = tel.substring(3, 3 + middleLength);
+            let telSuffix = tel.substring(3 + middleLength);
+
+            $(".tel-prefix-select").val(telPrefix).prop("selected", true);
+            $(".tel-middle-input").val(telMiddle);
+            $(".tel-suffix-input").val(telSuffix);
+        }
+
+        /* 다음 주소 연동 API */
+        function addressAPI() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    let addr = ''; // 주소 변수
+                    let extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        addr += extraAddr;
+                    } else {
+                        addr += ' ';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    $(".zipcode-input").val(data.zonecode);
+                    $(".addr-input").val(addr);
+                    // 커서를 상세주소 필드로 이동한다.
+                    $(".addr-detail-input").attr("readonly", false);
+                    $(".addr-detail-input").focus();
+                }
+            }).open();
+        }
+
+        /* 주문 수정 함수 */
+        function updateOrder() {
+            let form = $("#order-update-form");
+
+            let orderStatus = $(".order-status-select").val();
+            let totalOrderPrice = $(".total-order-price-input").val();
+            let totalPaymentPrice = $(".total-payment-price-input").val();
+            let usedPoints = $(".used-points-input").val();
+            let earnedPoints = $(".earned-points-input").val();
+            let recipient = $(".recipient-input").val();
+            let zipcode = $(".zipcode-input").val();
+            let addr = $(".addr-input").val();
+            let addrDetail = $(".addr-detail-input").val();
+            let telPrefix = $(".tel-prefix-select").val();
+            let telMiddle = $(".tel-middle-input").val();
+            let telSuffix = $(".tel-suffix-input").val();
+            let tel = telPrefix + telMiddle + telSuffix;
+            let req = $(".req-input").val();
+
+            $(".hidden-order-status-input").val(orderStatus);
+            $(".hidden-total-order-price-input").val(totalOrderPrice);
+            $(".hidden-total-payment-price-input").val(totalPaymentPrice);
+            $(".hidden-used-points-input").val(usedPoints);
+            $(".hidden-earned-points-input").val(earnedPoints);
+            $(".hidden-recipient-input").val(recipient);
+            $(".hidden-zipcode-input").val(zipcode);
+            $(".hidden-addr-input").val(addr);
+            $(".hidden-addr-detail-input").val(addrDetail);
+            $(".hidden-tel-input").val(tel);
+            $(".hidden-req-input").val(req);
+
+            $(".order-products-container .base-table__body tr").each(function (index) {
+                // 주문 상품 정보 동적 태그 추가
+                let orderProductId = $(this).find(".hidden-order-product-id-input").val();
+                let colorId = $(this).find(".hidden-color-id-input").val();
+                let sizeId = $(this).find(".hidden-size-id-input").val();
+                let orderQuantity = $(this).find(".base-table__order-quantity-input").val();
+                let orderProductStatus = $(this).find(".order-product-status-select").val();
+
+                let formContents = "<input type='hidden' name='orderProducts[" + index + "].orderProductId' value='" + orderProductId + "'>";
+                formContents += "<input type='hidden' name='orderProducts[" + index + "].colorId' value='" + colorId + "'>";
+                formContents += "<input type='hidden' name='orderProducts[" + index + "].sizeId' value='" + sizeId + "'>";
+                formContents += "<input type='hidden' name='orderProducts[" + index + "].orderQuantity' value='" + orderQuantity + "'>";
+                formContents += "<input type='hidden' name='orderProducts[" + index + "].orderProductStatus' value='" + orderProductStatus + "'>";
+
+                form.append(formContents);
+            });
+            form.submit();
+        }
+
+    </script>
+
+</body>

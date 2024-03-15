@@ -2,8 +2,6 @@
 
 .qaForm-body {
     form {
-        width: 70%;
-
         table {
             tbody {
                 td {
@@ -72,28 +70,5 @@
 .ck {
     p {
         margin: 0;
-    }
-}
-
-@media (max-width: 1200px) {
-    .qaForm-body {
-
-        form {
-            width: 90%;
-        }
-    }
-}
-
-@media (max-width: 992px) {
-    .qaForm-body {
-        form {
-            width: 100%;
-
-            .btn-box {
-                button.del-btn {
-                    width: 50px;
-                }
-            }
-        }
     }
 }

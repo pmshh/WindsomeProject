@@ -1,25 +1,23 @@
 @import "../../../abstracts/variables";
 
 .product-mng-body {
-    width: 90%;
-    margin: 0 auto;
-
     .product-list-container {
-        width: 100%;
         overflow-x: auto;
-
         table {
-            min-width: 810px;
-
+            min-width: 1300px;
             tbody {
                 tr {
                     td {
-                        height: 100px;
+                        .sold-out{
+                            color: #bb1919;
+                        }
 
-                        .product-dtl-btn {
-                            outline: none;
-                            background: white;
-                            border: none;
+                        .on-sale {
+                            color: #0000FF;
+                        }
+
+                        .product-name {
+                            color: #353535;
 
                             &:hover {
                                 color: rgb(80, 80, 80);
@@ -39,11 +37,5 @@
 
     .search-input-container {
         @include search-input-container();
-    }
-}
-
-@media (max-width:1200px) {
-    .product-mng-body {
-        width: 100%;
     }
 }

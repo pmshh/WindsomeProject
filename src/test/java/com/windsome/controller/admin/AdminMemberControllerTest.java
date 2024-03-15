@@ -3,19 +3,17 @@ package com.windsome.controller.admin;
 import com.windsome.WithAccount;
 import com.windsome.constant.Role;
 import com.windsome.dto.member.AdminMemberDetailDTO;
-import com.windsome.dto.member.MemberListSearchDto;
+import com.windsome.dto.member.MemberListSearchDTO;
 import com.windsome.service.AdminService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +46,7 @@ class AdminMemberControllerTest {
     @WithAccount("admin1234")
     void getMembersTest() throws Exception {
         // Mocking
-        given(adminService.getMemberListForAdminPage(any(MemberListSearchDto.class), any())).willReturn(new PageImpl<>(Collections.emptyList()));
+        given(adminService.getMemberListForAdminPage(any(MemberListSearchDTO.class), any())).willReturn(new PageImpl<>(Collections.emptyList()));
 
         // Perform & Verify
         mockMvc.perform(get("/admin/members")
@@ -180,7 +178,7 @@ class AdminMemberControllerTest {
     @WithAccount("admin1234")
     void deleteMemberTest() throws Exception {
         // Given
-        doNothing().when(adminService).deleteMember(anyLong());
+        doNothing().when(adminService).deleteMembers(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/members/1").with(csrf()))

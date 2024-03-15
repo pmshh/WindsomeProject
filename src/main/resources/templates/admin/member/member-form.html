@@ -181,9 +181,10 @@
             $(".cancel-btn").click(cancelProfile);
 
             /* 회원 삭제 버튼 클릭 처리 */
-            $(".del-btn").click(deleteProfile);
+            $(".del-btn").click(deleteMember);
         });
 
+        /* 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수 */
         function showMessage() {
             let message = [[${message}]];
             if (message) {
@@ -191,6 +192,7 @@
             }
         }
 
+        /* 회원의 이메일 정보를 가져와서 이메일 입력 필드에 초기화하는 함수 */
         function initializeEmail() {
             let email = [[${memberDetails.email}]];
             let emailArr = email.split("@");
@@ -326,12 +328,16 @@
         }
 
         /* 회원 삭제 함수 */
-        function deleteProfile() {
+        function deleteMember() {
+            let memberIds = [];
+            let memberId = $(this).attr("data-memberId");
+            memberIds.push(memberId);
+
             if (confirm("정말로 회원을 삭제하시겠습니까?")) {
-                let memberId = $(this).attr("data-memberId");
                 $.ajax({
-                    url: '/admin/members/' + memberId,
+                    url: '/admin/members/delete',
                     type: 'delete',
+                    data: JSON.stringify(memberIds),
                     success(res) {
                         alert(res);
                         location.href = '/admin/members';

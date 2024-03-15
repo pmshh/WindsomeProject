@@ -1,99 +1,137 @@
-//package com.windsome.controller;
-//
-//import com.windsome.WithAccount;
-//import com.windsome.constant.ProductSellStatus;
-//import com.windsome.dto.order.OrderRequestDTO;
-//import com.windsome.dto.order.OrderProductRequestDTO;
-//import com.windsome.entity.Product;
-//import com.windsome.repository.member.MemberRepository;
-//import com.windsome.repository.order.OrderRepository;
-//import com.windsome.repository.orderProduct.OrderProductRepository;
-//import com.windsome.repository.product.ProductRepository;
-//import com.windsome.service.OrderService;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.http.MediaType;
-//import org.springframework.test.context.TestPropertySource;
-//import org.springframework.test.web.servlet.MockMvc;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//
-//@SpringBootTest
-//@AutoConfigureMockMvc
-//@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
-//class OrderControllerTest {
-//
-//    @Autowired MockMvc mockMvc;
-//    @Autowired ProductRepository productRepository;
-//    @Autowired OrderService orderService;
-//    @Autowired OrderRepository orderRepository;
-//    @Autowired OrderProductRepository orderProductRepository;
-//    @Autowired MemberRepository memberRepository;
-//
-//    @AfterEach
-//    void afterEach() {
-//        orderProductRepository.deleteAll();
-//        orderRepository.deleteAll();
-//        productRepository.deleteAll();
-//        memberRepository.deleteAll();
-//    }
-//
-//    @WithAccount("test1234")
-//    @DisplayName("주문 조회 화면 보이는지 테스트")
-//    @Test
-//    void orderHist() throws Exception {
-//        mockMvc.perform(get("/orders"))
-//                .andExpect(model().attributeExists("orders"))
-//                .andExpect(model().attributeExists("maxPage"))
-//                .andExpect(view().name("order/order-history"));
-//    }
-//
-//    @WithAccount("test1234")
-//    @DisplayName("주문 취소 테스트")
-//    @Test
-//    void cancelOrder() throws Exception {
-//        Product product = saveProduct();
-//
-//        OrderRequestDTO orderDto = getOrderDto(product);
-//        Long orderId = orderService.order(orderDto, "test1234");
-//
-//        mockMvc.perform(patch("/orders/" + orderId + "/cancel")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentType("text/plain;charset=UTF-8"))
-//                .andExpect(content().string("주문이 최소되었습니다."));
-//    }
-//
-//    public Product saveProduct() {
-//        Product product = Product.builder()
-//                .name("테스트 상품")
-//                .price(10000)
-//                .productDetail("테스트 상품 상세 설명")
-//                .productSellStatus(ProductSellStatus.SELL)
-//                .stockNumber(100)
-//                .build();
-//        return productRepository.save(product);
-//    }
-//
-//    private static OrderRequestDTO getOrderDto(Product product) {
-//        List<OrderProductRequestDTO> orderItemDtoList = new ArrayList<>();
-//        OrderProductRequestDTO orderItemDto = new OrderProductRequestDTO();
-//        orderItemDto.setId(product.getId());
-//        orderItemDto.setPrice(product.getPrice());
-//        orderItemDto.setCount(10);
-//        orderItemDtoList.add(orderItemDto);
-//
-//        OrderRequestDTO orderDto = new OrderRequestDTO("test", "test", "test", "test", "test", "test", orderItemDtoList, 0, 0, 10000, 500, 10000);
-//        return orderDto;
-//    }
-//}
+package com.windsome.controller;
+import com.windsome.advice.MemberControllerAdvice;
+import com.windsome.dto.order.*;
+import com.windsome.entity.member.Member;
+import com.windsome.repository.member.MemberRepository;
+import com.windsome.service.OrderService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+@WebMvcTest(OrderController.class)
+@AutoConfigureMockMvc
+@MockBean(JpaMetamodelMappingContext.class)
+@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
+public class OrderControllerTest {
+
+    @Autowired MockMvc mockMvc;
+
+    @Autowired private OrderController orderController;
+
+    @MockBean private OrderService orderService;
+    @MockBean private MemberRepository memberRepository;
+    @MockBean MemberControllerAdvice memberControllerAdvice;
+
+    @Test
+    void testShowOrderList() {
+        // Given
+        Model mockModel = mock(Model.class);
+        Member member = mock(Member.class);
+        member.setUserIdentifier("test1234");
+        Pageable pageable = PageRequest.of(1, 5);
+        Page<OrderHistResponseDTO> page = mock(Page.class);
+
+        when(orderService.getOrderList(member.getUserIdentifier(), pageable)).thenReturn(page);
+
+        // When
+        String result = orderController.showOrderList(Optional.of(1), member, mockModel);
+
+        // Then
+        assertEquals("order/order-history", result);
+        verify(mockModel).addAttribute(eq("orders"), eq(page));
+        verify(mockModel).addAttribute(eq("maxPage"), eq(5));
+    }
+
+    @Test
+    void testCreateOrderForm() {
+        // Given
+        OrderProductListDTO orderProductListDTO = mock(OrderProductListDTO.class);
+        Model mockModel = mock(Model.class);
+        Member member = mock(Member.class);
+        member.setId(1L);
+        List<OrderProductResponseDTO> orderProductResponseDTOList = new ArrayList<>();
+
+        when(orderService.getOrderProductsInfo(orderProductListDTO)).thenReturn(orderProductResponseDTOList);
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
+
+        // When
+        String result = orderController.createOrderForm(orderProductListDTO, member, mockModel);
+
+        // Then
+        assertEquals("order/order-form", result);
+        verify(mockModel).addAttribute(eq("orderProducts"), eq(orderProductResponseDTOList));
+        verify(mockModel).addAttribute(eq("member"), eq(member));
+    }
+
+    @Test
+    void testCreateOrder() {
+        // Given
+        OrderRequestDTO orderRequestDTO = mock(OrderRequestDTO.class);
+        Member member = mock(Member.class);
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+        member.setUserIdentifier("test1234");
+
+        when(orderService.order(orderRequestDTO, member.getUserIdentifier())).thenReturn(1L);
+
+        // When
+        String result = orderController.createOrder(orderRequestDTO, member, mockRedirectAttributes);
+
+        // Then
+        assertEquals("redirect:/orders", result);
+        verify(mockRedirectAttributes).addFlashAttribute(eq("message"), eq("상품이 주문되었습니다."));
+    }
+
+    @Test
+    void testCancelOrder() {
+        // Given
+        Long orderId = 123L;
+        Member member = mock(Member.class);
+        member.setUserIdentifier("test1234");
+
+        when(orderService.verifyOrderCancellationPermission(orderId, member.getUserIdentifier())).thenReturn(false);
+
+        // When
+        ResponseEntity<String> responseEntity = orderController.cancelOrder(orderId, member);
+
+        // Then
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("주문이 취소되었습니다.", responseEntity.getBody());
+    }
+
+    @Test
+    void testShowOrderDetail() {
+        // Given
+        Long orderId = 123L;
+        Model mockModel = mock(Model.class);
+        OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
+
+        // Stubbing getOrderDetail() method to return a mock order detail DTO
+        when(orderService.getOrderDetail(orderId)).thenReturn(orderDetailDTO);
+
+        // When
+        String viewName = orderController.showOrderDetail(orderId, mockModel);
+
+        // Then
+        assertEquals("order/order-detail", viewName);
+        verify(mockModel).addAttribute(eq("orderDetail"), eq(orderDetailDTO));
+    }
+}

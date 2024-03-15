@@ -3,5 +3,5 @@ package com.windsome.dto.admin;
 public interface CategorySalesResult  {
 
     Long getCategory();
-    Long getCount();
+    Long getOrderQuantity();
 }

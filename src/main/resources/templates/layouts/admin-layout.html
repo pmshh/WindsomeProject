@@ -20,8 +20,6 @@
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- fontawesome js -->
     <script src="/node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
-    <!-- jdenticon js -->
-    <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
 </th:block>
 
 <body>
@@ -33,12 +31,11 @@
 
             <div class="sidebar-profile">
                 <div class="profile-img">
-                    <svg th:data-jdenticon-value="${#authentication.name}" width="36" height="36"></svg>
+                    <i id="profile-icon" class="xi-profile"></i>
                 </div>
                 <div class="profile-name">
                     <div class="name-box">
-                        <button type="button" class="toggle-btn"><span th:text="${#authentication.name}"></span><i
-                                class="fa-solid fa-sort-down"></i></button>
+                        <button type="button" class="toggle-btn" th:text="${currentMember.name}"></button>
                     </div>
                     <div class="logout-box">
                         <ul>
@@ -78,11 +75,11 @@
                         회원 관리
                     </a>
                     <a class="sidebar-link collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#sub-menu" role="button">
+                        data-bs-toggle="collapse" data-bs-target="#board-management-submenu" role="button">
                         <i class="xi-list pe-2"></i>
                         게시판 관리
                     </a>
-                    <div class="collapse sub-menu" id="sub-menu">
+                    <div class="collapse sub-menu" id="board-management-submenu">
                         <a th:href="@{/admin/board/notice}" th:classappend="${currentMenu == 'noticeManagement'}? active">Notice</a>
                         <a th:href="@{/admin/board/qa}" th:classappend="${currentMenu == 'qaManagement'}? active">Q&A</a>
                         <a th:href="@{/admin/board/review}" th:classappend="${currentMenu == 'reviewManagement'}? active">Review</a>
@@ -168,6 +165,7 @@
 
             <!--프로필 toggle 기능-->
             $('.toggle-btn').click(function () {
+                $(this).toggleClass("active");
                 $('.logout-box').toggleClass('active');
             });
         });

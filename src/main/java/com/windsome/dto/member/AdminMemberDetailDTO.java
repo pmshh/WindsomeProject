@@ -1,6 +1,6 @@
 package com.windsome.dto.member;
 
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +35,9 @@ public class AdminMemberDetailDTO {
         return AdminMemberDetailDTO.builder()
                 .id(member.getId())
                 .userIdentifier(member.getUserIdentifier())
-                .email(member.getEmail())
-                .name(member.getName())
                 .password(member.getPassword())
+                .name(member.getName())
+                .email(member.getEmail())
                 .zipcode(member.getZipcode())
                 .addr(member.getAddr())
                 .addrDetail(member.getAddrDetail())

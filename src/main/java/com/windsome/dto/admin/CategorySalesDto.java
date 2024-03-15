@@ -9,10 +9,10 @@ import lombok.Setter;
 public class CategorySalesDto {
 
     public Long category;
-    public Long count;
+    public Long orderQuantity;
 
     public CategorySalesDto(CategorySalesResult data) {
         this.category = data.getCategory();
-        this.count = data.getCount();
+        this.orderQuantity = data.getOrderQuantity();
     }
 }

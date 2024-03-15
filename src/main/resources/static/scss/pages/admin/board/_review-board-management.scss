@@ -1,19 +1,25 @@
 @import "../../../abstracts/variables";
 
 .review-mng-body {
-    width: 90%;
-    margin: 0 auto;
-
     .review-list-container {
-        width: 100%;
         overflow-x: auto;
 
-        table {
-            min-width: 1150px;
+        .base-table {
+            min-width: 1300px;
 
-            tbody {
-                tr {
-                    td {
+            .base-table__head {
+                .base-table__row {
+                    .base-table__header-cell {
+                        font-weight: bold;
+                        font-size: 11px;
+                        color: #353535;
+                    }
+                }
+            }
+
+            .base-table__body {
+                .base-table__row {
+                    .base-table__cell {
                         .rate {
                             display: inline-block;
 
@@ -28,7 +34,7 @@
                                 &:before {
                                     display: inline-block;
                                     font-size: 1rem;
-                                    padding: .3rem .2rem;
+                                    padding: 0.3rem 0.2rem;
                                     margin: 0;
                                     font-family: FontAwesome;
                                     content: "\f005 ";
@@ -40,7 +46,7 @@
                                 position: absolute;
                             }
 
-                            input:checked~label {
+                            input:checked ~ label {
                                 color: #f73c32 !important;
                             }
                         }

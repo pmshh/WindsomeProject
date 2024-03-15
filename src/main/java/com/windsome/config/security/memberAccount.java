@@ -1,6 +1,6 @@
 package com.windsome.config.security;
 
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

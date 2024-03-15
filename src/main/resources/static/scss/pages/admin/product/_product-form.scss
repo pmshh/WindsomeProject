@@ -2,18 +2,16 @@
 
 .product-form-body {
     form {
-        width: 90%;
         overflow-x: auto;
 
-        table {
-            width: 100%;
-            min-width: 784px;
+        .base-table {
+            min-width: 780px;
 
-            tbody {
+            .base-table__body {
                 font-size: 12px;
                 color: $graphite;
 
-                th {
+                .base-table__header-cell {
                     border-right: none;
 
                     .required-field {
@@ -22,7 +20,11 @@
                     }
                 }
 
-                td {
+                .base-table__cell {
+                    .discounted-price {
+                        font-weight: bold;
+                    }
+
                     .fake-input {
                         display: inline-block;
                         height: 26px;
@@ -62,8 +64,8 @@
                         padding: 3px !important;
                     }
 
-                    button.del-file,
-                    button.img-cancel-btn {
+                    .file-delete-btn,
+                    .image-upload-cancel-btn {
                         width: 70px !important;
                         height: 26px !important;
                         padding: 3px !important;
@@ -79,6 +81,57 @@
                             color: transparent;
                         }
                     }
+
+                    .sell-status-select {
+                        width: 100%;
+                    }
+
+                    .parent-cate-select,
+                    .child-cate-select {
+                        width: calc(50% - 2px);
+                    }
+
+                    .option-select-wrapper {
+                        .option-reset-btn {
+                            margin-left: auto;
+                        }
+                    }
+
+                    .option-table {
+                        table {
+                            width: 100%;
+                            text-align: center;
+                            vertical-align: middle;
+                            font-size: 12px;
+                            border-top: 1px solid $border-color;
+                            border-bottom: 1px solid $border-color;
+
+                            thead {
+                                tr {
+                                    th {
+                                        border-bottom: 1px solid $border-color;
+                                        // border: 1px solid $border-color;
+                                        padding: 10px;
+                                    }
+                                }
+                            }
+                            tbody {
+                                tr {
+                                    td {
+                                        // border: 1px solid $border-color;
+                                        padding: 10px;
+
+                                        .quantity-input {
+                                            width: 120px;
+                                            outline: none;
+                                            border: none;
+                                            border-bottom: 1px solid #777;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -90,12 +143,4 @@
             margin-top: 30px;
         }
     }
-}
-
-.ck.ck-editor {
-    min-width: 100%;
-}
-
-.ck {
-    height: 400px;
 }

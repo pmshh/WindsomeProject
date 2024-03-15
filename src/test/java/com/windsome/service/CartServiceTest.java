@@ -1,12 +1,20 @@
 package com.windsome.service;
 
 import com.windsome.dto.cart.CartDetailDto;
-import com.windsome.dto.cart.CartProductDto;
-import com.windsome.entity.*;
+import com.windsome.dto.cart.CartProductDTO;
+import com.windsome.dto.cart.CartProductListDTO;
+import com.windsome.entity.Color;
+import com.windsome.entity.Size;
+import com.windsome.entity.cart.Cart;
+import com.windsome.entity.cart.CartProduct;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.product.Product;
 import com.windsome.repository.cart.CartRepository;
 import com.windsome.repository.cartProduct.CartProductRepository;
 import com.windsome.repository.member.MemberRepository;
+import com.windsome.repository.product.ColorRepository;
 import com.windsome.repository.product.ProductRepository;
+import com.windsome.repository.product.SizeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +25,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static com.windsome.TestUtil.createMember;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +42,8 @@ class CartServiceTest {
     @Mock private MemberRepository memberRepository;
     @Mock private CartRepository cartRepository;
     @Mock private CartProductRepository cartProductRepository;
+    @Mock private ColorRepository colorRepository;
+    @Mock private SizeRepository sizeRepository;
 
     @InjectMocks private CartService cartService;
 
@@ -89,35 +101,38 @@ class CartServiceTest {
     @DisplayName("상품이 장바구니에 성공적으로 추가됨")
     void testAddCartProduct_SuccessfullyAdded() {
         // Given
-        CartProductDto cartProductDto = CartProductDto.builder()
-                .productId(1L)
-                .count(1)
-                .build();
-        Product product = Product.builder()
-                .id(1L)
-                .build();
-        when(productRepository.findById(cartProductDto.getProductId())).thenReturn(java.util.Optional.of(product));
+        Member member = Member.builder().id(1L).build();
+        Product product = Product.builder().id(1L).build();
+        Cart cart = Cart.builder().id(1L).build();
 
-        Member member = Member.builder()
-                .id(1L)
-                .build();
+        Color color = Color.builder().id(1L).build();
+        Size size = Size.builder().id(1L).build();
+
+        CartProductListDTO cartProductListDTO = new CartProductListDTO();
+        cartProductListDTO.setProductId(1L);
+        List<CartProductDTO> cartProductDTOList = new ArrayList<>();
+        CartProductDTO cartProductDTO = new CartProductDTO();
+        cartProductDTO.setColorId(1L);
+        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setQuantity(1);
+        cartProductDTOList.add(cartProductDTO);
+        cartProductListDTO.setCartProductDTOList(cartProductDTOList);
+
+        when(productRepository.findById(anyLong())).thenReturn(java.util.Optional.of(product));
         when(memberRepository.findByUserIdentifier("user1")).thenReturn(member);
-
-        Cart cart = Cart.builder()
-                .id(1L)
-                .build();
         when(cartRepository.findByMemberId(member.getId())).thenReturn(cart);
-
-        when(cartProductRepository.findByCartIdAndProductId(cart.getId(), product.getId())).thenReturn(null);
+        when(colorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(color));
+        when(sizeRepository.findById(anyLong())).thenReturn(Optional.ofNullable(size));
+        when(cartProductRepository.findByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(null);
 
         // When
-        assertDoesNotThrow(() -> cartService.addCartProduct(cartProductDto, "user1"));
+        assertDoesNotThrow(() -> cartService.addCartProduct(cartProductListDTO, "user1"));
 
         // Then
-        verify(productRepository, times(1)).findById(cartProductDto.getProductId());
+        verify(productRepository, times(1)).findById(anyLong());
         verify(memberRepository, times(1)).findByUserIdentifier("user1");
         verify(cartRepository, times(1)).findByMemberId(member.getId());
-        verify(cartProductRepository, times(1)).findByCartIdAndProductId(cart.getId(), product.getId());
+        verify(cartProductRepository, times(1)).findByProductIdAndColorIdAndSizeId(anyLong(),anyLong(),anyLong());
         verify(cartProductRepository, times(1)).save(any(CartProduct.class));
     }
 
@@ -125,26 +140,42 @@ class CartServiceTest {
     @DisplayName("상품이 존재하지 않을 때 예외 발생")
     void testAddCartProduct_ProductNotFound() {
         // Given
-        CartProductDto cartProductDto = new CartProductDto();
-        cartProductDto.setProductId(1L);
-        when(productRepository.findById(cartProductDto.getProductId())).thenReturn(java.util.Optional.empty());
+        CartProductListDTO cartProductListDTO = new CartProductListDTO();
+        cartProductListDTO.setProductId(1L);
+        List<CartProductDTO> cartProductDTOList = new ArrayList<>();
+        CartProductDTO cartProductDTO = new CartProductDTO();
+        cartProductDTO.setColorId(1L);
+        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setQuantity(1);
+        cartProductDTOList.add(cartProductDTO);
+        cartProductListDTO.setCartProductDTOList(cartProductDTOList);
+
+        when(productRepository.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
         // When, Then
-        assertThrows(EntityNotFoundException.class, () -> cartService.addCartProduct(cartProductDto, "user1"));
+        assertThrows(EntityNotFoundException.class, () -> cartService.addCartProduct(cartProductListDTO, "user1"));
     }
 
     @Test
     @DisplayName("회원이 존재하지 않을 때 예외 발생")
     void testAddCartProduct_MemberNotFound() {
         // Given
-        CartProductDto cartProductDto = new CartProductDto();
-        cartProductDto.setProductId(1L);
+        CartProductListDTO cartProductListDTO = new CartProductListDTO();
+        cartProductListDTO.setProductId(1L);
+        List<CartProductDTO> cartProductDTOList = new ArrayList<>();
+        CartProductDTO cartProductDTO = new CartProductDTO();
+        cartProductDTO.setColorId(1L);
+        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setQuantity(1);
+        cartProductDTOList.add(cartProductDTO);
+        cartProductListDTO.setCartProductDTOList(cartProductDTOList);
+
         Product product = new Product();
-        when(productRepository.findById(cartProductDto.getProductId())).thenReturn(java.util.Optional.of(product));
+        when(productRepository.findById(anyLong())).thenReturn(java.util.Optional.of(product));
         when(memberRepository.findByUserIdentifier("user1")).thenThrow(EntityNotFoundException.class);
 
         // When, Then
-        assertThrows(EntityNotFoundException.class, () -> cartService.addCartProduct(cartProductDto, "user1"));
+        assertThrows(EntityNotFoundException.class, () -> cartService.addCartProduct(cartProductListDTO, "user1"));
     }
 
     @Test
@@ -223,7 +254,7 @@ class CartServiceTest {
         int newCount = 5;
 
         CartProduct cartProduct = new CartProduct();
-        cartProduct.setCount(3);
+        cartProduct.setQuantity(3);
 
         when(cartProductRepository.findById(productId)).thenReturn(java.util.Optional.of(cartProduct));
 
@@ -231,7 +262,7 @@ class CartServiceTest {
         cartService.updateCartItemQuantity(productId, newCount);
 
         // Then
-        assertEquals(newCount, cartProduct.getCount());
+        assertEquals(newCount, cartProduct.getQuantity());
         verify(cartProductRepository, times(1)).findById(productId);
         verifyNoMoreInteractions(cartProductRepository);
     }

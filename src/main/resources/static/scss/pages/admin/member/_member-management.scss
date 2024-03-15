@@ -1,12 +1,10 @@
 @import "../../../abstracts/variables";
 
 .member-mng-body {
-    width: 90%;
-    margin: 0 auto;
-
     .member-list-container {
-        width: 100%;
+        overflow-x: auto;
         table {
+            min-width: 1300px;
             tbody {
                 tr {
                     td {
@@ -25,7 +23,7 @@
     }
 }
 
-@media (max-width:1200px) {
+@media (max-width: 1200px) {
     .member-mng-body {
         width: 100%;
     }

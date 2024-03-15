@@ -46,9 +46,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest(AdminBoardController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 @MockBean(JpaMetamodelMappingContext.class)
 @Transactional
+@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class AdminBoardControllerTest {
 
     @MockBean NoticeService noticeService;

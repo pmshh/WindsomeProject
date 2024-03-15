@@ -21,8 +21,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, QuerydslP
 
     Page<Review> findAll(Pageable pageable);
 
-    Review findByProductId(Long productId);
-
     @Query(value = "select avg(r.rating) from Review r where r.product.id = :productId")
     BigDecimal getRatingAvg(@Param("productId") Long productId);
 

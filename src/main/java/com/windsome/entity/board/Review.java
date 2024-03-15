@@ -2,8 +2,8 @@ package com.windsome.entity.board;
 
 import com.windsome.dto.board.review.ReviewEnrollDto;
 import com.windsome.dto.board.review.ReviewUpdateDto;
-import com.windsome.entity.Member;
-import com.windsome.entity.Product;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.product.Product;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,6 @@
 package com.windsome.dto.product;
 
-import com.windsome.entity.ProductImage;
+import com.windsome.entity.product.ProductImage;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 

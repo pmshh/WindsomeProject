@@ -11,38 +11,44 @@ public class CartDetailDto {
 
     private Long productId; // 상품 id
 
-    private String productName;
+    private String productName; // 상품명
 
-    private int stockNumber;
+    private double discount; // 할인율
 
-    private double discount;
+    private Long colorId; // 색상 id
 
-    private int count;
+    private String colorName; // 색상 이름
 
-    private int price;
+    private Long sizeId; // 사이즈 id
 
-    private int salePrice;
+    private String sizeName; // 사이즈 이름
 
-    private int totalPrice;
+    private int stockQuantity; // 재고 수량
 
-    private int point;
+    private int orderQuantity; // 주문 수량
 
-    private int totalPoint;
+    private int price; // 상품 가격
 
-    private String imageUrl;
+    private int salePrice; // 할인 적용된 가격
 
-    public CartDetailDto(Long cartProductId, Long productId, String productName, int stockNumber, double discount, int count, int price, String imageUrl) {
+    private int totalPrice; // 상품 총 가격
+
+    private String imageUrl; // 상품 대표 이미지 url
+
+    public CartDetailDto(Long cartProductId, Long productId, String productName, double discount, Long colorId, String colorName, Long sizeId, String sizeName, int stockQuantity, int orderQuantity, int price, String imageUrl) {
         this.cartProductId = cartProductId;
         this.productId = productId;
         this.productName = productName;
-        this.stockNumber = stockNumber;
         this.discount = discount;
-        this.count = count;
+        this.colorId = colorId;
+        this.colorName = colorName;
+        this.sizeId = sizeId;
+        this.sizeName = sizeName;
+        this.stockQuantity = stockQuantity;
+        this.orderQuantity = orderQuantity;
         this.price = price;
         this.salePrice = (int) Math.floor(price * (1 - discount));
-        this.totalPrice = salePrice * count;
-        this.point = (int) Math.floor(salePrice * 0.05);
-        this.totalPoint = point * count;
+        this.totalPrice = salePrice * orderQuantity;
         this.imageUrl = imageUrl;
     }
 }

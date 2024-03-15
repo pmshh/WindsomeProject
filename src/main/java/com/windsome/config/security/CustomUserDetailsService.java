@@ -1,6 +1,6 @@
 package com.windsome.config.security;
 
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

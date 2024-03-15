@@ -2,11 +2,11 @@ package com.windsome.controller;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.constant.Role;
+import com.windsome.dto.member.MemberFormDTO;
 import com.windsome.dto.member.SignUpRequestDTO;
-import com.windsome.dto.member.UpdatePasswordDto;
-import com.windsome.dto.member.ProfileFormDto;
+import com.windsome.dto.member.UpdatePasswordDTO;
 import com.windsome.dto.validator.ProfileFormDtoValidator;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.service.MemberService;
 import com.windsome.dto.validator.SignUpDtoValidator;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class MemberController {
      * 아이디 중복 체크
      */
     @PostMapping("/members/check-userid")
-    public ResponseEntity<Object> checkDuplicateUserId(String userId) {
+    public ResponseEntity<String> checkDuplicateUserId(String userId) {
         if (memberService.checkDuplicateUserId(userId)) {
             return ResponseEntity.badRequest().body("이미 사용중인 아이디입니다.");
         }
@@ -88,7 +88,7 @@ public class MemberController {
      */
     @GetMapping("/members/{memberId}/edit")
     public String updateMemberForm(@CurrentMember Member member, Model model) {
-        model.addAttribute(modelMapper.map(member, ProfileFormDto.class));
+        model.addAttribute("memberForm", modelMapper.map(member, MemberFormDTO.class));
         return "member/update-member";
     }
 
@@ -96,8 +96,8 @@ public class MemberController {
      * 회원 수정
      */
     @PostMapping("/members/{memberId}/update")
-    public String updateMember(@CurrentMember Member member, @Valid ProfileFormDto profileFormDto, Errors errors,
-                                Model model, RedirectAttributes attributes) {
+    public String updateMember(@CurrentMember Member member, @Valid MemberFormDTO memberFormDto, Errors errors,
+                               Model model, RedirectAttributes attributes) {
         if (member.getRole() != Role.ADMIN) {
             if (errors.hasErrors()) {
                 model.addAttribute(member);
@@ -106,7 +106,7 @@ public class MemberController {
             }
         }
 
-        memberService.updateMember(member, profileFormDto);
+        memberService.updateMember(member, memberFormDto);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:/members/" + member.getId() + "/edit";
     }
@@ -155,7 +155,7 @@ public class MemberController {
      * 비밀번호 조회 결과 화면 (쿼리 파라미터 숨기기 위한 용도)
      */
     @GetMapping("/forgot-credentials/password-lookup-result-redirect")
-    public String redirectPasswordLookupResult(UpdatePasswordDto updatePasswordDto, RedirectAttributes redirectAttr) {
+    public String redirectPasswordLookupResult(UpdatePasswordDTO updatePasswordDto, RedirectAttributes redirectAttr) {
         try {
             redirectAttr.addFlashAttribute("result", memberService.validateUserIdentifier(updatePasswordDto));
         } catch (EntityNotFoundException e) {
@@ -176,7 +176,7 @@ public class MemberController {
      * 비밀번호 리셋
      */
     @PostMapping("/forgot-credentials/reset-password")
-    public ResponseEntity<String> passwordReset(UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<String> passwordReset(UpdatePasswordDTO updatePasswordDto) {
         memberService.updatePassword(updatePasswordDto);
         return ResponseEntity.ok().body("비밀번호가 변경되었습니다.");
     }
@@ -188,7 +188,7 @@ public class MemberController {
     public String showMyPage(@CurrentMember Member member, Model model) {
         model.addAttribute("userSummary", memberService.getUserSummary(member));
         model.addAttribute("orderTotalAmount", memberService.getTotalOrderAmount(member));
-        model.addAttribute("orderStatusCounts", memberService.getMemberOrderStatusCounts(member)); // TODO - OrderStatus 별로 개수 조회
+        model.addAttribute("orderStatusCounts", memberService.getMemberOrderStatusCounts(member));
         return "member/mypage";
     }
 

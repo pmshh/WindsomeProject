@@ -7,16 +7,18 @@
         .table-wrapper {
             min-width: 936px;
             .base-table {
-                .base-table__head {
-                    .base-table__row {
-                        .base-table__header-cell {
-                        }
-                    }
-                }
-
                 .base-table__body {
                     .base-table__row {
-                        .base-table__body {
+                        .base-table__cell {
+                            .original-price {
+                                font-weight: normal;
+                                text-decoration: line-through;
+                            }
+
+                            .base-table__option-wrap {
+                                color: #707070;
+                                font-size: 12px;
+                            }
                         }
                     }
                 }

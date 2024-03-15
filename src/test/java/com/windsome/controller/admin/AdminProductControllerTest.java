@@ -7,7 +7,7 @@ import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.service.AdminService;
 import com.windsome.service.CategoryService;
-import com.windsome.service.ProductService;
+import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,7 @@ class AdminProductControllerTest {
         // Performing request
         mockMvc.perform(multipart("/admin/products/new")
                         .file(mockMultipartFile)
-                        .param("productName", "Test 상품명")
+                        .param("name", "Test 상품명")
                         .param("price", "10000")
                         .param("discount", "0")
                         .param("productDetail", "Test 상품 상세")
@@ -157,7 +157,7 @@ class AdminProductControllerTest {
         // Performing request
         mockMvc.perform(multipart("/admin/products/{productId}", 1L)
                         .file(mockMultipartFile)
-                        .param("productName", "test")
+                        .param("name", "test")
                         .param("price", "10000")
                         .param("productDetail", "Test 상세 설명")
                         .param("stockNumber", "10")
@@ -220,7 +220,7 @@ class AdminProductControllerTest {
     @WithAccount("admin1234")
     void deleteItemSuccessTest() throws Exception {
         // Mocking - 상품 삭제가 성공하는 경우
-        doNothing().when(productService).deleteProduct(anyLong());
+        doNothing().when(productService).deleteProduct(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/products/{productId}", 123L)
@@ -236,7 +236,7 @@ class AdminProductControllerTest {
     @WithAccount("admin1234")
     void deleteItemFailureTest() throws Exception {
         // Mocking - 일치하는 상품 정보가 없는 경우
-        doThrow(new Exception()).when(productService).deleteProduct(anyLong());
+        doThrow(new Exception()).when(productService).deleteProduct(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/products/{productId}", 123L)

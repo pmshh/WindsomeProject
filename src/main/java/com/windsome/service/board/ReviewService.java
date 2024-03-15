@@ -1,8 +1,10 @@
 package com.windsome.service.board;
 
 import com.windsome.dto.board.review.*;
-import com.windsome.entity.*;
 import com.windsome.entity.board.Review;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.product.Product;
+import com.windsome.entity.product.ProductImage;
 import com.windsome.repository.productImage.ProductImageRepository;
 import com.windsome.repository.product.ProductRepository;
 import com.windsome.repository.board.review.ReviewRepository;

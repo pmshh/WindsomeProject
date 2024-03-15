@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
+</head>
+
+<body>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='memberManagement')"></div>
+
+        <article class="admin-content-area">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
+
+            <!-- section start -->
+            <section class="admin-section-area">
+                <div class="container-fluid">
+
+                    <div class="section-header">
+                        <h2>회원 등록</h2>
+                        <div class="divider"></div>
+                    </div>
+
+                    <div class="section-body member-enroll-body row">
+                        <form class="col-10" id="member-enroll-form" th:action="@{'/admin/members/new'}" th:object="${memberForm}" method="post">
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--two-columns base-table--two-columns-color">
+                                    <colgroup>
+                                        <col style="width:15%;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody class="base-table__body">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{userIdentifier}">아이디 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input id-input" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20">
+                                                <span class="base-table__message--red id-result-text">5~20자의 영문소문자,숫자 사용</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{password}">비밀번호 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input pw-input" th:field="*{password}" type="password" minlength="8" maxlength="20">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{name}">이름 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input name-input" th:field="*{name}" type="text">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label>휴대전화 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <select class="base-table__select tel-prefix-select">
+                                                    <option value="1">선택</option>
+                                                    <option value="010" selected>010</option>
+                                                    <option value="011">011</option>
+                                                    <option value="016">016</option>
+                                                    <option value="017">017</option>
+                                                    <option value="018">018</option>
+                                                    <option value="019">019</option>
+                                                </select>
+                                                -
+                                                <input type="text" class="base-table__input base-table__input--small tel-middle-input" maxlength="4">
+                                                -
+                                                <input type="text" class="base-table__input base-table__input--small tel-suffix-input" maxlength="4">
+                                                <input type="hidden" class="base-table__input tel-hidden-input" th:field="*{tel}">
+                                            </td>
+                                        </tr>
+
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{email}">이메일 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <div class="mail-input-box mb-1">
+                                                    <input class="email-hidden-input" type="hidden" th:field="*{email}">
+                                                    <input class="base-table__input email-prefix-input" type="text">
+                                                    @
+                                                    <input  class="base-table__input email-domain-input" type="text">
+                                                    <select class="base-table__select base-table__select--email-domain email-domain-select">
+                                                        <option value="1" selected>직접입력</option>
+                                                        <option value="naver.com">naver.com</option>
+                                                        <option value="hanmail.net">hanmail.net</option>
+                                                        <option value="hotmail.com">hotmail.com</option>
+                                                        <option value="nate.com">nate.com</option>
+                                                        <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                        <option value="empas.com">empas.com</option>
+                                                        <option value="dreamwiz.com">dreamwiz.com</option>
+                                                        <option value="freechal.com">freechal.com</option>
+                                                        <option value="lycos.co.kr">lycos.co.kr</option>
+                                                        <option value="korea.com">korea.com</option>
+                                                        <option value="gmail.com">gmail.com</option>
+                                                        <option value="hanmir.com">hanmir.com</option>
+                                                        <option value="paran.com">paran.com</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{zipcode}">주소 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input zipcode-input" th:field="*{zipcode}" type="text" readonly="readonly">
+                                                <button type="button" class="find-addr button button--white button--90x30" onclick="addressAPI()">주소 찾기</button>
+                                                <input class="base-table__input base-table__input--big displayblock mt5 addr-input" th:field="*{addr}" type="text" readonly="readonly">
+                                                <input class="base-table__input base-table__input--big displayblock mt5 addr-detail-input" th:field="*{addrDetail}" type="text" readonly="readonly">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{availablePoints}">사용 가능한 포인트 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input available-points-input" th:field="*{availablePoints}" type="text">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{totalEarnedPoints}">총 적립 포인트 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input total-earned-points-input" th:field="*{totalEarnedPoints}" type="text">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{totalUsedPoints}">총 사용 포인트 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input total-used-points-input" th:field="*{totalUsedPoints}" type="text">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="btn-box text-center my-3">
+                                <button class="button button--black button--130x40 enroll-btn" type="button">등록</button>
+                                <button class="button button--white button--130x40 cancel-btn" type="button">취소</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
+        </article>
+    </main>
+
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- custom js -->
+    <script th:inline="javascript">
+
+        /* 유효성 검사 통과 유무 변수 */
+        let checkId = false;                    // 아이디
+        let checkPw = false;                    // 비번
+        let passwordContainsWhitespace = false; // 비번 공백 여부
+        let checkName = false;                  // 이름
+        let checkTelPrefix = false;             // 휴대전화 통신사 번호
+        let checkTelMiddle = false;             // 휴대전화 앞번호
+        let checkTelSuffix = false;             // 휴대전화 뒷번호
+        let checkTel = false;                   // 휴대전화 전체
+        let checkMail = false;                  // 이메일
+        let checkEmailDuplication = false;          // 이메일 중복
+        let checkAddress = false;               // 주소
+        let checkAvailablePoints = false;       // 사용 가능한 포인트
+        let checkTotalEarnedPoints = false;     // 총 적립 포인트
+        let checkTotalUsedPointsVal = false;    // 총 사용 포인트
+
+        $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+
+            /* 아이디 입력 유효성 검사 이벤트 처리  */
+            $('.id-input').on("propertychange change keyup paste input", validateId);
+
+            /* 아이디 입력 유효성 검사 이벤트 처리  */
+            $('.email-prefix-input, .email-domain-input').on("propertychange change keyup paste input", validateEmail);
+
+            /* 이메일 선택 체인지 이벤트 처리 */
+            $('.email-domain-select').change(setEmailInputMode);
+
+            /* 등록 버튼 클릭 이벤트 처리 */
+            $(".enroll-btn").click(enrollMember);
+
+            /* 취소 버튼 클릭 이벤트 처리 */
+            $(".cancel-btn").click(goToMemberManagementPage);
+        });
+
+        /* 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수 */
+        function showMessage() {
+            let message = [[${message}]];
+            if (message) {
+                alert(message);
+            }
+        }
+
+        /* 회원 등록 함수 */
+        function enrollMember() {
+            let form = $('#member-enroll-form');                                 // form
+            let idVal = $(".id-input").val();                                    // 아이디
+            let pwVal = $('.pw-input').val();                                    // 비밀번호
+            let nameVal = $('.name-input').val();                                // 이름
+            let telPrefixVal = $(".tel-prefix-select").val();                    // 휴대전화 통신사 번호
+            let telMiddleVal = $(".tel-middle-input").val();                     // 휴대전화 앞번호
+            let telSuffixVal = $(".tel-suffix-input").val();                     // 휴대전화 뒷번호
+            let emailPrefixVal = $(".email-prefix-input").val();                 // 이메일 앞부분
+            let emailSuffixVal = $(".email-domain-input").val();                 // 이메일 뒷부분
+            let addressVal = $('.addr-detail-input').val();                      // 주소
+            let availablePointsVal = $(".available-points-input").val();         // 사용 가능한 포인트
+            let totalEarnedPointsVal = $(".total-earned-points-input").val();    // 총 적립 포인트
+            let totalUsedPointsVal = $(".total-used-points-input").val();        // 총 사용 포인트
+
+            /* 아이디 빈값 검사 */
+            if (idVal === "") {
+                alert("아이디를 입력하세요.");
+                $('.id-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
+
+            /* 비밀번호 빈값 검사 */
+            if (pwVal === "") {
+                alert("비밀번호를 입력하세요.");
+                $('.pw-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            } else {
+                checkPw = true;
+            }
+
+            /* 비밀번호 공백 존재 여부 검사 */
+            if (hasBlank(pwVal)) {
+                alert("비밀번호는 공백 없이 입력해주세요.");
+                $('.pw-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            } else {
+                passwordContainsWhitespace = true;
+            }
+
+            /* 이름 빈값 검사 */
+            if (nameVal === "") {
+                alert("이름을 입력하세요.");
+                $('.name-input').focus();
+                window.scrollTo(0, 0);
+                checkName = false;
+                return false;
+            } else {
+                checkName = true;
+            }
+
+            /* 휴대전화 통신사 번호 빈값 검사 */
+            if (telPrefixVal === "1") {
+                alert("통신사 번호를 선택하세요.");
+                window.scrollTo(0, 0);
+                checkTelPrefix = false;
+                return false;
+            } else {
+                checkTelPrefix = true;
+            }
+
+            /* 휴대전화 앞번호 빈값 검사 */
+            if (telMiddleVal === "") {
+                alert("휴대전화를 입력하세요.");
+                $('.tel-middle-input').focus();
+                window.scrollTo(0, 0);
+                checkTelMiddle = false;
+                return false;
+            } else {
+                checkTelMiddle = true;
+            }
+
+            /* 휴대전화 뒷번호 빈값 검사 */
+            if (telSuffixVal === "") {
+                alert("휴대전화를 입력하세요.");
+                $('.tel-suffix-input').focus();
+                window.scrollTo(0, 0);
+                checkTelSuffix = false;
+                return false;
+            } else {
+                checkTelSuffix = true;
+            }
+
+            /* 이메일 빈값 검사 */
+            if (emailPrefixVal === '' || emailSuffixVal === '') {
+                alert("이메일을 입력하세요.");
+                $('.email-prefix-input').focus();
+                window.scrollTo(0, 0);
+                checkMail = false;
+                return false;
+            } else {
+                checkMail = true;
+            }
+
+            /* 주소 빈값 검사 */
+            if (addressVal === "") {
+                alert("주소를 입력하세요.");
+                $('.zipcode-input').focus();
+                window.scrollTo(0, 0);
+                checkAddress = false;
+                return false;
+            } else {
+                checkAddress = true;
+            }
+
+            /* 사용 가능한 포인트 검사 */
+            if (availablePointsVal === "") {
+                alert("사용 가능한 포인트를 입력하세요.");
+                $('.total-order-price-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            } else {
+                checkAvailablePoints = true;
+            }
+
+            /* 총 적립 포인트 빈값 검사 */
+            if (totalEarnedPointsVal === "") {
+                alert("총 적립 포인트를 입력하세요.");
+                $('.total-earned-points-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            } else {
+                checkTotalEarnedPoints = true;
+            }
+
+            /* 총 사용 포인트 빈값 검사 */
+            if (totalUsedPointsVal === "") {
+                alert("총 사용 포인트를 입력하세요.");
+                $('.total-used-points-input').focus();
+                window.scrollTo(0, 0);
+                return false;
+            } else {
+                checkTotalUsedPointsVal = true;
+            }
+
+            /* 휴대전화 전체 유효성 검사 */
+            if (!validateTel(telPrefixVal + telMiddleVal + telSuffixVal)) {
+                alert("올바른 휴대전화를 입력하세요.");
+                $(".tel-middle-input").focus();
+                window.scrollTo(0, 0);
+                return false;
+            } else {
+                checkTel = true;
+            }
+
+            if (!checkEmailDuplication) {
+                alert("이미 사용중인 이메일입니다.");
+                $(".email-prefix-input").focus();
+                window.scrollTo(0, 0);
+                return false;
+            }
+
+            if (checkId && checkPw && passwordContainsWhitespace && checkName && checkTelPrefix && checkTelMiddle && checkTelSuffix
+                && checkTel && checkMail && checkEmailDuplication && checkAddress && checkAvailablePoints && checkTotalEarnedPoints && checkTotalUsedPointsVal) {
+                $(".email-hidden-input").val(emailPrefixVal + "@" +  emailSuffixVal);
+                $(".tel-hidden-input").val(telPrefixVal + telMiddleVal + telSuffixVal);
+                form.submit();
+            }
+        }
+
+        /* 아이디 중복 검사 함수 */
+        function validateId() {
+            const userId = $('.id-input').val();
+            const data = {userId: userId}
+            let idResultText = $('.id-result-text');
+
+            if (userId.length !== 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/members/check-userid",
+                    data: data,
+                    success: function () {
+                        idResultText.css("color", "#0000ff");
+                        idResultText.html("사용 가능한 아이디입니다.");
+                        checkId = true;
+                    },
+                    error: function () {
+                        idResultText.css("color", "#d43301");
+                        idResultText.html("아이디가 이미 존재합니다.");
+                        checkId = false;
+                    },
+                });
+            }
+        }
+
+        /* 이메일 중복 검사 함수 */
+        function validateEmail() {
+            if ($(".email-prefix-input").val() !== '' && $(".email-domain-input").val() !== '') {
+                const email = $(".email-prefix-input").val() + "@" + $(".email-domain-input").val();
+                const data = {email: email}
+
+                $.ajax({
+                    url: "/admin/members/email-verification",
+                    type: "get",
+                    dataType: "text",
+                    data: data,
+                    success: function () {
+                        checkEmailDuplication = true;
+                    },
+                    error: function () {
+                        checkEmailDuplication = false;
+                    },
+                });
+            }
+        }
+
+        /* 이메일 입력 모드 설정 함수 */
+        function setEmailInputMode() {
+            let emailDomainInput = $(".email-domain-input");
+            if ($(this).val() === '1') {
+                // 직접 입력 모드일 경우 입력 필드를 비워두고 활성화
+                emailDomainInput.val('');
+                emailDomainInput.attr("disabled",false);
+            } else {
+                // 선택한 이메일 도메인을 입력 필드에 설정하고 비활성화
+                emailDomainInput.val($(this).val());
+                emailDomainInput.attr("disabled",true);
+            }
+        }
+
+        /* 회원 관리 페이지로 이동하는 함수 */
+        function goToMemberManagementPage() {
+            location.href = '/admin/members';
+        }
+
+        /* 주소 API 호출 함수 */
+        function addressAPI() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    let addr = ''; // 주소 변수
+                    let extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        addr += extraAddr;
+                    } else {
+                        addr += ' ';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    $(".zipcode-input").val(data.zonecode);
+                    $(".addr-input").val(addr);
+                    // 커서를 상세주소 필드로 이동한다.
+                    $(".addr-detail-input").attr("readonly", false);
+                    $(".addr-detail-input").focus();
+                }
+            }).open();
+        }
+
+        /* 공백 검사 */
+        function hasBlank (str) {
+            return /\s/g.test(str);
+        }
+
+        /* 휴대전화 유효성 검사 */
+        function validateTel(tel){
+            return /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/.test(tel);
+        }
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ package com.windsome.controller.board;
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.qa.CommentEnrollDto;
 import com.windsome.dto.board.qa.CommentUpdateDto;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.service.board.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

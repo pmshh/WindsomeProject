@@ -44,7 +44,7 @@
                         </form>
                     </li>
                     <li>
-                        <a sec:authorize="!isAuthenticated()" th:href="@{/members/register}">JOIN</a>
+                        <a sec:authorize="!isAuthenticated()" th:href="@{/members/new}">JOIN</a>
                     </li>
                     <li>
                         <a th:href="@{/cart}">CART</a>
@@ -173,7 +173,7 @@
                             <div class="member-menu">
                                 <ul>
                                     <li sec:authorize="!isAuthenticated()">
-                                        <a th:href="@{/members/register}">Join</a>
+                                        <a th:href="@{/members/new}">Join</a>
                                     </li>
                                     <li sec:authorize="isAuthenticated()">
                                         <a th:href="@{'/members/' + ${currentMember.id} + '/edit'}">Modify</a>

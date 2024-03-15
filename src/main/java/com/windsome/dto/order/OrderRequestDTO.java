@@ -37,7 +37,7 @@ public class OrderRequestDTO {
 
     private int usedPoints; // 사용한 포인트 금액
 
-    private int productCount; // 주문 상품 개수
+    private int productCount; // 주문한 상품의 개수
 
     private String repProductName; // 대표 상품 이름
 

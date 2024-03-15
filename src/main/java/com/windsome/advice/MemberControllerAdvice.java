@@ -1,7 +1,7 @@
 package com.windsome.advice;
 
 import com.windsome.config.security.CurrentMember;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

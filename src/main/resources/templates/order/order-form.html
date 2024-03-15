@@ -3,861 +3,1049 @@
 
 <head>
     <div th:replace="/layouts/default-layout.html :: head"></div>
+
+    <style>
+        @font-face {
+            font-family: "Noto Sans KR";
+            font-style: normal;
+            font-weight: 100;
+            src:
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff2) format("woff2"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.woff) format("woff"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Thin.otf) format("opentype");
+        }
+
+        @font-face {
+            font-family: "Noto Sans KR";
+            font-style: normal;
+            font-weight: 300;
+            src:
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff2) format("woff2"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff) format("woff"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.otf) format("opentype");
+        }
+
+        @font-face {
+            font-family: "Noto Sans KR";
+            font-style: normal;
+            font-weight: 400;
+            src:
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2) format("woff2"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff) format("woff"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.otf) format("opentype");
+        }
+
+        @font-face {
+            font-family: "Noto Sans KR";
+            font-style: normal;
+            font-weight: 500;
+            src:
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2) format("woff2"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff) format("woff"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.otf) format("opentype");
+        }
+
+        @font-face {
+            font-family: "Noto Sans KR";
+            font-style: normal;
+            font-weight: 700;
+            src:
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2) format("woff2"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff) format("woff"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.otf) format("opentype");
+        }
+
+        @font-face {
+            font-family: "Noto Sans KR";
+            font-style: normal;
+            font-weight: 900;
+            src:
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff2) format("woff2"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff) format("woff"),
+                    url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.otf) format("opentype");
+        }
+
+        * {
+            font-family: "Noto Sans KR", sans-serif;
+        }
+    </style>
 </head>
 
 <body>
-    <main class="def-main-area">
-        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+    <div class="order-form-container">
+        <header>
+            <div class="logo">
+                <h1><a href="">윈섬 WINDSOME</a></h1>
+                <i class="xi-angle-left back-btn" onclick="location.href='/';"></i>
+            </div>
+            <div class="title">
+                <h1>주문/결제</h1>
+            </div>
+        </header>
+        <form action="">
+            <!-- shipping-address-container start -->
+            <div class="shipping-address-container">
+                <div class="title">
+                    <h2>배송지</h2>
+                </div>
+                <div class="contents">
+                    <div class="address-wrapper">
+                        <div class="tab">
+                            <ul>
+                                <li class="selected"><a href="#" class="recent-address-tab-button">최근 배송지</a></li>
+                                <li><a href="#" class="direct-input-tab-button">직접입력</a></li>
+                            </ul>
+                        </div>
+                        <div class="recent-address-wrapper">
+                            <div class="address-info">
+                                <span class="name" th:text="${member.name}"></span>
+                                <p class="address">
+                                    [<span th:text="${member.zipcode}"></span>]
+                                    <span th:text="${member.addr}"></span>
+                                    <span class="ms-1" th:text="${member.addrDetail}"></span>
+                                </p>
+                                <span class="tel" th:text="${member.tel}"></span>
+                            </div>
+                            <button class="address-list-btn" type="button">배송지 목록</button>
+                        </div>
+                        <div class="new-address-wrapper">
+                            <div class="address-options-area">
+                                <label for="same-address" class="custom-radio">
+                                    <input id="same-address" name="address" type="radio" value="same-address" checked>
+                                    회원 정보와 동일
+                                    <span></span>
+                                </label>
 
-        <article class="def-content-area">
-            <div th:replace="/layouts/default-layout.html :: nav"></div>
+                                <label for="new-address" class="custom-radio">
+                                    <input id="new-address" name="address" type="radio" value="new-address">
+                                    새로운 배송지
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="address-table-area">
+                                <table>
+                                    <caption>배송 정보 입력</caption>
+                                    <colgroup>
+                                        <col style="width: 102px;">
+                                        <col style="width: auto;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">
+                                                받는사람
+                                                <span class="required">*</span>
+                                            </th>
+                                            <td>
+                                                <input type="text" class="name-input" th:value="${member.name}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                주소
+                                                <span class="required">*</span>
+                                            </th>
+                                            <td>
+                                                <div class="address-input-box">
+                                                    <div class="zipcode-wrap">
+                                                        <input class="zipcode-input" type="text" placeholder="우편번호" th:value="${member.zipcode}">
+                                                        <button class="find-addr-btn" type="button" onclick="addressAPI()">주소검색</button>
+                                                    </div>
+                                                    <div class="addr-wrap">
+                                                        <input class="addr-input" type="text" placeholder="기본주소"  th:value="${member.addr}">
+                                                    </div>
+                                                    <div class="addr-detail-wrap">
+                                                        <input class="addr-detail-input" type="text" placeholder="나머지 주소(선택 입력 가능)"  th:value="${member.addrDetail}">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                휴대전화
+                                                <span class="required">*</span>
+                                            </th>
+                                            <td>
+                                                <div class="tel-input-box">
+                                                    <select class="tel-prefix-select">
+                                                        <option value="010" selected>010</option>
+                                                        <option value="011">011</option>
+                                                        <option value="016">016</option>
+                                                        <option value="017">017</option>
+                                                        <option value="018">018</option>
+                                                        <option value="019">019</option>
+                                                    </select>
+                                                    -
+                                                    <input class="tel-middle-input" type="text" maxlength="4">
+                                                    -
+                                                    <input class="tel-suffix-input" type="text" maxlength="4">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">
+                                                이메일
+                                                <span class="required">*</span>
+                                            </th>
+                                            <td>
+                                                <div class="email-input-box">
+                                                    <input type="text" class="email-input">
+                                                    @
+                                                    <span class="email-domain-wrap">
+                                                        <select class="email-domain-select">
+                                                            <option value="0">-이메일 선택-</option>
+                                                            <option value="naver.com">naver.com</option>
+                                                            <option value="daum.net">daum.net</option>
+                                                            <option value="nate.com">nate.com</option>
+                                                            <option value="hotmail.com">hotmail.com</option>
+                                                            <option value="yahoo.com">yahoo.com</option>
+                                                            <option value="empas.com">empas.com</option>
+                                                            <option value="korea.com">korea.com</option>
+                                                            <option value="dreamwiz.com">dreamwiz.com</option>
+                                                            <option value="gmail.com">gmail.com</option>
+                                                            <option value="custom">직접입력</option>
+                                                        </select>
+                                                        <span class="direct-input-wrap">
+                                                            <input type="text" placeholder="직접입력" class="email-domain-input">
+                                                        </span>
+                                                    </span>
+                                                </div>
 
-            <!-- section start -->
-            <section class="def-section-area">
-                <div class="container-fluid">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="req-wrapper">
+                        <select>
+                            <option value="oMessage-0" selected="selected">-- 메시지 선택 (선택사항) --</option>
+                            <option value="oMessage-1">배송 전에 미리 연락바랍니다.</option>
+                            <option value="oMessage-2">부재 시 경비실에 맡겨주세요.</option>
+                            <option value="oMessage-3">부재 시 문 앞에 놓아주세요.</option>
+                            <option value="oMessage-4">빠른 배송 부탁드립니다.</option>
+                            <option value="oMessage-5">택배함에 보관해 주세요.</option>
+                            <option value="oMessage-input">직접 입력</option>
+                        </select>
+                    </div>
+                    <div class="set-def-address-btn-warpper">
+                        <input id="set-def-address" name="set-def-address" type="checkbox">
+                        <label for="set-def-address">기본 배송지로 저장</label>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="section-header">
-                        <h2>주문서 작성</h2>
-                        <div class="divider"></div>
+            <!-- order-products-container start -->
+            <div class="order-products-container">
+                <div class="title">
+                    <h2>주문상품</h2>
+                    <div class="text-box">
+                        <span class="total">
+                            <span class="order-products-count"></span>개
+                        </span>
+                    </div>
+                </div>
+                <div class="contents">
+                    <div class="order-products-info">
+                        <div class="product-info" th:each="product, status: ${orderProducts}">
+                            <div class="thumbnail">
+                                <img th:src="${product.imageUrl}">
+                            </div>
+                            <div class="description">
+                                <strong class="name" th:text="${product.name}"></strong>
+                                <span class="option">[옵션: <span th:text="${product.colorName}"></span>/<span th:text="${product.sizeName}"></span> size]</span>
+                                <span class="quantity">수량: <span th:text="${product.orderQuantity}"></span>개</span>
+                                <strong th:if="${product.discount > 0}" class="price" th:text="|${#numbers.formatInteger(((product.price * (1 - product.discount)) * product.orderQuantity), 0, 'COMMA')}원|"></strong>
+                                <strong th:unless="${product.discount > 0}" class="price" th:text="|${#numbers.formatInteger((product.price * product.orderQuantity), 0, 'COMMA')}원|"></strong>
+                                <input type="hidden" class="data-info" th:data-color-id="${product.colorId}" th:data-size-id="${product.sizeId}" th:data-product-id="${product.id}" th:data-product-name="${product.name}" th:data-product-image-url="${product.imageUrl}" th:data-price="${product.price}" th:data-discount="${product.discount}" th:data-quantity="${product.orderQuantity}">
+                            </div>
+                            <div class="button-wrapper">
+                                <button class="delete-btn" type="button" th:data-cart-product-id="${product.cartProductId}"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="delivery-price-wrapper">
+                        <h3>배송비</h3>
+                        <span class="txt"><span class="delivery-price"></span>원</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- discount-payment-container start -->
+            <div class="discount-payment-container">
+                <div class="title">
+                    <h2>할인/부가결제</h2>
+                    <div class="text-box">
+                        <span class="total">
+                            -0원
+                        </span>
+                    </div>
+                </div>
+                <div class="contents">
+                    <div class="discount-code-use-wrapper">
+                        <strong class="heading">할인코드 적용</strong>
+                        <div class="discount-code-input-wrapper">
+                            <input type="text" class="discount-code-input">
+                            <button class="discount-code-use-btn" type="button">적용</button>
+                        </div>
                     </div>
 
-                    <div class="section-body order-form-body row">
-                        <!-- order-products-container -->
-                        <div class="order-products-container col-11">
-                            <div class="title">
-                                <h2>주문 상품 정보</h2>
-                            </div>
-
-                            <div class="body">
-                                <div class="table-wrapper">
-                                    <table class="base-table base-table--multi-columns">
-                                        <thead class="base-table__head">
-                                            <tr class="base-table__row">
-                                                <th class="base-table__header-cell" style="width: 80px;" scope="col">이미지</th>
-                                                <th class="base-table__header-cell" style="width: auto;" scope="col">상품정보</th>
-                                                <th class="base-table__header-cell" style="width: 10%;" scope="col">가격</th>
-                                                <th class="base-table__header-cell" style="width: 10%;" scope="col">수량</th>
-                                                <th class="base-table__header-cell" style="width: 10%;" scope="col">상품주문금액</th>
-                                                <th class="base-table__header-cell" style="width: 10%;" scope="col">배송비</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody class="base-table__body">
-                                            <tr class="base-table__row" th:each="product : ${orderProducts}">
-                                                <td class="base-table__cell base-table__cell--thumbnail">
-                                                    <a class="base-table__link" th:href="${'/product/' + product.id}">
-                                                        <img class="base-table__image" th:src="${product.imageUrl}">
-                                                    </a>
-                                                </td>
-                                                <td class="base-table__cell left top pl20">
-                                                    <a class="base-table__product-name" th:href="${'/product/' + product.id}" th:text="${product.name}"></a>
-                                                    <div class="mt5">[옵션: 선택 X]</div>
-                                                </td>
-                                                <td class="base-table__cell">
-                                                    <span th:if="${product.discount == 0}" class="displayblock" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"></span>
-                                                    <span th:if="${product.discount > 0}" class="line-through displayblock" th:text="|${#numbers.formatInteger(product.price, 0, 'COMMA')}원|"></span>
-                                                    <strong th:if="${product.discount > 0}" th:text="|${#numbers.formatInteger(product.salePrice, 0, 'COMMA')}원|"></strong>
-                                                </td>
-                                                <td class="base-table__cell">
-                                                    <span th:text="${product.count}"></span>
-                                                    <input type="hidden" th:id="'count-' + ${product.id}" th:value="${product.count}" readonly>
-                                                </td>
-                                                <td class="base-table__cell base-table__cell--price-info">
-                                                    <strong th:id="'price-' + ${product.id}" class="base-table__cell--price"
-                                                            th:data-discount="${product.discount}" th:data-price="${product.price}"
-                                                            th:data-salePrice="${product.salePrice}" th:data-count="${product.count}"
-                                                            th:data-name="${product.name}" th:data-imageUrl="${product.imageUrl}"
-                                                            th:text="|${#numbers.formatInteger(product.totalPrice, 0, 'COMMA')}원|"
-                                                            th:data-id="${product.id}">
-                                                    </strong>
-                                                </td>
-                                                <td class="base-table__cell base-table__cell--delivery-price">
-                                                    <span class="displayblock">2,500원</span>
-                                                    <span>조건</span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                    <div class="point-use-wrapper">
+                        <div class="input-box">
+                            <strong class="heading">적립금</strong>
+                            <div class="point-use-input-wrapper">
+                                <input type="text" class="point-use-input">
+                                <button class="all-point-use-btn" type="button">전액 사용</button>
                             </div>
                         </div>
 
-                        <!-- shopping-address-container -->
-                        <div class="shopping-address-container col-11">
-                            <div class="title">
-                                <h2>배송지 정보</h2>
-                            </div>
-                            <div class="body">
-                                <form th:action="@{/orders/new}" th:object="${member}" method="post">
-
-                                    <div class="table-wrapper">
-                                        <table class="base-table base-table--two-columns base-table--two-columns-color">
-                                            <colgroup>
-                                                <col style="width:15%;">
-                                                <col style="width:auto;">
-                                            </colgroup>
-                                            <tbody class="base-table__body">
-                                                <tr class="base-table__row">
-                                                    <th class="base-table__header-cell" scope="row">
-                                                        <label>배송지 선택 <span>*</span></label>
-                                                    </th>
-                                                    <td class="base-table__cell">
-                                                        <select class="base-table__select base-table__select--big address-select">
-                                                            <option value="0" selected>사용자 정보 주소록</option>
-                                                            <option value="1">직접 입력</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr class="base-table__row">
-                                                    <th class="base-table__header-cell" scope="row">
-                                                        <label th:for="*{name}">받으시는 분 <span>*</span></label>
-                                                    </th>
-                                                    <td class="base-table__cell">
-                                                        <input class="base-table__input name-input" th:field="*{name}" type="text">
-                                                    </td>
-                                                </tr>
-                                                <tr class="base-table__row">
-                                                    <th class="base-table__header-cell" scope="row">
-                                                        <label th:for="*{zipcode}">주소 <span>*</span></label>
-                                                    </th>
-                                                    <td class="base-table__cell">
-                                                        <input th:field="*{zipcode}" class="base-table__input mb5 zipcode-input" readonly="readonly">
-                                                        <button type="button" class="find-addr button button--white button--65x30" onclick="addressAPI()">주소 찾기</button>
-                                                        <input th:field="*{addr}" class="base-table__input base-table__input--big displayblock mb5 addr-input" readonly="readonly">
-                                                        <input th:field="*{addrDetail}" class="base-table__input base-table__input--big displayblock mb5 addr-detail-input" readonly="readonly">
-                                                    </td>
-                                                </tr>
-                                                <tr class="base-table__row">
-                                                    <th class="base-table__header-cell" scope="row">
-                                                        <label>휴대전화 <span>*</span></label>
-                                                    </th>
-                                                    <td class="base-table__cell">
-                                                        <select class="base-table__select tel-prefix-select">
-                                                            <option value="1">선택</option>
-                                                            <option value="010" selected>010</option>
-                                                            <option value="011">011</option>
-                                                            <option value="016">016</option>
-                                                            <option value="017">017</option>
-                                                            <option value="018">018</option>
-                                                            <option value="019">019</option>
-                                                        </select>
-                                                        -
-                                                        <input type="text" class="base-table__input base-table__input--small tel-middle-input" maxlength="4">
-                                                        -
-                                                        <input type="text" class="base-table__input base-table__input--small tel-suffix-input" maxlength="4">
-                                                        <input type="hidden" class="base-table__input tel-hidden-input" th:field="*{tel}">
-                                                    </td>
-                                                </tr>
-                                                <tr class="base-table__row">
-                                                    <th class="base-table__header-cell" scope="row">
-                                                        <label th:for="*{email}">이메일 <span>*</span></label>
-                                                    </th>
-                                                    <td class="base-table__cell">
-                                                        <input class="base-table__input email-prefix-input" th:field="*{email}" type="text">
-                                                        @
-                                                        <input class="base-table__input email-domain-input" type="text">
-                                                        <select class="base-table__select email-domain-select">
-                                                            <option value="1" selected>직접입력</option>
-                                                            <option value="naver.com">naver.com</option>
-                                                            <option value="hanmail.net">hanmail.net</option>
-                                                            <option value="hotmail.com">hotmail.com</option>
-                                                            <option value="nate.com">nate.com</option>
-                                                            <option value="yahoo.co.kr">yahoo.co.kr</option>
-                                                            <option value="empas.com">empas.com</option>
-                                                            <option value="dreamwiz.com">dreamwiz.com</option>
-                                                            <option value="freechal.com">freechal.com</option>
-                                                            <option value="lycos.co.kr">lycos.co.kr</option>
-                                                            <option value="korea.com">korea.com</option>
-                                                            <option value="gmail.com">gmail.com</option>
-                                                            <option value="hanmir.com">hanmir.com</option>
-                                                            <option value="paran.com">paran.com</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr class="base-table__row">
-                                                    <th class="base-table__header-cell" scope="row">
-                                                        <label>배송메시지</label>
-                                                    </th>
-                                                    <td class="base-table__cell">
-                                                        <select class="base-table__select base-table__select--big req-select">
-                                                            <option value="req-message-0" selected>-- 메시지 선택 (선택사항) --</option>
-                                                            <option value="req-message-1">배송 전에 미리 연락바랍니다.</option>
-                                                            <option value="req-message-2">부재 시 경비실에 맡겨주세요.</option>
-                                                            <option value="req-message-3">부재 시 문 앞에 놓아주세요.</option>
-                                                            <option value="req-message-4">빠른 배송 부탁드립니다.</option>
-                                                            <option value="req-message-5">택배함에 보관해 주세요.</option>
-                                                            <option value="req-message-input">직접 입력</option>
-                                                        </select>
-                                                        <textarea class="req-input displaynone"></textarea>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </form>
-                            </div>
+                        <span class="summary">
+                            보유 잔액 <span th:text="${#numbers.formatInteger(member.availablePoints, 0, 'COMMA')}"></span>원
+                        </span>
+                        <div class="help-message-box">
+                            <span class="help-msg">1회 구매시 적립금 최대 사용금액은 <span th:text="${#numbers.formatInteger(member.availablePoints, 0, 'COMMA')}"></span>원입니다.</span>
+                            <span class="hide">최소 적립금 2,000원 이상일 때 사용 가능합니다.</span>
+                            <span class="hide">최대 사용금액은 제한이 없습니다.</span>
+                            <span class="hide">적립금으로만 결제할 경우, 결제금액이 0으로 보여지는 것은 정상이며 [결제하기] 버튼을 누르면 주문이 완료됩니다.</span>
                         </div>
 
-                        <!-- discount-info-container -->
-                        <div class="discount-info-container col-11">
-                            <div class="title">
-                                <h2>할인/부가결제</h2>
-                            </div>
-                            <div class="body">
+                    </div>
 
-                                <div class="table-wrapper">
-                                    <table class="base-table base-table--two-columns base-table--two-columns-color">
-                                        <colgroup>
-                                            <col style="width:15%;">
-                                            <col style="width:auto;">
-                                        </colgroup>
-                                        <tbody class="base-table__body">
-                                            <tr class="base-table__row">
-                                                <th class="base-table__header-cell" scope="row">
-                                                    <label>할인코드 적용</label>
-                                                </th>
-                                                <td class="base-table__cell">
-                                                    <input class="base-table__input coupon-input" type="text">
-                                                    <button class="button button--white button--65x30 coupon-use-btn">적용</button>
-                                                </td>
-                                            </tr>
-                                            <tr class="base-table__row">
-                                                <th class="base-table__header-cell" scope="row">
-                                                    <label>적립금</label>
-                                                </th>
-                                                <td class="base-table__cell">
-                                                    <input class="base-table__input point-input" type="text" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
-                                                    <button class="button button--white button--90x30 point-use-all-btn">전액 사용</button>
-                                                    <button class="button button--white button--90x30 point-cancel-btn">사용 취소</button>
-                                                    <span class="displayblock point" th:text="|보유 잔액: ${#numbers.formatInteger(member.availablePoints, 0, 'COMMA')}원|"></span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                    <div class="discount-applied-price-wrapper">
+                        <h3>적용금액</h3>
+                        <span>-0원</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- payment-details-container start -->
+            <div class="payment-details-container">
+                <div class="title">
+                    <h2>결제정보</h2>
+                </div>
+                <div class="contents">
+                    <div class="total-price-wrapper">
+                        <div class="products-total-price-wrapper">
+                            <div class="heading">
+                                <span>주문상품</span>
+                            </div>
+                            <div class="content">
+                                <strong><span class="order-products-total-price"></span>원</strong>
                             </div>
                         </div>
-
-                        <!-- payment-details-container -->
-                        <div class="payment-details-container col-11">
-                            <div class="title">
-                                <h2>결제 정보</h2>
+                        <div class="delivery-total-price-wrapper">
+                            <div class="heading">
+                                <span>배송비</span>
                             </div>
-                            <div class="body">
-                                <div class="table-wrapper">
-                                    <table class="base-table base-table--payment-info">
-                                        <thead class="base-table__head">
-                                            <tr class="base-table__row">
-                                                <th class="base-table__header-cell" style="width: 17%;" scope="col">총 상품금액</th>
-                                                <th class="base-table__header-cell" style="width: 19%;" scope="col">총 배송비</th>
-                                                <th class="base-table__header-cell" style="width: auto;" scope="col">결제예정금액</th>
-                                                <th class="base-table__header-cell" style="width: 17%;" scope="col">적립예정금액</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody class="base-table__body">
-                                            <tr class="base-table__row">
-                                                <td class="base-table__cell">
-                                                    <span class="total-product-price">0</span>원
-                                                </td>
-                                                <td class="base-table__cell">
-                                                    <span class="order-delivery-price">+ 0</span>원
-                                                </td>
-                                                <td class="base-table__cell">
-                                                    <span class="payment-price">= 0</span>원
-                                                </td>
-                                                <td class="base-table__cell">
-                                                    <span class="earned-points">0</span>원
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="content">
+                                <strong>+<span class="delivery-price"></span>원</strong>
                             </div>
                         </div>
-
-                        <!-- button-container -->
-                        <div class="button-container col-11">
-                            <button class="button button--black button--130x40 button--order" type="button">결제하기</button>
-                            <button class="button button--white button--130x40" type="button" onclick="location.href='/'">취소</button>
+                        <div class="discount-total-price-wrapper">
+                            <div class="heading">
+                                <span>할인/부가결제</span>
+                            </div>
+                            <div class="content">
+                                <strong><span class="discount-price">-0</span>원</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-total-price-wrapper">
+                        <div class="heading">
+                            최종 결제 금액
+                        </div>
+                        <div class="content">
+                            <strong><span class="final-payment-price"></span>원</strong>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- 주문 요청 form -->
-            <form id="orderForm" class="order-form" th:action="@{/orders/new}" method="post">
-                <input name="orderUid" type="hidden">
-                <input name="paymentUid" type="hidden">
-                <input name="name" type="hidden">
-                <input name="totalOrderPrice" type="hidden">
-                <input name="totalDiscountPrice" type="hidden">
-                <input name="totalPaymentPrice" type="hidden">
-                <input name="zipcode" type="hidden">
-                <input name="addr" type="hidden">
-                <input name="addrDetail" type="hidden">
-                <input name="tel" type="hidden">
-                <input name="email" type="hidden">
-                <input name="req" type="hidden">
-                <input name="earnedPoints" type="hidden">
-                <input name="usedPoints" type="hidden">
-                <input name="productCount" type="hidden">
-                <input name="repProductName" type="hidden">
-                <input name="repProductImage" type="hidden">
-            </form>
+            <!-- payment-options-container start -->
+            <div class="payment-options-container">
+                <div class="title">
+                    <h2>결제수단</h2>
+                </div>
+                <div class="contents">
+                    <div class="payment-options">
+                        <label for="payment1" class="custom-radio">
+                            <input id="payment1" name="payment" type="radio" checked>
+                            결제수단 선택
+                            <span></span>
+                        </label>
+                        <span class="credit-card">신용카드</span>
+                    </div>
 
-            <div th:replace="/layouts/default-layout.html :: footer"></div>
-        </article>
-    </main>
+                    <div class="help-message-wrapper">
+                        <span class="help-msg">- 소액 결제의 경우 PG사 정책에 따라 결제 금액 제한이 있을 수 있습니다.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- point-earn-price-container start -->
+            <div class="point-earn-price-container">
+                <div class="title">
+                    <h2>적립혜택</h2>
+                    <div class="text-box">
+                        <span class="total">
+                            <span class="expected-accumulated-point"></span>원 예정
+                        </span>
+                    </div>
+                </div>
+                <div class="contents">
+                    <div class="reward-wrapper">
+                        <div class="product-reward-wrapper">
+                            <div class="heading">
+                                <span>상품별 적립금</span>
+                            </div>
+                            <div class="content">
+                                <strong><span class="products-reward-points"></span>원</strong>
+                            </div>
+                        </div>
+                        <div class="member-reward-wrapper">
+                            <div class="heading">
+                                <span>회원 적립금</span>
+                            </div>
+                            <div class="content">
+                                <strong>0원</strong>
+                            </div>
+                        </div>
+                        <div class="coupon-reward-wrapper">
+                            <div class="heading">
+                                <span>쿠폰 적립금</span>
+                            </div>
+                            <div class="content">
+                                <strong>0원</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="total-reward-wrapper">
+                        <div class="heading">
+                            <strong>적립 예정금액</strong>
+                        </div>
+                        <div class="content">
+                            <strong><span class="expected-accumulated-point"></span>원</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- button-container start -->
+            <div class="button-container">
+                <button class="order-btn" type="button"><span class="final-payment-price"></span>원 결제하기</button>
+            </div>
+
+            <!-- help-area start -->
+            <div class="help-area">
+                <span>- 최소 결제 가능 금액은 결제금액에서 배송비를 제외한 금액입니다.</span>
+            </div>
+        </form>
+    </div>
+
+    <!-- 주문 요청 form -->
+    <form id="orderForm" class="order-form" th:action="@{/orders/new}" method="post">
+        <input name="orderUid" type="hidden">
+        <input name="paymentUid" type="hidden">
+        <input name="name" type="hidden">
+        <input name="totalProductPrice" type="hidden">
+        <input name="totalOrderPrice" type="hidden">
+        <input name="totalPaymentPrice" type="hidden">
+        <input name="zipcode" type="hidden">
+        <input name="addr" type="hidden">
+        <input name="addrDetail" type="hidden">
+        <input name="tel" type="hidden">
+        <input name="email" type="hidden">
+        <input name="req" type="hidden">
+        <input name="earnedPoints" type="hidden">
+        <input name="usedPoints" type="hidden">
+        <input name="productCount" type="hidden">
+        <input name="repProductName" type="hidden">
+        <input name="repProductImage" type="hidden">
+    </form>
 
     <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+
     <!-- 사용자 JS -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script th:inline="javascript">
 
-        /* 유효성 검사 통과 유무 변수 */
-        let checkName = false;          // 이름
-        let checkAddress = false        // 주소
-        let checkTelPrefix = false;     // 휴대전화 통신사 번호
-        let checkTelMiddle = false;     // 휴대전화 앞번호
-        let checkTelSuffix = false;     // 휴대전화 뒷번호
-        let checkTel = false;           // 휴대전화 전체
-        let checkMail = false           // 이메일
+        /* 구매자 정보 */
+        let buyerName = [[${member.name}]];
+        let buyerEmail = [[${member.email}]];
+        let email = buyerEmail.split('@');
+        let emailPrefix = email[0];
+        let emailSuffix = email[1];
+        let buyerTel = [[${member.tel}]];
+        let telPrefix = buyerTel.substring(0, 3); // 앞의 3자리
+        let telMiddle = buyerTel.substring(3, 4); // 가운데 4자리
+        let telSuffix = buyerTel.substring(7);    // 뒤의 나머지 자리
+        let buyerZipcode = [[${member.zipcode}]];
+        let buyerAddr = [[${member.addr}]];
+        let buyerAddrDetail = [[${member.addrDetail}]];
 
         /* 주문 API 가맹점 식별코드 값 저장 */
         const IMP = window.IMP;
         IMP.init("imp50343645");
 
-        $(function() {
-            refreshPaymentInfo(); // 상품 금액, 배송비, 할인/부가결제, 최종 결제 금액, 적립 예정 금액 출력하는 함수
-            initializeEmailInputValues(); // 이메일 입력창에 회원의 이메일 값을 저장하는 함수
-            initializeTelInputValues() // 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수
+        $(function () {
+            fillPhoneNumberField(); // 이메일 input에 휴대 전화 값 채우기
+            fillEmailField(); // 이메일 input에 사용자 이메일 값 채우기
+            refreshPaymentInfo(); // 결제 관련 값 업데이트
 
-            /* 상품 주문 버튼 클릭 이벤트 처리 */
-            $(".button--order").click(orderProducts);
+            /* 이메일 도메인 select 이벤트 처리 */
+            $(".email-domain-select").change(showCustomEmailDomainInput);
 
-            /* 배송지 선택 이벤트 처리 */
-            $(".address-select").change(handleAddressSelect);
+            /* 각 섹션 제목 클릭 시 본문 숨김/보이기 처리 */
+            $(".title").click(toggleSectionContent);
 
-            /* 이메일 입력 방식 선택 이벤트 처리 */
-            $('.email-domain-select').on("change", handleEmailSelect);
+            /* '회원 정보와 동일', '새로운 배송지' 체크 박스 이벤트 처리 */
+            $("input[name='address']").change(handleAddressChange);
 
-            /* 포인트 입력창 이벤트 처리 */
-            $(".point-input").on("propertychange change keyup paste input", validatePointInput);
+            /* 적립금 관련 메시지 박스 클릭 이벤트 처리 */
+            $(".help-message-box").click(toggleMessageBox);
+
+            /* 주문 상품 삭제 버튼 클릭 이벤트 처리 */
+            $(".delete-btn").click(deleteOrderProduct);
+
+            /* 주소 탭 클릭 이벤트 처리 */
+            $(".direct-input-tab-button, .recent-address-tab-button").click(toggleAddressTab);
 
             /* 포인트 전액 사용 버튼 클릭 이벤트 처리 */
-            $(".point-use-all-btn").click(handlePointUseBtn);
+            $(".all-point-use-btn").click(setMaxPointUsage);
 
-            /* 포인트 사용 취소 버튼 클릭 이벤트 처리 */
-            $(".point-cancel-btn").click(handlePointCancelBtn);
+            /* 포인트 사용 input 이벤트 처리 */
+            $(".point-use-input").change(handlePointUseInput);
 
-            /* 배송 메시지 선택 체인지 이벤트 처리 */
-            $(".req-select").change(handleReqSelect);
+            /* 상품 주문 버튼 클릭 이벤트 처리 */
+            $(".order-btn").click(orderProducts);
         });
 
-        /* 상품 주문 함수 */
-        function orderProducts() {
-            let form = $("#orderForm");
+        /* 결제 관련 값 업데이트 */
+        function refreshPaymentInfo() {
+            let orderProductsTotalPrice = 0; // 주문 상품 총 금액
+            let deliveryPrice = 3000; // 배송비
+            let orderProductsCount = 0; // 주문 상품 개수
+            let usePoints = $(".point-use-input").val();
 
-            /* 입력값 변수 */
-            let nameVal = $('.name-input').val();                       // 이름 입력란
-            let addrDetailVal = $('.addr-detail-input').val();          // 주소 입력란
-            let telPrefixVal = $('.tel-prefix-select').val();           // 휴대 전화 입력란
-            let telMiddleVal = $('.tel-middle-input').val();            // 휴대 전화 입력란
-            let telSuffixVal = $('.tel-suffix-input').val();            // 휴대 전화 입력란
-            let emailPrefixVal = $(".email-prefix-input").val();        // 이메일 앞부분
-            let emailDomainVal = $(".email-domain-input").val();        // 이메일 뒷부분
+            $(".description").each(function (index, element) {
+                let price = $(element).find(".data-info").attr("data-price");
+                let discount = $(element).find(".data-info").attr("data-discount");
+                let quantity = $(element).find(".data-info").attr("data-quantity");
 
-            /* 이름 유효성 검사 */
-            if (nameVal === "") {
-                alert("받으시는 분을 입력해 주세요.");
-                $('.name-input').focus();
-                let topLocation = $(".name-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                checkName = false;
-                return false;
-            } else {
-                checkName = true;
+                if (discount > 0) {
+                    orderProductsTotalPrice += Math.floor((price * (1 - discount)) * quantity);
+                } else {
+                    orderProductsTotalPrice += price * quantity;
+                }
+
+                orderProductsCount += 1;
+            });
+
+            // 주문 상품 총 금액 3만원 이상 배송비 무료
+            if (orderProductsTotalPrice >= 30000) {
+                deliveryPrice = 0;
             }
 
-            /* 주소 유효성 검사 */
-            if (addrDetailVal === "") {
-                alert("주소를 입력해 주세요.");
-                $('.email-prefix-input').focus();
-                let topLocation = $(".email-prefix-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                checkAddress = false;
-                return false;
-            } else {
-                checkAddress = true;
-            }
+            // 주문 상품 개수 출력
+            $(".order-products-count").text(orderProductsCount);
 
-            /* 휴대전화 통신사 번호 빈값 검사 */
-            if (telPrefixVal === "1") {
-                alert("통신사 번호를 선택하세요.");
-                let topLocation = $(".tel-middle-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                checkTelPrefix = false;
-                return false;
-            } else {
-                checkTelPrefix = true;
-            }
+            // 적립 포인트 출력
+            $(".products-reward-points").text((orderProductsTotalPrice * 0.03).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            $(".expected-accumulated-point").text((orderProductsTotalPrice * 0.03).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 
-            /* 휴대전화 앞번호 빈값 검사 */
-            if (telMiddleVal === "") {
-                alert("휴대전화를 입력하세요.");
-                $('.tel-middle-input').focus();
-                let topLocation = $(".tel-middle-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                checkTelMiddle = false;
-                return false;
-            } else {
-                checkTelMiddle = true;
-            }
-
-            /* 휴대전화 뒷번호 빈값 검사 */
-            if (telSuffixVal === "") {
-                alert("휴대전화를 입력하세요.");
-                $('.tel-suffix-input').focus();
-                let topLocation = $(".tel-middle-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                checkTelSuffix = false;
-                return false;
-            } else {
-                checkTelSuffix = true;
-            }
-
-            /* 이메일 유효성 검사 */
-            if (emailPrefixVal === '' || emailDomainVal === '') {
-                alert("이메일을 입력해 주세요.");
-                $('.email-prefix-input').focus();
-                let topLocation = $(".email-prefix-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                checkMail = false;
-                return false;
-            } else {
-                checkMail = true;
-            }
-
-            /* 휴대전화 전체 유효성 검사 */
-            if (!validateTel(telPrefixVal + telMiddleVal + telSuffixVal)) {
-                alert("올바른 휴대전화를 입력하세요.");
-                $(".tel-middle-input").focus();
-                let topLocation = $(".tel-middle-input").offset();
-                window.scrollTo({top:topLocation.top - 400, behavior: 'smooth'})
-                return false
-            } else {
-                checkTel = true;
-            }
-
-            /* 최종 유효성 검사 */
-            if (checkName && checkAddress && checkTel && checkMail) {
-                let orderUid = generateOrderNumber(); // 주문 번호 생성
-                let buyerName = $(".name-input").val();
-                let zipcode = $(".zipcode-input").val();
-                let addr = $(".addr-input").val();
-                let addrDetail = $(".addr-detail-input").val();
-
-                IMP.request_pay({
-                        pg : 'html5_inicis.INIpayTest',
-                        pay_method : 'card',                                    // 결제 방식
-                        merchant_uid: orderUid,                                 // 주문 번호
-                        name : "의류",                                           // 상품 이름
-                        amount : 100,                                           // 상품 가격
-                        buyer_email : emailPrefixVal + "@" + emailDomainVal,    // 구매자 이메일
-                        buyer_name : buyerName,                                 // 구매자 이름
-                        buyer_tel : telPrefixVal + telMiddleVal + telSuffixVal, // 구매자 전화 번호
-                        buyer_addr : addr + " " + addrDetail,                   // 구매자 상세 주소
-                        buyer_postcode : zipcode,                               // 구매자 우편 번호
-                    },
-                    function(rsp) {
-                        // 결제 성공
-                        if (rsp.success) {
-                            let totalPriceInput = $(".base-table__cell--price-info");
-                            let pointInputVal = $(".point-input").val();
-                            let telPrefixVal = $(".tel-prefix-select").val();
-                            let telMiddleVal = $(".tel-middle-input").val();
-                            let telSuffixVal = $(".tel-suffix-input").val();
-                            let emailPrefixVal = $(".email-prefix-input").val();
-                            let emailDomainVal = $(".email-domain-input").val();
-
-                            /* 서버로 전송할 데이터 */
-                            let tel = telPrefixVal + telMiddleVal + telSuffixVal;       // 휴대전화
-                            let email = emailPrefixVal + "@" + emailDomainVal;          // 이메일
-                            let totalProductPrice = 0;                                  // 총 상품 금액
-                            let usePointsVal = Number(pointInputVal);                   // 포인트 사용 금액
-                            let paymentPrice = 0;                                       // 결제 총 금액 (주문 총 금액 - 포인트 사용 금액)
-                            let earnedPoints = 0;                                       // 적립 포인트 금액
-                            let productCount = 0;                                       // 주문 상품 개수
-                            let repProductName = 0;                                     // 첫번째 상품의 이름 (대표 상품명)
-                            let repProductImage = 0;                                    // 첫번째 상품의 이미지 (대표 상품 이미지)
-                            let deliveryPrice = 2500;                                   // 배송비
-
-                            /* 가격 관련 값 구하기 */
-                            totalPriceInput.each(function (index) {
-                                let productId = $(this).find(".base-table__cell--price").attr("data-id");
-                                let priceInput = $("#price-" + productId);                  // price input에 data 속성으로 모든 정보 넣어놨음.
-                                let salePriceVal = priceInput.attr("data-salePrice");       // 할인 적용된 가격
-                                let countVal = priceInput.attr("data-count");               // 주문 개수
-
-                                // 총 상품 금액 구하기
-                                totalProductPrice += salePriceVal * countVal;
-
-                                // 총 상품 금액 30,000원 이상 배송비 무료
-                                if (totalProductPrice >= 30000) {
-                                    deliveryPrice = 0;
-                                }
-
-                                // 대표 상품명, 이미지 구하기
-                                if (index === 0) {
-                                    let productNameVal = priceInput.attr("data-name");
-                                    let productImageVal = priceInput.attr("data-imageUrl");
-
-                                    repProductName = productNameVal;
-                                    repProductImage = productImageVal;
-                                }
-
-                                // 주문 상품 개수 증가
-                                productCount += 1;
-                            });
-
-                            // 결제 예정 금액 = 총 상품 금액 + 배송비
-                            paymentPrice += totalProductPrice;
-                            paymentPrice += deliveryPrice;
-
-                            // 적립 포인트 값 저장
-                            earnedPoints = Math.floor(paymentPrice * 0.05);
-
-                            // 포인트를 사용하여 결제하는 경우, 결제 예정 금액, 적립 예정 금액 값 변동
-                            if (usePointsVal > 0) {
-                                paymentPrice -= usePointsVal;
-                                earnedPoints = Math.floor(paymentPrice * 0.05);
-                            }
-
-                            /* 서버로 전송할 form data 채우기 */
-                            // $("input[name='orderUid']").val(rsp.merchant_uid);
-                            $("input[name='orderUid']").val(generateOrderNumber());
-                            // $("input[name='paymentUid']").val(rsp.imp_uid);
-                            $("input[name='paymentUid']").val("test");
-                            $("input[name='name']").val($(".name-input").val());
-                            $("input[name='totalProductPrice']").val(totalProductPrice);
-                            $("input[name='totalOrderPrice']").val(totalProductPrice + deliveryPrice);
-                            $("input[name='totalPaymentPrice']").val(paymentPrice);
-                            $("input[name='zipcode']").val($(".zipcode-input").val());
-                            $("input[name='addr']").val($(".addr-input").val());
-                            $("input[name='addrDetail']").val($(".addr-detail-input").val());
-                            $("input[name='tel']").val(tel);
-                            $("input[name='email']").val(email);
-                            // 배송 메시지 선택 옵션이 "직접 입력"인 경우 input value 값 저장
-                            if ($(".req-select option:selected").val() === "req-message-input") {
-                                $("input[name='req']").val($(".req-input").val());
-                            }
-                            $("input[name='earnedPoints']").val(earnedPoints);
-                            $("input[name='usedPoints']").val(pointInputVal);
-                            $("input[name='productCount']").val(productCount);
-                            $("input[name='repProductName']").val(repProductName);
-                            $("input[name='repProductImage']").val(repProductImage);
-
-                            /* 주문 상품 정보 담긴 input 태그 동적 생성 */
-                            let formContents = '';
-                            totalPriceInput.each(function(index, element){
-                                let id = $(element).find('.base-table__cell--price').attr("data-id");
-                                let salePrice = $(element).find('.base-table__cell--price').attr("data-salePrice");
-                                let count = $(element).find('.base-table__cell--price').attr("data-count");
-
-                                formContents += "<input name='orderProductDtoList[" + index + "].id' type='hidden' value='" + id + "'>";
-                                formContents += "<input name='orderProductDtoList[" + index + "].price' type='hidden' value='" + salePrice + "'>";
-                                formContents += "<input name='orderProductDtoList[" + index + "].count' type='hidden' value='" + count + "'>";
-                            });
-
-                            form.append(formContents);
-                            form.submit();
-
-                            // $.ajax({
-                            //     url: "/payment",
-                            //     type: "POST",
-                            //     contentType: "application/json",
-                            //     dataType: "text",
-                            //     data: JSON.stringify({
-                            //         "paymentUid": rsp.imp_uid,                  // 결제 고유번호
-                            //         "orderUid": rsp.merchant_uid                // 주문번호
-                            //     }),
-                            //     success: function(response) {
-                            //         console.log(response);
-                            //         alert("결제가 완료되었습니다.");
-                            //     },
-                            //     error: function(request) {
-                            //         alert(request.responseText);
-                            //     }
-                            // });
-                        } else {
-                            // 결제 실패
-                            alert("결제가 취소되었습니다.");
-                        }
-                    });
-            }
-            return false;
+            // 배송비, 주문 상품 총 금액, 최종 결제 금액 출력
+            $(".delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            $(".order-products-total-price").text(orderProductsTotalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            $(".final-payment-price").text(((orderProductsTotalPrice + deliveryPrice) - usePoints).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
         }
 
-        /* 이메일 입력 방식 선택 함수 */
-        function handleEmailSelect() {
-            $(".email-domain-select option:selected").each(function () {
-                if ($(this).val() === '1') {
-                    $(".email-domain-input").val('').prop("disabled", false);
+        /* 상품 총 주문 금액 조회 */
+        function getOrderProductsTotalPrice() {
+            let orderProductsTotalPrice = 0; // 주문 상품 총 금액
+            $(".description").each(function (index, element) {
+                let price = $(element).find(".data-info").attr("data-price");
+                let discount = $(element).find(".data-info").attr("data-discount");
+                let quantity = $(element).find(".data-info").attr("data-quantity");
+
+                if (discount > 0) {
+                    orderProductsTotalPrice += Math.floor((price * (1 - discount)) * quantity);
                 } else {
-                    $(".email-domain-input").val($(this).text()).prop("disabled", true);
+                    orderProductsTotalPrice += price * quantity;
                 }
             });
+            return orderProductsTotalPrice;
         }
 
-        /* 주소 선택(select) 옵션에 따라 화면에 표시되는 입력 필드들을 제어하는 함수 */
-        function handleAddressSelect() {
-            if ($(".address-select option:checked").val() === '1') {
+        /* 각 섹션 제목 클릭 시 본문을 숨기거나 보이게 하는 함수 */
+        function toggleSectionContent() {
+            let container = $(this).parent();
+            container.toggleClass("selected");
+
+            let contents = $(this).siblings(".contents");
+            contents.toggle(); // .contents 요소의 표시 상태를 토글
+
+            if ($(this).parent().hasClass("selected")) {
+                $(this).find(".text-box").show();
+            } else {
+                $(this).find(".text-box").hide();
+            }
+        }
+
+        /* '회원 정보와 동일' 클릭 시 배송지 관련 입력창에 회원의 배송지 값 저장 */
+        /* '새로운 배송지' 클릭 시 배송지 관련 입력창 값 비우기 */
+        function handleAddressChange() {
+            let type = $("input[name='address']:checked").val();
+
+            if (type === 'new-address') {
                 $(".name-input").val("");
                 $(".zipcode-input").val("");
                 $(".addr-input").val("");
                 $(".addr-detail-input").val("");
-                $(".tel-prefix-select option:eq(1)").prop("selected", true);
+                $(".tel-prefix-select").val("010");
                 $(".tel-middle-input").val("");
                 $(".tel-suffix-input").val("");
-                $(".email-prefix-input").val("");
+                $(".email-input").val("");
+                $(".email-domain-select").prop('selectedIndex', 0);
+                $(".direct-input-wrap").css("display", "none");
                 $(".email-domain-input").val("");
-                $(".email-domain-select option:eq(0)").prop("selected", true);
             } else {
-                let name = [[${member.name}]];
-                let zipcode = [[${member.zipcode}]];
-                let addr = [[${member.addr}]];
-                let addrDetail = [[${member.addrDetail}]];
-                let email = [[${member.email}]];
-                let emailArr = email.split("@");
-                let emailPrefix = emailArr[0];
-                let emailDomainInput = emailArr[1];
-
-                $(".name-input").val(name);
-                $(".zipcode-input").val(zipcode);
-                $(".addr-input").val(addr);
-                $(".addr-detail-input").val(addrDetail);
-                $(".tel-prefix-select option:eq(1)").prop("selected", true);
-                $(".tel-middle-input").val("");
-                $(".tel-suffix-input").val("");
-                $(".email-prefix-input").val(emailPrefix);
-                $(".email-domain-input").val(emailDomainInput);
-                $(".email-domain-select option:eq(0)").prop("selected", true);
+                $(".name-input").val(buyerName);
+                $(".zipcode-input").val(buyerZipcode);
+                $(".addr-input").val(buyerAddr);
+                $(".addr-detail-input").val(buyerAddrDetail);
+                $(".tel-prefix-select").val(telPrefix);
+                $(".tel-middle-input").val(telMiddle);
+                $(".tel-suffix-input").val(telSuffix);
+                $(".email-input").val(emailPrefix);
+                $(".email-domain-select").val('custom');
+                $(".direct-input-wrap").css("display", "inline");
+                $(".email-domain-input").val(emailSuffix);
             }
         }
 
-        /* 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수 */
-        function initializeTelInputValues() {
-            // 회원의 휴대전화 저장
-            let tel = [[${member.tel}]];
+        /* 휴대 전화 input에 유저 휴대 전화 값 채우기 */
+        function fillPhoneNumberField() {
+            let telPrefixSelect = $(".tel-prefix-select");
+            let telMiddleInput = $(".tel-middle-input");
+            let telSuffixInput = $(".tel-suffix-input");
+            let userTel = [[${member.tel}]];
 
-            // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
-            let telPrefix = tel.substring(0, 3);
-            let middleLength = tel.length === 11 ? 4 : 3; // 중간 번호 길이 결정
-            let telMiddle = tel.substring(3, 3 + middleLength);
-            let telSuffix = tel.substring(3 + middleLength);
+            // 휴대전화 번호를 각 부분으로 나누기
+            let telPrefix = userTel.substring(0, 3);
+            let telMiddle = userTel.substring(3, 7);
+            let telSuffix = userTel.substring(7);
 
-            $(".tel-prefix-select").val(telPrefix).prop("selected", true);
-            $(".tel-middle-input").val(telMiddle);
-            $(".tel-suffix-input").val(telSuffix);
+            // 각 필드에 값 넣어주기
+            telPrefixSelect.val(telPrefix);
+            telMiddleInput.val(telMiddle);
+            telSuffixInput.val(telSuffix);
+
+            $(".tel").html(telPrefix + "-" + telMiddle + "-" + telSuffix);
         }
 
-        /* 배송 메시지 선택(select) 제어 함수 */
-        function handleReqSelect() {
-            let selectedVal = $(".req-select option:selected").val();
-            let selectedText = $(".req-select option:selected").text()
+        /* 이메일 input에 유저 이메일 값 채우기 */
+        function fillEmailField() {
+            let emailInput = $(".email-input");
+            let emailDomainSelect = $(".email-domain-select");
+            let emailDomainInput = $(".email-domain-input");
+            let userEmail = [[${member.email}]];
 
-            // 직접 입력인 경우 입력창 보이기
-            if (selectedVal === 'req-message-input') {
-                $(".req-input").removeClass("displaynone");
-            } else if (selectedVal === 'req-message-0') {
-                $(".req-input").addClass("displaynone");
-                // 아무 것도 선택하지 않은 경우 빈 값을 서버로 전송할 input에 저장
-                $("input[name='req']").val("");
+            // 이메일을 이메일 주소와 도메인으로 분할
+            let emailParts = userEmail.split("@");
+            let emailPrefix = emailParts[0];
+            let emailDomain = emailParts[1];
+
+            // 사용자의 이메일 도메인이 select의 옵션에 있는지 확인
+            if (emailDomainSelect.find('option[value="' + emailDomain + '"]').length > 0) {
+                // 사용자의 이메일 도메인이 존재하는 경우
+                emailDomainSelect.val(emailDomain);
             } else {
-                $(".req-input").addClass("displaynone");
-                // 그 외의 옵션 선택한 경우 선택된 옵션의 text 값을 서버로 전송할 input에 저장
-                $("input[name='req']").val(selectedText);
+                // 사용자의 이메일 도메인이 존재하지 않는 경우, "직접입력" 옵션 선택
+                emailDomainSelect.val('custom');
+                $(".direct-input-wrap").show();
+                // 직접입력 input 필드에 도메인 값 넣어주기
+                $(".email-domain-input").val(emailDomain);
             }
+
+            // 이메일 주소 input 필드에 값 넣어주기
+            emailInput.val(emailPrefix);
         }
 
-        /* 포인트 전액 사용 함수 */
-        function handlePointUseBtn() {
-            let values = getPointAndPriceValues();
-
-            if (values.maxPoint < 0) {
-                alert("사용 가능한 적립금이 없습니다.");
-                return;
-            }
-
-            $('.point-input').val(values.maxPoint);
-
-            let pointVal = $('.point-input').val();
-            if (pointVal > (values.totalAmount + values.orderDeliveryPrice)) {
-                let afterPoint = values.maxPoint - (values.totalAmount + values.orderDeliveryPrice);
-                $(".point").html('보유 잔액: ' + afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-                $(".point-input").val(values.totalAmount + values.orderDeliveryPrice);
+        /* 이메일 select 직접 입력인 경우 input 보이기 */
+        function showCustomEmailDomainInput() {
+            if ($(this).val() === "custom") {
+                $(".direct-input-wrap").show();
             } else {
-                $(".point").html('보유 잔액: 0원');
-                $(".point-input").val(values.maxPoint);
+                $(".direct-input-wrap").hide();
             }
-            $(".point-cancel-btn").css("display", "inline-block");
-            $(".point-use-all-btn").css("display", "none");
-            refreshPaymentInfo();
         }
 
-        /* 포인트 사용 취소 함수 */
-        function handlePointCancelBtn() {
-            let values = getPointAndPriceValues();
-            $(".point-input").val(0);
-            $(".point").html('보유 잔액: ' + values.maxPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-            $(".point-cancel-btn").css("display", "none");
-            $(".point-use-all-btn").css("display", "inline-block");
-            refreshPaymentInfo();
+        /* 주소 입력 탭 전환 함수 */
+        function toggleAddressTab() {
+            // 클릭한 탭에 따라 해당하는 주소 입력란을 보여주거나 숨김 처리
+            if ($(this).hasClass("direct-input-tab-button")) {
+                $(".recent-address-wrapper").hide();
+                $(".new-address-wrapper").show();
+            } else if ($(this).hasClass("recent-address-tab-button")) {
+                $(".new-address-wrapper").hide();
+                $(".recent-address-wrapper").show();
+            }
+
+            // 선택된 탭에 selected 클래스 추가
+            $(this).closest('li').addClass('selected')
+                .siblings('li').removeClass('selected'); // 다른 li 태그의 selected 클래스 제거
         }
 
-        /* 포인트, 가격 관련 최신 값 가져오는 함수 */
-        function getPointAndPriceValues() {
-            let maxPoint = parseInt([[${member.availablePoints}]]);
-            let totalProductPrice = 0;
-            let orderDeliveryPrice = 2500;
-            let orderDiscountPrice = 0;
-            let totalAmount = 0;
+        /* 주문 상품 삭제 함수 */
+        function deleteOrderProduct() {
+            if (confirm("선택하신 상품을 삭제하시겠습니까?")) {
+                $(this).parent().parent('.product-info').remove();
+                refreshPaymentInfo();
 
-            $(".base-table__cell--price-info").each(function () {
-                let productId = $(this).find(".base-table__cell--price").attr("data-id");
-                let price = $("#price-" + productId);
-                let priceVal = price.attr("data-price");
-                let countVal = $("#count-" + productId).val();
-
-                totalProductPrice += priceVal * countVal;
-                orderDiscountPrice += (price.attr("data-price") * (price.attr("data-discount"))) * countVal;
-            });
-
-            totalAmount = totalProductPrice - orderDiscountPrice;
-            if (totalAmount >= 30000 || totalAmount === 0) {
-                orderDeliveryPrice = 0;
-            }
-
-            return {
-                maxPoint: maxPoint,
-                totalProductPrice: totalProductPrice,
-                orderDeliveryPrice: orderDeliveryPrice,
-                orderDiscountPrice: orderDiscountPrice,
-                totalAmount: totalAmount
-            };
-        }
-
-        /* 포인트 입력 유효성 검사 함수 */
-        function validatePointInput() {
-            const maxPoint = parseInt([[${member.availablePoints}]]);
-            let inputVal = parseInt($(this).val());
-            let totalProductPrice = 0; // 상품 금액
-            let orderDeliveryPrice = 2500; // 배송비
-            let orderDiscountPrice = 0; // 할인 합계
-            let totalAmount = 0; // 최종 결제 금액
-
-            if (inputVal < 0) {
-                $(this).val(0);
-            } else if (inputVal > maxPoint) {
-                $(this).val(maxPoint);
-            }
-
-            $(".base-table__cell--price-info").each(function () {
-                let productId = $(this).find(".base-table__cell--price").attr("data-id");
-                let price = $("#price-" + productId);
-                let priceVal = price.attr("data-price");
-                let countVal = $("#count-" + productId).val();
-
-                totalProductPrice += priceVal * countVal;
-                orderDiscountPrice += (price.attr("data-price") * (price.attr("data-discount"))) * countVal;
-            });
-
-            /* 최종 결제 금액 3만원 이상 배송비 무료 */
-            totalAmount = totalProductPrice - orderDiscountPrice;
-            if (totalAmount >= 30000) {
-                orderDeliveryPrice = 0;
-            } else if (totalAmount === 0) {
-                orderDeliveryPrice = 0;
-            } else {
-                orderDeliveryPrice = 2500;
-            }
-
-            /* 포인트 보유 잔액 > 최종 결제 금액 = 최종 결제 금액 만큼만 포인트 사용 */
-            let afterPoint;
-            if (inputVal > maxPoint) {
-                afterPoint = 0;
-            } else if (inputVal > (totalAmount + orderDeliveryPrice)) {
-                afterPoint = maxPoint - (totalAmount + orderDeliveryPrice);
-                $(this).val(totalAmount + orderDeliveryPrice);
-            } else if (inputVal >= 0) {
-                afterPoint = maxPoint - inputVal;
-            } else {
-                afterPoint = maxPoint;
-            }
-            $(".point").html('보유 잔액: '+ afterPoint.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-
-            refreshPaymentInfo();
-        }
-
-        /* 휴대전화 유효성 검사 */
-        function validateTel(tel){
-            return /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/.test(tel);
-        }
-
-        /* 결제 관련 금액 최신화 */
-        function refreshPaymentInfo(){
-            let totalProductPrice = 0; // 총 상품 금액
-            let orderDeliveryPrice = 2500; // 총 배송비
-            let earnedPoints = 0; // 적립 예정 금액
-            let paymentPrice = 0; // 결제 예정 금액
-
-            $(".base-table__cell--price-info").each(function () {
-                let productId = $(this).find(".base-table__cell--price").attr("data-id");
-                let salePrice = $(this).find(".base-table__cell--price").attr("data-salePrice");
-                let price = $("#price-" + productId);
-                let priceVal = price.attr("data-price");
-                let countVal = $("#count-" + productId).val();
-
-                totalProductPrice += salePrice * countVal;
-                earnedPoints += totalProductPrice * 0.05;
-            });
-
-            /* 최종 결제 금액 3만원 이상 배송비 무료 */
-            if (totalProductPrice >= 30000) {
-                orderDeliveryPrice = 0;
-            } else if (totalProductPrice === 0) {
-                orderDeliveryPrice = 0;
-            } else {
-                orderDeliveryPrice = 2500;
-            }
-
-            $(".base-table__cell--delivery-price").each(function () {
-                if (totalProductPrice >= 30000) {
-                    $(this).html("무료");
-                } else {
-                    $(this).html("<span class='displayblock'>2,500원</span><span>조건</span>");
+                if ($(".order-products-info .product-info").length === 0) {
+                    location.href = '/cart';
                 }
-            });
+            }
+            return false;
+        }
 
-            // 결제 예정 금액 값 설정
-            paymentPrice += totalProductPrice;
-            paymentPrice += orderDeliveryPrice;
+        /* 포인트 사용 input 핸들러 함수 */
+        function handlePointUseInput() {
+            let availablePoints = [[${member.availablePoints}]];
+            let usePoints = $(this).val().replace(/[^0-9]/g, '');
+            let orderProductsTotalPrice = getOrderProductsTotalPrice(); // 주문 상품 총 금액
 
-            // 포인트를 사용하여 결제하는 경우, 결제 예정 금액, 적립 예정 금액 업데이트
-            let usePoints = $(".point-input").val();
-            if (usePoints > 0) {
-                paymentPrice -= usePoints;
-                earnedPoints = Math.floor(paymentPrice * 0.05);
+            $(this).val(usePoints); // 사용자가 문자를 입력한 경우 문자 제거
+            $(".discount-price").text("-" + usePoints); // 할인/부가결제 업데이트
+            refreshPaymentInfo();
+
+            if (usePoints === "") {
+                $(".discount-price").text("-" + 0);
+                refreshPaymentInfo();
             }
 
-            $(".total-product-price").html(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-            $(".order-delivery-price").html('+ ' + orderDeliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))
-            $(".payment-price").html('= ' + paymentPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-            $(".earned-points").html(earnedPoints.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            // 사용가능 적립금보다 높은 값을 입력한 경우 경고 메시지 출력
+            if (usePoints > availablePoints) {
+                $(".point-use-input").val(0);
+                $(".discount-price").text("-" + 0);
+                refreshPaymentInfo();
+                alert("사용가능 적립금보다 많습니다.\n적립금 사용금액을 다시 입력해 주세요.");
+                return false;
+            }
+
+            // 주문 금액이 4만원 미만인 경우 경고 메시지 출력
+            if (orderProductsTotalPrice < 40000) {
+                $(".point-use-input").val(0);
+                $(".discount-price").text("-" + 0);
+                refreshPaymentInfo();
+                alert("상품구매금액이 40,000KRW 이상이어야\n적립금을 사용하실 수 있습니다.");
+                return false;
+            }
+        }
+
+        /* 포인트 전액 사용 버튼을 클릭하면 회원이 갖고 있는 포인트를 포인트 사용 input의 값으로 설정 */
+        function setMaxPointUsage() {
+            let orderProductsTotalPrice = getOrderProductsTotalPrice(); // 주문 상품 총 금액
+            let availablePoints = [[${member.availablePoints}]];
+            if (orderProductsTotalPrice >= 40000) {
+                $(".point-use-input").val(availablePoints);
+                $(".discount-price").text("-" + availablePoints.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                refreshPaymentInfo();
+            } else {
+                $(".point-use-input").val(0);
+                $(".discount-price").text("-" + 0);
+                alert("상품구매금액이 40,000KRW 이상이어야\n적립금을 사용하실 수 있습니다.");
+                refreshPaymentInfo();
+            }
+        }
+
+        /* 메시지 박스 클릭 시 토글 기능을 위한 클래스 추가 함수 */
+        function toggleMessageBox() {
+            $(this).toggleClass("selected");
+        }
+
+        /* 상품 주문 함수 */
+        function orderProducts() {
+            /* 유효성 검사 통과 유무 변수 */
+            let checkName = false;          // 이름
+            let checkZipcode = false        // 우편 번호
+            let checkAddr = false           // 주소
+            let checkAddrDetail = false     // 상세 주소
+            let checkTelMiddle = false;     // 휴대전화 앞번호
+            let checkTelSuffix = false;     // 휴대전화 뒷번호
+            let checkEmailPrefix = false;   // 이메일 앞부분
+            let checkEmailDomain = false;   // 이메일 도메인
+
+            if ($(".tab .selected").find("a").hasClass("direct-input-tab-button")) {
+                let nameVal = $(".name-input").val();
+                let zipcodeVal = $(".zipcode-input").val();
+                let addrVal = $(".addr-input").val();
+                let addrDetailVal = $(".addr-detail-input").val();
+                let telPrefixVal = $(".tel-prefix-select").val();
+                let telMiddleVal = $(".tel-middle-input").val();
+                let telSuffixVal = $(".tel-suffix-input").val();
+                let emailPrefixVal = $(".email-input").val();
+                let emailDomainSelectVal = $(".email-domain-select").val();
+                let emailDomainInputVal = $(".email-domain-input").val();
+
+                /* 받는사람 빈값 검사 */
+                if (nameVal === "") {
+                    alert("아이디를 입력하세요.");
+                    $('.name-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkName = true;
+                }
+
+                /* 우편 번호 빈값 검사 */
+                if (zipcodeVal === "") {
+                    alert("우편 번호를 입력하세요.");
+                    $('.zipcode-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkZipcode = true;
+                }
+
+                /* 주소 빈값 검사 */
+                if (addrVal === "") {
+                    alert("주소를 입력하세요.");
+                    $('.addr-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkAddr = true;
+                }
+
+                /* 상세 주소 빈값 검사 */
+                if (addrDetailVal === "") {
+                    alert("상세 주소를 입력하세요.");
+                    $('.addr-detail-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkAddrDetail = true;
+                }
+
+                /* 휴대전화 앞번호 빈값 검사 */
+                if (telMiddleVal === "") {
+                    alert("휴대전화를 입력하세요.");
+                    $('.tel-middle-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkTelMiddle = true;
+                }
+
+                /* 휴대전화 뒷번호 빈값 검사 */
+                if (telSuffixVal === "") {
+                    alert("휴대전화를 입력하세요.");
+                    $('.tel-suffix-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkTelSuffix = true;
+                }
+
+                /* 이메일 앞자리 빈값 검사 */
+                if (emailPrefixVal === "") {
+                    alert("이메일을 입력하세요.");
+                    $('.email-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkEmailPrefix = true;
+                }
+
+                /* 이메일 도메인 빈값 검사 */
+                if (emailDomainSelectVal === '0') {
+                    alert("이메일 도메인을 선택하세요.");
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkEmailDomain = true;
+                }
+
+                /* 이메일 직접입력 빈값 검사 */
+                if (emailDomainSelectVal !== '0' && emailDomainInputVal === "") {
+                    alert("이메일을 입력하세요.");
+                    $(".email-domain-input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                } else {
+                    checkEmailDomain = true;
+                }
+
+                /* 휴대전화 전체 유효성 검사 */
+                if (!validateTel(telPrefixVal + telMiddleVal + telSuffixVal)) {
+                    alert("올바른 휴대전화를 입력하세요.");
+                    $(".tel-middle-input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 이메일 도메인 유효성 검사 */
+                if (/[^a-z.]/.test(emailDomainInputVal)) {
+                    alert("올바른 이메일을 입력하세요.");
+                    $(".email-domain-input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                if (checkName && checkZipcode && checkAddr && checkAddrDetail && checkTelMiddle && checkTelSuffix && checkEmailPrefix && checkEmailDomain) {
+                    processPayment();
+                }
+            } else {
+                processPayment();
+            }
+        }
+
+        /* 주문 결제 API */
+        function processPayment() {
+            IMP.request_pay({
+                    pg : 'html5_inicis.INIpayTest',
+                    pay_method : 'card',                                    // 결제 방식
+                    merchant_uid: generateOrderNumber(),                    // 주문 번호
+                    name : "의류",                                           // 상품 이름
+                    amount : 100,                                           // 상품 가격
+                    buyer_email : buyerEmail,                               // 구매자 이메일
+                    buyer_name : buyerName,                                 // 구매자 이름
+                    buyer_tel : buyerTel,                                   // 구매자 전화 번호
+                    buyer_addr : buyerAddr + " " + buyerAddrDetail,         // 구매자 상세 주소
+                    buyer_postcode : buyerZipcode,                          // 구매자 우편 번호
+                },
+                function(rsp) {
+                    // 결제 성공
+                    if (rsp.success) {
+                        let form = $("#orderForm");
+                        // let orderUid = generateOrderNumber(); // 주문 번호 생성
+
+                        let totalProductPrice = 0; // 상품 총 금액
+                        let totalOrderPrice = 0; // 주문 총 금액 (상품 총 금액 + 배송비)
+                        let totalPaymentPrice = 0; // 결제 총 금액 (상품 총 금액 + 배송비 - 포인트 사용 금액)
+                        let deliveryPrice = 3000;
+                        let usePoints = $(".point-use-input").val(); // 사용 포인트 금액
+                        let earnedPoints = 0; // 적립 예정 금액
+                        let productCount = 0; // 주문 상품 개수
+                        let repProductName; // 첫 번째 상품의 상품명
+                        let repProductImageUrl; // 첫 번째 상품의 이미지 url
+
+                        $(".product-info").each(function (index, element) {
+                            let hiddenDataInfoInput = $(element).find(".data-info");
+                            let price = hiddenDataInfoInput.attr("data-price");
+                            let discount = hiddenDataInfoInput.attr("data-discount");
+                            let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
+
+                            // 상품 총 금액 계산
+                            if (discount > 0) {
+                                totalProductPrice += Math.floor((price * (1 - discount)) * orderQuantity);
+                            } else {
+                                totalProductPrice += price * orderQuantity;
+                            }
+
+                            // 대표 상품명, 이미지 구하기
+                            if (index === 0) {
+                                repProductName = hiddenDataInfoInput.attr("data-product-name");
+                                repProductImageUrl = hiddenDataInfoInput.attr("data-product-image-url");
+                            }
+
+                            productCount += 1;
+                        });
+
+                        // 사용 포인트
+                        if ($(".point-use-input").val() <= 0) {
+                            usePoints = 0;
+                        }
+
+                        // 배송비 계산
+                        if (totalProductPrice >= 30000) {
+                            deliveryPrice = 0;
+                        }
+
+                        // 주문 총 금액 계산
+                        totalOrderPrice = totalProductPrice + deliveryPrice;
+
+                        // 총 결제 금액 계산
+                        totalPaymentPrice = totalOrderPrice;
+
+                        // 적립 포인트 계산
+                        earnedPoints = Math.floor(totalPaymentPrice * 0.03);
+
+                        // 포인트를 사용하여 결제하는 경우
+                        if (usePoints > 0) {
+                            totalPaymentPrice = totalOrderPrice - usePoints;
+                            earnedPoints = Math.floor((totalPaymentPrice - usePoints) * 0.03);
+                        }
+
+                        /* 서버로 전송할 form data 채우기 */
+                        $("input[name='orderUid']").val(rsp.merchant_uid);
+                        // $("input[name='orderUid']").val("test");
+                        $("input[name='paymentUid']").val(rsp.imp_uid);
+                        // $("input[name='paymentUid']").val("test");
+                        $("input[name='totalProductPrice']").val(totalProductPrice);
+                        $("input[name='totalOrderPrice']").val(totalProductPrice + deliveryPrice);
+                        $("input[name='totalPaymentPrice']").val(totalPaymentPrice);
+
+                        /* 배송 정보 (최근 배송지 / 직접 입력) 구분 */
+                        if ($(".tab .selected").find("a").hasClass("recent-address-tab-button")) {
+                            $("input[name='name']").val(buyerName);
+                            $("input[name='zipcode']").val(buyerZipcode);
+                            $("input[name='addr']").val(buyerAddr);
+                            $("input[name='addrDetail']").val(buyerAddrDetail);
+                            $("input[name='tel']").val(buyerTel);
+                            $("input[name='email']").val(buyerEmail);
+                        } else {
+                            $("input[name='name']").val($(".name-input").val());
+                            $("input[name='zipcode']").val($(".zipcode-input").val());
+                            $("input[name='addr']").val($(".addr-input").val());
+                            $("input[name='addrDetail']").val($(".addr-detail-input").val());
+                            $("input[name='tel']").val($(".tel-prefix-select").val() + $(".tel-middle-input").val() + $(".tel-suffix-input").val());
+                            let emailDomain;
+                            if ($(".email-domain-select").val() === "custom") {
+                                emailDomain = $(".email-domain-input").val();
+                            } else {
+                                emailDomain = $(".email-domain-select").val();
+                            }
+                            $("input[name='email']").val($(".email-input").val() + "@" + emailDomain);
+                        }
+
+                        $("input[name='earnedPoints']").val(earnedPoints);
+                        $("input[name='usedPoints']").val(usePoints);
+                        $("input[name='productCount']").val(productCount);
+                        $("input[name='repProductName']").val(repProductName);
+                        $("input[name='repProductImage']").val(repProductImageUrl);
+
+                        /* 주문 상품 정보 담긴 input 태그 동적 생성 */
+                        let formContents = '';
+                        $(".product-info").each(function(index, element){
+                            let hiddenDataInfoInput = $(element).find(".data-info");
+                            let productId = hiddenDataInfoInput.attr("data-product-id");
+                            let price = hiddenDataInfoInput.attr("data-price");
+                            let discount = hiddenDataInfoInput.attr("data-discount");
+                            let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
+                            let colorId = hiddenDataInfoInput.attr("data-color-id");
+                            let sizeId = hiddenDataInfoInput.attr("data-size-id");
+                            if (discount > 0) {
+                                price = Math.floor(price * (1 - discount));
+                            }
+
+                            formContents += "<input name='orderProductDtoList[" + index + "].productId' type='hidden' value='" + productId + "'>";
+                            formContents += "<input name='orderProductDtoList[" + index + "].colorId' type='hidden' value='" + colorId + "'>";
+                            formContents += "<input name='orderProductDtoList[" + index + "].sizeId' type='hidden' value='" + sizeId + "'>";
+                            formContents += "<input name='orderProductDtoList[" + index + "].price' type='hidden' value='" + price + "'>";
+                            formContents += "<input name='orderProductDtoList[" + index + "].orderQuantity' type='hidden' value='" + orderQuantity + "'>";
+                        });
+
+                        form.append(formContents);
+                        form.submit();
+                    } else {
+                        // 결제 실패
+                        alert("결제가 취소되었습니다.");
+                    }
+                });
         }
 
         /* 랜덤한 주문 번호를 생성하는 함수 */
@@ -882,23 +1070,15 @@
             // 6자리의 난수
             let randomNumber = generateRandomNumber();
             // 주문번호 생성
-            let orderNumber = todayDate + '-' + randomNumber;
-
-            return orderNumber;
+            return todayDate + '-' + randomNumber;
         }
 
-        /* 이메일 입력창에 회원의 이메일 값을 저장하는 함수 */
-        function initializeEmailInputValues() {
-            // 회원 이메일 값을 출력합니다.
-            let email = [[${member.email}]]; // 회원 이메일 값
-            let emailArr = email.split("@"); // 이메일 주소를 "@" 기준으로 분할
-
-            // 이메일 프리픽스와 도메인을 각각의 입력 필드에 할당
-            $(".email-prefix-input").val(emailArr[0]);
-            $(".email-domain-input").val(emailArr[1]);
+        /* 휴대전화 유효성 검사 */
+        function validateTel(tel){
+            return /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/.test(tel);
         }
 
-        /* 다음 주소 API 연동하는 함수 */
+        /* 다음 주소 연동 API */
         function addressAPI() {
             new daum.Postcode({
                 oncomplete: function (data) {
@@ -936,11 +1116,11 @@
                     }
 
                     // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                    $(".address-input-1").val(data.zonecode);
-                    $(".address-input-2").val(addr);
+                    $(".zipcode-input").val(data.zonecode);
+                    $(".addr-input").val(addr);
                     // 커서를 상세주소 필드로 이동한다.
-                    $(".address-input-3").attr("readonly", false);
-                    $(".address-input-3").focus();
+                    $(".addr-detail-input").attr("readonly", false);
+                    $(".addr-detail-input").focus();
                 }
             }).open();
         }

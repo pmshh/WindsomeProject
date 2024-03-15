@@ -11,6 +11,9 @@ import com.windsome.dto.product.MainPageProductDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.QMainPageProductDTO;
 import com.windsome.entity.*;
+import com.windsome.entity.product.Product;
+import com.windsome.entity.product.QProduct;
+import com.windsome.entity.product.QProductImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.windsome.entity.QProduct.*;
+import static com.windsome.entity.product.QProduct.*;
 
 @RequiredArgsConstructor
 public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {

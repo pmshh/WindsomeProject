@@ -4,18 +4,26 @@ import com.windsome.dto.product.MainPageProductDTO;
 import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.entity.Category;
-import com.windsome.entity.Product;
-import com.windsome.entity.ProductImage;
+import com.windsome.entity.Color;
+import com.windsome.entity.product.Product;
+import com.windsome.entity.product.ProductColor;
+import com.windsome.entity.product.ProductImage;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.repository.category.CategoryRepository;
+import com.windsome.repository.product.InventoryRepository;
+import com.windsome.repository.product.ProductColorRepository;
 import com.windsome.repository.product.ProductRepository;
+import com.windsome.repository.product.ProductSizeRepository;
 import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.service.product.ProductImageService;
+import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -44,6 +52,10 @@ class ProductServiceTest {
     @Mock private ProductImageService productImageService;
     @Mock private CategoryRepository categoryRepository;
     @Mock private FileService fileService;
+    @Mock private ProductColorRepository productColorRepository;
+    @Mock private ProductSizeRepository productSizeRepository;
+    @Mock private InventoryRepository inventoryRepository;
+    @Mock private ModelMapper modelMapper;
 
     @Value("${productImgLocation}")
     private String productImgLocation;
@@ -62,10 +74,14 @@ class ProductServiceTest {
         Category category = new Category();
         category.setId(1L);
 
+        Product product = new Product();
+        product.setId(1L);
+
         List<MultipartFile> productImageFileList = new ArrayList<>();
         productImageFileList.add(new MockMultipartFile("file1.jpg", "file1.jpg", "image/jpeg", "file1".getBytes()));
         productImageFileList.add(new MockMultipartFile("file2.jpg", "file2.jpg", "image/jpeg", "file2".getBytes()));
 
+        when(modelMapper.map(productFormDto, Product.class)).thenReturn(product);
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
         // When
@@ -88,8 +104,12 @@ class ProductServiceTest {
         Category category = new Category();
         category.setId(1L);
 
+        Product product = new Product();
+        product.setId(1L);
+
         List<MultipartFile> productImageFileList = Collections.emptyList();
 
+        when(modelMapper.map(productFormDto, Product.class)).thenReturn(product);
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
         // When
@@ -107,9 +127,8 @@ class ProductServiceTest {
         // Given
         ProductFormDTO productFormDto = new ProductFormDTO();
         productFormDto.setId(1L);
-        productFormDto.setProductName("Test Name");
+        productFormDto.setName("Test Name");
         productFormDto.setPrice(10000);
-        productFormDto.setStockNumber(100);
         productFormDto.setCategoryId(1L);
         List<Long> productImageIds = new ArrayList<>();
         productImageIds.add(1L);
@@ -126,8 +145,9 @@ class ProductServiceTest {
         product.setId(1L);
         Category category = new Category();
         category.setId(1L);
-        when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
+
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(product));
 
         doNothing().when(productImageService).updateProductImage(anyLong(), any());
 
@@ -148,9 +168,9 @@ class ProductServiceTest {
         // Given
         ProductFormDTO productFormDto = new ProductFormDTO();
         productFormDto.setId(1L);
-        productFormDto.setProductName("Test Name");
+        productFormDto.setName("Test Name");
         productFormDto.setPrice(10000);
-        productFormDto.setStockNumber(100);
+//        productFormDto.setStockNumber(100);
         productFormDto.setCategoryId(1L);
 
         List<MultipartFile> productImageFileList = new ArrayList<>();
@@ -211,7 +231,15 @@ class ProductServiceTest {
         Pageable pageable = Pageable.ofSize(10).withPage(0);
         Page<MainPageProductDTO> expectedPage = new PageImpl<>(Collections.singletonList(new MainPageProductDTO()));
 
+        List<ProductColor> productColorList = new ArrayList<>();
+        Color color = new Color();
+        color.setCode("#000000");
+        ProductColor productColor = new ProductColor();
+        productColor.setColor(color);
+        productColorList.add(productColor);
+
         when(productRepository.getMainPageProducts(productSearchDto, pageable)).thenReturn(expectedPage);
+        when(productColorRepository.findAllByProductId(any())).thenReturn(productColorList);
 
         // When
         Page<MainPageProductDTO> resultPage = productService.getMainPageProducts(productSearchDto, pageable);
@@ -241,6 +269,7 @@ class ProductServiceTest {
     @DisplayName("상품 삭제 - 상품 및 상품 이미지가 존재하는 경우")
     void testDeleteProduct_ProductAndProductImageExist() throws Exception {
         // Given
+        Long[] productIds = {1L};
         Long productId = 1L;
         List<ProductImage> productImageList = new ArrayList<>();
         ProductImage productImage = new ProductImage();
@@ -248,15 +277,15 @@ class ProductServiceTest {
         productImageList.add(productImage);
         Product product = new Product();
 
+
         when(productImageRepository.findByProductId(productId)).thenReturn(Optional.of(productImageList));
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
         // When
-        assertDoesNotThrow(() -> productService.deleteProduct(productId));
+        assertDoesNotThrow(() -> productService.deleteProduct(productIds));
 
         // Then
         verify(productRepository, times(1)).delete(product);
-        verify(productImageRepository, times(1)).deleteAll(productImageList);
         verify(fileService, times(productImageList.size())).deleteFile(anyString());
     }
 
@@ -264,10 +293,10 @@ class ProductServiceTest {
     @DisplayName("상품 삭제 - 존재하지 않는 상품 삭제")
     void testDeleteProduct_NonExistingProduct() {
         // Given
-        Long productId = 1L;
+        Long[] productIds = {1L};
 
         // When, Then
-        assertThrows(EntityNotFoundException.class, () -> productService.deleteProduct(productId));
+        assertThrows(EntityNotFoundException.class, () -> productService.deleteProduct(productIds));
     }
 
     @Test

@@ -2,6 +2,10 @@ package com.windsome.entity;
 
 import com.windsome.constant.ProductSellStatus;
 import com.windsome.constant.Role;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.order.Order;
+import com.windsome.entity.order.OrderProduct;
+import com.windsome.entity.product.Product;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.orderProduct.OrderProductRepository;
 import com.windsome.repository.order.OrderRepository;
@@ -48,7 +52,7 @@ class OrderTest {
             productRepository.save(product);
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setProduct(product);
-            orderProduct.setCount(10);
+            orderProduct.setOrderQuantity(10);
             orderProduct.setPrice(1000);
             orderProduct.setOrder(order);
             order.getOrderProducts().add(orderProduct);
@@ -84,7 +88,7 @@ class OrderTest {
         product.setPrice(10000);
         product.setProductDetail("상세 설명");
         product.setProductSellStatus(ProductSellStatus.AVAILABLE);
-        product.setStockNumber(100);
+//        product.setStockNumber(100);
         return product;
     }
 
@@ -96,7 +100,7 @@ class OrderTest {
             productRepository.save(product);
             OrderProduct orderProduct = new OrderProduct();
             orderProduct.setProduct(product);
-            orderProduct.setCount(10);
+            orderProduct.setOrderQuantity(10);
             orderProduct.setPrice(1000);
             orderProduct.setOrder(order);
             order.getOrderProducts().add(orderProduct);

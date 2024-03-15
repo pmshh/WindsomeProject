@@ -38,20 +38,19 @@
                                             <th class="base-table__header-cell" style="width: 61px;" scope="col">수량</th>
                                             <th class="base-table__header-cell" style="width: 111px;" scope="col">상품구매금액</th>
                                             <th class="base-table__header-cell" style="width: 111px;" scope="col">주문처리상태</th>
-                                            <th class="base-table__header-cell" style="width: 180px;" scope="col">취소/교환/반품</th>
                                         </tr>
                                     </thead>
 
                                     <tbody class="base-table__body">
                                         <tr class="base-table__row" th:if="${#lists.isEmpty(orders.getContent())}">
-                                            <td class="base-table__cell base-table__cell--empty" colspan="7">
+                                            <td class="base-table__cell base-table__cell--empty" colspan="6">
                                                 <span class="base-table__message">주문 내역이 없습니다.</span>
                                             </td>
                                         </tr>
 
                                         <th:block th:each="order, status: ${orders.getContent()}">
                                             <tr class="base-table__row" th:each="orderProduct, status: ${order.orderHistProductList}">
-                                                <td class="base-table__cell number" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
+                                                <td class="base-table__cell base-table__cell--order-uid" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
                                                     <span th:text="${order.orderDate}"></span>
                                                     <a class="order-uid" th:href="@{'/orders/' + ${order.orderId}}" th:text="${order.orderUid}"></a>
                                                 </td>
@@ -62,20 +61,20 @@
                                                 </td>
                                                 <td class="base-table__cell left top pl20">
                                                     <a class="base-table__product-name" th:href="${'/product/' + orderProduct.id}" th:text="${orderProduct.name}"></a>
-                                                    <div class="mt5">[옵션: 선택 X]</div>
+                                                    <div class="base-table__option-wrap mt5">
+                                                        [옵션: <span th:text="${orderProduct.colorName}"></span>/<span th:text="${orderProduct.sizeName}"></span> size]
+                                                        <!-- js에서 활용하기 위한 데이터 -->
+                                                        <input type="hidden" class="data-info" th:data-color-id="${orderProduct.colorId}" th:data-size-id="${orderProduct.sizeId}" th:data-color-name="${orderProduct.colorName}" th:data-size-name="${orderProduct.sizeName}">
+                                                    </div>
                                                 </td>
                                                 <td class="base-table__cell">
-                                                    <span th:text="${orderProduct.count}"></span>
+                                                    <span th:text="${orderProduct.orderQuantity}"></span>
                                                 </td>
                                                 <td class="base-table__cell">
                                                     <span th:text="|${#numbers.formatInteger(orderProduct.price, 0, 'COMMA')}원|"></span>
                                                 </td>
                                                 <td class="base-table__cell">
-                                                    <span th:text="${order.orderStatus}"></span>
-                                                </td>
-                                                <td class="base-table__cell" th:if="${status.index == 0}" th:rowspan="${#lists.size(order.orderHistProductList)}">
-                                                    <button th:if="${order.orderStatus.displayName == '배송준비중'}" class="button button--black button--65x30 order-cancel-button" type="button" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문 취소</button>
-                                                    <div th:if="${order.orderStatus.displayName == '결제취소'}">-</div>
+                                                    <span th:text="${orderProduct.orderProductStatus}"></span>
                                                 </td>
                                             </tr>
                                         </th:block>
@@ -160,14 +159,14 @@
 
         function showMessage() {
             let message = [[${message}]];
-            if (message !== null) {
+            if (message) {
                 alert(message);
             }
         }
 
         /* 페이지 이동 함수 */
         function page(page) {
-            location.href = "/orders/" + page;
+            location.href = "/orders?page=" + page;
         }
     </script>
 </body>

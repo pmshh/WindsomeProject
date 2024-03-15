@@ -1,9 +1,9 @@
 package com.windsome.service;
 
-import com.windsome.constant.OrderStatus;
 import com.windsome.dto.member.*;
 import com.windsome.constant.Role;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
+import com.windsome.entity.order.Order;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.service.mail.EmailMessageDto;
@@ -22,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -60,9 +63,9 @@ public class MemberService {
     /**
      * 프로필 수정
      */
-    public void updateMember(Member member, ProfileFormDto profileFormDto) {
-        modelMapper.map(profileFormDto, member);
-        member.setPassword(passwordEncoder.encode(profileFormDto.getPassword()));
+    public void updateMember(Member member, MemberFormDTO memberFormDto) {
+        modelMapper.map(memberFormDto, member);
+        member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
         memberRepository.save(member);
     }
 
@@ -121,7 +124,7 @@ public class MemberService {
      * 비밀번호 찾기 - 회원 정보 조회
      */
     @Transactional(readOnly = true)
-    public String validateUserIdentifier(UpdatePasswordDto updatePasswordDto) {
+    public String validateUserIdentifier(UpdatePasswordDTO updatePasswordDto) {
         return memberRepository.findByUserIdentifierAndNameAndEmail(
                 updatePasswordDto.getUserIdentifier(), updatePasswordDto.getName(), updatePasswordDto.getEmail())
                 .orElseThrow(EntityNotFoundException::new).getUserIdentifier();
@@ -130,7 +133,7 @@ public class MemberService {
     /**
      * 비밀번호 분실 - 비밀번호 초기화
      */
-    public void updatePassword(UpdatePasswordDto updatePasswordDto) {
+    public void updatePassword(UpdatePasswordDTO updatePasswordDto) {
         Member member = memberRepository.findByUserIdentifier(updatePasswordDto.getUserIdentifier());
         member.setPassword(passwordEncoder.encode(updatePasswordDto.getPassword()));
         memberRepository.save(member);
@@ -148,8 +151,18 @@ public class MemberService {
      * 마이 페이지 - 회원 총 주문 수 조회
      */
     @Transactional(readOnly = true)
-    public Long getMemberOrderStatusCounts(Member member) {
-        return orderRepository.countByMemberIdAndOrderStatus(member.getId(), OrderStatus.PROCESSING);
+    public Map<String, Integer> getMemberOrderStatusCounts(Member member) {
+        List<Order> orders = orderRepository.findByMemberId(member.getId());
+
+        Map<String, Integer> statusCounts = new HashMap<>();
+
+        // 주문 상태별로 개수를 계산
+        for (Order order : orders) {
+            String status = order.getOrderStatus().getDisplayName();
+            statusCounts.put(status, statusCounts.getOrDefault(status, 0) + 1);
+        }
+
+        return statusCounts;
     }
 
     /**

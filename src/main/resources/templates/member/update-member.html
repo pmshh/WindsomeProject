@@ -23,7 +23,7 @@
 
                     <div class="section-body update-member-body mt-5">
 
-                        <form class="profile-form" th:action="@{'/members/' + ${memberId} + '/update'}" th:object="${profileFormDto}" method="post">
+                        <form class="profile-form" th:action="@{'/members/' + ${memberId} + '/update'}" th:object="${memberForm}" method="post">
                             <div class="table-wrapper">
                                 <table class="base-table base-table--two-columns base-table--no-border-sides">
                                     <colgroup>
@@ -96,7 +96,7 @@
                                                     <input class="base-table__input email-prefix-input" th:field="*{email}" type="text">
                                                     @
                                                     <input class="base-table__input email-domain-input" type="text">
-                                                    <select class="base-table__select email-domain-select" name="email-domain-select">
+                                                    <select class="base-table__select base-table__select--email-domain email-domain-select" name="email-domain-select">
                                                         <option value="1" selected>직접입력</option>
                                                         <option value="naver.com">naver.com</option>
                                                         <option value="hanmail.net">hanmail.net</option>
@@ -166,7 +166,7 @@
         let checkMail = false;                                                      // 이메일
         let checkMailConfirm = false;                                               // 이메일 인증번호 확인
         let checkAddress = false                                                    // 주소
-        let beforeEmail = [[${profileFormDto.email}]];                              // 기존 이메일
+        let beforeEmail = [[${memberForm.email}]];                              // 기존 이메일
 
         $(function () {
             showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
@@ -200,7 +200,7 @@
         /* 이메일 입력창에 회원의 이메일 값을 저장하는 함수 */
         function initializeEmailInputValues() {
             // 회원 이메일 값을 출력합니다.
-            let email = [[${profileFormDto.email}]];
+            let email = [[${memberForm.email}]];
             let emailArr = email.split("@");
 
             // 이메일 프리픽스와 도메인을 각각의 입력 필드에 할당
@@ -211,7 +211,7 @@
         /* 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수 */
         function initializeTelInputValues() {
             // 회원의 휴대전화 저장
-            let tel = [[${profileFormDto.tel}]];
+            let tel = [[${memberForm.tel}]];
 
             // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
             let telPrefix = tel.substring(0, 3);

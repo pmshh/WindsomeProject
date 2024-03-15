@@ -154,7 +154,9 @@
                                             </td>
                                             <td class="base-table__cell left top pl20">
                                                 <a class="base-table__product-name" th:href="${'/product/' + orderProduct.productId}"th:text="${orderProduct.productName}"></a>
-                                                <div class="mt5">[옵션: 선택 X]</div>
+                                                <div class="base-table__option-wrap mt5">
+                                                    [옵션: <span th:text="${orderProduct.colorName}"></span>/<span th:text="${orderProduct.sizeName}"></span> size]
+                                                </div>
                                             </td>
                                             <td class="base-table__cell order-count">
                                                 <span th:text="${orderProduct.orderQuantity}"></span>
@@ -163,7 +165,7 @@
                                                 <span class="txtBold" th:text="|${#numbers.formatInteger(orderProduct.productPrice, 0, 'COMMA')}원|"></span>
                                             </td>
                                             <td class="base-table__cell">
-                                                <span th:text="${orderProduct.orderProductStatus.name == 'ORDER' ? '배송준비중' : ''}"></span>
+                                                <span th:text="${orderProduct.orderProductStatus}"></span>
                                             </td>
                                             <td class="base-table__cell">
                                                 -
@@ -177,8 +179,8 @@
                                     <tfoot class="base-table__footer">
                                         <tr class="base-table__row">
                                             <td class="base-table__cell" colspan="7">
-                                                상품구매금액 <strong th:text="${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 2500), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}"></strong>
-                                                + 배송비 <span th:text="${orderDetail.totalOrderPrice >= 30000 ? 0 : '2,500'}"></span>
+                                                상품구매금액 <strong th:text="${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 3000), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}"></strong>
+                                                + 배송비 <span th:text="${orderDetail.totalOrderPrice >= 30000 ? 0 : '3,000'}"></span>
                                                 = 합계 : <strong class="ml10 txtBold txt18" th:text="|${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></strong>
                                             </td>
                                         </tr>
@@ -211,11 +213,11 @@
                                         </tr>
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" scope="row">주소</th>
-                                            <td class="base-table__cell" th:text="${orderDetail.address}"></td>
+                                            <td class="base-table__cell" th:text="${orderDetail.addr + ' ' + orderDetail.addrDetail}"></td>
                                         </tr>
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" scope="row">휴대전화</th>
-                                            <td class="base-table__cell" th:text="${orderDetail.tel}"></td>
+                                            <td class="base-table__cell tel" th:text="${orderDetail.tel}"></td>
                                         </tr>
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" scope="row">배송메시지</th>
@@ -244,7 +246,7 @@
                             <ul class="">
                                 <li>
                                     <strong class="term" >상품금액</strong>
-                                    <span class="desc" th:text="|${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 2500), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></span>
+                                    <span class="desc" th:text="|${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 3000), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></span>
                                 </li>
                                 <li class="displaynone">
                                     <strong class="term">부가세</strong>
@@ -252,7 +254,7 @@
                                 </li>
                                 <li>
                                     <strong class="term">배송비</strong>
-                                    <span class="desc" th:text="|${orderDetail.totalOrderPrice >= 30000 ? 0 : '2,500'}원|"></span>
+                                    <span class="desc" th:text="|${orderDetail.totalOrderPrice >= 30000 ? 0 : '3,000'}원|"></span>
                                 </li>
                                 <li class="">
                                     <strong class="term">지역별 배송비</strong>
@@ -273,13 +275,32 @@
     <div th:replace="/layouts/default-layout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script th:inline="javascript">
-        $(".show-payment-detail").click(function () {
-            $(".total-detail-container").toggleClass("displaynone");
+        $(function () {
+            initializePhoneNumberInput(); // 구매자 휴대 전화 번호에 하이픈을 추가하는 함수
+
+            /* 결제 정보 상세 내역 보기 버튼 클릭 이벤트 처리 */
+            $(".show-payment-detail").click(showPaymentDetails);
+
+            /* 옵션 변경 요소 닫기 버튼 클릭 이벤트 처리 */
+            $(".close").click(closeOptionScreen);
         });
 
-        $(".close").click(function () {
+        /* 결제 정보 상세 내역 요소 토글 함수 */
+        function showPaymentDetails() {
+            $(".total-detail-container").toggleClass("displaynone");
+        }
+
+        /* 옵션 변경 화면 닫기 함수 */
+        function closeOptionScreen() {
             $(".total-detail-container").addClass("displaynone");
-        });
+        }
+
+        /* 휴대 전화 번호에 하이픈을 추가하는 함수 */
+        function initializePhoneNumberInput() {
+            let tel = [[${orderDetail.tel}]];
+            tel = tel.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+            $(".tel").text(tel);
+        }
     </script>
 </body>
 

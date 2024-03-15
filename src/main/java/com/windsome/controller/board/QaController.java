@@ -2,7 +2,7 @@ package com.windsome.controller.board;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.qa.*;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Qa;
 import com.windsome.repository.board.qa.QaRepository;
 import com.windsome.service.board.QaService;
@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 @Controller

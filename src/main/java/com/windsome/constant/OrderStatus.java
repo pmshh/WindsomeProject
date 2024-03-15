@@ -13,12 +13,22 @@ public enum OrderStatus {
     EXCHANGE_REQUESTED("교환요청"),
     EXCHANGED("교환완료"),
     REFUND_REQUESTED("환불요청"),
-    REFUNDED("환불완료");
+    REFUNDED("환불완료"),
+    INDIVIDUAL_PROCESSING("개별처리");
 
     private final String displayName;
 
     OrderStatus(String displayName) {
         this.displayName = displayName;
+    }
+
+    public static OrderStatus valueOfDisplayName(String displayName) {
+        for (OrderStatus status : OrderStatus.values()) {
+            if (status.displayName.equals(displayName)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("No constant with displayName " + displayName + " found");
     }
 
     @Override

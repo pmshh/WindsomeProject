@@ -1,12 +1,14 @@
 package com.windsome.controller.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.windsome.dto.admin.PageDto;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.service.AdminService;
 import com.windsome.service.CategoryService;
-import com.windsome.service.ProductService;
+import com.windsome.service.product.InventoryService;
+import com.windsome.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class AdminProductController {
     private final ProductService productService;
     private final AdminService adminService;
     private final CategoryService categoryService;
+    private final InventoryService inventoryService;
 
     /**
      * 상품 관리 - 상품 조회
@@ -71,6 +74,7 @@ public class AdminProductController {
             redirectAttributes.addFlashAttribute("message", "상품이 등록되었습니다.");
             return "redirect:/admin/products";
         } catch (Exception e) {
+            model.addAttribute("productFormDto", productFormDto);
             model.addAttribute("message", "상품 등록 중 에러가 발생하였습니다.");
             return "admin/product/product-create";
         }
@@ -83,6 +87,7 @@ public class AdminProductController {
     public String showProductDetail(PageDto pageDto, @PathVariable("productId") Long productId, Model model) {
         model.addAttribute("type", "detail");
         try {
+            model.addAttribute("inventories", inventoryService.getInventories(productId));
             model.addAttribute("productFormDto", productService.getProductFormDto(productId));
             model.addAttribute("pageDto", pageDto);
         } catch (EntityNotFoundException e) {
@@ -101,6 +106,7 @@ public class AdminProductController {
     public String showEditProductForm(PageDto pageDto, @PathVariable("productId") Long productId, Model model) {
         model.addAttribute("type", "update");
         try {
+            model.addAttribute("inventories", inventoryService.getInventories(productId));
             model.addAttribute("productFormDto", productService.getProductFormDto(productId));
             model.addAttribute("pageDto", pageDto);
         } catch (EntityNotFoundException e) {
@@ -156,10 +162,10 @@ public class AdminProductController {
     /**
      * 상품 관리 - 상품 삭제
      */
-    @DeleteMapping("/products/{productId}")
-    public ResponseEntity<Object> deleteProduct(@PathVariable("productId") Long itemId) {
+    @DeleteMapping("/products/delete")
+    public ResponseEntity<String> deleteProducts(@RequestBody Long[] productIds) {
         try {
-            productService.deleteProduct(itemId);
+            productService.deleteProduct(productIds);
             return ResponseEntity.ok().body("상품이 삭제되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("일치하는 상품 정보가 없습니다.");
@@ -172,5 +178,21 @@ public class AdminProductController {
     @GetMapping("/products/categories")
     public ResponseEntity<String> fetchProductCategories() throws Exception {
         return ResponseEntity.ok().body(categoryService.fetchProductCategories());
+    }
+
+    /**
+     * 상품 관리 - 사이즈 조회
+     */
+    @GetMapping("/products/sizes")
+    public ResponseEntity<String> getProductSizes() throws JsonProcessingException {
+        return ResponseEntity.ok().body(adminService.getProductSizes());
+    }
+
+    /**
+     * 상품 관리 - 사이즈 조회
+     */
+    @GetMapping("/products/colors")
+    public ResponseEntity<String> getProductColors() throws JsonProcessingException {
+        return ResponseEntity.ok().body(adminService.getProductColors());
     }
 }

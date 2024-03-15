@@ -14,7 +14,7 @@
 
             <!-- section start -->
             <section class="admin-section-area">
-                <div class="container-fluid">
+                <div class="container">
 
                     <div class="section-header">
                         <h2 th:if="${type} == 'detail'">상품 상세</h2>
@@ -22,14 +22,13 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section-body product-form-body">
-                        <!-- 상품 업데이트 폼 -->
-                        <form th:if="${type == 'update' || type == 'detail'}" id="updateForm" th:action="@{'/admin/products/' + ${productFormDto.id}}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
+                    <div class="section-body product-form-body row">
 
+                        <form class="col-12 col-xl-8" th:if="${type == 'update' || type == 'detail'}" id="updateForm" th:action="@{'/admin/products/' + ${productFormDto.id}}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
                             <div class="table-wrapper">
-                                <table class="base-table base-table--two-columns base-table--no-border-sides">
+                                <table class="base-table base-table--two-columns">
                                    <colgroup>
-                                       <col style="width:200px;">
+                                       <col style="width:130px;">
                                        <col style="width: auto;">
                                    </colgroup>
                                    <tbody class="base-table__body">
@@ -58,10 +57,10 @@
                                                <label>카테고리 <span class="required-field">*</span></label>
                                            </th>
                                            <td class="base-table__cell">
-                                               <select class="base-table__select base-table__select--big parent-cate-select" th:if="${type == 'update'}">
+                                               <select class="base-table__select parent-cate-select" th:if="${type == 'update'}">
                                                    <option selected value="0">선택</option>
                                                </select>
-                                               <select class="base-table__select base-table__select--big child-cate-select" th:if="${type == 'update'}"  th:field="*{categoryId}">
+                                               <select class="base-table__select child-cate-select" th:if="${type == 'update'}"  th:field="*{categoryId}">
                                                    <option selected value="0">선택</option>
                                                </select>
 
@@ -75,11 +74,11 @@
                                        </tr>
                                        <tr class="base-table__row">
                                            <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{productName}">상품명 <span class="required-field">*</span></label>
+                                               <label th:for="*{name}">상품명 <span class="required-field">*</span></label>
                                            </th>
                                            <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--big name-input" th:if="${type == 'update'}" type="text" th:field="*{productName}">
-                                               <input class="base-table__input base-table__input--big name-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{productName}">
+                                               <input class="base-table__input base-table__input--w100p name-input" th:if="${type == 'update'}" type="text" th:field="*{name}">
+                                               <input class="base-table__input base-table__input--w100p name-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{name}">
                                            </td>
                                        </tr>
                                        <tr class="base-table__row">
@@ -87,8 +86,8 @@
                                                <label th:for="*{price}">가격 <span class="required-field">*</span></label>
                                            </th>
                                            <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--big price-input" th:if="${type == 'update'}" type="text" th:field="*{price}">
-                                               <input class="base-table__input base-table__input--big price-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{price}">
+                                               <input class="base-table__input base-table__input--w100p price-input" th:if="${type == 'update'}" type="text" th:field="*{price}">
+                                               <input class="base-table__input base-table__input--w100p price-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{price}">
                                            </td>
                                        </tr>
                                        <tr class="base-table__row">
@@ -96,19 +95,59 @@
                                                <label th:for="*{discount}">할인율 <span class="required-field">*</span></label>
                                            </th>
                                            <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--big discount-interface" th:if="${type == 'update'}" maxlength="2" th:value="*{discount}">
-                                               <input class="base-table__input base-table__input--big discount-interface"  th:if="${type == 'detail'}" readonly maxlength="2" th:value="*{discount}">
-                                               <input class="base-table__input base-table__input--big discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
-                                               <span class="displayblock discount-text">할인 가격 : <span class="discount-price"></span></span>
+                                               <input class="base-table__input base-table__input--w100p discount-interface" th:if="${type == 'update'}" maxlength="2" th:value="*{discount}">
+                                               <input class="base-table__input base-table__input--w100p discount-interface"  th:if="${type == 'detail'}" readonly maxlength="2" th:value="*{discount}">
+                                               <input class="base-table__input base-table__input--w100p discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
+                                               <span class="displayblock">할인 가격 : <span class="discounted-price"></span></span>
                                            </td>
                                        </tr>
                                        <tr class="base-table__row">
                                            <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{stockNumber}">재고 <span class="required-field">*</span></label>
+                                               <label>옵션 <span class="required-field">*</span></label>
                                            </th>
                                            <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--big stock-number-input"  th:if="${type == 'update'}" th:field="*{stockNumber}">
-                                               <input class="base-table__input base-table__input--big stock-number-input"  th:if="${type == 'detail'}" readonly th:field="*{stockNumber}">
+                                               <div class="d-flex option-select-wrapper">
+                                                   <th:block th:if="${type == 'update'}">
+                                                       <select class="base-table__select--big size-select me-1">
+                                                           <option value="0" selected>선택(사이즈)</option>
+                                                       </select>
+                                                       <select class="base-table__select--big color-select me-1">
+                                                           <option value="0" selected>선택(색상)</option>
+                                                       </select>
+                                                       <button class="button button--white button--90x30 add-option-button" type="button">옵션 추가</button>
+                                                       <button class="button button--white button--90x30 option-reset-btn" type="button">옵션 초기화</button>
+                                                   </th:block>
+
+                                                   <th:block th:if="${type == 'detail'}">
+                                                       <select class="base-table__select--big size-select me-1" disabled>
+                                                           <option value="0" selected>선택(사이즈)</option>
+                                                       </select>
+                                                       <select class="base-table__select--big color-select me-1" disabled>
+                                                           <option value="0" selected>선택(색상)</option>
+                                                       </select>
+                                                   </th:block>
+                                               </div>
+                                               <div class="displaynone option-table mt-2">
+                                                   <table>
+                                                       <colgroup>
+                                                           <col style="width: 70px">
+                                                           <col style="width: auto">
+                                                           <col style="width: 150px">
+                                                           <col style="width: 150px">
+                                                       </colgroup>
+                                                       <thead>
+                                                           <tr>
+                                                               <th scope="col">크기</th>
+                                                               <th scope="col">색상</th>
+                                                               <th scope="col">재고</th>
+                                                               <th scope="col">선택</th>
+                                                           </tr>
+                                                       </thead>
+                                                       <tbody class="option-table-body">
+                                                            <!-- 동적으로 태그 생성 -->
+                                                       </tbody>
+                                                   </table>
+                                               </div>
                                            </td>
                                        </tr>
                                        <tr class="base-table__row">
@@ -120,28 +159,28 @@
                                                <textarea th:if="${type == 'detail'}" th:field="*{productDetail}" disabled></textarea>
                                            </td>
                                        </tr>
-                                       <tr class="base-table__row" th:if="${type == 'update'}" th:each="productImageDto, status: ${productFormDto.productImageDTOList}">
+                                       <tr class="base-table__row" th:if="${type == 'update'}" th:each="productImage, status: ${productFormDto.productImageDTOList}">
                                            <th class="base-table__header-cell" scope="row">
                                                <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
                                            </th>
                                            <td class="base-table__cell">
-                                               <input class="fake-input" type="text" th:value="${not #strings.isEmpty(productImageDto.originalImageName)} ? ${productImageDto.originalImageName} : '상품 이미지 ' + ${status.index+1}">
+                                               <input class="fake-input" type="text" th:value="${not #strings.isEmpty(productImage.originalImageName)} ? ${productImage.originalImageName} : '상품 이미지 ' + ${status.index+1}">
                                                <input class="real-input" type="file" name="productImageFile" th:id="${'img' + status.index+1}">
                                                <label class="button button--white button--90x40 find-file" th:for="${'img' + status.index+1}">파일 찾기</label>
-                                               <button class="button button--black button--90x40 del-file" type="button" th:data-index="${status.index+1}" th:data-productImageId="${productImageDto.id}">삭제</button>
-                                               <input type="hidden" name="productImageIds" th:value="${productImageDto.id}">
+                                               <button class="button button--black button--90x40 file-delete-btn" type="button" th:data-index="${status.index + 1}" th:data-product-image-id="${productImage.id}" th:data-server-image-name="${productImage.serverImageName}">삭제</button>
+                                               <input type="hidden" name="productImageIds" th:value="${productImage.id}">
                                            </td>
                                        </tr>
 
                                        <th:block th:if="${type == 'detail'}">
-                                           <tr class="base-table__row" th:each="productImageDto, status: ${productFormDto.productImageDTOList}">
+                                           <tr class="base-table__row" th:each="productImage, status: ${productFormDto.productImageDTOList}">
                                                <th class="base-table__header-cell" scope="row">
                                                    <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
                                                </th>
                                                <td class="base-table__cell">
-                                                   <input class="fake-input" type="text" readonly="readonly" th:value="${not #strings.isEmpty(productImageDto.originalImageName)} ? ${productImageDto.originalImageName} : '상품 이미지 ' + ${status.index+1}">
+                                                   <input class="fake-input" type="text" readonly="readonly" th:value="${not #strings.isEmpty(productImage.originalImageName)} ? ${productImage.originalImageName} : '상품 이미지 ' + ${status.index+1}">
                                                    <input type="file" class="real-input" name="productImageFile" th:id="${'img' + status.index+1}" readonly="readonly">
-                                                   <input type="hidden" name="productImageIds" th:value="${productImageDto.id}">
+                                                   <input type="hidden" name="productImageIds" th:value="${productImage.id}">
                                                </td>
                                            </tr>
                                        </th:block>
@@ -150,10 +189,10 @@
                             </div>
 
                             <div class="btn-box">
-                                <button th:if="${type == 'detail'}" class="button button--black button--130x40 modify-btn" type="button">상품 수정</button>
-                                <button th:if="${type == 'detail'}" class="button button--white button--130x40 list-btn" type="button">상품 목록</button>
-                                <button th:if="${type == 'update'}" class="button button--black button--130x40 save-btn" type="button">저장</button>
-                                <button th:if="${type == 'update'}" class="button button--white button--130x40 cancel-btn" type="button">취소</button>
+                                <button th:if="${type == 'detail'}" class="button button--black button--130x40 go-to-edit-button" type="button">상품 수정</button>
+                                <button th:if="${type == 'detail'}" class="button button--white button--130x40 back-to-list-button" type="button">상품 목록</button>
+                                <button th:if="${type == 'update'}" class="button button--black button--130x40 product-update-button" type="button">저장</button>
+                                <button th:if="${type == 'update'}" class="button button--white button--130x40 cancel-button" type="button">취소</button>
                             </div>
                         </form>
                     </div>
@@ -182,252 +221,440 @@
         let updateForm = $("#updateForm");
 
         $(function () {
-            initializeClassicEditor();
-            initializeFileInput();
-            initializeSaveButton();
-            initializeCategoryOptions();
-            initializeMoveButtons();
-            setDefaultDiscount();
-            initializeDiscountInput();
-            initializePriceInput();
+            initializeClassicEditor(); // 위지웍 에디터 초기화
+            initializeProductSizeOptions(); // 상품 사이즈 option 태그 동적 생성
+            initializeProductColorOptions(); // 상품 색상 option 태그 동적 생성
+            initializeCategoryOptions(); // 카테고리 option 태그 동적 생성
+            initializeDiscountValues(); // 할인율, 할인 가격 설정
+            loadProductOptions(); // 상품의 기존 옵션 값을 로드하고 화면에 보여주는 함수
 
-            /* 위지웍 에디터 초기화 */
-            function initializeClassicEditor() {
-                ClassicEditor.create(document.querySelector('.text-editor'))
-                    .catch(error => {
-                        console.error(error);
+            /* 서버 전송용 파일 업로드 입력창 이벤트 처리 */
+            $(".real-input").change(validateFile);
+
+            /* 파일 삭제 버튼 클릭 이벤트 처리 */
+            $(".file-delete-btn").click(deleteFile);
+
+            /* 상품 저장 버튼 클릭 이벤트 처리 */
+            $(".product-update-button").click(updateProduct);
+
+            /* 수정 버튼 클릭 이벤트 처리 */
+            $(".go-to-edit-button").click(goToEditProductPage);
+
+            /* 상품 목록, 취소 버튼 클릭 이벤트 처리 */
+            $(".back-to-list-button, .cancel-button").click(goToManageProductsPage);
+
+            /* 할인율, 가격 입력창 이벤트 처리 */
+            $(".discount-interface, .price-input").on("propertychange change keyup paste input", updateDiscountPrice);
+
+            /* 옵션 초기화 버튼 클릭 이벤트 처리 */
+            $(".option-reset-btn").click(clearAllOptionTables);
+
+            /* 옵션 추가 버튼 클릭 이벤트 처리 */
+            $(".add-option-button").click(addProductOption);
+
+            /* 옵션 삭제 버튼 클릭 이벤트 처리 */
+            $(document).on("click", ".option-delete-btn", deleteProductOption);
+        });
+
+        /* 위지웍 에디터 초기화 함수 */
+        function initializeClassicEditor() {
+            ClassicEditor.create(document.querySelector('.text-editor'))
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        /* 상품 사이즈 option 태그 동적 생성 함수 */
+        function initializeProductSizeOptions() {
+            $.ajax({
+                url: "/admin/products/sizes",
+                type: "get",
+                success: function (res) {
+                    let sizeList = JSON.parse(res);
+                    let sizeSelectElement = $(".size-select");
+
+                    $.each(sizeList, function(index, item) {
+                        let optionElement = $("<option></option>").attr("value", item.id).text(item.name);
+                        sizeSelectElement.append(optionElement);
                     });
-            }
+                },
+            });
+        }
 
-            /* 파일 유효성 검사 */
-            function initializeFileInput() {
-                $(".real-input").on("change", function () {
-                    let fileName = $(this).val().split("\\").pop();
-                    let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+        /* 상품 색상 option 태그 동적 생성 함수 */
+        function initializeProductColorOptions() {
+            $.ajax({
+                url: "/admin/products/colors",
+                type: "get",
+                success: function (res) {
+                    let colorList = JSON.parse(res);
+                    let colorSelectElement = $(".color-select");
 
-                    if (!["jpg", "jpeg", "gif", "png", "bmp"].includes(fileExt)) {
-                        alert("이미지 파일만 등록이 가능합니다.");
-                        return;
+                    $.each(colorList, function(index, item) {
+                        let optionElement = $("<option></option>").attr("value", item.id).text(item.name);
+                        optionElement.data("code", item.code);
+                        colorSelectElement.append(optionElement);
+                    });
+                },
+            })
+        }
+
+        /* 카테고리 option 태그 동적 생성 함수 */
+        function initializeCategoryOptions() {
+            let parentId = 0;
+            let childCateId = [[${productFormDto?.categoryId}]];
+            let parentCate = $(".parent-cate-select");
+            let childCate = $(".child-cate-select");
+
+            $.ajax({
+                url: "/admin/products/categories",
+                type: "GET",
+                success: function (res) {
+                    let cateList = JSON.parse(res);
+
+                    let cate1Arr = cateList.filter(cate => cate.tier === "1");
+                    let cate2Arr = cateList.flatMap(cate => cate.children.filter(child => child.tier === "2")
+                        .map(child => ({ id: child.id, name: child.name, parent: child.parent })));
+
+                    cate1Arr.forEach(cate1 => parentCate.append("<option value='" + cate1.id + "'>" + cate1.name + "</option>"));
+                    parentId = childCateId >= 500 ? 500 : childCateId >= 400 ? 400 : childCateId >= 300 ? 300 : childCateId >= 200 ? 200 : childCateId >= 100 ? 100 : 0;
+                    cate2Arr.filter(cate2 => cate2.parent === parentId).forEach(cate2 => childCate.append("<option value='" + cate2.id + "'>" + cate2.name + "</option>"));
+
+                    /* 상품 수정 - 기존 카테고리 값 설정 */
+                    if (childCateId !== null) {
+                        let parentVal = Math.floor(childCateId / 100) * 100;
+                        $('.parent-cate-select').val(parentVal).prop("selected", true);
+                        $('.child-cate-select').val(childCateId === 400 ? '0' : childCateId).prop("selected", true);
                     }
 
-                    $(this).siblings(".fake-input").val(fileName);
-                });
-
-                /* 이미지 삭제 버튼 */
-                $(".del-file").click(function () {
-                    let productImgId = $(this).attr("data-productImgId");
-                    if (confirm("이미지를 삭제하시겠습니까?")) {
-                        $.ajax({
-                            url: "/admin/products/" + productImgId,
-                            type: "patch",
-                            success(res) {
-                                alert(res);
-                                $(this).siblings(".fake-input").val("상품 이미지 " + $(this).attr("data-index"));
-                                $(this).siblings(".real-input").val("delete");
-                            },
-                            error(request) {
-                                alert(request.responseText);
-                            }
+                    /* 대분류 option 변경 시 중분류 option 추가 */
+                    parentCate.on("change", function () {
+                        let parentSelectVal = Number($(this).find("option:selected").val());
+                        // 중분류 option 초기화 (단, 중분류가 존재하지 않는 대분류를 선택했을 시, 대분류 값을 중분류 값에 넣음)
+                        childCate.children().remove();
+                        childCate.append("<option value='" + (parentSelectVal === 400 ? '400' : '0') + "'>선택</option>");
+                        // 중분류 option 추가
+                        cate2Arr.filter(cate => cate.parent === parentSelectVal).forEach(cate => {
+                            childCate.append("<option value='" + cate.id + "'>" + cate.name + "</option>");
                         });
-                    }
-                    return false;
-                });
+                    });
+                },
+                error: function (request) {
+                    alert(request.responseText);
+                }
+            });
+        }
 
-                /* 파일 업로드 취소 버튼 */
-                $(".img-cancel-btn").click(function () {
-                    $(this).siblings(".fake-input").val("상품 이미지 " + $(this).attr("data-index"));
-                    $(this).siblings(".real-input").val("");
-                });
+        /* 상품 수정 함수 */
+        function updateProduct() {
+            let form = $("#updateForm");
+
+            // 유효성 검사 통과 유무 변수
+            let isValidated = true;
+
+            let productSellStatusVal = $(".sell-status-select").val();
+            let parentCateVal = $(".parent-cate-select").val();
+            let childCateVal = $(".child-cate-select").val();
+            let productNmVal = $(".name-input").val();
+            let priceVal = $(".price-input").val();
+            let discountVal = $(".discount-interface").val();
+            let stockNumberVal = $(".stock-number-input").val();
+            let productDetailVal = $("p").html();
+
+            if (productSellStatusVal === 'none') {
+                alert("판매 상태를 선택하세요.");
+                $('.sell-status-select').focus();
+                window.scrollTo(0, 0);
+                isValidated = false;
+                return false;
             }
 
-            /* 상품 등록, 수정 버튼 초기화 */
-            function initializeSaveButton() {
-                let form = $("#updateForm");
-                $(".save-btn").on("click", function (e) {
-                    e.preventDefault();
-                    validateAndSubmitForm(form);
-                });
+            if (parentCateVal === '0') {
+                alert("카테고리를 선택하세요.");
+                $('.parent-cate-select').focus();
+                window.scrollTo(0, 0);
+                isValidated = false;
+                return false;
             }
 
-            function validateAndSubmitForm(form) {
-                let productSellStatusVal = $(".sell-status-select").val();
-                let parentCateVal = $(".parent-cate-select").val();
-                let childCateVal = $(".child-cate-select").val();
-                let productNmVal = $(".name-input").val();
-                let priceVal = $(".price-input").val();
-                let discountVal = $(".discount-interface").val();
-                let stockNumberVal = $(".stock-number-input").val();
-                let productDetailVal = $("p").html();
+            if (parentCateVal !== '400' && childCateVal === '0') {
+                alert("카테고리를 선택하세요.");
+                $('.child-cate-select').focus();
+                window.scrollTo(0, 0);
+                isValidated = false;
+                return false;
+            }
 
-                if (productSellStatusVal === 'none') {
-                    alert("판매 상태를 선택하세요.");
-                    $('.sell-status-select').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
+            if (productNmVal === '') {
+                alert("상품명을 입력하세요.");
+                $('.name-input').focus();
+                window.scrollTo(0, 0);
+                isValidated = false;
+                return false;
+            }
 
-                if (parentCateVal === '0') {
-                    alert("카테고리를 선택하세요.");
-                    $('.parent-cate-select').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
+            if (priceVal === '') {
+                alert("가격을 입력하세요.");
+                $('.price-input').focus();
+                window.scrollTo(0, 0);
+                isValidated = false;
+                return false;
+            }
 
-                if (parentCateVal !== '400' && childCateVal === '0') {
-                    alert("카테고리를 선택하세요.");
-                    $('.child-cate-select').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
+            if (discountVal === '') {
+                alert("할인율을 입력하세요.");
+                $('.discount-interface').focus();
+                window.scrollTo(0, 0);
+                isValidated = false;
+                return false;
+            }
 
-                if (productNmVal === '') {
-                    alert("상품명을 입력하세요.");
-                    $('.name-input').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
+            if (productDetailVal === '<br data-cke-filler="true">') {
+                alert("상품 상세 내용을 입력하세요.");
+                $('.ck').focus();
+                let scrollTop = $('.ck').offset().top - 300;
+                $(window).scrollTop(scrollTop);
+                isValidated = false;
+                return false;
+            }
 
-                if (priceVal === '') {
-                    alert("가격을 입력하세요.");
-                    $('.price-input').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
-
-                if (discountVal === '') {
-                    alert("할인율을 입력하세요.");
-                    $('.discount-interface').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
-
-                if (stockNumberVal === "") {
+            $(".quantity-input").each(function () {
+                if ($(this).val() === "") {
                     alert("재고를 입력하세요.");
-                    $('.stock-number-input').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
+                    $(this).focus();
 
-                if (productDetailVal === '<br data-cke-filler="true">') {
-                    alert("상품 상세 내용을 입력하세요.");
-                    $('#product-detail-textarea').focus();
-                    window.scrollTo(0, 0);
-                    return false;
-                }
+                    let scrollTop = $(this).offset().top - 400;
+                    $(window).scrollTop(scrollTop);
 
-                if (parentCateVal === '400') {
-                    let childCate = $(".child-cate-select");
-                    childCate.append("<option value='400'>선택</option>");
-                    childCate.val(400);
+                    isValidated = false;
+                    return false; // 반복 중지
                 }
+            });
+
+            if (parentCateVal === '400') {
+                let childCate = $(".child-cate-select");
+                childCate.append("<option value='400'>선택</option>");
+                childCate.val(400);
+            }
+
+            if (isValidated) {
+                $(".option-table-body").find('tr').each(function (index) {
+                    let sizeVal = $(this).find('.size-input').val();
+                    let colorVal = $(this).find('.color-input').val();
+                    let quantityVal = $(this).find('.quantity-input').val();
+
+                    form.append("<input type='hidden' name='optionDTOList[" + index + "].sizeId' value='" + sizeVal + "'>");
+                    form.append("<input type='hidden' name='optionDTOList[" + index + "].colorId' value='" + colorVal + "'>");
+                    form.append("<input type='hidden' name='optionDTOList[" + index + "].quantity' value='" + quantityVal + "'>");
+                });
+
                 form.submit();
             }
+        }
 
-            /* 카테고리 초기화 (상품 수정의 경우 기존 카테고리 값 셋팅) */
-            function initializeCategoryOptions() {
-                let parentId = 0;
-                let childCateId = [[${productFormDto?.categoryId}]];
-                let parentCate = $(".parent-cate-select");
-                let childCate = $(".child-cate-select");
+        /* 파일 유효성 검사 함수 */
+        function validateFile() {
+            let fileName = $(this).val().split("\\").pop();
+            let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
-                $.ajax({
-                    url: "/admin/products/categories",
-                    type: "GET",
-                    success: function (res) {
-                        let cateList = JSON.parse(res);
+            if (!["jpg", "jpeg", "gif", "png", "bmp"].includes(fileExt)) {
+                alert("이미지 파일만 등록이 가능합니다.");
+                return;
+            }
 
-                        let cate1Arr = cateList.filter(cate => cate.tier === "1");
-                        let cate2Arr = cateList.flatMap(cate => cate.children.filter(child => child.tier === "2")
-                            .map(child => ({ id: child.id, name: child.name, parent: child.parent })));
+            $(this).siblings(".fake-input").val(fileName);
+        }
 
-                        cate1Arr.forEach(cate1 => parentCate.append("<option value='" + cate1.id + "'>" + cate1.name + "</option>"));
-                        parentId = childCateId >= 500 ? 500 : childCateId >= 400 ? 400 : childCateId >= 300 ? 300 : childCateId >= 200 ? 200 : childCateId >= 100 ? 100 : 0;
-                        cate2Arr.filter(cate2 => cate2.parent === parentId).forEach(cate2 => childCate.append("<option value='" + cate2.id + "'>" + cate2.name + "</option>"));
+        /* 이미지 삭제 함수 */
+        function deleteFile() {
+            let productImgId = $(this).attr("data-product-image-id");
+            let serverImageName = $(this).attr("data-server-image-name");
 
-                        /* 상품 수정 - 기존 카테고리 값 설정 */
-                        if (childCateId !== null) {
-                            let parentVal = Math.floor(childCateId / 100) * 100;
-                            $('.parent-cate-select').val(parentVal).prop("selected", true);
-                            $('.child-cate-select').val(childCateId === 400 ? '0' : childCateId).prop("selected", true);
+            if (typeof serverImageName !== "undefined") {
+                if (confirm("이미지를 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: "/admin/products/" + productImgId,
+                        type: "patch",
+                        success(res) {
+                            alert(res);
+                            $(this).siblings(".fake-input").val("상품 이미지 " + $(this).attr("data-index"));
+                            $(this).siblings(".real-input").val("delete");
+                        },
+                        error(request) {
+                            alert(request.responseText);
                         }
-
-                        /* 대분류 option 변경 시 중분류 option 추가 */
-                        parentCate.on("change", function () {
-                            let parentSelectVal = Number($(this).find("option:selected").val());
-                            // 중분류 option 초기화 (단, 중분류가 존재하지 않는 대분류를 선택했을 시, 대분류 값을 중분류 값에 넣음)
-                            childCate.children().remove();
-                            childCate.append("<option value='" + (parentSelectVal === 400 ? '400' : '0') + "'>선택</option>");
-                            // 중분류 option 추가
-                            cate2Arr.filter(cate => cate.parent === parentSelectVal).forEach(cate => {
-                                childCate.append("<option value='" + cate.id + "'>" + cate.name + "</option>");
-                            });
-                        });
-                    },
-                    error: function (request) {
-                        alert(request.responseText);
-                    }
-                });
+                    });
+                } else {
+                    return false;
+                }
+            } else {
+                $(this).siblings(".fake-input").val("상품 이미지 " + $(this).attr("data-index"));
+                $(this).siblings(".real-input").val("");
             }
+        }
 
-            /* 버튼 초기화 */
-            function initializeMoveButtons() {
-                $(".modify-btn").on("click", function(e) {
-                    e.preventDefault();
-                    moveFormTo("/admin/products/" + [[${productFormDto?.id}]] + "/edit");
-                });
+        /* 상품 수정 화면으로 이동하는 함수 */
+        function goToEditProductPage() {
+            let moveForm = $("#move-form");
+            moveForm.attr("action", "/admin/products/" + [[${productFormDto?.id}]] + "/edit");
+            moveForm.submit();
+        }
 
-                $(".list-btn, .cancel-btn").on("click", function(e){
-                    e.preventDefault();
-                    moveFormTo("/admin/products?page=" + [[${pageDto?.page}]]);
-                });
-            }
+        /* 상품 관리 화면으로 이동하는 함수 */
+        function goToManageProductsPage() {
+            let moveForm = $("#move-form");
+            moveForm.attr("action", "/admin/products?page=" + [[${pageDto?.page}]]);
+            moveForm.submit();
+        }
 
-            /* form 전송 */
-            function moveFormTo(url) {
-                let moveForm = $("#move-form");
-                moveForm.attr("action", url);
-                moveForm.submit();
-            }
+        /* 할인율, 할인 가격 설정 함수  */
+        function initializeDiscountValues() {
+            let discountValue = [[${productFormDto?.discount}]];
+            let price = [[${productFormDto?.price}]];
+            let discountPrice = Math.floor(price * (1 - discountValue));
 
-            /* 할인율, 가격 셋팅 */
-            function setDefaultDiscount() {
-                let discountValue = [[${productFormDto?.discount}]];
-                let price = [[${productFormDto?.price}]];
-                let discountPrice = Math.floor(price * (1 - discountValue));
+            $(".discount-interface").val(discountValue * 100);
+            $(".discounted-price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
+        }
 
-                $(".discount-interface").val(discountValue * 100);
-                $(".discount-price").html(formatPrice(discountPrice) + "원");
-            }
+        /* 할인율, 가격 변동 시 할인 가격 수정 */
+        function updateDiscountPrice() {
+            let userInput = $(".discount-interface");
+            let discountRate = userInput.val() / 100;
+            let productPrice = $(".price-input").val();
+            let discountPrice = Math.floor(productPrice * (1 - discountRate));
 
-            /* 할인율 input 초기화 */
-            function initializeDiscountInput() {
-                $(".discount-interface").on("propertychange change keyup paste input", updatePrice);
-            }
-
-            /* 가격 input 초기화 */
-            function initializePriceInput() {
-                $(".price-input").on("propertychange change keyup paste input", updatePrice);
-            }
-
-            /* 할인율, 가격 변동 시 할인 가격 수정 */
-            function updatePrice() {
-                let userInput = $(".discount-interface");
-                let discountRate = userInput.val() / 100;
-                let productPrice = $(".price-input").val();
-                let discountPrice = Math.floor(productPrice * (1 - discountRate));
-
-                if (!isNaN(discountRate)) {
-                    $(".discount-price").html(formatPrice(discountPrice) + "원");
-                    if (userInput.hasClass("discount-interface")) {
-                        $(".discount-input").val(discountRate);
-                    }
+            if (!isNaN(discountRate)) {
+                $(".discounted-price").html(discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원");
+                if (userInput.hasClass("discount-interface")) {
+                    $(".discount-input").val(discountRate);
                 }
             }
+        }
 
-            function formatPrice(price) {
-                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        /* 옵션 테이블 초기화 함수 */
+        function clearAllOptionTables() {
+            $(".option-table-body").find('tr').remove();
+            hideTableIfEmpty();
+        }
+
+        /* 페이지 로딩 시 기존 상품 옵션 동적 추가 */
+        function loadProductOptions() {
+            let inventories = [[${inventories}]];
+            let pageType = [[${type}]];
+            if (inventories.length >= 1) {
+                $.each(inventories, function (index, item) {
+                    if (pageType === 'update') {
+                        $(".option-table-body").append(
+                            "<tr>" +
+                            "<td>" +
+                            "<span class='size'>" + item.sizeName + "</span>" +
+                            "<input class='size-input' type='hidden' value='" + item.sizeId + "'>" +
+                            "</td>" +
+                            "<td class='left'>" +
+                            "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + item.colorCode + ";'></span>" +
+                            "<span class='color'>" + item.colorName + "</span>" +
+                            "<input class='color-input' type='hidden' value='" + item.colorId + "'>" +
+                            "</td>" +
+                            "<td>" +
+                            "<input placeholder='재고를 입력하세요.' type='text' value='" + item.quantity + "' class='base-table__input quantity-input'>" +
+                            "</td>" +
+                            "<td>" +
+                            "<button class='button button--white button--65x30 option-delete-btn' type='button'>삭제</button>" +
+                            "</td>" +
+                            "</tr>");
+                    } else {
+                        $(".option-table-body").append(
+                            "<tr>" +
+                            "<td>" +
+                            "<span class='size'>" + item.sizeName + "</span>" +
+                            "<input class='size-input' type='hidden' value='" + item.sizeId + "'>" +
+                            "</td>" +
+                            "<td class='left'>" +
+                            "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + item.colorCode + ";'></span>" +
+                            "<span class='color'>" + item.colorName + "</span>" +
+                            "<input class='color-input' type='hidden' value='" + item.colorId + "'>" +
+                            "</td>" +
+                            "<td>" +
+                            "<input placeholder='재고를 입력하세요.' type='text' value='" + item.quantity + "' class='base-table__input quantity-input' readonly>" +
+                            "</td>" +
+                            "<td>" +
+                            "-" +
+                            "</td>" +
+                            "</tr>");
+                    }
+                });
+                $('.option-table').removeClass("displaynone");
             }
-        });
+        }
+
+        /* 테이블 안에 tr 태그의 개수가 0개인 경우 테이블을 숨기는 함수 */
+        function hideTableIfEmpty() {
+            if ($(".option-table-body").find("tr").length === 0) {
+                $(".option-table").addClass("displaynone");
+            }
+        }
+
+        /* 선택된 select 값에 따른 상품 옵션 동적 추가 함수 */
+        function addProductOption() {
+            let sizeVal = $(".size-select").val();
+            let colorVal = $(".color-select").val();
+            let size = $(".size-select option:selected").text();
+            let color = $(".color-select option:selected").text();
+            let colorCode = $(".color-select option:selected").data("code");
+
+            if (sizeVal === "0") {
+                alert("사이즈를 선택해 주세요.");
+                return false;
+            }
+            if (colorVal === "0") {
+                alert("색상을 선택해 주세요.");
+                return false;
+            }
+
+            // 옵션 중복 체크
+            let isDuplicate = false;
+            $(".option-table table tbody tr").each(function () {
+                let existingSize = $(this).find('td:eq(0) .size').text();
+                let existingColor = $(this).find('td:eq(1) .color').text();
+                if (existingSize === size && existingColor === color) {
+                    isDuplicate = true;
+                    return false; // 중복된 옵션을 찾으면 반복문 종료
+                }
+            });
+
+            // 이미 추가된 옵션인 경우 추가 X
+            if (isDuplicate) {
+                alert("이미 추가된 옵션입니다.");
+                return false;
+            } else {
+                $(".option-table-body").append(
+                    "<tr>" +
+                    "<td>" +
+                    "<span class='size'>" + size + "</span>" +
+                    "<input class='size-input' type='hidden' value='" + sizeVal + "'>" +
+                    "</td>" +
+                    "<td class='left'>" +
+                    "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + colorCode + ";'></span>" +
+                    "<span class='color'>" + color + "</span>" +
+                    "<input class='color-input' type='hidden' value='" + colorVal + "'>" +
+                    "</td>" +
+                    "<td>" +
+                    "<input placeholder='재고를 입력하세요.' type='text' class='base-table__input quantity-input'>" +
+                    "</td>" +
+                    "<td>" +
+                    "<button class='button button--white button--65x30 option-delete-btn' type='button'>삭제</button>" +
+                    "</td>" +
+                    "</tr>");
+                $(".option-table").removeClass("displaynone");
+            }
+        }
+
+        /* 동적으로 생성된 option 태그 삭제 함수 */
+        function deleteProductOption() {
+            $(this).closest("tr").remove(); // 클릭한 버튼이 속한 행 삭제
+            hideTableIfEmpty()
+        }
     </script>
 </body>
 

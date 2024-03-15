@@ -1,7 +1,7 @@
 package com.windsome.repository.member;
 
 import com.windsome.dto.member.UserSummaryDTO;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

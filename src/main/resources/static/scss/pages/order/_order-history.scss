@@ -11,17 +11,6 @@
                     .base-table__row {
                         .base-table__cell {
                             height: 135px;
-
-                            &.number {
-                                letter-spacing: -0.2px;
-
-                                .order-uid {
-                                    display: block;
-                                    color: black;
-                                    text-decoration: underline;
-                                    cursor: pointer;
-                                }
-                            }
                         }
                     }
                 }

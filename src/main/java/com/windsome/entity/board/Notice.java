@@ -2,7 +2,7 @@ package com.windsome.entity.board;
 
 import com.windsome.dto.board.notice.NoticeDto;
 import com.windsome.dto.board.notice.NoticeUpdateDto;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
 

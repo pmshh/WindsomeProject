@@ -21,16 +21,22 @@
                     <div class="divider"></div>
                 </div>
 
-                <div class="section-body notice-mng-body mt-5">
-                    <div class="notice-list-container">
+                <div class="section-body notice-mng-body row">
 
-                        <div class="table-wrapper">
-                            <table class="base-table base-table--multi-columns">
-                                <thead class="base-table__head">
+                    <div class="col-11">
+                        <div class="list-total-count-container">
+                            <span class="me-1" th:text="${noticeList.getTotalElements() + fixTopNoticeList.size}"></span>POSTS
+                        </div>
+
+                        <div class="notice-list-container">
+
+                            <div class="table-wrapper">
+                                <table class="base-table base-table--multi-columns">
+                                    <thead class="base-table__head">
                                     <tr class="base-table__row">
-                                        <th class="base-table__header-cell" style="width: 110px;" scope="col">
-                                            <input type="checkbox" id="check-all" name="check-all" onclick="checkAll()">
-                                            <label for="check-all">전체 선택</label>
+                                        <th class="base-table__header-cell" style="width: 80px;" scope="col">
+                                            <input type="checkbox" id="all-check" name="all-check" onclick="checkAll()">
+                                            <label for="all-check"></label>
                                         </th>
                                         <th class="base-table__header-cell" style="width: 80px;" scope="col">번호</th>
                                         <th class="base-table__header-cell" style="width: auto;" scope="col">제목</th>
@@ -38,9 +44,9 @@
                                         <th class="base-table__header-cell" style="width: 180px;" scope="col">작성일</th>
                                         <th class="base-table__header-cell" style="width: 180px;" scope="col">선택</th>
                                     </tr>
-                                </thead>
+                                    </thead>
 
-                                <tbody class="base-table__body base-table__body--notice">
+                                    <tbody class="base-table__body base-table__body--notice">
                                     <tr class="base-table__row" th:each="fixTopNotice, status:${fixTopNoticeList}">
                                         <td class="base-table__cell">
                                             <input type="checkbox" disabled>
@@ -54,16 +60,16 @@
                                         <td class="base-table__cell">
                                             <span th:text="${fixTopNotice.member.name}"></span>
                                         </td>
-                                        <td class="base-table__cell txt11 gray-col">
+                                        <td class="base-table__cell">
                                             <span th:text="${#temporals.format(fixTopNotice.regTime, 'yyyy-MM-dd')}"></span>
                                         </td>
                                         <td class="base-table__cell">
                                             <button class="button button--white button--90x30 top-unfix-btn" th:data-noticeId="${fixTopNotice.id}">공지 내리기</button>
                                         </td>
                                     </tr>
-                                </tbody>
+                                    </tbody>
 
-                                <tbody class="base-table__body">
+                                    <tbody class="base-table__body">
 
                                     <tr class="base-table__row" th:if="${#lists.isEmpty(noticeList.getContent())}">
                                         <td class="base-table__cell base-table__cell--empty" colspan="6">
@@ -84,71 +90,73 @@
                                         <td class="base-table__cell">
                                             <span th:text="${notice.createdBy}"></span>
                                         </td>
-                                        <td class="base-table__cell txt11 gray-col">
+                                        <td class="base-table__cell">
                                             <span th:text="${notice.regDate}">2024-02-06</span>
                                         </td>
                                         <td class="base-table__cell">
                                             <button class="button button--white button--65x30 top-fix-btn" th:data-noticeId="${notice.noticeId}">공지 설정</button>
                                         </td>
                                     </tr>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
 
-                    </div>
+                        <div class="button-container" sec:authorize="hasRole('ADMIN')">
+                            <button class="button button--white button--90x30 posts-del-btn">선택 삭제</button>
+                            <button class="button button--white button--90x30 all-post-del-btn">전체 삭제</button>
+                            <button class="button button--white button--65x30 write-btn">글쓰기</button>
+                        </div>
 
-                    <div class="button-container" sec:authorize="hasRole('ADMIN')">
-                        <button class="button button--white button--90x30 posts-del-btn">선택 삭제</button>
-                        <button class="button button--white button--90x30 all-post-del-btn">전체 삭제</button>
-                        <button class="button button--white button--65x30 write-btn">글쓰기</button>
-                    </div>
-
-                    <div class="pagination-container"
-                         th:with="start=${(noticeList.number/maxPage)*maxPage + 1}, end=(${(noticeList.totalPages == 0) ? 1 :
+                        <div class="pagination-container"
+                             th:with="start=${(noticeList.number/maxPage)*maxPage + 1}, end=(${(noticeList.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < noticeList.totalPages ? start + (maxPage - 1) : noticeList.totalPages)})">
-                        <ul>
-                            <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
-                                <a th:onclick="'javascript:page(0)'">
-                                    <i class="fa-solid fa-angle-left"></i><i
-                                        class="fa-solid fa-angle-left"></i>
-                                </a>
-                            </li>
-                            <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
-                                <a th:onclick="'javascript:page(' +  ${noticeList.number - 1} + ')'">
-                                    <i class="fa-solid fa-angle-left"></i>
-                                </a>
-                            </li>
-                            <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                th:classappend="${noticeList.number eq page - 1} ? 'active' : ''">
-                                <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                                   th:inline="text">[[${page}]]</a>
-                            </li>
-                            <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
-                                <a th:onclick="'javascript:page(' + ${noticeList.number + 1} + ')'">
-                                    <i class="fa-solid fa-angle-right"></i>
-                                </a>
-                            </li>
-                            <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
-                                <a th:onclick="'javascript:page(' + ${noticeList.totalPages - 1} + ')'">
-                                    <i class="fa-solid fa-angle-right"></i><i
-                                        class="fa-solid fa-angle-right"></i>
-                                </a>
-                            </li>
-                        </ul>
+                            <ul>
+                                <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(0)'">
+                                        <i class="fa-solid fa-angle-left"></i><i
+                                            class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="prev" th:classappend="${noticeList.first} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' +  ${noticeList.number - 1} + ')'">
+                                        <i class="fa-solid fa-angle-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${noticeList.number eq page - 1} ? 'active' : ''">
+                                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                                       th:inline="text">[[${page}]]</a>
+                                </li>
+                                <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${noticeList.number + 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="next" th:classappend="${noticeList.last} ? 'disabled'">
+                                    <a th:onclick="'javascript:page(' + ${noticeList.totalPages - 1} + ')'">
+                                        <i class="fa-solid fa-angle-right"></i><i
+                                            class="fa-solid fa-angle-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="search-input-container" th:object="${noticeSearchDto}">
+                            <i class="fa-solid fa-angle-right"></i>
+                            <span class="txt">검색어</span>
+                            <select class="search-date-type" th:field="*{searchDateType}">
+                                <option value="">(전체)</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="name">작성자</option>
+                            </select>
+                            <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
+                            <button class="search-btn button button--white button--90x30" type="button">검색</button>
+                        </div>
                     </div>
 
-                    <div class="search-input-container" th:object="${noticeSearchDto}">
-                        <i class="fa-solid fa-angle-right"></i>
-                        <span class="txt">검색어</span>
-                        <select class="search-date-type" th:field="*{searchDateType}">
-                            <option value="">(전체)</option>
-                            <option value="title">제목</option>
-                            <option value="content">내용</option>
-                            <option value="name">작성자</option>
-                        </select>
-                        <input class="search-query" th:field="*{searchQuery}" type="text" placeholder="검색어를 입력해주세요">
-                        <button class="search-btn button button--white button--90x30" type="button">검색</button>
-                    </div>
                 </div>
             </div>
         </section>
@@ -184,8 +192,8 @@
         });
 
         function initSubMenu() {
-            $("a[data-bs-target='#sub-menu']").removeClass("collapsed");
-            $("#sub-menu").addClass("show");
+            $("a[data-bs-target='#board-management-submenu']").removeClass("collapsed");
+            $("#board-management-submenu").addClass("show");
         }
 
         /* 게시글 등록 화면으로 이동하는 함수 */
@@ -260,7 +268,7 @@
 
         /* 체크 박스 전체 선택/해제 함수 */
         function checkAll() {
-            if ($("#check-all").prop("checked")) {
+            if ($("#all-check").prop("checked")) {
                 $("input[name=check]").prop("checked", true);
             } else {
                 $("input[name=check]").prop("checked", false);

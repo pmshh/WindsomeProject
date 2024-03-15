@@ -2,7 +2,7 @@ package com.windsome.controller;
 
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.service.CategoryService;
-import com.windsome.service.ProductService;
+import com.windsome.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

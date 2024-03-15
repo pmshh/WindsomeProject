@@ -1,8 +1,9 @@
 package com.windsome.dto.order;
 
 import com.windsome.constant.OrderStatus;
-import com.windsome.entity.Order;
+import com.windsome.entity.order.Order;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.format.DateTimeFormatter;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter @Setter
+@NoArgsConstructor
 public class OrderHistResponseDTO {
 
     private Long orderId; // 주문 id

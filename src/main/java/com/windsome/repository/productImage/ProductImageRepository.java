@@ -1,6 +1,6 @@
 package com.windsome.repository.productImage;
 
-import com.windsome.entity.ProductImage;
+import com.windsome.entity.product.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

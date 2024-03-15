@@ -1,73 +1,80 @@
 package com.windsome.controller;
 
-import com.windsome.constant.ProductSellStatus;
+import com.windsome.advice.MemberControllerAdvice;
+import com.windsome.controller.product.ProductController;
+import com.windsome.dto.board.review.ProductReviewDTO;
+import com.windsome.dto.product.InventoryDTO;
+import com.windsome.dto.product.ProductColorResponseDTO;
 import com.windsome.dto.product.ProductFormDTO;
-import com.windsome.entity.Category;
-import com.windsome.repository.category.CategoryRepository;
-import com.windsome.repository.productImage.ProductImageRepository;
-import com.windsome.repository.product.ProductRepository;
-import com.windsome.service.ProductService;
-import org.junit.jupiter.api.DisplayName;
+import com.windsome.dto.product.ProductSizeResponseDTO;
+import com.windsome.service.board.ReviewService;
+import com.windsome.service.product.InventoryService;
+import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@WebMvcTest(ProductController.class)
 @AutoConfigureMockMvc
+@MockBean(JpaMetamodelMappingContext.class)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class ProductControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired ProductRepository productRepository;
-    @Autowired ProductImageRepository productImageRepository;
-    @Autowired ProductService productService;
-    @Autowired CategoryRepository categoryRepository;
+
+    @Autowired private ProductController productController;
+
+    @MockBean private ProductService productService;
+    @MockBean private ReviewService reviewService;
+    @MockBean private InventoryService inventoryService;
+    @MockBean MemberControllerAdvice memberControllerAdvice;
 
     @Test
-    @DisplayName("아이템 상세 화면 보이는지 테스트")
-    public void cartHist() throws Exception {
-        Category category = new Category();
-        categoryRepository.save(category);
+    void testShowProductDetail() {
+        // Given
+        Long productId = 123L;
+        Model mockModel = mock(Model.class);
+        RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
+        List<InventoryDTO> mockInventoryList = mock(List.class);
+        List<ProductColorResponseDTO> mockProductColors = mock(List.class);
+        List<ProductSizeResponseDTO> mockProductSizes = mock(List.class);
 
-        ProductFormDTO productFormDto = getProductFormDto();
-        productFormDto.setCategoryId(category.getId());
+        ProductFormDTO productFormDTO = new ProductFormDTO();
+        Pageable pageable = PageRequest.of(1, 5);
+        Page<ProductReviewDTO> reviewPage = mock(Page.class);
 
-        List<MultipartFile> multipartFiles = createMultipartFiles();
+        when(inventoryService.getInventories(productId)).thenReturn(mockInventoryList);
+        when(productService.getProductSizesByProductId(productId)).thenReturn(mockProductSizes);
+        when(productService.getProductColorsByProductId(productId)).thenReturn(mockProductColors);
+        when(productService.getProductFormDto(productId)).thenReturn(productFormDTO);
+        when(reviewService.getProductReviewList(productId, pageable)).thenReturn(reviewPage);
 
-        Long productId = productService.createProduct(productFormDto, multipartFiles);
+        // When
+        String viewName = productController.showProductDetail(Optional.of(1), productId, mockRedirectAttributes, mockModel);
 
-        mockMvc.perform(get("/product/" + productId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("main/product/product-detail"))
-                .andExpect(model().attributeExists("product"));
-    }
-
-    private ProductFormDTO getProductFormDto() {
-        return new ProductFormDTO(null, "test", 10000, 0.0, "test", 100, ProductSellStatus.AVAILABLE, null, null, null);
-    }
-
-    List<MultipartFile> createMultipartFiles() throws Exception {
-        List<MultipartFile> multipartFileList = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            String path = "C:/shop/item/";
-            String imageName = "imageName" + i + ".jpg";
-            MockMultipartFile multipartFile = new MockMultipartFile(path, imageName, "image/jpg", new byte[]{1, 2, 3, 4});
-            multipartFileList.add(multipartFile);
-        }
-        return multipartFileList;
+        // Then
+        assertEquals("main/product/product-detail", viewName);
+        verify(mockModel).addAttribute(eq("inventories"), eq(mockInventoryList));
+        verify(mockModel).addAttribute(eq("productSizes"), eq(mockProductSizes));
+        verify(mockModel).addAttribute(eq("productColors"), eq(mockProductColors));
+        verify(mockModel).addAttribute(eq("product"), eq(productFormDTO));
+        verify(mockModel).addAttribute(eq("reviews"), eq(reviewPage));
+        verify(mockModel).addAttribute(eq("maxPage"), eq(5));
     }
 }

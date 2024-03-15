@@ -1,7 +1,7 @@
 package com.windsome;
 
 import com.windsome.constant.Role;
-import com.windsome.entity.Member;
+import com.windsome.entity.member.Member;
 
 public class TestUtil {
 

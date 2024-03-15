@@ -1,13 +1,12 @@
 package com.windsome.controller;
 
 import com.windsome.config.security.CurrentMember;
-import com.windsome.dto.order.OrderDetailDTO;
-import com.windsome.dto.order.OrderRequestDTO;
-import com.windsome.dto.order.OrderPageRequestDTO;
-import com.windsome.entity.Member;
+import com.windsome.dto.order.*;
+import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ public class OrderController {
     private final MemberRepository memberRepository;
 
     /**
-     * 주문 조회 화면
+     * 주문 조회
      */
     @GetMapping("/orders")
     public String showOrderList(Optional<Integer> page, @CurrentMember Member member, Model model) {
@@ -39,11 +38,11 @@ public class OrderController {
     }
 
     /**
-     * 주문서 작성 화면
+     * 상품 주문 화면
      */
     @GetMapping("/orders/new")
-    public String createOrderForm(OrderPageRequestDTO orderPageRequestDTO, @CurrentMember Member member, Model model) {
-        model.addAttribute("orderProducts", orderService.getOrderProductDetails(orderPageRequestDTO.getOrderProducts()));
+    public String createOrderForm(OrderProductListDTO orderProductListDTO, @CurrentMember Member member, Model model) {
+        model.addAttribute("orderProducts", orderService.getOrderProductsInfo(orderProductListDTO));
         model.addAttribute("member", memberRepository.findById(member.getId()).orElseThrow(EntityNotFoundException::new));
         return "order/order-form";
     }
@@ -73,11 +72,11 @@ public class OrderController {
         }
 
         orderService.cancelOrder(orderId);
-        return ResponseEntity.ok().body("주문이 최소되었습니다.");
+        return ResponseEntity.ok().body("주문이 취소되었습니다.");
     }
 
     /**
-     * 주문 상세 화면
+     * 주문 상세
      */
     @GetMapping("/orders/{orderId}")
     public String showOrderDetail(@PathVariable(value = "orderId") Long orderId, Model model) {
