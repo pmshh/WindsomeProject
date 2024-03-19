@@ -1,4 +1,4 @@
-package com.windsome.service;
+package com.windsome.service.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

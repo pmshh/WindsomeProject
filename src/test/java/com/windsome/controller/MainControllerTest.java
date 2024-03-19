@@ -2,7 +2,7 @@ package com.windsome.controller;
 
 import com.windsome.dto.member.SignUpRequestDTO;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.service.MemberService;
+import com.windsome.service.member.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

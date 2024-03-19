@@ -52,16 +52,12 @@ class ProductControllerTest {
         Model mockModel = mock(Model.class);
         RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
         List<InventoryDTO> mockInventoryList = mock(List.class);
-        List<ProductColorResponseDTO> mockProductColors = mock(List.class);
-        List<ProductSizeResponseDTO> mockProductSizes = mock(List.class);
 
         ProductFormDTO productFormDTO = new ProductFormDTO();
         Pageable pageable = PageRequest.of(1, 5);
         Page<ProductReviewDTO> reviewPage = mock(Page.class);
 
         when(inventoryService.getInventories(productId)).thenReturn(mockInventoryList);
-        when(productService.getProductSizesByProductId(productId)).thenReturn(mockProductSizes);
-        when(productService.getProductColorsByProductId(productId)).thenReturn(mockProductColors);
         when(productService.getProductFormDto(productId)).thenReturn(productFormDTO);
         when(reviewService.getProductReviewList(productId, pageable)).thenReturn(reviewPage);
 
@@ -71,8 +67,6 @@ class ProductControllerTest {
         // Then
         assertEquals("main/product/product-detail", viewName);
         verify(mockModel).addAttribute(eq("inventories"), eq(mockInventoryList));
-        verify(mockModel).addAttribute(eq("productSizes"), eq(mockProductSizes));
-        verify(mockModel).addAttribute(eq("productColors"), eq(mockProductColors));
         verify(mockModel).addAttribute(eq("product"), eq(productFormDTO));
         verify(mockModel).addAttribute(eq("reviews"), eq(reviewPage));
         verify(mockModel).addAttribute(eq("maxPage"), eq(5));

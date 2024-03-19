@@ -1,5 +1,7 @@
 package com.windsome.dto.member;
 
+import com.windsome.entity.member.Address;
+import com.windsome.entity.member.Member;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -44,4 +46,18 @@ public class SignUpRequestDTO {
     @NotBlank
     private String addrDetail;
 
+    public Address toAddress(Member member, SignUpRequestDTO signUpRequestDTO) {
+        Address address = Address.builder()
+                .member(member)
+                .name(signUpRequestDTO.getName())
+                .zipcode(signUpRequestDTO.getZipcode())
+                .addr(signUpRequestDTO.getAddr())
+                .addrDetail(signUpRequestDTO.getAddrDetail())
+                .tel(signUpRequestDTO.getTel())
+                .req("")
+                .isDefault(true)
+                .build();
+        address.setMember(member);
+        return address;
+    }
 }

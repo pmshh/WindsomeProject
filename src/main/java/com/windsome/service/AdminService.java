@@ -20,6 +20,7 @@ import com.windsome.dto.product.ProductInfoResponseDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.dto.product.SizeDTO;
+import com.windsome.entity.member.Address;
 import com.windsome.entity.product.Inventory;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
@@ -28,6 +29,7 @@ import com.windsome.entity.order.Payment;
 import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
 import com.windsome.repository.board.qa.QaRepository;
+import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.repository.orderProduct.OrderProductRepository;
@@ -67,6 +69,7 @@ public class AdminService {
     private final ObjectMapper objectMapper;
     private final InventoryRepository inventoryRepository;
     private final PaymentRepository paymentRepository;
+    private final AddressRepository addressRepository;
 
     /**
      * dashboard 정보 조회
@@ -99,6 +102,7 @@ public class AdminService {
         Member member = modelMapper.map(memberFormDTO, Member.class);
         member.setRole(Role.USER);
         member.setPassword(passwordEncoder.encode(memberFormDTO.getPassword()));
+        addressRepository.save(memberFormDTO.toAddress(member, memberFormDTO));
         memberRepository.save(member);
     }
 
@@ -115,13 +119,14 @@ public class AdminService {
     @Transactional(readOnly = true)
     public AdminMemberDetailDTO getMemberDetails(Long accountId) {
         Member member = memberRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
-        return AdminMemberDetailDTO.toDto(member);
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        return AdminMemberDetailDTO.toDto(member, address);
     }
 
     /**
      * 회원 수정
      */
-    public void updateMember(AdminMemberDetailDTO dto) throws Exception {
+    public void updateMember(AdminMemberDetailDTO dto) {
         Member member = memberRepository.findById(dto.getId()).orElseThrow(EntityNotFoundException::new);
         modelMapper.map(dto, member);
         // dto의 password 필드 값이 있으면 비밀번호 변경
@@ -129,6 +134,15 @@ public class AdminService {
             String encodedPassword = passwordEncoder.encode(dto.getPassword());
             member.setPassword(encodedPassword);
         }
+
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        address.setTel(dto.getTel());
+        address.setZipcode(dto.getZipcode());
+        address.setAddr(dto.getAddr());
+        address.setAddrDetail(dto.getAddrDetail());
+        address.setMember(member);
+        addressRepository.save(address);
+
         memberRepository.save(member);
     }
 

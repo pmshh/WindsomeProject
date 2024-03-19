@@ -3,7 +3,6 @@ package com.windsome.controller.admin;
 import com.windsome.constant.Role;
 import com.windsome.dto.member.AdminMemberDetailDTO;
 import com.windsome.dto.member.AdminMemberFormDTO;
-import com.windsome.dto.member.MemberFormDTO;
 import com.windsome.dto.member.MemberListSearchDTO;
 import com.windsome.exception.AdminDeletionException;
 import com.windsome.service.AdminService;
@@ -52,7 +51,7 @@ public class AdminMemberController {
      * 회원 등록
      */
     @PostMapping("/members/new")
-    public String createMember(@Valid AdminMemberFormDTO memberFormDTO, BindingResult bindingResult, Model model) {
+    public String createMember(@Valid AdminMemberFormDTO memberFormDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttr) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message", "회원 등록 도중 오류가 발생하였습니다.");
             model.addAttribute("memberForm", memberFormDTO);
@@ -60,6 +59,7 @@ public class AdminMemberController {
         }
 
         adminService.enrollMember(memberFormDTO);
+        redirectAttr.addFlashAttribute("message", "회원이 등록되었습니다.");
         return "redirect:/admin/members";
     }
 
@@ -98,14 +98,14 @@ public class AdminMemberController {
      * 회원 수정
      */
     @PostMapping("/members/{memberId}")
-    public String updateMember(AdminMemberDetailDTO adminMemberDetailDTO, RedirectAttributes redirectAttr) {
+    public String updateMember(@PathVariable("memberId") Long memberId, AdminMemberDetailDTO adminMemberDetailDTO, RedirectAttributes redirectAttr) {
         try {
             adminService.updateMember(adminMemberDetailDTO);
             redirectAttr.addFlashAttribute("message", "회원 정보가 수정되었습니다.");
-            return "redirect:/admin/members";
+            return "redirect:/admin/members/" + memberId + "/edit";
         } catch (Exception e) {
             redirectAttr.addFlashAttribute("message", "회원 정보 수정 도중 오류가 발생하였습니다.");
-            return "redirect:/admin/members/" + adminMemberDetailDTO.getId() + "/edit";
+            return "redirect:/admin/members/" + memberId + "/edit";
         }
     }
 
@@ -116,7 +116,7 @@ public class AdminMemberController {
     public ResponseEntity<String> updateMemberRole(@PathVariable(value = "memberId") Long memberId, Role role) {
         try {
             adminService.updateMemberRole(memberId, role);
-            return ResponseEntity.ok().body("사용자의 권한이 수정되었습니다.");
+            return ResponseEntity.ok().body("회원의 권한이 수정되었습니다.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
         }
@@ -129,13 +129,13 @@ public class AdminMemberController {
     public ResponseEntity<String> deleteMember(@RequestBody Long[] memberIds) {
         try {
             adminService.deleteMembers(memberIds);
-            return ResponseEntity.ok().body("사용자가 삭제되었습니다.");
+            return ResponseEntity.ok().body("회원이 삭제되었습니다.");
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body("존재하지 않는 사용자입니다.");
+            return ResponseEntity.badRequest().body("존재하지 않는 회원입니다.");
         } catch (AdminDeletionException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 삭제 중 오류 발생");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 삭제 중 오류 발생");
         }
     }
 }

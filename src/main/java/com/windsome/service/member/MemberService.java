@@ -1,9 +1,11 @@
-package com.windsome.service;
+package com.windsome.service.member;
 
 import com.windsome.dto.member.*;
 import com.windsome.constant.Role;
+import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
+import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.service.mail.EmailMessageDto;
@@ -39,6 +41,22 @@ public class MemberService {
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final AddressRepository addressRepository;
+
+    /**
+     * 회원 조회
+     * @return Member
+     */
+    public Member getMemberByMemberId(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    /**
+     * 회원 저장
+     */
+    public void saveMember(Member member) {
+        memberRepository.save(member);
+    }
 
     /**
      * 회원 가입
@@ -47,6 +65,7 @@ public class MemberService {
         Member member = modelMapper.map(signUpRequestDTO, Member.class);
         member.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
         member.setRole(Role.USER);
+        addressRepository.save(signUpRequestDTO.toAddress(member, signUpRequestDTO));
         memberRepository.save(member);
     }
 
@@ -63,9 +82,19 @@ public class MemberService {
     /**
      * 프로필 수정
      */
-    public void updateMember(Member member, MemberFormDTO memberFormDto) {
+    public void updateMember(Long memberId, MemberFormDTO memberFormDto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         modelMapper.map(memberFormDto, member);
         member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        address.setZipcode(memberFormDto.getZipcode());
+        address.setAddr(memberFormDto.getAddr());
+        address.setAddrDetail(memberFormDto.getAddrDetail());
+        address.setMember(member);
+        address.setTel(member.getTel());
+        addressRepository.save(address);
+
         memberRepository.save(member);
     }
 
@@ -170,5 +199,15 @@ public class MemberService {
      */
     public Long getTotalOrderAmount(Member member) {
         return orderRepository.getTotalOrderAmountByMemberId(member.getId());
+    }
+
+    /**
+     * 회원 상세 조회
+     * @return MemberDetailDTO
+     */
+    public MemberDetailDTO getMemberDetail(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        return MemberDetailDTO.createMemberDetailDTO(member, address);
     }
 }

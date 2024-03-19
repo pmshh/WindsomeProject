@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class MemberFormDTO {
 
+    private Long memberId;
+
     private String userIdentifier;
 
     @NotBlank

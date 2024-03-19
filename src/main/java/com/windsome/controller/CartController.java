@@ -3,7 +3,7 @@ package com.windsome.controller;
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.cart.CartProductListDTO;
 import com.windsome.entity.member.Member;
-import com.windsome.service.CartService;
+import com.windsome.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

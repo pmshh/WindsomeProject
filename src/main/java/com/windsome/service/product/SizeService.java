@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,5 +30,12 @@ public class SizeService {
             }
         }
         return false;
+    }
+
+    /**
+     * OrderService - Size 조회
+     */
+    public Size getSizeBySizeId(Long sizeId) {
+        return sizeRepository.findById(sizeId).orElseThrow(EntityNotFoundException::new);
     }
 }

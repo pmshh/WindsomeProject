@@ -12,15 +12,12 @@ import com.windsome.entity.order.OrderProduct;
 import com.windsome.entity.order.Payment;
 import com.windsome.entity.product.Product;
 import com.windsome.entity.product.ProductImage;
-import com.windsome.repository.payment.PaymentRepository;
-import com.windsome.repository.cartProduct.CartProductRepository;
-import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
-import com.windsome.repository.product.ColorRepository;
-import com.windsome.repository.product.InventoryRepository;
-import com.windsome.repository.product.ProductRepository;
-import com.windsome.repository.product.SizeRepository;
-import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.service.cart.CartProductService;
+import com.windsome.service.member.MemberService;
+import com.windsome.service.order.OrderService;
+import com.windsome.service.order.PaymentService;
+import com.windsome.service.product.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +32,6 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,14 +43,14 @@ import static org.mockito.Mockito.*;
 class OrderServiceTest {
 
     @Mock private OrderRepository orderRepository;
-    @Mock private ProductImageRepository productImageRepository;
-    @Mock private ProductRepository productRepository;
-    @Mock private MemberRepository memberRepository;
-    @Mock private CartProductRepository cartProductRepository;
-    @Mock private PaymentRepository paymentRepository;
-    @Mock private ColorRepository colorRepository;
-    @Mock private SizeRepository sizeRepository;
-    @Mock private InventoryRepository inventoryRepository;
+    @Mock private ProductService productService;
+    @Mock private MemberService memberService;
+    @Mock private ProductImageService productImageService;
+    @Mock private CartProductService cartProductService;
+    @Mock private PaymentService paymentService;
+    @Mock private InventoryService inventoryService;
+    @Mock private ColorService colorService;
+    @Mock private SizeService sizeService;
 
     @InjectMocks private OrderService orderService;
 
@@ -112,9 +108,9 @@ class OrderServiceTest {
         CartProduct cartProduct = new CartProduct();
         cartProduct.setId(1L);
 
-        when(productRepository.findById(anyLong())).thenReturn(java.util.Optional.of(product));
-        when(productImageRepository.findByProductIdAndIsRepresentativeImage(anyLong(), anyBoolean())).thenReturn(productImage);
-        when(cartProductRepository.findByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(cartProduct);
+        when(productService.getProductByProductId(anyLong())).thenReturn(product);
+        when(productImageService.getRepresentativeImageUrl(anyLong(), anyBoolean())).thenReturn(productImage.getImageUrl());
+        when(cartProductService.getCartProductByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(cartProduct);
 
         // When
         List<OrderProductResponseDTO> orderProductsInfo = orderService.getOrderProductsInfo(orderProductListDTO);
@@ -130,22 +126,22 @@ class OrderServiceTest {
         OrderRequestDTO orderRequestDTO = createOrderRequestDTO();
         orderRequestDTO.setEarnedPoints(900);
         orderRequestDTO.setUsedPoints(1000);
-        String userIdentifier = "test";
+        Long memberId = 1L;
 
         Member member = createMember(); member.setAvailablePoints(1000); member.setTotalEarnedPoints(1000);
-        when(memberRepository.findByUserIdentifier(userIdentifier)).thenReturn(member);
+        when(memberService.getMemberByMemberId(memberId)).thenReturn(member);
 
         Product product = createProduct();
-        when(productRepository.findById(anyLong())).thenReturn(java.util.Optional.of(product));
+        when(productService.getProductByProductId(anyLong())).thenReturn(product);
 
         Color color = new Color(); color.setId(1L);
-        when(colorRepository.findById(anyLong())).thenReturn(Optional.of(color));
+        when(colorService.getColorByColorId(anyLong())).thenReturn(color);
 
         Size size = new Size(); size.setId(1L);
-        when(sizeRepository.findById(anyLong())).thenReturn(Optional.of(size));
+        when(sizeService.getSizeBySizeId(anyLong())).thenReturn(size);
 
         Inventory inventory = new Inventory(); inventory.setQuantity(2);
-        when(inventoryRepository.findByProductIdAndColorIdAndSizeId(product.getId(), color.getId(), size.getId())).thenReturn(inventory);
+        when(inventoryService.getInventoryByProductIdAndColorIdAndSizeId(product.getId(), color.getId(), size.getId())).thenReturn(inventory);
 
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
             Order orderArgument = invocation.getArgument(0);
@@ -153,10 +149,10 @@ class OrderServiceTest {
             orderArgument.setId(1L); // 예시로 ID를 1로 설정
             return orderArgument;
         });
-        when(cartProductRepository.findByProductId(1L)).thenReturn(new CartProduct());
+        when(cartProductService.getCartProductByProductIdAndColorIdAndSizeId(1L, 1L, 1L)).thenReturn(new CartProduct());
 
         // When
-        Long orderId = orderService.order(orderRequestDTO, userIdentifier);
+        Long orderId = orderService.order(orderRequestDTO, memberId);
 
         // Then
         assertNotNull(orderId);
@@ -167,12 +163,12 @@ class OrderServiceTest {
         assertEquals(inventory.getQuantity(), 1); // 상품 재고 감소 확인
 
         verify(orderRepository, times(1)).save(any(Order.class));
-        verify(cartProductRepository, times(1)).delete(any(CartProduct.class));
-        verify(colorRepository, times(1)).findById(anyLong());
-        verify(sizeRepository, times(1)).findById(anyLong());
-        verify(inventoryRepository, times(1)).findByProductIdAndColorIdAndSizeId(anyLong(),anyLong(),anyLong());
-        verify(inventoryRepository, times(1)).findAllByProductId(anyLong());
-        verify(paymentRepository, times(1)).save(any(Payment.class));
+        verify(cartProductService, times(1)).deleteCartProduct(any(CartProduct.class));
+        verify(colorService, times(1)).getColorByColorId(anyLong());
+        verify(sizeService, times(1)).getSizeBySizeId(anyLong());
+        verify(inventoryService, times(1)).getInventoryByProductIdAndColorIdAndSizeId(anyLong(),anyLong(),anyLong());
+        verify(inventoryService, times(1)).getInventoriesByProductId(anyLong());
+        verify(paymentService, times(1)).savePayment(any(Payment.class));
     }
 
     @DisplayName("주문 취소 권한 검사 - 주문 취소 권한이 있는 경우")
@@ -180,20 +176,18 @@ class OrderServiceTest {
     void testVerifyOrderCancellationPermission_Authorized() {
         // Given
         Long orderId = 1L;
-        String userIdentifier = "user1";
-        Member currentAccount = Member.builder().userIdentifier(userIdentifier).build();
-        Member savedAccount = Member.builder().userIdentifier(userIdentifier).build();
-        Order order = Order.builder().id(orderId).member(savedAccount).build();
+        Member member = Member.builder().id(1L).build();
+        Order order = Order.builder().id(orderId).member(member).build();
 
-        when(memberRepository.findByUserIdentifier(userIdentifier)).thenReturn(currentAccount);
+        when(memberService.getMemberByMemberId(member.getId())).thenReturn(member);
         when(orderRepository.findById(orderId)).thenReturn(java.util.Optional.of(order));
 
         // When
-        boolean hasPermission = orderService.verifyOrderCancellationPermission(orderId, userIdentifier);
+        boolean hasPermission = orderService.verifyOrderCancellationPermission(orderId, member.getId());
 
         // Then
         assertFalse(hasPermission);
-        verify(memberRepository, times(1)).findByUserIdentifier(userIdentifier);
+        verify(memberService, times(1)).getMemberByMemberId(member.getId());
         verify(orderRepository, times(1)).findById(orderId);
     }
 
@@ -202,20 +196,19 @@ class OrderServiceTest {
     void testVerifyOrderCancellationPermission_Unauthorized() {
         // Given
         Long orderId = 1L;
-        String userIdentifier = "user1";
-        Member currentAccount = Member.builder().userIdentifier(userIdentifier).build();
-        Member savedAccount = Member.builder().userIdentifier("otherUser").build();
-        Order order = Order.builder().id(orderId).member(savedAccount).build();
+        Member currentAccount = Member.builder().id(1L).userIdentifier("currentAccount").build();
+        Member orderAccount = Member.builder().id(2L).userIdentifier("orderAccount").build();
+        Order order = Order.builder().id(orderId).member(orderAccount).build();
 
-        when(memberRepository.findByUserIdentifier(userIdentifier)).thenReturn(currentAccount);
+        when(memberService.getMemberByMemberId(currentAccount.getId())).thenReturn(currentAccount);
         when(orderRepository.findById(orderId)).thenReturn(java.util.Optional.of(order));
 
         // When
-        boolean hasPermission = orderService.verifyOrderCancellationPermission(orderId, userIdentifier);
+        boolean hasPermission = orderService.verifyOrderCancellationPermission(orderId, currentAccount.getId());
 
         // Then
         assertTrue(hasPermission);
-        verify(memberRepository, times(1)).findByUserIdentifier(userIdentifier);
+        verify(memberService, times(1)).getMemberByMemberId(currentAccount.getId());
         verify(orderRepository, times(1)).findById(orderId);
     }
 
@@ -224,16 +217,16 @@ class OrderServiceTest {
     void testVerifyOrderCancellationPermission_OrderNotFound() {
         // Given
         Long orderId = 1L;
-        String userIdentifier = "user1";
+        Long memberId = 1L;
 
-        when(memberRepository.findByUserIdentifier(userIdentifier)).thenReturn(new Member());
+        when(memberService.getMemberByMemberId(memberId)).thenReturn(new Member());
         when(orderRepository.findById(orderId)).thenReturn(java.util.Optional.empty());
 
         // When / Then
         assertThrows(EntityNotFoundException.class, () -> {
-            orderService.verifyOrderCancellationPermission(orderId, userIdentifier);
+            orderService.verifyOrderCancellationPermission(orderId, memberId);
         });
-        verify(memberRepository, times(1)).findByUserIdentifier(userIdentifier);
+        verify(memberService, times(1)).getMemberByMemberId(memberId);
         verify(orderRepository, times(1)).findById(orderId);
     }
 
@@ -248,18 +241,18 @@ class OrderServiceTest {
         Inventory inventory = new Inventory(); inventory.setQuantity(2);
 
         when(orderRepository.findById(orderId)).thenReturn(java.util.Optional.of(order));
-        when(inventoryRepository.findByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(inventory);
+        when(inventoryService.getInventoryByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(inventory);
 
         // When
         assertDoesNotThrow(() -> orderService.cancelOrder(orderId));
 
         // Then
         verify(orderRepository, times(1)).findById(orderId);
-        verify(memberRepository, times(1)).save(member);
+        verify(memberService, times(1)).saveMember(member);
         assertEquals(1100, member.getAvailablePoints()); // 1000(기존 포인트) + 1000(사용 포인트 복구) - 900(적립 포인트 회수) = 1100
         assertEquals(0, member.getTotalUsedPoints());
         assertEquals(1100, member.getTotalEarnedPoints());
-        assertEquals(order.getOrderStatus(), OrderStatus.REFUNDED);
+        assertEquals(order.getOrderStatus(), OrderStatus.CANCELED);
         assertEquals(order.getPayment().getStatus(), PaymentStatus.PAYMENT_CANCELLED);
         for (OrderProduct orderProduct : order.getOrderProducts()) {
             assertEquals(orderProduct.getOrderProductStatus(), OrderProductStatus.CANCELED);
@@ -277,7 +270,7 @@ class OrderServiceTest {
         // When, Then
         assertThrows(EntityNotFoundException.class, () -> orderService.cancelOrder(orderId));
         verify(orderRepository, times(1)).findById(orderId);
-        verify(memberRepository, never()).findById(anyLong());
+        verify(memberService, never()).getMemberByMemberId(anyLong());
     }
 
     private Member createMember() {
@@ -285,9 +278,6 @@ class OrderServiceTest {
         member.setId(1L);
         member.setName("test");
         member.setUserIdentifier("test1234");
-        member.setZipcode("test1");
-        member.setAddr("test2");
-        member.setAddrDetail("test3");
         member.setAvailablePoints(0);
         member.setTotalUsedPoints(0);
         member.setTotalEarnedPoints(0);

@@ -3,7 +3,7 @@ package com.windsome.controller;
 import com.windsome.WithAccount;
 import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.service.MemberService;
+import com.windsome.service.member.MemberService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -96,7 +96,7 @@ class MemberControllerTest {
 
         mockMvc.perform(get("/members/" + member.getId() + "/edit"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("profileFormDto"));
+                .andExpect(model().attributeExists("member"));
     }
 
     @WithAccount("test1234")
@@ -110,10 +110,11 @@ class MemberControllerTest {
                         .param("password", "change1234")
                         .param("passwordConfirm", "change1234")
                         .param("name", "이순신")
-                        .param("email", member.getEmail())
-                        .param("zipcode", member.getZipcode())
-                        .param("addr", member.getAddr())
-                        .param("addrDetail", member.getAddrDetail())
+                        .param("email", "test@email.com")
+                        .param("tel", "01012341234")
+                        .param("zipcode", "53212")
+                        .param("addr", "서울")
+                        .param("addrDetail", "401호")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/members/" + member.getId() + "/edit"))
@@ -128,15 +129,17 @@ class MemberControllerTest {
     @Test
     void updateProfile_with_error() throws Exception {
         Member member = memberRepository.findByUserIdentifier("USER");
+
         mockMvc.perform(post("/members/" + member.getId() + "/update")
                         .param("userIdentifier", member.getUserIdentifier())
+                        .param("name", "name")
                         .param("password", "changePassword123")
                         .param("passwordConfirm", "changePassword123")
-                        .param("name", "name")
                         .param("email", "test12.com")
-                        .param("zipcode", member.getZipcode())
-                        .param("addr", member.getAddr())
-                        .param("addrDetail", member.getAddrDetail())
+                        .param("tel", "01012341234")
+                        .param("zipcode", "53212")
+                        .param("addr", "서울")
+                        .param("addrDetail", "401호")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("member/update-member"))

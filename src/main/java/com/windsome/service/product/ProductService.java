@@ -218,4 +218,19 @@ public class ProductService {
     }
 
 
+    /**
+     * OrderService - 상품 정보 조회
+     * @return 상품 정보를 담은 ProductInfoResponseDTO 객체
+     */
+    public ProductInfoResponseDTO getProductInfoByProductId(Long productId) {
+        return productRepository.getProductInfoByProductId(productId);
+    }
+
+    /**
+     * OrderService - 상품 정보 조회
+     * @return 상품 정보를 담은 Product 객체
+     */
+    public Product getProductByProductId(Long productId) {
+        return productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
+    }
 }

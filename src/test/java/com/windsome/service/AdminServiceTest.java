@@ -6,11 +6,13 @@ import com.windsome.dto.admin.DashboardInfoDto;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.dto.member.AdminMemberDetailDTO;
 import com.windsome.dto.product.ProductSearchDTO;
+import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
 import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
 import com.windsome.repository.board.qa.QaRepository;
+import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.repository.orderProduct.OrderProductRepository;
@@ -49,9 +51,9 @@ import static org.mockito.Mockito.*;
 class AdminServiceTest {
 
     @Mock private MemberRepository memberRepository;
+    @Mock private AddressRepository addressRepository;
     @Mock private ProductRepository productRepository;
     @Mock private PaymentRepository paymentRepository;
-    @Mock private ProductImageRepository productImageRepository;
     @Mock private OrderRepository orderRepository;
     @Mock private OrderProductRepository orderProductRepository;
     @Mock private QaRepository qaRepository;
@@ -108,20 +110,19 @@ class AdminServiceTest {
         Long accountId = 1L;
         Member member = createMember(accountId);
         when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(member));
+        when(addressRepository.findByMemberIdAndIsDefault(accountId, true)).thenReturn(new Address());
 
         // When
         AdminMemberDetailDTO result = adminService.getMemberDetails(accountId);
 
         // Then
         verify(memberRepository, times(1)).findById(accountId);
+        verify(addressRepository, times(1)).findByMemberIdAndIsDefault(accountId, true);
         assertEquals(member.getId(), result.getId());
         assertEquals(member.getUserIdentifier(), result.getUserIdentifier());
         assertEquals(member.getPassword(), result.getPassword());
         assertEquals(member.getName(), result.getName());
         assertEquals(member.getEmail(), result.getEmail());
-        assertEquals(member.getZipcode(), result.getZipcode());
-        assertEquals(member.getAddr(), result.getAddr());
-        assertEquals(member.getAddrDetail(), result.getAddrDetail());
         assertEquals(member.getAvailablePoints(), result.getAvailablePoints());
         assertEquals(member.getTotalUsedPoints(), result.getTotalUsedPoints());
         assertEquals(member.getTotalEarnedPoints(), result.getTotalEarnedPoints());
@@ -166,15 +167,13 @@ class AdminServiceTest {
         member.setPassword(dto.getPassword());
         member.setName(dto.getName());
         member.setEmail(dto.getEmail());
-        member.setZipcode(dto.getZipcode());
-        member.setAddr(dto.getAddr());
-        member.setAddrDetail(dto.getAddrDetail());
         member.setAvailablePoints(dto.getAvailablePoints());
         member.setTotalUsedPoints(dto.getTotalUsedPoints());
         member.setTotalEarnedPoints(dto.getTotalEarnedPoints());
 
         when(memberRepository.findById(dto.getId())).thenReturn(java.util.Optional.of(member));
         when(passwordEncoder.encode("newpassword")).thenReturn("$2a$10$gLKb.8YwrDpQVmbZpRiMzOaEmI6oUxgWDEO75nKoqyQKOWoBvC.Ci");
+        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(new Address());
 
         // When
         adminService.updateMember(dto);
@@ -184,6 +183,7 @@ class AdminServiceTest {
         verify(modelMapper, times(1)).map(dto, member);
         verify(passwordEncoder, times(1)).encode(dto.getPassword());
         verify(memberRepository, times(1)).save(member);
+        verify(addressRepository, times(1)).save(any(Address.class));
 
         // Verify that the member was updated correctly
         assertEquals(dto.getId(), member.getId());
@@ -191,9 +191,6 @@ class AdminServiceTest {
         assertEquals("$2a$10$gLKb.8YwrDpQVmbZpRiMzOaEmI6oUxgWDEO75nKoqyQKOWoBvC.Ci", member.getPassword());
         assertEquals(dto.getName(), member.getName());
         assertEquals(dto.getEmail(), member.getEmail());
-        assertEquals(dto.getZipcode(), member.getZipcode());
-        assertEquals(dto.getAddr(), member.getAddr());
-        assertEquals(dto.getAddrDetail(), member.getAddrDetail());
         assertEquals(dto.getAvailablePoints(), member.getAvailablePoints());
         assertEquals(dto.getTotalUsedPoints(), member.getTotalUsedPoints());
         assertEquals(dto.getTotalEarnedPoints(), member.getTotalEarnedPoints());
@@ -272,8 +269,8 @@ class AdminServiceTest {
         adminService.deleteMembers(accountIds);
 
         // Then
+        assertEquals(member.isDeleted(), true);
         verify(memberRepository, times(1)).findById(accountId);
-        verify(memberRepository, times(1)).delete(member);
     }
 
     @Test
@@ -291,9 +288,8 @@ class AdminServiceTest {
         AdminDeletionException exception = assertThrows(AdminDeletionException.class, () -> {
             adminService.deleteMembers(accountIds);
         });
-
+        assertEquals(adminMember.isDeleted(), false);
         verify(memberRepository, times(1)).findById(accountId);
-        verify(memberRepository, never()).delete(any());
     }
 
     @Test
@@ -310,7 +306,6 @@ class AdminServiceTest {
         });
 
         verify(memberRepository, times(1)).findById(accountId);
-        verify(memberRepository, never()).delete(any());
     }
 
     @Test

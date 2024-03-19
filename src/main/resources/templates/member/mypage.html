@@ -54,15 +54,15 @@
                                     </li>
                                     <li>
                                         <strong>배송준비중</strong>
-                                        <a style="cursor: default;" th:text="${orderStatusCounts['배송준비중']}">0</a>
+                                        <a style="cursor: default;" th:text="${orderStatusCounts['배송준비중'] ?: 0}">0</a>
                                     </li>
                                     <li>
                                         <strong>배송중</strong>
-                                        <a style="cursor: default;" th:text="${orderStatusCounts['배송중']}">0</a>
+                                        <a style="cursor: default;" th:text="${orderStatusCounts['배송중'] ?: 0}">0</a>
                                     </li>
                                     <li>
                                         <strong>배송완료</strong>
-                                        <a style="cursor: default;" th:text="${orderStatusCounts['배송완료']}">0</a>
+                                        <a style="cursor: default;" th:text="${orderStatusCounts['배송완료'] ?: 0}">0</a>
                                     </li>
                                 </ul>
                             </div>

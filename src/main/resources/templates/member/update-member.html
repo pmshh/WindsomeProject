@@ -23,7 +23,7 @@
 
                     <div class="section-body update-member-body mt-5">
 
-                        <form class="profile-form" th:action="@{'/members/' + ${memberId} + '/update'}" th:object="${memberForm}" method="post">
+                        <form class="profile-form" th:action="@{'/members/' + ${member.memberId} + '/update'}" th:object="${member}" method="post">
                             <div class="table-wrapper">
                                 <table class="base-table base-table--two-columns base-table--no-border-sides">
                                     <colgroup>
@@ -93,7 +93,7 @@
                                             <td class="base-table__cell">
                                                 <input class="email-hidden-input" type="hidden" th:field="*{email}">
                                                 <div class="mb5">
-                                                    <input class="base-table__input email-prefix-input" th:field="*{email}" type="text">
+                                                    <input class="base-table__input email-prefix-input" type="text">
                                                     @
                                                     <input class="base-table__input email-domain-input" type="text">
                                                     <select class="base-table__select base-table__select--email-domain email-domain-select" name="email-domain-select">
@@ -166,12 +166,12 @@
         let checkMail = false;                                                      // 이메일
         let checkMailConfirm = false;                                               // 이메일 인증번호 확인
         let checkAddress = false                                                    // 주소
-        let beforeEmail = [[${memberForm.email}]];                              // 기존 이메일
+        let beforeEmail = [[${member.email}]];                              // 기존 이메일
 
         $(function () {
             showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
-            initializeEmailInputValues() // 이메일 입력창에 회원의 이메일 값을 저장하는 함수
             initializeTelInputValues() // 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수
+            initializeEmailInputValues() // 이메일 입력창에 회원의 이메일 값을 저장하는 함수
 
             /* 회원 정보 수정 버튼 클릭 이벤트 처리 */
             $(".modify-btn").click(modifyUserInfo);
@@ -200,7 +200,7 @@
         /* 이메일 입력창에 회원의 이메일 값을 저장하는 함수 */
         function initializeEmailInputValues() {
             // 회원 이메일 값을 출력합니다.
-            let email = [[${memberForm.email}]];
+            let email = [[${member.email}]];
             let emailArr = email.split("@");
 
             // 이메일 프리픽스와 도메인을 각각의 입력 필드에 할당
@@ -211,7 +211,7 @@
         /* 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수 */
         function initializeTelInputValues() {
             // 회원의 휴대전화 저장
-            let tel = [[${memberForm.tel}]];
+            let tel = [[${member.tel}]];
 
             // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
             let telPrefix = tel.substring(0, 3);
@@ -331,7 +331,6 @@
             /* 이메일 변경 검사 */
             if (beforeEmail === fullEmail) {
                 checkMailConfirm = true;
-                finalEmail = beforeEmail; // 이메일을 변경하지 않을 경우 기존 이메일 값을 그대로 서버에 전송
             } else if (checkMailConfirm === false && beforeEmail !== fullEmail) {
                 alert("이메일을 인증해주세요.");
                 $('.email-prefix-input').focus();
@@ -366,7 +365,7 @@
             /* 최종 유효성 검사 */
             if (checkPw && checkPwConfirm && checkPwMatch && checkMail && checkMailConfirm && checkName
                 && checkTelPrefix && checkTelMiddle && checkTelSuffix && checkTel && checkAddress) {
-                $(".email-hidden-input").val(finalEmail);
+                $(".email-hidden-input").val($(".email-prefix-input").val() + "@" + $(".email-domain-input").val());
                 $(".tel-hidden-input").val($(".tel-prefix-select").val() + $(".tel-middle-input").val() + $(".tel-suffix-input").val());
                 form.submit();
             }

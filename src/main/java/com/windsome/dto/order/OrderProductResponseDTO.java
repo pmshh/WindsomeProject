@@ -1,5 +1,7 @@
 package com.windsome.dto.order;
 
+import com.windsome.entity.cart.CartProduct;
+import com.windsome.entity.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,4 +34,20 @@ public class OrderProductResponseDTO {
     private String sizeName; // 사이즈 이름
 
     private int orderQuantity; // 주문 수량
+
+    public static OrderProductResponseDTO createDTO(OrderProductDTO orderProductDTO, Product product, String imageUrl, CartProduct cartProduct) {
+        return OrderProductResponseDTO.builder()
+                .id(product.getId())
+                .price(product.getPrice())
+                .discount(product.getDiscount())
+                .name(product.getName())
+                .imageUrl(imageUrl)
+                .colorId(orderProductDTO.getColorId())
+                .colorName(orderProductDTO.getColorName())
+                .sizeId(orderProductDTO.getSizeId())
+                .sizeName(orderProductDTO.getSizeName())
+                .orderQuantity(orderProductDTO.getOrderQuantity())
+                .cartProductId(cartProduct != null ? cartProduct.getId() : null)
+                .build();
+    }
 }

@@ -12,7 +12,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
 
     List<ProductImage> findByProductIdOrderByIdAsc(Long productId);
 
-    ProductImage findByProductIdAndIsRepresentativeImage(Long productId, boolean param);
+    ProductImage findByProductIdAndIsRepresentativeImage(Long productId, boolean isRepresentative);
 
     Optional<List<ProductImage>> findByProductId(Long productId);
 }

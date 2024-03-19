@@ -3,10 +3,9 @@ package com.windsome.controller.admin;
 import com.windsome.constant.OrderProductStatus;
 import com.windsome.constant.OrderStatus;
 import com.windsome.dto.order.AdminPageOrderDTO;
-import com.windsome.dto.order.OrderDetailDTO;
 import com.windsome.repository.product.InventoryRepository;
 import com.windsome.service.AdminService;
-import com.windsome.service.OrderService;
+import com.windsome.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor

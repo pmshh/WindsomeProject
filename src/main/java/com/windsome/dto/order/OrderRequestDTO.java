@@ -1,5 +1,7 @@
 package com.windsome.dto.order;
 
+import com.windsome.entity.member.Address;
+import com.windsome.entity.member.Member;
 import lombok.*;
 
 import java.util.List;
@@ -27,6 +29,8 @@ public class OrderRequestDTO {
 
     private String addrDetail; // 상세 주소
 
+    private boolean isDefault; // 기본 배송지 저장 여부
+
     private String tel; // 받는분 전화 번호
 
     private String email; // 받는분 이메일
@@ -44,5 +48,21 @@ public class OrderRequestDTO {
     private String repProductImage; // 대표 상품 이미지
 
     private List<OrderProductRequestDTO> orderProductDtoList; // 주문 상품 목록
+
+    /**
+     * 생성자, 메소드 등
+     */
+    public static Address toAddress(Member member, OrderRequestDTO orderRequestDTO) {
+        return Address.builder()
+                .name(orderRequestDTO.getName())
+                .member(member)
+                .tel(orderRequestDTO.getTel())
+                .zipcode(orderRequestDTO.getZipcode())
+                .addr(orderRequestDTO.getAddr())
+                .addrDetail(orderRequestDTO.getAddrDetail())
+                .req(orderRequestDTO.getReq())
+                .isDefault(orderRequestDTO.isDefault())
+                .build();
+    }
 
 }

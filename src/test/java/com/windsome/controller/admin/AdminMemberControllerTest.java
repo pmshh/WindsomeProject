@@ -1,5 +1,6 @@
 package com.windsome.controller.admin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
 import com.windsome.constant.Role;
 import com.windsome.dto.member.AdminMemberDetailDTO;
@@ -152,7 +153,7 @@ class AdminMemberControllerTest {
                         .param("totalEarnedPoints", "100")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/admin/members"))
+                .andExpect(redirectedUrl("/admin/members/" + 1 + "/edit"))
                 .andExpect(flash().attributeExists("message"));
     }
 
@@ -170,7 +171,7 @@ class AdminMemberControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().bytes("사용자의 권한이 수정되었습니다.".getBytes(StandardCharsets.UTF_8)));
+                .andExpect(content().bytes("회원의 권한이 수정되었습니다.".getBytes(StandardCharsets.UTF_8)));
     }
 
     @Test
@@ -178,11 +179,17 @@ class AdminMemberControllerTest {
     @WithAccount("admin1234")
     void deleteMemberTest() throws Exception {
         // Given
+        Long[] memberIds = {1L, 2L, 3L};
+        String jsonProductIds = new ObjectMapper().writeValueAsString(memberIds);
         doNothing().when(adminService).deleteMembers(any());
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/members/1").with(csrf()))
+        mockMvc.perform(delete("/admin/members/delete")
+                        .content(jsonProductIds)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("사용자가 삭제되었습니다."));
+                .andExpect(content().bytes("회원이 삭제되었습니다.".getBytes(StandardCharsets.UTF_8)));
     }
 }

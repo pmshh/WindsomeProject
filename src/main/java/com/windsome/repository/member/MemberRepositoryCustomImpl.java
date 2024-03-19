@@ -7,6 +7,7 @@ import com.windsome.constant.Role;
 import com.windsome.dto.member.MemberListResponseDTO;
 import com.windsome.dto.member.MemberListSearchDTO;
 import com.windsome.dto.member.QMemberListResponseDTO;
+import com.windsome.entity.member.QAddress;
 import com.windsome.entity.member.QMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     @Override
     public Page<MemberListResponseDTO> findMembersByCriteria(MemberListSearchDTO memberListSearchDto, Pageable pageable) {
         QMember member = QMember.member;
+        QAddress address = QAddress.address;
 
         List<MemberListResponseDTO> content = queryFactory
                 .select(
@@ -34,9 +36,9 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                                 member.userIdentifier,
                                 member.email,
                                 member.name,
-                                member.zipcode,
-                                member.addr,
-                                member.addrDetail,
+                                address.zipcode,
+                                address.addr,
+                                address.addrDetail,
                                 member.role,
                                 member.availablePoints,
                                 member.totalUsedPoints,
@@ -45,9 +47,12 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                         )
                 )
                 .from(member)
+                .join(address)
+                .on(member.id.eq(address.member.id))
                 .where(like(memberListSearchDto.getSearchType(), memberListSearchDto.getSearchQuery()),
                         (searchStateTypeEq(memberListSearchDto.getSearchStateType())),
-                        member.isDeleted.isFalse()
+                        member.isDeleted.isFalse(),
+                        address.isDefault.isTrue()
                 )
                 .orderBy(member.role.asc(), member.id.desc())
                 .offset(pageable.getOffset())
@@ -59,7 +64,9 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
                 .from(member)
                 .where(like(memberListSearchDto.getSearchType(), memberListSearchDto.getSearchQuery()),
                         (searchStateTypeEq(memberListSearchDto.getSearchStateType())),
-                        member.isDeleted.isFalse());
+                        member.isDeleted.isFalse(),
+                        address.isDefault.isTrue()
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
     }

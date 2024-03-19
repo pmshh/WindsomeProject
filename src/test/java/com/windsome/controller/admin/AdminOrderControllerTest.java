@@ -1,9 +1,10 @@
 package com.windsome.controller.admin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.service.AdminService;
-import com.windsome.service.OrderService;
+import com.windsome.service.order.OrderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,13 +61,16 @@ class AdminOrderControllerTest {
     @WithAccount("admin1234")
     void cancelOrderTest() throws Exception {
         // Mocking
+        Long[] orderIds = {1L, 2L, 3L};
+        String jsonOrderIds = new ObjectMapper().writeValueAsString(orderIds);
         doNothing().when(orderService).cancelOrder(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(post("/admin/order/{orderId}/cancel", 123L)
-                        .with(csrf())
+        mockMvc.perform(post("/admin/orders/cancel")
+                        .content(jsonOrderIds)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().bytes("주문이 취소되었습니다.".getBytes(StandardCharsets.UTF_8)));
     }

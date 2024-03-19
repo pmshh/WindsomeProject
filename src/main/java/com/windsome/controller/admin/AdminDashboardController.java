@@ -2,8 +2,8 @@ package com.windsome.controller.admin;
 
 import com.windsome.dto.board.qa.QaSearchDto;
 import com.windsome.dto.product.ProductSearchDTO;
-import com.windsome.service.*;
 import com.windsome.service.board.QaService;
+import com.windsome.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

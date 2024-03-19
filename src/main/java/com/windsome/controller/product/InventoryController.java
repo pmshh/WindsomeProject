@@ -16,7 +16,7 @@ public class InventoryController {
     @GetMapping("/inventory")
     public ResponseEntity<Integer> getInventory(@RequestParam Long productId, @RequestParam Long colorId, @RequestParam Long sizeId) {
         try {
-            int inventory = inventoryService.getInventory(productId, colorId, sizeId);
+            int inventory = inventoryService.getStockQuantity(productId, colorId, sizeId);
             return ResponseEntity.ok().body(inventory);
         } catch (Exception e) {
             return ResponseEntity.ok().body(0);

@@ -3737,8 +3737,8 @@ a.btn-normal {
 .login-body .login-form {
   min-width: 400px;
 }
-.login-body .login-form form input[type=text],
-.login-body .login-form form input[type=password] {
+.login-body .login-form #loginForm input[type=text],
+.login-body .login-form #loginForm input[type=password] {
   display: block;
   width: 100%;
   height: 50px;
@@ -3747,7 +3747,7 @@ a.btn-normal {
   margin: 0 0 8px;
   border: 1px solid #9e9e9e;
 }
-.login-body .login-form form button[type=submit] {
+.login-body .login-form #loginForm button[type=submit] {
   display: inline-block;
   height: 50px;
   width: 100%;
@@ -3757,15 +3757,23 @@ a.btn-normal {
   border-radius: 0;
   font-size: 14px;
 }
-.login-body .login-form form button[type=submit]:hover {
+.login-body .login-form #loginForm button[type=submit]:hover {
   background-color: #474747;
 }
-.login-body .login-form form .error-message-container {
-  margin: 15px 0 10px;
+.login-body .login-form #loginForm .form-check {
+  padding-left: 0;
 }
-.login-body .login-form form .error-message-container .error-message {
-  font-size: 14px;
+.login-body .login-form #loginForm .form-check .form-check-input {
+  margin: 3px 5px 0 0 !important;
+}
+.login-body .login-form #loginForm .error-message-container {
+  margin: 15px 0 15px;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.5px;
   color: #ff003e;
+  vertical-align: middle;
 }
 .login-body .login-find {
   min-width: 400px;
@@ -4508,6 +4516,114 @@ a.btn-normal {
   letter-spacing: -0.4px;
   cursor: pointer;
 }
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list {
+  padding: 9px 0 0;
+  position: relative;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul {
+  margin-top: 30px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li {
+  position: relative;
+  overflow: hidden;
+  padding: 15px 0;
+  border-top: 1px dashed #d7d5d5;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .name {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  font-size: 16px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .custom-radio {
+  color: #383838;
+  font-size: 16px;
+  text-transform: capitalize;
+  display: block;
+  padding-top: 5px;
+  padding-left: 30px;
+  padding-right: 20px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .custom-radio .choice-checkbox {
+  display: none;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .custom-radio .choice-checkbox:checked ~ span {
+  border: 6px solid #3971ff;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .custom-radio .check-btn {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 6px solid #e2e5ea;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 60px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .custom-radio .check-address-delete {
+  position: absolute;
+  top: 25px;
+  right: 5px;
+  width: 15px;
+  height: 15px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .address {
+  color: #383838;
+  margin-top: 18px;
+  letter-spacing: -0.4px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li .address-description .address-list-tel {
+  display: block;
+  margin: 8px 0 0 0;
+  color: rgb(102, 102, 102);
+  letter-spacing: -0.4px;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list ul li:last-child {
+  border-bottom: 1px dashed #d7d5d5;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list .delivery-modify-btn-wrapper {
+  text-align: right;
+  padding: 10px 0;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list .address-list-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 10px;
+  font-weight: 400;
+  color: #fff;
+  background: #ffffff;
+  line-height: 38px;
+  vertical-align: middle;
+  display: inline-block;
+  letter-spacing: -0.4px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #bebebe;
+  outline: none;
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list .address-list-close-btn::before {
+  content: " ";
+  position: absolute;
+  top: 4px;
+  left: 10px;
+  height: 15px;
+  width: 2px;
+  background-color: #bebebe;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.order-form-container form .shipping-address-container .contents .address-wrapper .recent-address-wrapper .address-list .address-list-close-btn::after {
+  content: " ";
+  position: absolute;
+  top: 4px;
+  left: 10px;
+  height: 15px;
+  width: 2px;
+  background-color: #bebebe;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
 .order-form-container form .shipping-address-container .contents .address-wrapper .new-address-wrapper {
   padding-bottom: 13px;
   display: none;
@@ -4764,7 +4880,7 @@ a.btn-normal {
   border-top: 1px solid #ebebeb;
   padding: 20px 16px 15px;
 }
-.order-form-container form .shipping-address-container .contents .req-wrapper select {
+.order-form-container form .shipping-address-container .contents .req-wrapper .req-select {
   width: 100%;
   padding: 0 20px 0 15px;
   height: 42px;
@@ -4773,12 +4889,24 @@ a.btn-normal {
   color: #333;
   border: 1px solid #c5c5c5;
   font-size: 14px;
+  outline: none;
 }
-.order-form-container form .shipping-address-container .contents .set-def-address-btn-warpper {
+.order-form-container form .shipping-address-container .contents .req-wrapper .req-custom-input-wrap {
+  display: block;
+  margin-top: 10px;
+}
+.order-form-container form .shipping-address-container .contents .req-wrapper .req-custom-input-wrap .req-custom-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 7px;
+  font-weight: inherit;
+  border: 1px solid #e1e1e1;
+}
+.order-form-container form .shipping-address-container .contents .set-def-address-btn-wrapper {
   padding: 0 16px 20px;
   position: relative;
 }
-.order-form-container form .shipping-address-container .contents .set-def-address-btn-warpper input[type=checkbox] {
+.order-form-container form .shipping-address-container .contents .set-def-address-btn-wrapper input[type=checkbox] {
   margin: 0;
   width: 20px;
   height: 20px;
@@ -4791,10 +4919,10 @@ a.btn-normal {
   background-size: 20px 20px;
   vertical-align: middle;
 }
-.order-form-container form .shipping-address-container .contents .set-def-address-btn-warpper input[type=checkbox]:checked {
+.order-form-container form .shipping-address-container .contents .set-def-address-btn-wrapper input[type=checkbox]:checked {
   background: url(//img.echosting.cafe24.com/skin/mobile/common/bg_newCheckbox_checked.png);
 }
-.order-form-container form .shipping-address-container .contents .set-def-address-btn-warpper label {
+.order-form-container form .shipping-address-container .contents .set-def-address-btn-wrapper label {
   font-size: 15px;
   margin: 0 16px 0 6px;
   color: #383838;

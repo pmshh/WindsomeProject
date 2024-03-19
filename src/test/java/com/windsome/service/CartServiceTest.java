@@ -15,6 +15,7 @@ import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.product.ColorRepository;
 import com.windsome.repository.product.ProductRepository;
 import com.windsome.repository.product.SizeRepository;
+import com.windsome.service.cart.CartService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

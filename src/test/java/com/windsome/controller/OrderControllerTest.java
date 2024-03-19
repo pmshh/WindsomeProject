@@ -1,9 +1,11 @@
 package com.windsome.controller;
 import com.windsome.advice.MemberControllerAdvice;
+import com.windsome.dto.member.MemberDetailDTO;
 import com.windsome.dto.order.*;
+import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.service.OrderService;
+import com.windsome.service.order.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -64,22 +66,35 @@ public class OrderControllerTest {
     @Test
     void testCreateOrderForm() {
         // Given
-        OrderProductListDTO orderProductListDTO = mock(OrderProductListDTO.class);
         Model mockModel = mock(Model.class);
-        Member member = mock(Member.class);
-        member.setId(1L);
+
+        Member currentAccount = new Member();
+        currentAccount.setId(1L);
+
+        OrderProductListDTO orderProductListDTO = mock(OrderProductListDTO.class);
+
         List<OrderProductResponseDTO> orderProductResponseDTOList = new ArrayList<>();
 
+        MemberDetailDTO memberDetailDTO = mock(MemberDetailDTO.class);
+
+        Address address = mock(Address.class);
+        List<Address> addressList = new ArrayList<>();
+        addressList.add(address);
+
         when(orderService.getOrderProductsInfo(orderProductListDTO)).thenReturn(orderProductResponseDTOList);
-        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
+        when(orderService.getMemberDetail(currentAccount.getId())).thenReturn(memberDetailDTO);
+        when(orderService.getDefaultShippingAddress(currentAccount.getId())).thenReturn(address);
+        when(orderService.getAddressList(currentAccount.getId())).thenReturn(addressList);
 
         // When
-        String result = orderController.createOrderForm(orderProductListDTO, member, mockModel);
+        String result = orderController.createOrderForm(orderProductListDTO, currentAccount, mockModel);
 
         // Then
         assertEquals("order/order-form", result);
         verify(mockModel).addAttribute(eq("orderProducts"), eq(orderProductResponseDTOList));
-        verify(mockModel).addAttribute(eq("member"), eq(member));
+        verify(mockModel).addAttribute(eq("member"), eq(memberDetailDTO));
+        verify(mockModel).addAttribute(eq("defaultAddress"), eq(address));
+        verify(mockModel).addAttribute(eq("addressList"), eq(addressList));
     }
 
     @Test
@@ -90,7 +105,7 @@ public class OrderControllerTest {
         RedirectAttributes mockRedirectAttributes = mock(RedirectAttributes.class);
         member.setUserIdentifier("test1234");
 
-        when(orderService.order(orderRequestDTO, member.getUserIdentifier())).thenReturn(1L);
+        when(orderService.order(orderRequestDTO, member.getId())).thenReturn(1L);
 
         // When
         String result = orderController.createOrder(orderRequestDTO, member, mockRedirectAttributes);
@@ -107,7 +122,7 @@ public class OrderControllerTest {
         Member member = mock(Member.class);
         member.setUserIdentifier("test1234");
 
-        when(orderService.verifyOrderCancellationPermission(orderId, member.getUserIdentifier())).thenReturn(false);
+        when(orderService.verifyOrderCancellationPermission(orderId, member.getId())).thenReturn(false);
 
         // When
         ResponseEntity<String> responseEntity = orderController.cancelOrder(orderId, member);

@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString(exclude = "reviews")
+@ToString(exclude = {"reviews", "addresses"})
 public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +33,6 @@ public class Member extends BaseTimeEntity {
 
     private String tel;
 
-    private String zipcode;
-
-    private String addr;
-
-    private String addrDetail;
-
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
@@ -51,6 +45,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
 
     private boolean isDeleted; // 회원 삭제 여부
 

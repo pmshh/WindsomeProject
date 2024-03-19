@@ -63,4 +63,11 @@ public class ProductImageService {
             savedProductImage.updateProductImage(originalImageName, serverImageName, imageUrl);
         }
     }
+
+    /**
+     * OrderService - 대표 이미지 url 조회
+     */
+    public String getRepresentativeImageUrl(Long productId, boolean isRepresentative) {
+        return productImageRepository.findByProductIdAndIsRepresentativeImage(productId, true).getImageUrl();
+    }
 }

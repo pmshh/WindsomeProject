@@ -61,6 +61,27 @@
                                     </tr>
                                     <tr class="base-table__row">
                                         <th class="base-table__header-cell" scope="row">
+                                            <label>휴대전화 <span class="required-field">*</span></label>
+                                        </th>
+                                        <td class="base-table__cell">
+                                            <select class="base-table__select tel-prefix-select">
+                                                <option value="1">선택</option>
+                                                <option value="010" selected>010</option>
+                                                <option value="011">011</option>
+                                                <option value="016">016</option>
+                                                <option value="017">017</option>
+                                                <option value="018">018</option>
+                                                <option value="019">019</option>
+                                            </select>
+                                            -
+                                            <input type="text" class="base-table__input base-table__input--small tel-middle-input" maxlength="4">
+                                            -
+                                            <input type="text" class="base-table__input base-table__input--small tel-suffix-input" maxlength="4">
+                                            <input type="hidden" class="base-table__input tel-hidden-input" th:field="*{tel}">
+                                        </td>
+                                    </tr>
+                                    <tr class="base-table__row">
+                                        <th class="base-table__header-cell" scope="row">
                                             <label th:for="*{email}">이메일 <span class="required-field">*</span></label>
                                         </th>
                                         <td class="base-table__cell">
@@ -166,7 +187,8 @@
 
         $(function () {
             showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
-            initializeEmail(); // 회원의 이메일 정보를 가져와서 이메일 입력 필드에 초기화하는 함수
+            initializeTelInputValues() // 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수
+            initializeEmailInputValues() // 이메일 입력창에 회원의 이메일 값을 저장하는 함수
 
             /* 저장 버튼 클릭 처리 */
             $(".save-btn").click(saveProfile);
@@ -192,8 +214,24 @@
             }
         }
 
-        /* 회원의 이메일 정보를 가져와서 이메일 입력 필드에 초기화하는 함수 */
-        function initializeEmail() {
+        /* 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수 */
+        function initializeTelInputValues() {
+            // 회원의 휴대전화 저장
+            let tel = [[${memberDetails.tel}]];
+
+            // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
+            let telPrefix = tel.substring(0, 3);
+            let middleLength = tel.length === 11 ? 4 : 3; // 중간 번호 길이 결정
+            let telMiddle = tel.substring(3, 3 + middleLength);
+            let telSuffix = tel.substring(3 + middleLength);
+
+            $(".tel-prefix-select").val(telPrefix).prop("selected", true);
+            $(".tel-middle-input").val(telMiddle);
+            $(".tel-suffix-input").val(telSuffix);
+        }
+
+        /* 이메일 입력창에 회원의 이메일 값을 저장하는 함수 */
+        function initializeEmailInputValues() {
             let email = [[${memberDetails.email}]];
             let emailArr = email.split("@");
 
@@ -293,6 +331,9 @@
 
             if (checkId && checkPw && checkName && checkMail && checkAddress && checkTotalOrderPrice && checkPoint && checkTotalUsePoint && checkTotalPoint) {
                 $(".email-hidden-input").val(fullEmail);
+                $(".tel-hidden-input").val($(".tel-prefix-select").val() + $(".tel-middle-input").val() + $(".tel-suffix-input").val());
+
+                // 비밀번호 input의 value가 빈 값 이면, 데이터 전송 X
                 if (pwVal === '') {
                     $(".pw-input").attr("disabled", true);
                 }
@@ -336,6 +377,8 @@
             if (confirm("정말로 회원을 삭제하시겠습니까?")) {
                 $.ajax({
                     url: '/admin/members/delete',
+                    contentType: "application/json",
+                    dataType: "text",
                     type: 'delete',
                     data: JSON.stringify(memberIds),
                     success(res) {

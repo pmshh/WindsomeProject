@@ -5,11 +5,14 @@ import com.windsome.dto.member.MemberFormDTO;
 import com.windsome.dto.member.SignUpRequestDTO;
 import com.windsome.dto.member.UpdatePasswordDTO;
 import com.windsome.dto.member.UserSummaryDTO;
+import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
+import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.service.mail.EmailService;
+import com.windsome.service.member.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,9 +31,9 @@ import org.springframework.test.context.TestPropertySource;
 import javax.mail.MessagingException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,6 +43,7 @@ import static org.mockito.Mockito.*;
 class MemberServiceTest {
 
     @Mock private MemberRepository memberRepository;
+    @Mock private AddressRepository addressRepository;
     @Mock private OrderRepository orderRepository;
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private AuthenticationManager authenticationManager;
@@ -96,20 +100,26 @@ class MemberServiceTest {
     @DisplayName("프로필 수정 테스트")
     void testUpdateMember() {
         // Given
+        Long memberId = 1L;
         Member member = new Member();
+        member.setId(1L);
         MemberFormDTO memberFormDto = new MemberFormDTO();
         memberFormDto.setPassword("newPassword");
         memberFormDto.setName("New Name");
+        Address address = new Address();
 
+        when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         doNothing().when(modelMapper).map(memberFormDto, member);
         when(passwordEncoder.encode(memberFormDto.getPassword())).thenReturn("encodedPassword");
+        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(address);
 
         // When
-        memberService.updateMember(member, memberFormDto);
+        memberService.updateMember(memberId, memberFormDto);
 
         // Then
         verify(modelMapper, times(1)).map(memberFormDto, member);
         verify(passwordEncoder, times(1)).encode(memberFormDto.getPassword());
+        verify(addressRepository, times(1)).save(address);
         verify(memberRepository, times(1)).save(member);
 
         assertEquals("encodedPassword", member.getPassword());

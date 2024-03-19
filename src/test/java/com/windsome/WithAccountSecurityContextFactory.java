@@ -4,7 +4,7 @@ import com.windsome.constant.Role;
 import com.windsome.dto.member.SignUpRequestDTO;
 import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.service.MemberService;
+import com.windsome.service.member.MemberService;
 import com.windsome.config.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +32,7 @@ public class WithAccountSecurityContextFactory implements WithSecurityContextFac
                 .email(userIdentifier + "@email.com")
                 .name("홍길동")
                 .password("test1234")
+                .tel("01012341234")
                 .zipcode("test")
                 .addr("test")
                 .addrDetail("test")

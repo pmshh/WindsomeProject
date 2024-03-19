@@ -6,7 +6,7 @@
     .login-form {
         min-width: 400px;
 
-        form {
+        #loginForm {
             input[type="text"],
             input[type="password"] {
                 display: block;
@@ -33,12 +33,22 @@
                 }
             }
 
-            .error-message-container {
-                margin: 15px 0 10px;
-                .error-message {
-                    font-size: 14px;
-                    color: #ff003e;
+            .form-check {
+                padding-left: 0;
+
+                .form-check-input {
+                    margin: 3px 5px 0 0 !important;
                 }
+            }
+
+            .error-message-container {
+                margin: 15px 0 15px;
+                display: inline-block;
+                font-size: 12px;
+                line-height: 16px;
+                letter-spacing: -0.5px;
+                color: #ff003e;
+                vertical-align: middle;
             }
         }
     }

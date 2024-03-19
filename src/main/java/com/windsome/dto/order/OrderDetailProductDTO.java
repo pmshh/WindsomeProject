@@ -5,6 +5,7 @@ import com.windsome.dto.product.InventoryDTO;
 import com.windsome.dto.product.ProductColorResponseDTO;
 import com.windsome.dto.product.ProductSizeResponseDTO;
 import com.windsome.entity.order.OrderProduct;
+import com.windsome.entity.product.Inventory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,4 +45,25 @@ public class OrderDetailProductDTO {
     private OrderProductStatus orderProductStatus; // 주문 상품 상태
 
     private int deliveryPrice = 2500; // 배송비
+
+
+    public static OrderDetailProductDTO createDTO(OrderProduct orderProduct, String imageUrl, Inventory inventory) {
+        OrderDetailProductDTO orderDetailProductDTO = new OrderDetailProductDTO();
+        orderDetailProductDTO.setOrderProductId(orderProduct.getId());
+        orderDetailProductDTO.setImageUrl(imageUrl);
+        orderDetailProductDTO.setProductId(orderProduct.getProduct().getId());
+        orderDetailProductDTO.setProductName(orderProduct.getProduct().getName());
+        orderDetailProductDTO.setOrderQuantity(orderProduct.getOrderQuantity());
+        orderDetailProductDTO.setProductPrice(orderProduct.getPrice());
+        orderDetailProductDTO.setColorId(orderProduct.getColor().getId());
+        orderDetailProductDTO.setColorName(orderProduct.getColor().getName());
+        orderDetailProductDTO.setSizeId(orderProduct.getSize().getId());
+        orderDetailProductDTO.setSizeName(orderProduct.getSize().getName());
+        orderDetailProductDTO.setOrderProductStatus(orderProduct.getOrderProductStatus());
+        if (orderProduct.getPrice() * orderProduct.getOrderQuantity() > 30000) {
+            orderDetailProductDTO.setDeliveryPrice(0);
+        }
+        orderDetailProductDTO.setQuantity(inventory.getQuantity());
+        return orderDetailProductDTO;
+    }
 }

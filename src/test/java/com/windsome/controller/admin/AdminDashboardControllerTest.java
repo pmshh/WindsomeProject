@@ -7,8 +7,9 @@ import com.windsome.dto.board.qa.QaListDto;
 import com.windsome.dto.board.qa.QaSearchDto;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.entity.product.Product;
-import com.windsome.service.*;
 import com.windsome.service.board.QaService;
+import com.windsome.service.AdminService;
+import com.windsome.service.order.OrderService;
 import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,10 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class AdminDashboardControllerTest {
 
-    @MockBean AdminService adminService;
+    @MockBean
+    AdminService adminService;
     @MockBean
     ProductService productService;
-    @MockBean OrderService orderService;
+    @MockBean
+    OrderService orderService;
     @MockBean QaService qaService;
     @Autowired MockMvc mockMvc;
 

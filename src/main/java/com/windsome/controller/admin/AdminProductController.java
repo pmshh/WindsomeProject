@@ -6,7 +6,7 @@ import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.service.AdminService;
-import com.windsome.service.CategoryService;
+import com.windsome.service.product.CategoryService;
 import com.windsome.service.product.InventoryService;
 import com.windsome.service.product.ProductService;
 import lombok.RequiredArgsConstructor;

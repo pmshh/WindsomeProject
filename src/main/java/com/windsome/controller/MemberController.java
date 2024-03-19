@@ -7,7 +7,7 @@ import com.windsome.dto.member.SignUpRequestDTO;
 import com.windsome.dto.member.UpdatePasswordDTO;
 import com.windsome.dto.validator.ProfileFormDtoValidator;
 import com.windsome.entity.member.Member;
-import com.windsome.service.MemberService;
+import com.windsome.service.member.MemberService;
 import com.windsome.dto.validator.SignUpDtoValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +88,7 @@ public class MemberController {
      */
     @GetMapping("/members/{memberId}/edit")
     public String updateMemberForm(@CurrentMember Member member, Model model) {
-        model.addAttribute("memberForm", modelMapper.map(member, MemberFormDTO.class));
+        model.addAttribute("member", memberService.getMemberDetail(member.getId()));
         return "member/update-member";
     }
 
@@ -96,17 +96,17 @@ public class MemberController {
      * 회원 수정
      */
     @PostMapping("/members/{memberId}/update")
-    public String updateMember(@CurrentMember Member member, @Valid MemberFormDTO memberFormDto, Errors errors,
+    public String updateMember(@Valid MemberFormDTO memberFormDto, Errors errors, @CurrentMember Member member,
                                Model model, RedirectAttributes attributes) {
         if (member.getRole() != Role.ADMIN) {
             if (errors.hasErrors()) {
-                model.addAttribute(member);
+                model.addAttribute("member", memberFormDto);
                 model.addAttribute("message", "프로필을 수정하는 도중 오류가 발생하였습니다.");
                 return "member/update-member";
             }
         }
 
-        memberService.updateMember(member, memberFormDto);
+        memberService.updateMember(member.getId(), memberFormDto);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:/members/" + member.getId() + "/edit";
     }

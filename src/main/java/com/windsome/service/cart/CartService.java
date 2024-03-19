@@ -1,4 +1,4 @@
-package com.windsome.service;
+package com.windsome.service.cart;
 
 import com.windsome.dto.cart.CartDetailDto;
 import com.windsome.dto.cart.CartProductDTO;

@@ -1,12 +1,13 @@
 package com.windsome.controller.admin;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
 import com.windsome.dto.admin.PageDto;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
 import com.windsome.service.AdminService;
-import com.windsome.service.CategoryService;
+import com.windsome.service.product.CategoryService;
 import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -220,10 +221,15 @@ class AdminProductControllerTest {
     @WithAccount("admin1234")
     void deleteItemSuccessTest() throws Exception {
         // Mocking - 상품 삭제가 성공하는 경우
+        Long[] productIds = {1L, 2L, 3L};
         doNothing().when(productService).deleteProduct(any());
 
+        // productIds 배열을 JSON 문자열로 변환
+        String jsonProductIds = new ObjectMapper().writeValueAsString(productIds);
+
         // Perform & Verify
-        mockMvc.perform(delete("/admin/products/{productId}", 123L)
+        mockMvc.perform(delete("/admin/products/delete")
+                        .content(jsonProductIds)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -236,10 +242,15 @@ class AdminProductControllerTest {
     @WithAccount("admin1234")
     void deleteItemFailureTest() throws Exception {
         // Mocking - 일치하는 상품 정보가 없는 경우
+        Long[] productIds = {1L, 2L, 3L};
         doThrow(new Exception()).when(productService).deleteProduct(any());
 
+        // productIds 배열을 JSON 문자열로 변환
+        String jsonProductIds = new ObjectMapper().writeValueAsString(productIds);
+
         // Perform & Verify
-        mockMvc.perform(delete("/admin/products/{productId}", 123L)
+        mockMvc.perform(delete("/admin/products/delete")
+                        .content(jsonProductIds)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()))

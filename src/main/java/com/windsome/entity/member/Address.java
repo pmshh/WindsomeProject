@@ -1,14 +1,16 @@
 package com.windsome.entity.member;
 
+import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
+@Getter @Setter
 @Builder @AllArgsConstructor @NoArgsConstructor
 @ToString
-public class Address {
+public class Address extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
@@ -31,4 +33,20 @@ public class Address {
     private String req; // 배송 메시지
 
     private boolean isDefault; // 기본 배송지 여부
+
+    /**
+     * 생성자, 메소드 등
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(name, address.name) && Objects.equals(zipcode, address.zipcode) && Objects.equals(addr, address.addr) && Objects.equals(addrDetail, address.addrDetail) && Objects.equals(tel, address.tel);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, zipcode, addr, addrDetail, tel);
+    }
 }

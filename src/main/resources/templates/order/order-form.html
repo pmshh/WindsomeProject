@@ -82,32 +82,75 @@
                 <h1>주문/결제</h1>
             </div>
         </header>
-        <form action="">
+        <form>
             <!-- shipping-address-container start -->
             <div class="shipping-address-container">
                 <div class="title">
                     <h2>배송지</h2>
                 </div>
                 <div class="contents">
+                    <!-- address-wrapper start -->
                     <div class="address-wrapper">
+                        <!-- tab start -->
                         <div class="tab">
                             <ul>
                                 <li class="selected"><a href="#" class="recent-address-tab-button">최근 배송지</a></li>
                                 <li><a href="#" class="direct-input-tab-button">직접입력</a></li>
                             </ul>
                         </div>
+
+                        <!-- recent-address-wrapper start -->
                         <div class="recent-address-wrapper">
                             <div class="address-info">
-                                <span class="name" th:text="${member.name}"></span>
+                                <span class="member-name name" th:text="${defaultAddress.name}"></span>
+                                <!-- 서버 전송용 hidden input -->
+                                <input type="hidden" class="hidden-member-name" th:value="${defaultAddress.name}">
                                 <p class="address">
-                                    [<span th:text="${member.zipcode}"></span>]
-                                    <span th:text="${member.addr}"></span>
-                                    <span class="ms-1" th:text="${member.addrDetail}"></span>
+                                    [<span class="member-zipcode" th:text="${defaultAddress.zipcode}"></span>]
+                                    <span class="member-addr" th:text="${defaultAddress.addr}"></span>
+                                    <span class="member-addr-detail ms-1" th:text="${defaultAddress.addrDetail}"></span>
+                                    <!-- 서버 전송용 hidden input -->
+                                    <input type="hidden" class="hidden-member-zipcode" th:value="${defaultAddress.zipcode}">
+                                    <input type="hidden" class="hidden-member-addr" th:value="${defaultAddress.addr}">
+                                    <input type="hidden" class="hidden-member-addr-detail" th:value="${defaultAddress.addrDetail}">
                                 </p>
-                                <span class="tel" th:text="${member.tel}"></span>
+                                <span class="member-tel tel" th:text="${defaultAddress.tel}"></span>
+                                <!-- 서버 전송용 hidden input -->
+                                <input type="hidden" class="hidden-member-tel" th:value="${defaultAddress.tel}">
                             </div>
                             <button class="address-list-btn" type="button">배송지 목록</button>
+                            <div class="address-list d-none">
+                                <ul>
+                                    <li th:each="address, status: ${addressList}">
+                                        <span class="name" th:text="${address.name}"></span>
+                                        <div class="address-description">
+                                            <label th:for="${'choice-address-' + address.id}" class="custom-radio">
+                                                <input class="choice-checkbox" th:id="${'choice-address-' + address.id}" th:value="${'choice-address-' + address.id}" name="choice-address" type="radio" th:checked="${address.isDefault}">
+                                                <span class="check-btn"></span>
+                                                <input type="checkbox" class="check-address-delete d-none" th:value="${address.id}" checked>
+                                                <!-- js에서 활용하기 위한 hidden input -->
+                                                <input class="address-data-info" type="hidden" th:data-name="${address.name}" th:data-zipcode="${address.zipcode}" th:data-addr="${address.addr}" th:data-addr-detail="${address.addrDetail}" th:data-tel="${address.tel}">
+                                            </label>
+                                            <p class="address">
+                                                [<span th:text="${address.zipcode}"></span>]
+                                                <span th:text="${address.addr}"></span>
+                                                <span class="ms-1" th:text="${address.addrDetail}"></span>
+                                            </p>
+                                            <span class="address-list-tel" th:text="${address.tel}" th:data-tel="${address.tel}"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="delivery-modify-btn-wrapper">
+                                    <button class="button button--white button--90x30 delivery-modify-btn" type="button">배송지 편집</button>
+                                    <button class="button button--white button--90x30 delivery-modify-delete-btn d-none" type="button">삭제</button>
+                                    <button class="button button--white button--90x30 delivery-modify-cancel-btn d-none" type="button">취소</button>
+                                    <button class="button button--white button--90x30 toggle-all-check d-none" type="button">전체 선택/해제</button>
+                                </div>
+                                <button class="address-list-close-btn" type="button"></button>
+                            </div>
                         </div>
+
+                        <!-- new-address-wrapper start -->
                         <div class="new-address-wrapper">
                             <div class="address-options-area">
                                 <label for="same-address" class="custom-radio">
@@ -209,7 +252,6 @@
                                                         </span>
                                                     </span>
                                                 </div>
-
                                             </td>
                                         </tr>
                                     </tbody>
@@ -217,18 +259,25 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- req-wrapper start -->
                     <div class="req-wrapper">
-                        <select>
-                            <option value="oMessage-0" selected="selected">-- 메시지 선택 (선택사항) --</option>
-                            <option value="oMessage-1">배송 전에 미리 연락바랍니다.</option>
-                            <option value="oMessage-2">부재 시 경비실에 맡겨주세요.</option>
-                            <option value="oMessage-3">부재 시 문 앞에 놓아주세요.</option>
-                            <option value="oMessage-4">빠른 배송 부탁드립니다.</option>
-                            <option value="oMessage-5">택배함에 보관해 주세요.</option>
-                            <option value="oMessage-input">직접 입력</option>
+                        <select class="req-select">
+                            <option value="" selected="selected">-- 메시지 선택 (선택사항) --</option>
+                            <option value="배송 전에 미리 연락바랍니다.">배송 전에 미리 연락바랍니다.</option>
+                            <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+                            <option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
+                            <option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
+                            <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
+                            <option value="custom">직접 입력</option>
                         </select>
+                        <div class="req-custom-input-wrap d-none">
+                            <textarea class="req-custom-input" maxlength="255" cols="70"></textarea>
+                        </div>
                     </div>
-                    <div class="set-def-address-btn-warpper">
+
+                    <!-- set-def-address-btn-wrapper start -->
+                    <div class="set-def-address-btn-wrapper d-none">
                         <input id="set-def-address" name="set-def-address" type="checkbox">
                         <label for="set-def-address">기본 배송지로 저장</label>
                     </div>
@@ -454,6 +503,7 @@
         <input name="zipcode" type="hidden">
         <input name="addr" type="hidden">
         <input name="addrDetail" type="hidden">
+        <input name="default" type="hidden">
         <input name="tel" type="hidden">
         <input name="email" type="hidden">
         <input name="req" type="hidden">
@@ -490,27 +540,55 @@
         IMP.init("imp50343645");
 
         $(function () {
-            fillPhoneNumberField(); // 이메일 input에 휴대 전화 값 채우기
+            fillPhoneNumberField(); // 휴대 전화 input에 휴대 전화 값 채우기
             fillEmailField(); // 이메일 input에 사용자 이메일 값 채우기
             refreshPaymentInfo(); // 결제 관련 값 업데이트
-
-            /* 이메일 도메인 select 이벤트 처리 */
-            $(".email-domain-select").change(showCustomEmailDomainInput);
+            initializeReqMessage(); // 배송 메시지 select에 기존 배송 메시지 값 저장하는 함수
 
             /* 각 섹션 제목 클릭 시 본문 숨김/보이기 처리 */
             $(".title").click(toggleSectionContent);
 
+            /* 배송지 목록 버튼 클릭 이벤트 처리 */
+            $(".address-list-btn").click(showAddressList);
+
+            /* 배송지 목록의 휴대 전화 값에 하이픈을 추가하는 함수 */
+            $(".address-list-tel").each(formatPhoneNumberWithHyphen);
+
+            /* 배송지 목록에서 원하는 배송지 체크 시 해당 주소 값을 배송지 값에 저장 */
+            $(".choice-checkbox").change(saveSelectedAddress);
+
+            /* 배송지 편집 버튼 클릭 이벤트 처리 */
+            $(".delivery-modify-btn").click(activateDeliveryEditMode);
+
+            /* 배송지 편집 삭제 버튼 클릭 이벤트 처리 */
+            $(".delivery-modify-delete-btn").click(deleteDeliveryAddresses);
+
+            /* 배송지 편집 취소 버튼 클릭 이벤트 처리 */
+            $(".delivery-modify-cancel-btn").click(deactivateDeliveryEditMode);
+
+            /* 배송지 편집 전체 선택/해제 버튼 클릭 이벤트 처리 */
+            $(".toggle-all-check").click(toggleAllAddressCheck);
+
+            /* 배송지 목록 닫기 버튼 클릭 이벤트 처리 */
+            $(".address-list-close-btn").click(closeAddressList);
+
+            /* 주소 탭 클릭 이벤트 처리 */
+            $(".direct-input-tab-button, .recent-address-tab-button").click(toggleAddressTab);
+
             /* '회원 정보와 동일', '새로운 배송지' 체크 박스 이벤트 처리 */
             $("input[name='address']").change(handleAddressChange);
+
+            /* 이메일 도메인 select 이벤트 처리 */
+            $(".email-domain-select").change(showCustomEmailDomainInput);
+
+            /* 배송 메시지 select 이벤트 처리 */
+            $(".req-select").change(toggleShippingMessageInput);
 
             /* 적립금 관련 메시지 박스 클릭 이벤트 처리 */
             $(".help-message-box").click(toggleMessageBox);
 
             /* 주문 상품 삭제 버튼 클릭 이벤트 처리 */
             $(".delete-btn").click(deleteOrderProduct);
-
-            /* 주소 탭 클릭 이벤트 처리 */
-            $(".direct-input-tab-button, .recent-address-tab-button").click(toggleAddressTab);
 
             /* 포인트 전액 사용 버튼 클릭 이벤트 처리 */
             $(".all-point-use-btn").click(setMaxPointUsage);
@@ -591,6 +669,134 @@
             } else {
                 $(this).find(".text-box").hide();
             }
+        }
+
+        /* 배송지 목록을 보여주는 함수 */
+        function showAddressList() {
+            $(this).hide();
+            $(".address-info").hide();
+            $(".address-list").removeClass("d-none");
+        }
+
+        /* 배송지 목록의 휴대 전화 값에 하이픈을 추가하는 함수 */
+        function formatPhoneNumberWithHyphen() {
+            let tel = $(this).data("tel");
+
+            // 휴대전화 번호를 각 부분으로 나누기
+            let telPrefix = tel.substring(0, 3);
+            let telMiddle = tel.substring(3, 7);
+            let telSuffix = tel.substring(7);
+
+            $(this).text(telPrefix + '-' + telMiddle + '-' + telSuffix);
+        }
+
+        /* 배송지 목록에서 원하는 배송지 체크 시 해당 주소 값을 배송지 값에 저장하는 함수 */
+        function saveSelectedAddress() {
+            $(".choice-checkbox").each(function () {
+                if ($(this).is(":checked")) {
+                    let dataInfo = $(this).siblings(".address-data-info");
+                    let name = dataInfo.data("name");
+                    let zipcode = dataInfo.data("zipcode");
+                    let addr = dataInfo.data("addr");
+                    let addrDetail = dataInfo.data("addr-detail");
+                    let tel = dataInfo.data("tel");
+
+                    console.log(addrDetail);
+
+                    // 휴대전화 번호를 각 부분으로 나누기
+                    let telPrefix = tel.substring(0, 3);
+                    let telMiddle = tel.substring(3, 7);
+                    let telSuffix = tel.substring(7);
+
+                    $(".member-name").text(name);
+                    $(".member-zipcode").text(zipcode);
+                    $(".member-addr").text(addr);
+                    $(".member-addr-detail").text(addrDetail);
+                    $(".member-tel").text(telPrefix + '-' + telMiddle + '-' + telSuffix);
+
+                    $(".hidden-member-name").val(name);
+                    $(".hidden-member-zipcode").val(zipcode);
+                    $(".hidden-member-addr").val(addr);
+                    $(".hidden-member-addr-detail").val(addrDetail);
+                    $(".hidden-member-tel").val(tel);
+                }
+            });
+            $(".address-list").addClass("d-none");
+            $(".address-info").show();
+            $(".address-list-btn").show();
+        }
+
+        /* 배송지 편집 모드 활성화 함수 */
+        function activateDeliveryEditMode() {
+            $(this).addClass("d-none");
+            $(".check-btn").addClass("d-none");
+            $(".check-address-delete").removeClass("d-none");
+            $(".delivery-modify-delete-btn").removeClass("d-none");
+            $(".delivery-modify-cancel-btn").removeClass("d-none");
+            $(".toggle-all-check").removeClass("d-none");
+        }
+
+        /* 배송지 삭제 함수 */
+        function deleteDeliveryAddresses() {
+            if ($(".check-address-delete:first").prop("checked")) {
+                alert("죄송합니다. 기본 배송지는 삭제할 수 없습니다.");
+                return false;
+            }
+
+            if (confirm("선택하신 배송지를 삭제하시겠습니까?")) {
+                let addressIds = [];
+                $(".check-address-delete").each(function () {
+                    if ($(this).is(":checked")) {
+                        addressIds.push($(this).val());
+                    }
+                });
+
+                $.ajax({
+                    url: "/address/delete",
+                    type: "delete",
+                    contentType: "application/json",
+                    dataType: "text",
+                    data: JSON.stringify(addressIds),
+                    success: function () {
+                        window.reload();
+                    },
+                    error: function (request) {
+                        alert(request.responseText);
+                    },
+                });
+            }
+        }
+
+        /* 배송지 편집 모드 비활성화 함수 */
+        function deactivateDeliveryEditMode() {
+            $(".delivery-modify-btn").removeClass("d-none");
+            $(".check-btn").removeClass("d-none");
+            $(".check-address-delete").addClass("d-none");
+            $(".delivery-modify-delete-btn").addClass("d-none");
+            $(".delivery-modify-cancel-btn").addClass("d-none");
+            $(".toggle-all-check").addClass("d-none");
+        }
+
+        /* 배송지 편집 전체 선택/해제 함수 */
+        function toggleAllAddressCheck() {
+            // 체크박스들의 상태를 확인하여 모두 체크되어 있는지 확인
+            let allChecked = $(".check-address-delete").not(this).prop("checked");
+            // 전체 체크박스를 토글
+            $(".check-address-delete").prop("checked", !allChecked);
+        }
+
+        /* 배송지 목록 닫기 함수 */
+        function closeAddressList() {
+            $(".delivery-modify-btn").removeClass("d-none");
+            $(".check-btn").removeClass("d-none");
+            $(".check-address-delete").addClass("d-none");
+            $(".delivery-modify-delete-btn").addClass("d-none");
+            $(".delivery-modify-cancel-btn").addClass("d-none");
+            $(".toggle-all-check").addClass("d-none");
+
+            $(".address-list").addClass("d-none");
+            $(".address-info").show();
+            $(".address-list-btn").show();
         }
 
         /* '회원 정보와 동일' 클릭 시 배송지 관련 입력창에 회원의 배송지 값 저장 */
@@ -688,14 +894,32 @@
             if ($(this).hasClass("direct-input-tab-button")) {
                 $(".recent-address-wrapper").hide();
                 $(".new-address-wrapper").show();
+                $(".set-def-address-btn-wrapper").removeClass("d-none");
             } else if ($(this).hasClass("recent-address-tab-button")) {
                 $(".new-address-wrapper").hide();
                 $(".recent-address-wrapper").show();
+                $(".set-def-address-btn-wrapper").addClass("d-none");
             }
 
             // 선택된 탭에 selected 클래스 추가
             $(this).closest('li').addClass('selected')
                 .siblings('li').removeClass('selected'); // 다른 li 태그의 selected 클래스 제거
+        }
+
+        /* 배송 메시지 select에 기존 배송 메시지 값 저장하는 함수 */
+        function initializeReqMessage() {
+            let defaultReq = [[${defaultAddress.req}]];
+            if (defaultReq === "배송 전에 미리 연락바랍니다." ||
+                defaultReq === "부재 시 경비실에 맡겨주세요." ||
+                defaultReq === "부재 시 문 앞에 놓아주세요." ||
+                defaultReq === "빠른 배송 부탁드립니다." ||
+                defaultReq === "택배함에 보관해 주세요.") {
+                $(".req-select").val(defaultReq);
+            } else {
+                $(".req-select").val("custom");
+                $(".req-custom-input-wrap").removeClass("d-none");
+                $(".req-custom-input").val(defaultReq);
+            }
         }
 
         /* 주문 상품 삭제 함수 */
@@ -758,6 +982,15 @@
                 $(".discount-price").text("-" + 0);
                 alert("상품구매금액이 40,000KRW 이상이어야\n적립금을 사용하실 수 있습니다.");
                 refreshPaymentInfo();
+            }
+        }
+
+        /* 배송 메시지 입력창 토글 */
+        function toggleShippingMessageInput() {
+            if ($(this).val() === 'custom') {
+                $(".req-custom-input-wrap").removeClass('d-none');
+            } else {
+                $(".req-custom-input-wrap").addClass('d-none');
             }
         }
 
@@ -870,13 +1103,11 @@
                 }
 
                 /* 이메일 직접입력 빈값 검사 */
-                if (emailDomainSelectVal !== '0' && emailDomainInputVal === "") {
+                if (emailDomainSelectVal === 'custom' && emailDomainInputVal === "") {
                     alert("이메일을 입력하세요.");
                     $(".email-domain-input").focus();
                     window.scrollTo(0, 0);
                     return false;
-                } else {
-                    checkEmailDomain = true;
                 }
 
                 /* 휴대전화 전체 유효성 검사 */
@@ -921,7 +1152,6 @@
                     // 결제 성공
                     if (rsp.success) {
                         let form = $("#orderForm");
-                        // let orderUid = generateOrderNumber(); // 주문 번호 생성
 
                         let totalProductPrice = 0; // 상품 총 금액
                         let totalOrderPrice = 0; // 주문 총 금액 (상품 총 금액 + 배송비)
@@ -991,18 +1221,30 @@
 
                         /* 배송 정보 (최근 배송지 / 직접 입력) 구분 */
                         if ($(".tab .selected").find("a").hasClass("recent-address-tab-button")) {
-                            $("input[name='name']").val(buyerName);
-                            $("input[name='zipcode']").val(buyerZipcode);
-                            $("input[name='addr']").val(buyerAddr);
-                            $("input[name='addrDetail']").val(buyerAddrDetail);
-                            $("input[name='tel']").val(buyerTel);
+                            $("input[name='name']").val($(".hidden-member-name").val());
+                            $("input[name='zipcode']").val($(".hidden-member-zipcode").val());
+                            $("input[name='addr']").val($(".hidden-member-addr").val());
+                            $("input[name='addrDetail']").val($(".hidden-member-addr-detail").val());
+                            $("input[name='default']").val(true);
+                            $("input[name='tel']").val($(".hidden-member-tel").val());
+                            if ($(".req-select").val() === 'custom') {
+                                $("input[name='req']").val($(".req-custom-input").val());
+                            } else {
+                                $("input[name='req']").val($(".req-select").val());
+                            }
                             $("input[name='email']").val(buyerEmail);
                         } else {
                             $("input[name='name']").val($(".name-input").val());
                             $("input[name='zipcode']").val($(".zipcode-input").val());
                             $("input[name='addr']").val($(".addr-input").val());
                             $("input[name='addrDetail']").val($(".addr-detail-input").val());
+                            $("input[name='default']").val($("#set-def-address").prop("checked"));
                             $("input[name='tel']").val($(".tel-prefix-select").val() + $(".tel-middle-input").val() + $(".tel-suffix-input").val());
+                            if ($(".req-select").val() === 'custom') {
+                                $("input[name='req']").val($(".req-custom-input").val());
+                            } else {
+                                $("input[name='req']").val($(".req-select").val());
+                            }
                             let emailDomain;
                             if ($(".email-domain-select").val() === "custom") {
                                 emailDomain = $(".email-domain-input").val();

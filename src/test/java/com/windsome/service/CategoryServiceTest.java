@@ -6,6 +6,7 @@ import com.windsome.dto.category.CategoryDto;
 import com.windsome.dto.category.MainPageCategoryDTO;
 import com.windsome.entity.Category;
 import com.windsome.repository.category.CategoryRepository;
+import com.windsome.service.product.CategoryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
