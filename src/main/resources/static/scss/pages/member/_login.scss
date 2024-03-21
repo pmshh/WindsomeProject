@@ -35,9 +35,43 @@
 
             .form-check {
                 padding-left: 0;
+                color: #A1A7A8;
 
-                .form-check-input {
-                    margin: 3px 5px 0 0 !important;
+                .remember-me-label {
+                    position: relative;
+                    font-size: 13px;
+
+                    input {
+                        position: absolute;
+                        left: -999px;
+                    }
+                    .circle {
+                        margin-right: 2px;
+                        width: 18px;
+                        height: 18px;
+                        border: 1px solid #A1A7A8;
+                        border-radius: 10px;
+                        display: inline-block;
+                        position: relative;
+                        top: 4px;
+                        cursor: pointer;
+                    }
+                    .check {
+                        font-size: 16px;
+                        position: absolute;
+                        top: 5px;
+                        left: 1px;
+                    }
+
+                    input:checked + .circle {
+                        background-color: #03C75A;
+                        border: 1px solid transparent;
+                    }
+
+                    input:checked ~ .check {
+                        color: white;
+                    }
+
                 }
             }
 
@@ -55,7 +89,7 @@
 
     .login-find {
         min-width: 400px;
-        padding: 20px 0 35px;
+        padding: 20px 0 20px;
         text-align: center;
 
         .txt {
@@ -68,7 +102,7 @@
             border-left: 1px solid #ddd;
 
             a {
-                color: #000;
+                color: #999;
 
                 &:hover {
                     color: #ccc;
@@ -87,72 +121,72 @@
             line-height: 11px;
 
             a {
-                color: #000;
+                color: #111;
                 font-weight: bold;
 
                 &:hover {
-                    color: #ccc;
+                    color: #999;
+                }
+            }
+        }
+    }
+
+    .sns-login-warpper {
+        min-width: 400px;
+        font-size: 12px;
+
+        li {
+            margin: 7px 0 0 0;
+
+            a {
+                display: block;
+                height: 50px;
+                line-height: 50px;
+            }
+        }
+
+        .kakao {
+            a {
+                background: #ffeb00;
+
+                i {
+                    margin-left: 15px;
+                    display: inline-block;
+                    font-size: 28px;
+                    vertical-align: middle;
+                }
+
+                span {
+                    display: inline-block;
+                    width: 80%;
+                    vertical-align: middle;
+                    text-align: center;
+                    font-size: 13px;
+                    color: #3c1e1e;
+                }
+            }
+        }
+
+        .naver {
+            a {
+                background: #26c826;
+
+                i {
+                    margin-left: 15px;
+                    display: inline-block;
+                    font-size: 28px;
+                    vertical-align: middle;
+                }
+
+                span {
+                    display: inline-block;
+                    width: 80%;
+                    vertical-align: middle;
+                    text-align: center;
+                    font-size: 13px;
+                    color: #fff;
                 }
             }
         }
     }
 }
-
-// .sns-login {
-//     width: 100%;
-//     font-size: 12px;
-
-//     li {
-//         margin: 7px 0 0 0;
-
-//         a {
-//             display: block;
-//             height: 50px;
-//             line-height: 50px;
-//         }
-//     }
-
-//     .kakao {
-//         a {
-//             background: #ffeb00;
-
-//             i {
-//                 margin-left: 15px;
-//                 display: inline-block;
-//                 font-size: 28px;
-//                 vertical-align: middle;
-//             }
-
-//             span {
-//                 display: inline-block;
-//                 width: 80%;
-//                 vertical-align: middle;
-//                 text-align: center;
-//                 font-size: 13px;
-//                 color: #3c1e1e;
-//             }
-//         }
-//     }
-
-//     .naver {
-//         a {
-//             background: #26c826;
-
-//             i {
-//                 margin-left: 15px;
-//                 display: inline-block;
-//                 font-size: 28px;
-//                 vertical-align: middle;
-//             }
-
-//             span {
-//                 display: inline-block;
-//                 width: 80%;
-//                 vertical-align: middle;
-//                 text-align: center;
-//                 font-size: 13px;
-//                 color: #fff;
-//             }
-//         }
-//     }
-// }

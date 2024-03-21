@@ -41,6 +41,8 @@ public class MemberDetailDTO {
 
     private int totalUsedPoints;
 
+    private String oauth;
+
     /**
      * 생성자, 메소드 등
      */
@@ -58,6 +60,7 @@ public class MemberDetailDTO {
                 .availablePoints(member.getAvailablePoints())
                 .totalUsedPoints(member.getTotalUsedPoints())
                 .totalEarnedPoints(member.getTotalUsedPoints())
+                .oauth(member.getOauth())
                 .build();
     }
 }

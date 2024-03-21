@@ -119,7 +119,7 @@ public class AdminService {
     @Transactional(readOnly = true)
     public AdminMemberDetailDTO getMemberDetails(Long accountId) {
         Member member = memberRepository.findById(accountId).orElseThrow(EntityNotFoundException::new);
-        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true).orElseThrow(EntityNotFoundException::new);
         return AdminMemberDetailDTO.toDto(member, address);
     }
 
@@ -131,11 +131,10 @@ public class AdminService {
         modelMapper.map(dto, member);
         // dto의 password 필드 값이 있으면 비밀번호 변경
         if (dto.getPassword() != null) {
-            String encodedPassword = passwordEncoder.encode(dto.getPassword());
-            member.setPassword(encodedPassword);
+            member.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
-        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true).orElseThrow(EntityNotFoundException::new);
         address.setTel(dto.getTel());
         address.setZipcode(dto.getZipcode());
         address.setAddr(dto.getAddr());

@@ -19,11 +19,9 @@ public class MemberFormDTO {
     @Length(min = 1, max = 8)
     private String name;
 
-    @NotBlank
     @Length(min = 8,max = 20)
     private String password;
 
-    @NotBlank
     @Length(min = 8,max = 20)
     private String passwordConfirm;
 
@@ -42,4 +40,6 @@ public class MemberFormDTO {
 
     @NotBlank
     private String addrDetail;
+
+    private String oauth;
 }

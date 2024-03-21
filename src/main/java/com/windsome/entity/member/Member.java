@@ -51,6 +51,8 @@ public class Member extends BaseTimeEntity {
 
     private boolean isDeleted; // 회원 삭제 여부
 
+    private String oauth;
+
     /**
      * 생성자, 메소드 등
      */

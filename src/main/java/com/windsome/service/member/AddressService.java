@@ -30,7 +30,7 @@ public class AddressService {
      * 회원의 기본 배송지 조회
      */
     public Address getAddressByMemberIdAndIsDefault(Long memberId, boolean isDefault) {
-        return addressRepository.findByMemberIdAndIsDefault(memberId, isDefault);
+        return addressRepository.findByMemberIdAndIsDefault(memberId, isDefault).orElseThrow(EntityNotFoundException::new);
     }
 
     /**

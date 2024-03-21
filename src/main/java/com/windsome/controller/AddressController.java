@@ -15,6 +15,9 @@ public class AddressController {
 
     private final AddressService addressService;
 
+    /**
+     * 배송지 삭제
+     */
     @DeleteMapping("/address/delete")
     public ResponseEntity<String> deleteAddress(@RequestBody Long[] addressIds) {
         try {

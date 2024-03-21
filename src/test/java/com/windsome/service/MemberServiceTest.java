@@ -111,7 +111,7 @@ class MemberServiceTest {
         when(memberRepository.findById(member.getId())).thenReturn(Optional.of(member));
         doNothing().when(modelMapper).map(memberFormDto, member);
         when(passwordEncoder.encode(memberFormDto.getPassword())).thenReturn("encodedPassword");
-        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(address);
+        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(Optional.of(address));
 
         // When
         memberService.updateMember(memberId, memberFormDto);

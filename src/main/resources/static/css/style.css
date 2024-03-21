@@ -3762,9 +3762,39 @@ a.btn-normal {
 }
 .login-body .login-form #loginForm .form-check {
   padding-left: 0;
+  color: #A1A7A8;
 }
-.login-body .login-form #loginForm .form-check .form-check-input {
-  margin: 3px 5px 0 0 !important;
+.login-body .login-form #loginForm .form-check .remember-me-label {
+  position: relative;
+  font-size: 13px;
+}
+.login-body .login-form #loginForm .form-check .remember-me-label input {
+  position: absolute;
+  left: -999px;
+}
+.login-body .login-form #loginForm .form-check .remember-me-label .circle {
+  margin-right: 2px;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #A1A7A8;
+  border-radius: 10px;
+  display: inline-block;
+  position: relative;
+  top: 4px;
+  cursor: pointer;
+}
+.login-body .login-form #loginForm .form-check .remember-me-label .check {
+  font-size: 16px;
+  position: absolute;
+  top: 5px;
+  left: 1px;
+}
+.login-body .login-form #loginForm .form-check .remember-me-label input:checked + .circle {
+  background-color: #03C75A;
+  border: 1px solid transparent;
+}
+.login-body .login-form #loginForm .form-check .remember-me-label input:checked ~ .check {
+  color: white;
 }
 .login-body .login-form #loginForm .error-message-container {
   margin: 15px 0 15px;
@@ -3777,7 +3807,7 @@ a.btn-normal {
 }
 .login-body .login-find {
   min-width: 400px;
-  padding: 20px 0 35px;
+  padding: 20px 0 20px;
   text-align: center;
 }
 .login-body .login-find .txt {
@@ -3790,7 +3820,7 @@ a.btn-normal {
   border-left: 1px solid #ddd;
 }
 .login-body .login-find .txt a {
-  color: #000;
+  color: #999;
 }
 .login-body .login-find .txt a:hover {
   color: #ccc;
@@ -3805,11 +3835,57 @@ a.btn-normal {
   line-height: 11px;
 }
 .login-body .login-find .join-txt a {
-  color: #000;
+  color: #111;
   font-weight: bold;
 }
 .login-body .login-find .join-txt a:hover {
-  color: #ccc;
+  color: #999;
+}
+.login-body .sns-login-warpper {
+  min-width: 400px;
+  font-size: 12px;
+}
+.login-body .sns-login-warpper li {
+  margin: 7px 0 0 0;
+}
+.login-body .sns-login-warpper li a {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+}
+.login-body .sns-login-warpper .kakao a {
+  background: #ffeb00;
+}
+.login-body .sns-login-warpper .kakao a i {
+  margin-left: 15px;
+  display: inline-block;
+  font-size: 28px;
+  vertical-align: middle;
+}
+.login-body .sns-login-warpper .kakao a span {
+  display: inline-block;
+  width: 80%;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 13px;
+  color: #3c1e1e;
+}
+.login-body .sns-login-warpper .naver a {
+  background: #26c826;
+}
+.login-body .sns-login-warpper .naver a i {
+  margin-left: 15px;
+  display: inline-block;
+  font-size: 28px;
+  vertical-align: middle;
+}
+.login-body .sns-login-warpper .naver a span {
+  display: inline-block;
+  width: 80%;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 13px;
+  color: #fff;
 }
 
 .mypage-body {

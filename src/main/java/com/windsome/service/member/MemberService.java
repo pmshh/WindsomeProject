@@ -24,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +39,37 @@ public class MemberService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final AddressRepository addressRepository;
+
+    public void createOrLogin(Member member) {
+        if (member.getOauth() != null) {//카카오 로그인
+            String rawPassword = member.getPassword();
+            if (kakaoValidateDuplicateUser(member).isEmpty()) {
+                // 회원가입
+                String encPassword = passwordEncoder.encode(member.getPassword());
+                member.setPassword(encPassword);
+                memberRepository.save(member);
+            }
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getUserIdentifier(), rawPassword));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            validateDuplicateUser(member);
+            String encPassword = passwordEncoder.encode(member.getPassword());
+            member.setPassword(encPassword);
+            memberRepository.save(member);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void validateDuplicateUser(Member member){
+        memberRepository.findByName(member.getName()).ifPresent(m -> {
+                    throw new IllegalStateException("이미 존재하는 회원");
+                });
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> kakaoValidateDuplicateUser(Member member){
+        return memberRepository.findOneByUserIdentifier(member.getUserIdentifier());
+    }
 
     /**
      * 회원 조회
@@ -85,15 +113,20 @@ public class MemberService {
     public void updateMember(Long memberId, MemberFormDTO memberFormDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         modelMapper.map(memberFormDto, member);
-        member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+        if (memberFormDto.getPassword() != null) {
+            member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+        }
 
-        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
-        address.setZipcode(memberFormDto.getZipcode());
-        address.setAddr(memberFormDto.getAddr());
-        address.setAddrDetail(memberFormDto.getAddrDetail());
-        address.setMember(member);
-        address.setTel(member.getTel());
-        addressRepository.save(address);
+        Optional<Address> address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        if (address.isPresent()) {
+            Address findAddress = address.get();
+            findAddress.setZipcode(memberFormDto.getZipcode());
+            findAddress.setAddr(memberFormDto.getAddr());
+            findAddress.setAddrDetail(memberFormDto.getAddrDetail());
+            findAddress.setMember(member);
+            findAddress.setTel(member.getTel());
+            addressRepository.save(findAddress);
+        }
 
         memberRepository.save(member);
     }
@@ -207,7 +240,7 @@ public class MemberService {
      */
     public MemberDetailDTO getMemberDetail(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
-        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true);
+        Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true).orElseThrow(EntityNotFoundException::new);
         return MemberDetailDTO.createMemberDetailDTO(member, address);
     }
 }

@@ -110,7 +110,7 @@ class AdminServiceTest {
         Long accountId = 1L;
         Member member = createMember(accountId);
         when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(member));
-        when(addressRepository.findByMemberIdAndIsDefault(accountId, true)).thenReturn(new Address());
+        when(addressRepository.findByMemberIdAndIsDefault(accountId, true)).thenReturn(Optional.of(new Address()));
 
         // When
         AdminMemberDetailDTO result = adminService.getMemberDetails(accountId);
@@ -173,7 +173,7 @@ class AdminServiceTest {
 
         when(memberRepository.findById(dto.getId())).thenReturn(java.util.Optional.of(member));
         when(passwordEncoder.encode("newpassword")).thenReturn("$2a$10$gLKb.8YwrDpQVmbZpRiMzOaEmI6oUxgWDEO75nKoqyQKOWoBvC.Ci");
-        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(new Address());
+        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(Optional.of(new Address()));
 
         // When
         adminService.updateMember(dto);

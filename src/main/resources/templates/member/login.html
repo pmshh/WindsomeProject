@@ -28,41 +28,47 @@
                             <form id="loginForm" th:action="@{/login}" method="post">
                                 <input id="userId" name="userId" type="text" placeholder="아이디">
                                 <input id="password" name="password" type="password" placeholder="비밀번호">
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me" checked>
-                                    <label class="form-check-label" style="font-size: 14px" for="rememberMe">로그인 유지</label>
+                                <div class="form-check mt-3 mb-3">
+                                    <label for="rememberMe" class="remember-me-label">
+                                        <input type="checkbox" id="rememberMe" name="remember-me" checked>
+                                        <i class="circle"></i>
+                                        <i class="xi-check-min check"></i>
+                                        로그인 상태 유지
+                                    </label>
                                 </div>
-                                <div class="error-message-container">
-                                    <span th:if="${error}" class="error-message" th:utext="${exception}"></span>
+                                <div class="error-message-container" th:if="${error}">
+                                    <span class="error-message" th:utext="${exception}"></span>
                                 </div>
                                 <button class="login_button" type="submit">로그인</button>
                             </form>
                         </div>
                         <div class="login-find">
                             <div class="txt">
-                                <a th:href="@{'/forgot-credentials?action=find-id'}">아이디 찾기</a>
+                                <a th:href="@{'/forgot-credentials?action=find-id'}">아이디찾기</a>
                             </div>
                             <div class="txt">
-                                <a th:href="@{'/forgot-credentials?action=find-pw'}">비밀번호 찾기</a>
+                                <a th:href="@{'/forgot-credentials?action=find-pw'}">비밀번호찾기</a>
                             </div>
                             <div class="join-txt">
                                 <a th:href="@{/members/new}">회원가입</a>
                             </div>
                         </div>
-                        <!--                <ul class="sns-login">-->
-                        <!--                    <li class="kakao">-->
-                        <!--                        <a href="">-->
-                        <!--                            <i class="xi-kakaotalk"></i>-->
-                        <!--                            <span>카카오계정 로그인</span>-->
-                        <!--                        </a>-->
-                        <!--                    </li>-->
-                        <!--                    <li class="naver">-->
-                        <!--                        <a href="">-->
-                        <!--                            <i class="xi-naver-square"></i>-->
-                        <!--                            <span>네이버 로그인</span>-->
-                        <!--                        </a>-->
-                        <!--                    </li>-->
-                        <!--                </ul>-->
+                        <div class="sns-login-warpper">
+                            <ul>
+                                <li class="kakao">
+                                    <a href="http://localhost:8080/oauth2/authorization/kakao">
+                                        <i class="xi-kakaotalk"></i>
+                                        <span>카카오계정 로그인</span>
+                                    </a>
+                                </li>
+                                <li class="naver">
+                                    <a href="http://localhost:8080/oauth2/authorization/naver">
+                                        <i class="xi-naver-square"></i>
+                                        <span>네이버 로그인</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -27,4 +27,10 @@ public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslP
     Optional<Member> findByNameAndEmail(String name, String email);
 
     Optional<Member> findByUserIdentifierAndNameAndEmail(String userIdentifier, String name, String email);
+
+    Optional<Member> findOneByEmail(String email);
+
+    Optional<Member> findByName(String formatted);
+
+    Optional<Member> findOneByUserIdentifier(String userIdentifier);
 }

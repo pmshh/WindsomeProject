@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Controller
@@ -39,9 +40,15 @@ public class OrderController {
      */
     @GetMapping("/orders/new")
     public String createOrderForm(OrderProductListDTO orderProductListDTO, @CurrentMember Member member, Model model) {
+        try {
+            model.addAttribute("defaultAddress", orderService.getDefaultShippingAddress(member.getId()));
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("message", "배송지 정보를 조회하던 도중 오류가 발생하였습니다.");
+            return "order/order-form";
+        }
+
         model.addAttribute("orderProducts", orderService.getOrderProductsInfo(orderProductListDTO));
         model.addAttribute("member", orderService.getMemberDetail(member.getId()));
-        model.addAttribute("defaultAddress", orderService.getDefaultShippingAddress(member.getId()));
         model.addAttribute("addressList", orderService.getAddressList(member.getId()));
         return "order/order-form";
     }

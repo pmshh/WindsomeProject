@@ -39,7 +39,7 @@
                                                 <input class="base-table__input id-input" th:field="*{userIdentifier}" type="text" minlength="5" maxlength="20" readonly="readonly">
                                             </td>
                                         </tr>
-                                        <tr class="base-table__row">
+                                        <tr class="base-table__row" th:if="${member.oauth == null}">
                                             <th class="base-table__header-cell" scope="row">
                                                 <label th:for="*{password}">비밀번호 <span class="required-field">*</span></label>
                                             </th>
@@ -48,7 +48,7 @@
                                                 <span class="base-table__message--red pl5 pw-result-text">8~20자의 영문대소문자,숫자,특수문자 사용</span>
                                             </td>
                                         </tr>
-                                        <tr class="base-table__row">
+                                        <tr class="base-table__row" th:if="${member.oauth == null}">
                                             <th class="base-table__header-cell" scope="row">
                                                 <label th:for="*{passwordConfirm}">비밀번호 확인 <span class="required-field">*</span></label>
                                             </th>
@@ -71,7 +71,6 @@
                                             </th>
                                             <td class="base-table__cell">
                                                 <select class="base-table__select tel-prefix-select">
-                                                    <option value="1">선택</option>
                                                     <option value="010" selected>010</option>
                                                     <option value="011">011</option>
                                                     <option value="016">016</option>
@@ -213,19 +212,25 @@
             // 회원의 휴대전화 저장
             let tel = [[${member.tel}]];
 
-            // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
-            let telPrefix = tel.substring(0, 3);
-            let middleLength = tel.length === 11 ? 4 : 3; // 중간 번호 길이 결정
-            let telMiddle = tel.substring(3, 3 + middleLength);
-            let telSuffix = tel.substring(3 + middleLength);
+            if (tel !== "") {
+                // 통신사 번호(3자리), 중간 번호(3~4자리), 뒷번호(4자리)로 분리
+                let telPrefix = tel.substring(0, 3);
+                let middleLength = tel.length === 11 ? 4 : 3; // 중간 번호 길이 결정
+                let telMiddle = tel.substring(3, 3 + middleLength);
+                let telSuffix = tel.substring(3 + middleLength);
 
-            $(".tel-prefix-select").val(telPrefix).prop("selected", true);
-            $(".tel-middle-input").val(telMiddle);
-            $(".tel-suffix-input").val(telSuffix);
+                $(".tel-prefix-select").val(telPrefix).prop("selected", true);
+                $(".tel-middle-input").val(telMiddle);
+                $(".tel-suffix-input").val(telSuffix);
+            } else {
+                $(".tel-prefix-select").val("010").prop("selected", true);
+            }
         }
 
         /* 회원 정보 수정 함수 */
         function modifyUserInfo() {
+            let oauth = [[${member.oauth}]];
+
             /* 입력값 변수 */
             let form = $(".profile-form");
             let pwVal = $(".pw-input").val();                                       // 비밀번호
@@ -239,28 +244,42 @@
             let fullEmail = mailVal1 + '@' + mailVal2;
             let addressVal = $('.addr-detail-input').val();                         // 주소
 
-            /* 비밀번호 빈값 검사 */
-            if (pwVal === "") {
-                alert("비밀번호를 입력하세요.");
-                $('.pw-input').focus();
-                window.scrollTo(0, 0);
-                return false;
-            }
+            if (oauth === null) {
+                /* 비밀번호 빈값 검사 */
+                if (pwVal === "") {
+                    alert("비밀번호를 입력하세요.");
+                    $('.pw-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
 
-            /* 비밀번호 확인 빈값 검사 */
-            if (pwConfirmVal === "") {
-                alert("비밀번호 확인을 입력하세요.");
-                $('.pw-confirm-input').focus();
-                window.scrollTo(0, 0);
-                return false;
-            }
+                /* 비밀번호 확인 빈값 검사 */
+                if (pwConfirmVal === "") {
+                    alert("비밀번호 확인을 입력하세요.");
+                    $('.pw-confirm-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
 
-            /* 비밀번호 공백 존재 여부 검사 */
-            if (hasBlank(pwVal) || hasBlank(pwConfirmVal)) {
-                alert("비밀번호는 공백 없이 입력해주세요.");
-                $('.pw-input').focus();
-                window.scrollTo(0, 0);
-                return false;
+                /* 비밀번호 공백 존재 여부 검사 */
+                if (hasBlank(pwVal) || hasBlank(pwConfirmVal)) {
+                    alert("비밀번호는 공백 없이 입력해주세요.");
+                    $('.pw-input').focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+
+                /* 비밀번호 일치 여부 검사 */
+                if (!checkPwMatch) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    $(".pw-input").focus();
+                    window.scrollTo(0, 0);
+                    return false;
+                }
+            } else {
+                checkPw = true;
+                checkPwMatch = true;
+                checkPwConfirm = true;
             }
 
             /* 이름 빈값 검사 */
@@ -342,13 +361,6 @@
             if (mailVal1 !== '' && mailVal2 !== '' && checkMailConfirm === false) {
                 alert("이메일을 인증해주세요.");
                 $('.email-prefix-input').focus();
-                window.scrollTo(0, 0);
-                return false;
-            }
-
-            if (!checkPwMatch) {
-                alert("비밀번호가 일치하지 않습니다.");
-                $(".pw-input").focus();
                 window.scrollTo(0, 0);
                 return false;
             }

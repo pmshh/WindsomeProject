@@ -179,7 +179,7 @@
                                                 <span class="required">*</span>
                                             </th>
                                             <td>
-                                                <input type="text" class="name-input" th:value="${member.name}">
+                                                <input type="text" class="name-input" th:value="${defaultAddress.name}">
                                             </td>
                                         </tr>
                                         <tr>
@@ -190,14 +190,14 @@
                                             <td>
                                                 <div class="address-input-box">
                                                     <div class="zipcode-wrap">
-                                                        <input class="zipcode-input" type="text" placeholder="우편번호" th:value="${member.zipcode}">
+                                                        <input class="zipcode-input" type="text" placeholder="우편번호" th:value="${defaultAddress.zipcode}">
                                                         <button class="find-addr-btn" type="button" onclick="addressAPI()">주소검색</button>
                                                     </div>
                                                     <div class="addr-wrap">
-                                                        <input class="addr-input" type="text" placeholder="기본주소"  th:value="${member.addr}">
+                                                        <input class="addr-input" type="text" placeholder="기본주소"  th:value="${defaultAddress.addr}">
                                                     </div>
                                                     <div class="addr-detail-wrap">
-                                                        <input class="addr-detail-input" type="text" placeholder="나머지 주소(선택 입력 가능)"  th:value="${member.addrDetail}">
+                                                        <input class="addr-detail-input" type="text" placeholder="나머지 주소(선택 입력 가능)"  th:value="${defaultAddress.addrDetail}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -544,6 +544,7 @@
             fillEmailField(); // 이메일 input에 사용자 이메일 값 채우기
             refreshPaymentInfo(); // 결제 관련 값 업데이트
             initializeReqMessage(); // 배송 메시지 select에 기존 배송 메시지 값 저장하는 함수
+            handleNoShippingAddressOnSocialLogin(); // 소셜 로그인 시에 배송지 정보가 없는 경우 처리
 
             /* 각 섹션 제목 클릭 시 본문 숨김/보이기 처리 */
             $(".title").click(toggleSectionContent);
@@ -682,6 +683,10 @@
         function formatPhoneNumberWithHyphen() {
             let tel = $(this).data("tel");
 
+            if (tel === undefined) {
+                return false;
+            }
+
             // 휴대전화 번호를 각 부분으로 나누기
             let telPrefix = tel.substring(0, 3);
             let telMiddle = tel.substring(3, 7);
@@ -758,7 +763,7 @@
                     dataType: "text",
                     data: JSON.stringify(addressIds),
                     success: function () {
-                        window.reload();
+                        window.location.reload();
                     },
                     error: function (request) {
                         alert(request.responseText);
@@ -821,9 +826,13 @@
                 $(".zipcode-input").val(buyerZipcode);
                 $(".addr-input").val(buyerAddr);
                 $(".addr-detail-input").val(buyerAddrDetail);
-                $(".tel-prefix-select").val(telPrefix);
-                $(".tel-middle-input").val(telMiddle);
-                $(".tel-suffix-input").val(telSuffix);
+                if (telPrefix === "" || telPrefix === null) {
+                    $(".tel-prefix-select").val("010");
+                } else {
+                    $(".tel-prefix-select").val(telPrefix);
+                    $(".tel-middle-input").val(telMiddle);
+                    $(".tel-suffix-input").val(telSuffix);
+                }
                 $(".email-input").val(emailPrefix);
                 $(".email-domain-select").val('custom');
                 $(".direct-input-wrap").css("display", "inline");
@@ -836,7 +845,12 @@
             let telPrefixSelect = $(".tel-prefix-select");
             let telMiddleInput = $(".tel-middle-input");
             let telSuffixInput = $(".tel-suffix-input");
-            let userTel = [[${member.tel}]];
+            let userTel = [[${defaultAddress.tel}]];
+
+            if (userTel === "") {
+                console.log(userTel);
+                return false;
+            }
 
             // 휴대전화 번호를 각 부분으로 나누기
             let telPrefix = userTel.substring(0, 3);
@@ -909,6 +923,11 @@
         /* 배송 메시지 select에 기존 배송 메시지 값 저장하는 함수 */
         function initializeReqMessage() {
             let defaultReq = [[${defaultAddress.req}]];
+
+            if (defaultReq === "") {
+                return false;
+            }
+
             if (defaultReq === "배송 전에 미리 연락바랍니다." ||
                 defaultReq === "부재 시 경비실에 맡겨주세요." ||
                 defaultReq === "부재 시 문 앞에 놓아주세요." ||
@@ -1148,145 +1167,152 @@
                     buyer_addr : buyerAddr + " " + buyerAddrDetail,         // 구매자 상세 주소
                     buyer_postcode : buyerZipcode,                          // 구매자 우편 번호
                 },
-                function(rsp) {
-                    // 결제 성공
-                    if (rsp.success) {
-                        let form = $("#orderForm");
+                function(res) {
+                    // 결제검증
+                    $.ajax({
+                        type : "POST",
+                        url : "/payment/verify/" + res.imp_uid
+                    }).done(function(data) {
+                        if(res.paid_amount === data.response.amount){
+                            console.log("결제 및 결제 검증 완료");
 
-                        let totalProductPrice = 0; // 상품 총 금액
-                        let totalOrderPrice = 0; // 주문 총 금액 (상품 총 금액 + 배송비)
-                        let totalPaymentPrice = 0; // 결제 총 금액 (상품 총 금액 + 배송비 - 포인트 사용 금액)
-                        let deliveryPrice = 3000;
-                        let usePoints = $(".point-use-input").val(); // 사용 포인트 금액
-                        let earnedPoints = 0; // 적립 예정 금액
-                        let productCount = 0; // 주문 상품 개수
-                        let repProductName; // 첫 번째 상품의 상품명
-                        let repProductImageUrl; // 첫 번째 상품의 이미지 url
+                            //결제 성공 시 비즈니스 로직
+                            let form = $("#orderForm");
 
-                        $(".product-info").each(function (index, element) {
-                            let hiddenDataInfoInput = $(element).find(".data-info");
-                            let price = hiddenDataInfoInput.attr("data-price");
-                            let discount = hiddenDataInfoInput.attr("data-discount");
-                            let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
+                            let totalProductPrice = 0; // 상품 총 금액
+                            let totalOrderPrice = 0; // 주문 총 금액 (상품 총 금액 + 배송비)
+                            let totalPaymentPrice = 0; // 결제 총 금액 (상품 총 금액 + 배송비 - 포인트 사용 금액)
+                            let deliveryPrice = 3000;
+                            let usePoints = $(".point-use-input").val(); // 사용 포인트 금액
+                            let earnedPoints = 0; // 적립 예정 금액
+                            let productCount = 0; // 주문 상품 개수
+                            let repProductName; // 첫 번째 상품의 상품명
+                            let repProductImageUrl; // 첫 번째 상품의 이미지 url
 
-                            // 상품 총 금액 계산
-                            if (discount > 0) {
-                                totalProductPrice += Math.floor((price * (1 - discount)) * orderQuantity);
+                            $(".product-info").each(function (index, element) {
+                                let hiddenDataInfoInput = $(element).find(".data-info");
+                                let price = hiddenDataInfoInput.attr("data-price");
+                                let discount = hiddenDataInfoInput.attr("data-discount");
+                                let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
+
+                                // 상품 총 금액 계산
+                                if (discount > 0) {
+                                    totalProductPrice += Math.floor((price * (1 - discount)) * orderQuantity);
+                                } else {
+                                    totalProductPrice += price * orderQuantity;
+                                }
+
+                                // 대표 상품명, 이미지 구하기
+                                if (index === 0) {
+                                    repProductName = hiddenDataInfoInput.attr("data-product-name");
+                                    repProductImageUrl = hiddenDataInfoInput.attr("data-product-image-url");
+                                }
+
+                                productCount += 1;
+                            });
+
+                            // 사용 포인트
+                            if ($(".point-use-input").val() <= 0) {
+                                usePoints = 0;
+                            }
+
+                            // 배송비 계산
+                            if (totalProductPrice >= 30000) {
+                                deliveryPrice = 0;
+                            }
+
+                            // 주문 총 금액 계산
+                            totalOrderPrice = totalProductPrice + deliveryPrice;
+
+                            // 총 결제 금액 계산
+                            totalPaymentPrice = totalOrderPrice;
+
+                            // 적립 포인트 계산
+                            earnedPoints = Math.floor(totalPaymentPrice * 0.03);
+
+                            // 포인트를 사용하여 결제하는 경우
+                            if (usePoints > 0) {
+                                totalPaymentPrice = totalOrderPrice - usePoints;
+                                earnedPoints = Math.floor((totalPaymentPrice - usePoints) * 0.03);
+                            }
+
+                            /* 서버로 전송할 form data 채우기 */
+                            $("input[name='orderUid']").val(res.merchant_uid);
+                            // $("input[name='orderUid']").val("test");
+                            $("input[name='paymentUid']").val(res.imp_uid);
+                            // $("input[name='paymentUid']").val("test");
+                            $("input[name='totalProductPrice']").val(totalProductPrice);
+                            $("input[name='totalOrderPrice']").val(totalProductPrice + deliveryPrice);
+                            $("input[name='totalPaymentPrice']").val(totalPaymentPrice);
+
+                            /* 배송 정보 (최근 배송지 / 직접 입력) 구분 */
+                            if ($(".tab .selected").find("a").hasClass("recent-address-tab-button")) {
+                                $("input[name='name']").val($(".hidden-member-name").val());
+                                $("input[name='zipcode']").val($(".hidden-member-zipcode").val());
+                                $("input[name='addr']").val($(".hidden-member-addr").val());
+                                $("input[name='addrDetail']").val($(".hidden-member-addr-detail").val());
+                                $("input[name='default']").val(true);
+                                $("input[name='tel']").val($(".hidden-member-tel").val());
+                                if ($(".req-select").val() === 'custom') {
+                                    $("input[name='req']").val($(".req-custom-input").val());
+                                } else {
+                                    $("input[name='req']").val($(".req-select").val());
+                                }
+                                $("input[name='email']").val(buyerEmail);
                             } else {
-                                totalProductPrice += price * orderQuantity;
+                                $("input[name='name']").val($(".name-input").val());
+                                $("input[name='zipcode']").val($(".zipcode-input").val());
+                                $("input[name='addr']").val($(".addr-input").val());
+                                $("input[name='addrDetail']").val($(".addr-detail-input").val());
+                                $("input[name='default']").val($("#set-def-address").prop("checked"));
+                                $("input[name='tel']").val($(".tel-prefix-select").val() + $(".tel-middle-input").val() + $(".tel-suffix-input").val());
+                                if ($(".req-select").val() === 'custom') {
+                                    $("input[name='req']").val($(".req-custom-input").val());
+                                } else {
+                                    $("input[name='req']").val($(".req-select").val());
+                                }
+                                let emailDomain;
+                                if ($(".email-domain-select").val() === "custom") {
+                                    emailDomain = $(".email-domain-input").val();
+                                } else {
+                                    emailDomain = $(".email-domain-select").val();
+                                }
+                                $("input[name='email']").val($(".email-input").val() + "@" + emailDomain);
                             }
 
-                            // 대표 상품명, 이미지 구하기
-                            if (index === 0) {
-                                repProductName = hiddenDataInfoInput.attr("data-product-name");
-                                repProductImageUrl = hiddenDataInfoInput.attr("data-product-image-url");
-                            }
+                            $("input[name='earnedPoints']").val(earnedPoints);
+                            $("input[name='usedPoints']").val(usePoints);
+                            $("input[name='productCount']").val(productCount);
+                            $("input[name='repProductName']").val(repProductName);
+                            $("input[name='repProductImage']").val(repProductImageUrl);
 
-                            productCount += 1;
-                        });
+                            /* 주문 상품 정보 담긴 input 태그 동적 생성 */
+                            let formContents = '';
+                            $(".product-info").each(function(index, element){
+                                let hiddenDataInfoInput = $(element).find(".data-info");
+                                let productId = hiddenDataInfoInput.attr("data-product-id");
+                                let price = hiddenDataInfoInput.attr("data-price");
+                                let discount = hiddenDataInfoInput.attr("data-discount");
+                                let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
+                                let colorId = hiddenDataInfoInput.attr("data-color-id");
+                                let sizeId = hiddenDataInfoInput.attr("data-size-id");
+                                if (discount > 0) {
+                                    price = Math.floor(price * (1 - discount));
+                                }
 
-                        // 사용 포인트
-                        if ($(".point-use-input").val() <= 0) {
-                            usePoints = 0;
-                        }
+                                formContents += "<input name='orderProductDtoList[" + index + "].productId' type='hidden' value='" + productId + "'>";
+                                formContents += "<input name='orderProductDtoList[" + index + "].colorId' type='hidden' value='" + colorId + "'>";
+                                formContents += "<input name='orderProductDtoList[" + index + "].sizeId' type='hidden' value='" + sizeId + "'>";
+                                formContents += "<input name='orderProductDtoList[" + index + "].price' type='hidden' value='" + price + "'>";
+                                formContents += "<input name='orderProductDtoList[" + index + "].orderQuantity' type='hidden' value='" + orderQuantity + "'>";
+                            });
 
-                        // 배송비 계산
-                        if (totalProductPrice >= 30000) {
-                            deliveryPrice = 0;
-                        }
-
-                        // 주문 총 금액 계산
-                        totalOrderPrice = totalProductPrice + deliveryPrice;
-
-                        // 총 결제 금액 계산
-                        totalPaymentPrice = totalOrderPrice;
-
-                        // 적립 포인트 계산
-                        earnedPoints = Math.floor(totalPaymentPrice * 0.03);
-
-                        // 포인트를 사용하여 결제하는 경우
-                        if (usePoints > 0) {
-                            totalPaymentPrice = totalOrderPrice - usePoints;
-                            earnedPoints = Math.floor((totalPaymentPrice - usePoints) * 0.03);
-                        }
-
-                        /* 서버로 전송할 form data 채우기 */
-                        $("input[name='orderUid']").val(rsp.merchant_uid);
-                        // $("input[name='orderUid']").val("test");
-                        $("input[name='paymentUid']").val(rsp.imp_uid);
-                        // $("input[name='paymentUid']").val("test");
-                        $("input[name='totalProductPrice']").val(totalProductPrice);
-                        $("input[name='totalOrderPrice']").val(totalProductPrice + deliveryPrice);
-                        $("input[name='totalPaymentPrice']").val(totalPaymentPrice);
-
-                        /* 배송 정보 (최근 배송지 / 직접 입력) 구분 */
-                        if ($(".tab .selected").find("a").hasClass("recent-address-tab-button")) {
-                            $("input[name='name']").val($(".hidden-member-name").val());
-                            $("input[name='zipcode']").val($(".hidden-member-zipcode").val());
-                            $("input[name='addr']").val($(".hidden-member-addr").val());
-                            $("input[name='addrDetail']").val($(".hidden-member-addr-detail").val());
-                            $("input[name='default']").val(true);
-                            $("input[name='tel']").val($(".hidden-member-tel").val());
-                            if ($(".req-select").val() === 'custom') {
-                                $("input[name='req']").val($(".req-custom-input").val());
-                            } else {
-                                $("input[name='req']").val($(".req-select").val());
-                            }
-                            $("input[name='email']").val(buyerEmail);
+                            form.append(formContents);
+                            form.submit();
                         } else {
-                            $("input[name='name']").val($(".name-input").val());
-                            $("input[name='zipcode']").val($(".zipcode-input").val());
-                            $("input[name='addr']").val($(".addr-input").val());
-                            $("input[name='addrDetail']").val($(".addr-detail-input").val());
-                            $("input[name='default']").val($("#set-def-address").prop("checked"));
-                            $("input[name='tel']").val($(".tel-prefix-select").val() + $(".tel-middle-input").val() + $(".tel-suffix-input").val());
-                            if ($(".req-select").val() === 'custom') {
-                                $("input[name='req']").val($(".req-custom-input").val());
-                            } else {
-                                $("input[name='req']").val($(".req-select").val());
-                            }
-                            let emailDomain;
-                            if ($(".email-domain-select").val() === "custom") {
-                                emailDomain = $(".email-domain-input").val();
-                            } else {
-                                emailDomain = $(".email-domain-select").val();
-                            }
-                            $("input[name='email']").val($(".email-input").val() + "@" + emailDomain);
+                            alert("결제를 실패했습니다.");
                         }
-
-                        $("input[name='earnedPoints']").val(earnedPoints);
-                        $("input[name='usedPoints']").val(usePoints);
-                        $("input[name='productCount']").val(productCount);
-                        $("input[name='repProductName']").val(repProductName);
-                        $("input[name='repProductImage']").val(repProductImageUrl);
-
-                        /* 주문 상품 정보 담긴 input 태그 동적 생성 */
-                        let formContents = '';
-                        $(".product-info").each(function(index, element){
-                            let hiddenDataInfoInput = $(element).find(".data-info");
-                            let productId = hiddenDataInfoInput.attr("data-product-id");
-                            let price = hiddenDataInfoInput.attr("data-price");
-                            let discount = hiddenDataInfoInput.attr("data-discount");
-                            let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
-                            let colorId = hiddenDataInfoInput.attr("data-color-id");
-                            let sizeId = hiddenDataInfoInput.attr("data-size-id");
-                            if (discount > 0) {
-                                price = Math.floor(price * (1 - discount));
-                            }
-
-                            formContents += "<input name='orderProductDtoList[" + index + "].productId' type='hidden' value='" + productId + "'>";
-                            formContents += "<input name='orderProductDtoList[" + index + "].colorId' type='hidden' value='" + colorId + "'>";
-                            formContents += "<input name='orderProductDtoList[" + index + "].sizeId' type='hidden' value='" + sizeId + "'>";
-                            formContents += "<input name='orderProductDtoList[" + index + "].price' type='hidden' value='" + price + "'>";
-                            formContents += "<input name='orderProductDtoList[" + index + "].orderQuantity' type='hidden' value='" + orderQuantity + "'>";
-                        });
-
-                        form.append(formContents);
-                        form.submit();
-                    } else {
-                        // 결제 실패
-                        alert("결제가 취소되었습니다.");
-                    }
+                    });
                 });
         }
 
@@ -1365,6 +1391,24 @@
                     $(".addr-detail-input").focus();
                 }
             }).open();
+        }
+
+        /* 소셜 로그인 - 배송지 정보 없는 경우 처리 */
+        function handleNoShippingAddressOnSocialLogin() {
+            let zipcode = [[${defaultAddress.zipcode}]];
+            let addrDetail = [[${defaultAddress.addrDetail}]];
+            let addr = [[${defaultAddress.addr}]];
+
+            if (zipcode === "" || addr === "" || addrDetail === "") {
+                // 최근 배송지, 직접 입력 탭 버튼 숨기기
+                $(".tab").hide();
+                // 최근 배송지 숨기기
+                $(".recent-address-wrapper").hide();
+                // 직접 입력 보이기
+                $(".new-address-wrapper").show();
+                // 기본 배송지로 저장 체크 버튼 보이기
+                $(".set-def-address-btn-wrapper").removeClass("d-none");
+            }
         }
     </script>
 </body>
