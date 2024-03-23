@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDtlDto {
+public class NoticeDtlDTO {
 
     public Long noticeId;
 
@@ -18,17 +18,17 @@ public class NoticeDtlDto {
 
     public String content;
 
-    public boolean noticeYN;
+    public boolean hasNotice;
 
     public String createdBy;
 
     public LocalDateTime regTime;
 
-    public NoticeDtlDto(NoticeDtlDtoInterface noticeDtlDtoInterface, String createdBy) {
-        this.noticeId = noticeDtlDtoInterface.getNoticeId();
+    public NoticeDtlDTO(NoticeDtlDtoInterface noticeDtlDtoInterface, String createdBy) {
+        this.noticeId = noticeDtlDtoInterface.getBoardId();
         this.title = noticeDtlDtoInterface.getTitle();
         this.content = noticeDtlDtoInterface.getContent();
-        this.noticeYN = noticeDtlDtoInterface.getNoticeYN();
+        this.hasNotice = noticeDtlDtoInterface.getHasNotice();
         this.createdBy = createdBy;
         this.regTime = noticeDtlDtoInterface.getRegTime();
     }

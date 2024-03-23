@@ -227,7 +227,7 @@
                     alert("검색어를 입력해주세요.")
                     return false;
                 }
-                location.href = "/board/review/product-selection?searchQuery=" + searchQuery + "&size=" + selectVal;
+                location.href = "/board/reviews/product-selection?searchQuery=" + searchQuery + "&size=" + selectVal;
             });
 
             /* 상품 선택 버튼 */
@@ -279,7 +279,7 @@
                 if (searchQuery === '') {
                     searchQuery = null;
                 }
-                location.href = "/board/review/product-selection?searchQuery=" + searchQuery + "&size=" + selectVal;
+                location.href = "/board/reviews/product-selection?searchQuery=" + searchQuery + "&size=" + selectVal;
             });
         });
 
@@ -298,7 +298,7 @@
         function page(page) {
             let searchQuery = $("input[name='searchQuery']").val();
             let selectVal = $("#limit option:selected").val();
-            location.href = "/board/review/product-selection?page=" + page + "&searchQuery=" + searchQuery + "&size=" + selectVal;
+            location.href = "/board/reviews/product-selection?page=" + page + "&searchQuery=" + searchQuery + "&size=" + selectVal;
         }
     </script>
 </body>

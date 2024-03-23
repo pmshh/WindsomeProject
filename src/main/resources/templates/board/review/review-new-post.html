@@ -23,7 +23,7 @@
 
                     <div class="section-body review-form-body row">
                         <div class="review-form-wrap col-11 col-md-10 col-xxl-8">
-                            <form id="reviewEnrollForm" th:action="@{'/board/review/enroll'}" th:object="${reviewDto}" method="post">
+                            <form id="reviewEnrollForm" th:action="@{'/board/reviews/enroll'}" th:object="${reviewDto}" method="post">
                                 <div class="table-wrapper">
                                     <table class="base-table base-table--post">
                                         <colgroup>
@@ -131,7 +131,7 @@
             $(".find-product-btn").on("click", function (e) {
                 e.preventDefault();
 
-                let popUrl = "/board/review/product-selection";
+                let popUrl = "/board/reviews/product-selection";
                 let popOption = "width=600px, height=500px,top=300px, left=300px, scrollbars=yes";
 
                 window.open(popUrl, "findProduct", popOption);
@@ -141,7 +141,7 @@
             $(document).on("click", ".new-find-product-btn", function (e) {
                 e.preventDefault();
 
-                let popUrl = "/board/review/product-selection";
+                let popUrl = "/board/reviews/product-selection";
                 let popOption = "width=600px, height=500px,top=300px, left=300px, scrollbars=yes";
 
                 window.open(popUrl, "findProduct", popOption);
@@ -209,7 +209,7 @@
                     let productId = $(".hiddenProductId").val();
 
                     $.ajax({
-                        url: "/board/review/check/" + productId,
+                        url: "/board/reviews/check/" + productId,
                         type: "POST",
                         dataType: "text",
                         cache: false,
@@ -224,7 +224,7 @@
                             let paramData = JSON.stringify(param);
 
                             $.ajax({
-                                url: "/board/review/enroll",
+                                url: "/board/reviews/enroll",
                                 type: "POST",
                                 contentType: "application/json",
                                 dataType: "text",
@@ -232,7 +232,7 @@
                                 data: paramData,
                                 success: function (result) {
                                     alert(result);
-                                    location.href = '/board/review';
+                                    location.href = '/board/reviews';
                                 },
                                 error: function (xhr) {
                                     if (xhr.status === 200) {
@@ -254,7 +254,7 @@
 
             /* 리뷰 게시판으로 이동 */
             $(".cancel-btn").on("click", function () {
-                location.href = '/board/review';
+                location.href = '/board/reviews';
             });
 
             /* 게시글 제목 글자 수 제한 */

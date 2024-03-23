@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="section-body qaForm-body row">
-                        <div class="review-form-wrap col-11 col-md-10 col-xxl-8">
+                        <div class="review-form-wrap col-11 col-md-10">
                             <form id="qaEnrollForm" th:action="@{'/board/qa/enroll'}" th:object="${qaEnrollDto}"
                                   method="post">
                                 <div class="table-wrapper">
@@ -73,7 +73,7 @@
 
                                 <div class="btn-box">
                                     <button class="button button--black button--130x40 enroll-btn" type="button">등록</button>
-                                    <button class="button button--white button--130x40" type="button" onclick="location.href='/board/notice'">취소</button>
+                                    <button class="button button--white button--130x40" type="button" onclick="location.href='/board/notices'">취소</button>
                                 </div>
                             </form>
                         </div>
@@ -200,7 +200,7 @@
                             title: $("select[name=title] option:selected").text(),
                             content: contentInputVal,
                             password: passwordInputVal,
-                            secretYN: $("input[name='secret']:checked").val(),
+                            hasPrivate: $("input[name='secret']:checked").val(),
                             originNo: originNo
                         },
                         success(res) {

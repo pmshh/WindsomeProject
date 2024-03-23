@@ -6,11 +6,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentEnrollDto {
+public class CommentEnrollDTO {
 
     private Long qaId;
 
     private String content;
 
-    private boolean secretYN;
+    private boolean hasPrivate;
 }

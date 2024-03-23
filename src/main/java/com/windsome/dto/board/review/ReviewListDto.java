@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class ReviewListDto {
+public class ReviewListDTO {
 
     private Long reviewId;
 
@@ -43,7 +43,7 @@ public class ReviewListDto {
     private int salePrice;
 
     @QueryProjection
-    public ReviewListDto(Long reviewId, String title, String content, BigDecimal rating, String createdBy, LocalDateTime regDate, int hits, String imageUrl, Long productId, String productName, int price, double discount) {
+    public ReviewListDTO(Long reviewId, String title, String content, BigDecimal rating, String createdBy, LocalDateTime regDate, int hits, String imageUrl, Long productId, String productName, int price, double discount) {
         this.reviewId = reviewId;
         this.title = title;
         this.content = content;

@@ -1,8 +1,8 @@
 package com.windsome.controller.board;
 
 import com.windsome.config.security.CurrentMember;
-import com.windsome.dto.board.qa.CommentEnrollDto;
-import com.windsome.dto.board.qa.CommentUpdateDto;
+import com.windsome.dto.board.qa.CommentEnrollDTO;
+import com.windsome.dto.board.qa.CommentUpdateDTO;
 import com.windsome.entity.member.Member;
 import com.windsome.service.board.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class CommentController {
      * 댓글 등록
      */
     @PostMapping("/comment/enroll")
-    public ResponseEntity<String> enrollComment(@CurrentMember Member member, CommentEnrollDto commentEnrollDto) {
+    public ResponseEntity<String> enrollComment(@CurrentMember Member member, CommentEnrollDTO commentEnrollDto) {
         if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }
@@ -40,7 +40,7 @@ public class CommentController {
      * 댓글 수정
      */
     @PatchMapping("/comment/{commentId}")
-    public ResponseEntity<String> updateComment(@CurrentMember Member member, CommentUpdateDto commentUpdateDto) {
+    public ResponseEntity<String> updateComment(@CurrentMember Member member, CommentUpdateDTO commentUpdateDto) {
         if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
         }

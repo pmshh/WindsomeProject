@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductSearchDto {
+public class ProductSearchDTO {
 
     private String searchQuery;
 }

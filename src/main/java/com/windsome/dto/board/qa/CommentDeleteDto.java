@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class CommentDeleteDto {
+public class CommentDeleteDTO {
 
     private Long commentId;
 }

@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class QaListDto {
+public class QaListDTO {
 
     private Long qaId; // qa 기본키
 
@@ -23,25 +23,25 @@ public class QaListDto {
 
     private String regDate; // 작성일
 
-    private boolean secretYN; // 비밀 글 설정 여부
+    private boolean hasPrivate; // 비밀 글 설정 여부
 
     private Long originNo; // 원글 번호
 
-    private int groupOrd; // 원글(답글 포함)에 대한 순서
+    private int groupOrder; // 원글(답글 포함)에 대한 순서
 
     private int groupLayer; // 답글 계층
 
     @QueryProjection
-    public QaListDto(Long qaId, String title, String content, String createdBy, Role state, LocalDateTime regDate, boolean secretYN, Long originNo, int groupOrd, int groupLayer) {
+    public QaListDTO(Long qaId, String title, String content, String createdBy, Role state, LocalDateTime regDate, boolean hasPrivate, Long originNo, int groupOrder, int groupLayer) {
         this.qaId = qaId;
         this.title = title;
         this.content = content;
         this.createdBy = createdBy;
         this.state = state;
         this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.secretYN = secretYN;
+        this.hasPrivate = hasPrivate;
         this.originNo = originNo;
-        this.groupOrd = groupOrd;
+        this.groupOrder = groupOrder;
         this.groupLayer = groupLayer;
     }
 

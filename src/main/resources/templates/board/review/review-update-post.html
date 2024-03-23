@@ -177,7 +177,7 @@
                             let paramData = JSON.stringify(param);
 
                             $.ajax({
-                                url: "/board/review/" + reviewId,
+                                url: "/board/reviews/" + reviewId,
                                 type: "PATCH",
                                 contentType: "application/json",
                                 dataType: "text",
@@ -185,7 +185,7 @@
                                 data: paramData,
                                 success: function (result) {
                                     alert(result);
-                                    location.href = '/board/review';
+                                    location.href = '/board/reviews';
                                 },
                                 error: function (xhr) {
                                     if (xhr.status === 200) {
@@ -207,7 +207,7 @@
 
             /* 리뷰 게시판으로 이동 */
             $(".cancel-btn").on("click", function () {
-                location.href = "/board/review";
+                location.href = "/board/reviews";
             });
 
             /* 리뷰 평점 값 초기화 */

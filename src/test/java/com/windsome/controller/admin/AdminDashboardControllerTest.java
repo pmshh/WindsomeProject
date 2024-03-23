@@ -3,12 +3,12 @@ package com.windsome.controller.admin;
 import com.windsome.WithAccount;
 import com.windsome.dto.admin.DashboardInfoDto;
 import com.windsome.dto.admin.OrderManagementDTO;
-import com.windsome.dto.board.qa.QaListDto;
-import com.windsome.dto.board.qa.QaSearchDto;
+import com.windsome.dto.board.SearchDTO;
+import com.windsome.dto.board.qa.QaListDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.entity.product.Product;
-import com.windsome.service.board.QaService;
 import com.windsome.service.AdminService;
+import com.windsome.service.board.BoardService;
 import com.windsome.service.order.OrderService;
 import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
@@ -42,13 +42,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class AdminDashboardControllerTest {
 
-    @MockBean
-    AdminService adminService;
-    @MockBean
-    ProductService productService;
-    @MockBean
-    OrderService orderService;
-    @MockBean QaService qaService;
+    @MockBean AdminService adminService;
+    @MockBean ProductService productService;
+    @MockBean OrderService orderService;
+    @MockBean BoardService boardService;
     @Autowired MockMvc mockMvc;
 
     @Test
@@ -64,8 +61,8 @@ class AdminDashboardControllerTest {
         Page<OrderManagementDTO> orders = new PageImpl<>(Collections.emptyList());
         given(adminService.getOrderList(anyString(), any(Pageable.class))).willReturn(orders);
 
-        Page<QaListDto> qaList = new PageImpl<>(Collections.emptyList());
-        given(qaService.getQaList(any(QaSearchDto.class), any(Pageable.class))).willReturn(qaList);
+        Page<QaListDTO> qaList = new PageImpl<>(Collections.emptyList());
+        given(boardService.getQaList(any(SearchDTO.class), any(Pageable.class))).willReturn(qaList);
 
         mockMvc.perform(get("/admin/dashboard"))
                 .andExpect(model().attributeExists("dashboardData"))

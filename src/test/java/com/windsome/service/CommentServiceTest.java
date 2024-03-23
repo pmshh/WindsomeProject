@@ -1,14 +1,15 @@
-package com.windsome.service.board;
+package com.windsome.service;
 
 import com.windsome.constant.Role;
-import com.windsome.dto.board.qa.CommentDto;
-import com.windsome.dto.board.qa.CommentEnrollDto;
-import com.windsome.dto.board.qa.CommentUpdateDto;
+import com.windsome.dto.board.qa.CommentDTO;
+import com.windsome.dto.board.qa.CommentEnrollDTO;
+import com.windsome.dto.board.qa.CommentUpdateDTO;
+import com.windsome.entity.board.Board;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Comment;
-import com.windsome.entity.board.Qa;
-import com.windsome.repository.board.qa.CommentRepository;
-import com.windsome.repository.board.qa.QaRepository;
+import com.windsome.repository.board.BoardRepository;
+import com.windsome.repository.board.CommentRepository;
+import com.windsome.service.board.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +31,10 @@ import static org.mockito.Mockito.*;
 class CommentServiceTest {
 
     @Mock CommentRepository commentRepository;
-    @Mock QaRepository qaRepository;
+    @Mock BoardRepository boardRepository;
 
-    @InjectMocks CommentService commentService;
+    @InjectMocks
+    CommentService commentService;
 
     @Test
     @DisplayName("댓글 등록 테스트")
@@ -42,17 +44,17 @@ class CommentServiceTest {
         member.setId(1L);
         member.setUserIdentifier("test1234");
 
-        Qa qa = new Qa();
-        qa.setId(1L);
+        Board board = new Board();
+        board.setId(1L);
 
-        CommentEnrollDto commentEnrollDto = new CommentEnrollDto();
+        CommentEnrollDTO commentEnrollDto = new CommentEnrollDTO();
         commentEnrollDto.setQaId(1L);
         commentEnrollDto.setContent("test content");
 
-        Comment comment = Comment.toEntity(commentEnrollDto, qa, member);
+        Comment comment = Comment.toEntity(commentEnrollDto, board, member);
         comment.setId(1L);
 
-        when(qaRepository.findById(anyLong())).thenReturn(java.util.Optional.of(qa));
+        when(boardRepository.findById(anyLong())).thenReturn(java.util.Optional.of(board));
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
         // when
@@ -60,7 +62,7 @@ class CommentServiceTest {
 
         // then
         assertNotNull(savedCommentId);
-        verify(qaRepository, times(1)).findById(anyLong());
+        verify(boardRepository, times(1)).findById(anyLong());
         verify(commentRepository, times(1)).save(any(Comment.class));
     }
 
@@ -78,27 +80,27 @@ class CommentServiceTest {
         member2.setId(2L);
         member2.setRole(Role.USER);
 
-        Qa qa = new Qa();
-        qa.setId(1L);
-        qa.setMember(member1);
+        Board board = new Board();
+        board.setId(1L);
+        board.setMember(member1);
 
         List<Comment> comments = Arrays.asList(
-                new Comment(1L, member1, qa, "댓글 내용1", false),
-                new Comment(2L, member2, qa, "댓글 내용2", true)
+                new Comment(1L, member1, board, "댓글 내용1", false),
+                new Comment(2L, member2, board, "댓글 내용2", true)
         );
 
-        when(commentRepository.findByQaId(anyLong())).thenReturn(comments);
+        when(commentRepository.findAllByBoardId(anyLong())).thenReturn(comments);
 
         // when
-        List<CommentDto> commentDtoList = commentService.getCommentDtoList(qaId);
+        List<CommentDTO> commentDTOList = commentService.getCommentDtoList(qaId);
 
         // then
-        assertEquals(2, commentDtoList.size());
-        assertEquals("댓글 내용1", commentDtoList.get(0).getContent());
-        assertFalse(commentDtoList.get(0).isSecretYN());
-        assertEquals("댓글 내용2", commentDtoList.get(1).getContent());
-        assertTrue(commentDtoList.get(1).isSecretYN());
-        verify(commentRepository, times(1)).findByQaId(anyLong());
+        assertEquals(2, commentDTOList.size());
+        assertEquals("댓글 내용1", commentDTOList.get(0).getContent());
+        assertFalse(commentDTOList.get(0).isHasPrivate());
+        assertEquals("댓글 내용2", commentDTOList.get(1).getContent());
+        assertTrue(commentDTOList.get(1).isHasPrivate());
+        verify(commentRepository, times(1)).findAllByBoardId(anyLong());
     }
 
     @Test
@@ -110,11 +112,11 @@ class CommentServiceTest {
         member.setUserIdentifier("test1234");
         member.setRole(Role.USER);
 
-        Qa qa = new Qa();
-        qa.setId(1L);
-        qa.setMember(member);
+        Board board = new Board();
+        board.setId(1L);
+        board.setMember(member);
 
-        Comment comment = new Comment(1L, member, qa, "댓글 내용", false);
+        Comment comment = new Comment(1L, member, board, "댓글 내용", false);
 
         when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
 
@@ -140,11 +142,11 @@ class CommentServiceTest {
         admin.setUserIdentifier("admin");
         admin.setRole(Role.ADMIN);
 
-        Qa qa = new Qa();
-        qa.setId(1L);
-        qa.setMember(member1);
+        Board board = new Board();
+        board.setId(1L);
+        board.setMember(member1);
 
-        Comment comment = new Comment(1L, member1, qa, "댓글 내용", false);
+        Comment comment = new Comment(1L, member1, board, "댓글 내용", false);
 
         when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
 
@@ -170,11 +172,11 @@ class CommentServiceTest {
         member2.setUserIdentifier("user2");
         member2.setRole(Role.USER);
 
-        Qa qa = new Qa();
-        qa.setId(1L);
-        qa.setMember(member1);
+        Board board = new Board();
+        board.setId(1L);
+        board.setMember(member1);
 
-        Comment comment = new Comment(1L, member1, qa, "댓글 내용", false);
+        Comment comment = new Comment(1L, member1, board, "댓글 내용", false);
 
         when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
 
@@ -213,12 +215,12 @@ class CommentServiceTest {
         member.setUserIdentifier("test1234");
         member.setRole(Role.USER);
 
-        Qa qa = new Qa();
-        qa.setId(1L);
-        qa.setMember(member);
+        Board board = new Board();
+        board.setId(1L);
+        board.setMember(member);
 
-        CommentUpdateDto commentUpdateDto = new CommentUpdateDto(1L, "수정된 댓글 내용", true);
-        Comment comment = new Comment(1L, member, qa, "원래 댓글 내용", false);
+        CommentUpdateDTO commentUpdateDto = new CommentUpdateDTO(1L, "수정된 댓글 내용", true);
+        Comment comment = new Comment(1L, member, board, "원래 댓글 내용", false);
 
         when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
 
@@ -229,14 +231,14 @@ class CommentServiceTest {
         verify(commentRepository, times(1)).findById(anyLong());
         verify(commentRepository, times(1)).save(comment);
         assertEquals("수정된 댓글 내용", comment.getContent());
-        assertTrue(comment.isSecretYN());
+        assertTrue(comment.isHasPrivate());
     }
 
     @Test
     @DisplayName("댓글 수정 테스트 - 존재하지 않는 댓글")
     public void updateCommentTestWithNonExistingComment() {
         // given
-        CommentUpdateDto commentUpdateDto = new CommentUpdateDto(1L, "수정된 댓글 내용", true);
+        CommentUpdateDTO commentUpdateDto = new CommentUpdateDTO(1L, "수정된 댓글 내용", true);
 
         when(commentRepository.findById(anyLong())).thenReturn(Optional.empty());
 

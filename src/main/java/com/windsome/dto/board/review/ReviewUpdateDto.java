@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewUpdateDto {
+public class ReviewUpdateDTO {
 
     private Long reviewId;
 

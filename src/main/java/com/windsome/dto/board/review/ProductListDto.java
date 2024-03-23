@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class ProductListDto {
+public class ProductListDTO {
 
     private String imageUrl;
     private Long productId;
@@ -15,7 +15,7 @@ public class ProductListDto {
     private double discount;
     private int salePrice;
 
-    public ProductListDto(String imageUrl, Long productId, String productName, int price, double discount) {
+    public ProductListDTO(String imageUrl, Long productId, String productName, int price, double discount) {
         this.imageUrl = imageUrl;
         this.productId = productId;
         this.productName = productName;

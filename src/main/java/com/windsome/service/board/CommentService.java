@@ -1,14 +1,14 @@
 package com.windsome.service.board;
 
 import com.windsome.constant.Role;
-import com.windsome.dto.board.qa.CommentEnrollDto;
-import com.windsome.dto.board.qa.CommentDto;
-import com.windsome.dto.board.qa.CommentUpdateDto;
+import com.windsome.dto.board.qa.CommentDTO;
+import com.windsome.dto.board.qa.CommentEnrollDTO;
+import com.windsome.dto.board.qa.CommentUpdateDTO;
+import com.windsome.entity.board.Board;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.board.Comment;
-import com.windsome.entity.board.Qa;
-import com.windsome.repository.board.qa.CommentRepository;
-import com.windsome.repository.board.qa.QaRepository;
+import com.windsome.repository.board.BoardRepository;
+import com.windsome.repository.board.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final QaRepository qaRepository;
+    private final BoardRepository boardRepository;
 
     /**
      * 댓글 등록
      */
-    public Long enrollComment(CommentEnrollDto commentEnrollDto, Member member) {
-        Qa qa = qaRepository.findById(commentEnrollDto.getQaId()).orElseThrow(EntityNotFoundException::new);
+    public Long enrollComment(CommentEnrollDTO commentEnrollDto, Member member) {
+        Board qa = boardRepository.findById(commentEnrollDto.getQaId()).orElseThrow(EntityNotFoundException::new);
         Comment comment = Comment.toEntity(commentEnrollDto, qa, member);
         Comment savedComment = commentRepository.save(comment);
         return savedComment.getId();
@@ -38,9 +38,9 @@ public class CommentService {
     /**
      * 댓글 조회
      */
-    public List<CommentDto> getCommentDtoList(Long qaId) {
-        return commentRepository.findByQaId(qaId).stream()
-                .map(comment -> new CommentDto(comment.getId(), comment.getMember().getUserIdentifier(), comment.getMember().getName(), comment.getMember().getRole(), comment.getRegTime(), comment.getContent(), comment.isSecretYN()))
+    public List<CommentDTO> getCommentDtoList(Long qaId) {
+        return commentRepository.findAllByBoardId(qaId).stream()
+                .map(comment -> new CommentDTO(comment.getId(), comment.getMember().getUserIdentifier(), comment.getMember().getName(), comment.getMember().getRole(), comment.getRegTime(), comment.getContent(), comment.isHasPrivate()))
                 .collect(Collectors.toList());
     }
 
@@ -56,10 +56,10 @@ public class CommentService {
     /**
      * 댓글 수정
      */
-    public void updateComment(CommentUpdateDto commentUpdateDto) {
+    public void updateComment(CommentUpdateDTO commentUpdateDto) {
         Comment comment = commentRepository.findById(commentUpdateDto.getCommentId()).orElseThrow(EntityNotFoundException::new);
         comment.setContent(commentUpdateDto.getContent());
-        comment.setSecretYN(commentUpdateDto.isSecretYN());
+        comment.setHasPrivate(commentUpdateDto.isHasPrivate());
         commentRepository.save(comment);
     }
 

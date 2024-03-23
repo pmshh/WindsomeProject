@@ -118,7 +118,7 @@
                     $('.password-input').focus();
                 } else if (passwordVal === password) {
                     let reviewId = $(this).attr("data-reviewId");
-                    location.href = "/board/review/update/" + reviewId;
+                    location.href = "/board/reviews/update/" + reviewId;
                 } else {
                     alert("비밀번호가 일치하지 않습니다.");
                     $('.password-input').focus();
@@ -138,13 +138,13 @@
                 } else if (passwordVal === password) {
                     if (confirm("리뷰를 삭제하시겠습니까?")) {
                         $.ajax({
-                            url: "/board/review/delete/" + reviewId + "?productId=" + productId,
+                            url: "/board/reviews/" + reviewId + "?productId=" + productId,
                             type: "DELETE",
                             dataType: "text",
                             cache: false,
-                            success: function (result, status) {
+                            success: function (result) {
                                 alert(result);
-                                location.href = '/board/review';
+                                location.href = '/board/reviews';
                             },
                             error: function (xhr) {
                                 if (xhr.status === 200) {
@@ -166,7 +166,7 @@
 
             /* 리뷰 게시판으로 이동 */
             $(".cancel-btn").on("click", function () {
-                location.href = '/board/review';
+                location.href = '/board/reviews';
             });
 
             /* 리뷰 평점 값 초기화 */

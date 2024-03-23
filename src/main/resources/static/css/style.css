@@ -186,6 +186,7 @@ input[type=text], input[type=password] {
   border: 1px solid #ddd;
   color: #353535;
   font-size: 12px;
+  outline: none;
 }
 
 select {
@@ -1988,10 +1989,6 @@ a.btn-normal {
   margin-top: 2px;
 }
 
-.notice-detail-body {
-  width: 80%;
-  margin: 0 auto;
-}
 .notice-detail-body .table-box {
   width: 100%;
   border-bottom: 1px solid #e5e5e5;
@@ -2075,6 +2072,7 @@ a.btn-normal {
   margin-left: 5px;
 }
 .notice-detail-body .board-movement {
+  width: 100%;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
   margin: 60px 0 40px;
@@ -2226,7 +2224,6 @@ a.btn-normal {
 }
 
 .qa-dtl-body {
-  width: 80%;
   margin: 0 auto;
 }
 .qa-dtl-body .table-box {
@@ -2523,6 +2520,7 @@ a.btn-normal {
   border: 1px solid black;
 }
 .qa-dtl-body .board-movement {
+  width: 100%;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
   margin: 60px 0 40px;

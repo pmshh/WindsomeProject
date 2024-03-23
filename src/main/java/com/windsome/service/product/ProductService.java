@@ -1,5 +1,6 @@
 package com.windsome.service.product;
 
+import com.windsome.dto.board.review.ProductListDTO;
 import com.windsome.dto.product.*;
 import com.windsome.entity.*;
 import com.windsome.entity.product.*;
@@ -47,6 +48,13 @@ public class ProductService {
 
     @Value("${productImgLocation}")
     private String productImgLocation;
+
+    /**
+     * 상품 저장
+     */
+    public void saveProduct(Product product) {
+        productRepository.save(product);
+    }
 
     /**
      * 상품 등록
@@ -232,5 +240,19 @@ public class ProductService {
      */
     public Product getProductByProductId(Long productId) {
         return productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    /**
+     * 리뷰 등록 화면 - 상품 검색(상품 리스트 조회)
+     */
+    public List<ProductListDTO> getReviewPageItemList(String searchQuery, Pageable pageable) {
+        return productRepository.getReviewPageItemList(searchQuery, pageable);
+    }
+
+    /**
+     * 리뷰 등록 화면 - 상품 검색(상품 리스트 조회) 카운트 쿼리
+     */
+    public Long getReviewPageItemListCount(String searchQuery) {
+        return productRepository.getReviewPageItemListCount(searchQuery);
     }
 }

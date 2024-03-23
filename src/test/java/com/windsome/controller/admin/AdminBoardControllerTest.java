@@ -1,16 +1,12 @@
 package com.windsome.controller.admin;
 
 import com.windsome.WithAccount;
-import com.windsome.dto.board.notice.NoticeListDto;
-import com.windsome.dto.board.notice.NoticeSearchDto;
-import com.windsome.dto.board.qa.QaListDto;
-import com.windsome.dto.board.qa.QaSearchDto;
-import com.windsome.dto.board.review.ReviewListDto;
-import com.windsome.dto.board.review.ReviewSearchDto;
+import com.windsome.dto.board.SearchDTO;
+import com.windsome.dto.board.notice.NoticeListDTO;
+import com.windsome.dto.board.qa.QaListDTO;
+import com.windsome.dto.board.review.ReviewListDTO;
+import com.windsome.service.board.BoardService;
 import com.windsome.service.cart.CartService;
-import com.windsome.service.board.NoticeService;
-import com.windsome.service.board.QaService;
-import com.windsome.service.board.ReviewService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class AdminBoardControllerTest {
 
-    @MockBean NoticeService noticeService;
-    @MockBean QaService qaService;
-    @MockBean ReviewService reviewService;
+    @MockBean BoardService boardService;
     @MockBean CartService cartService;
     @Autowired MockMvc mockMvc;
 
@@ -60,11 +54,11 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void getNoticeListTest() throws Exception {
         // Given
-        Page<NoticeListDto> noticeList = new PageImpl<>(Collections.emptyList());
-        given(noticeService.getNoticeList(any(NoticeSearchDto.class), any())).willReturn(noticeList);
+        Page<NoticeListDTO> noticeList = new PageImpl<>(Collections.emptyList());
+        given(boardService.getNoticeList(any(SearchDTO.class), any())).willReturn(noticeList);
 
         // Perform & Verify
-        mockMvc.perform(get("/admin/board/notice")
+        mockMvc.perform(get("/admin/board/notices")
                         .param("page", "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -77,10 +71,10 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteNoticeSuccessTest() throws Exception {
         // Mocking - 게시글 삭제가 성공하는 경우
-        doNothing().when(noticeService).deleteNotices(any(Long[].class));
+        doNothing().when(boardService).deleteNotices(any(Long[].class));
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/board/notice")
+        mockMvc.perform(delete("/admin/board/notices")
                         .param("noticeIds", "1", "2", "3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -94,10 +88,10 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteNoticeFailureNotFoundTest() throws Exception {
         // Mocking - 존재하지 않는 게시글 삭제 시 EntityNotFoundException이 발생하는 경우
-        doThrow(EntityNotFoundException.class).when(noticeService).deleteNotices(any(Long[].class));
+        doThrow(EntityNotFoundException.class).when(boardService).deleteNotices(any(Long[].class));
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/board/notice")
+        mockMvc.perform(delete("/admin/board/notices")
                         .param("noticeIds", "1", "2", "3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -111,11 +105,11 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void updateNoticeSuccessTest() throws Exception {
         // Given
-        given(noticeService.checkNoticeYN(anyLong(), anyBoolean())).willReturn(false);
-        doNothing().when(noticeService).updateNoticeYN(anyLong(), anyBoolean());
+        given(boardService.checkNoticeYN(anyLong(), anyBoolean())).willReturn(false);
+        doNothing().when(boardService).updateNoticeYN(anyLong(), anyBoolean());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/board/notice/1")
+        mockMvc.perform(patch("/admin/board/notices/1")
                         .param("noticeYn", "true")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -127,10 +121,10 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void updateNoticeAlreadyNoticeTest() throws Exception {
         // Given
-        given(noticeService.checkNoticeYN(anyLong(), anyBoolean())).willReturn(true);
+        given(boardService.checkNoticeYN(anyLong(), anyBoolean())).willReturn(true);
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/board/notice/1")
+        mockMvc.perform(patch("/admin/board/notices/1")
                         .param("noticeYn", "true")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -143,10 +137,10 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void updateNoticeNotFoundTest() throws Exception {
         // Given
-        doThrow(EntityNotFoundException.class).when(noticeService).updateNoticeYN(anyLong(), anyBoolean());
+        doThrow(EntityNotFoundException.class).when(boardService).updateNoticeYN(anyLong(), anyBoolean());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/board/notice/1")
+        mockMvc.perform(patch("/admin/board/notices/1")
                         .param("noticeYn", "true")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -159,8 +153,8 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void getQaListTest() throws Exception {
         // Given
-        Page<QaListDto> qaListDtos = new PageImpl<>(Collections.emptyList());
-        given(qaService.getQaList(any(QaSearchDto.class), any())).willReturn(qaListDtos);
+        Page<QaListDTO> qaListDtos = new PageImpl<>(Collections.emptyList());
+        given(boardService.getQaList(any(SearchDTO.class), any())).willReturn(qaListDtos);
 
         // Perform & Verify
         mockMvc.perform(get("/admin/board/qa")
@@ -169,7 +163,7 @@ class AdminBoardControllerTest {
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/board/qa-board-management"))
-                .andExpect(model().attributeExists("qaList", "qaSearchDto", "maxPage", "page"));
+                .andExpect(model().attributeExists("qaList", "searchDTO", "maxPage", "page"));
     }
 
     @Test
@@ -177,7 +171,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteQaSuccessTest() throws Exception {
         // Given
-        doNothing().when(qaService).deleteQas(any());
+        doNothing().when(boardService).deleteQas(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/qa")
@@ -193,7 +187,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteNonExistingQaTest() throws Exception {
         // Given
-        doThrow(EntityNotFoundException.class).when(qaService).deleteQas(any());
+        doThrow(EntityNotFoundException.class).when(boardService).deleteQas(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/qa")
@@ -209,15 +203,15 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void getReviewListTest() throws Exception {
         // Given
-        Page<ReviewListDto> mockReviewPage = new PageImpl<>(Collections.emptyList());
-        given(reviewService.getReviews(any(ReviewSearchDto.class), any(Pageable.class))).willReturn(mockReviewPage);
+        Page<ReviewListDTO> mockReviewPage = new PageImpl<>(Collections.emptyList());
+        given(boardService.getReviews(any(SearchDTO.class), any(Pageable.class))).willReturn(mockReviewPage);
 
         // Perform & Verify
-        mockMvc.perform(get("/admin/board/review"))
+        mockMvc.perform(get("/admin/board/reviews"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/board/review-board-management"))
                 .andExpect(model().attributeExists("reviews"))
-                .andExpect(model().attributeExists("reviewSearchDto"))
+                .andExpect(model().attributeExists("searchDTO"))
                 .andExpect(model().attributeExists("maxPage"));
     }
 
@@ -226,10 +220,10 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteReviewExistingTest() throws Exception {
         // Given
-        doNothing().when(reviewService).deleteReviews(any(Long[].class));
+        doNothing().when(boardService).deleteReviews(any(Long[].class));
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/board/review")
+        mockMvc.perform(delete("/admin/board/reviews")
                         .param("reviewIds", "1", "2", "3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -242,10 +236,10 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteReviewNotFoundTest() throws Exception {
         // Given
-        doThrow(EntityNotFoundException.class).when(reviewService).deleteReviews(any(Long[].class));
+        doThrow(EntityNotFoundException.class).when(boardService).deleteReviews(any(Long[].class));
 
         // Perform & Verify
-        mockMvc.perform(delete("/admin/board/review")
+        mockMvc.perform(delete("/admin/board/reviews")
                         .param("reviewIds", "1", "2", "3")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))

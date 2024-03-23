@@ -58,7 +58,7 @@
                                                 </a>
                                             </td>
                                             <td class="base-table__cell left pl20">
-                                                <a class="base-table__link" th:href="${'/board/review/' + review.reviewId}">
+                                                <a class="base-table__link" th:href="${'/board/reviews/' + review.reviewId}">
                                                     <span class="txt11 text-secondary-emphasis" th:text="${review.content}"></span>
                                                 </a>
                                             </td>
@@ -126,7 +126,7 @@
                                 </ul>
                             </div>
 
-                            <div class="search-input-container" th:object="${reviewSearchDto}">
+                            <div class="search-input-container" th:object="${searchDTO}">
                                 <i class="fa-solid fa-angle-right"></i>
                                 <span class="txt">검색어</span>
                                 <select class="search-date-type" th:field="*{searchDateType}">
@@ -166,7 +166,7 @@
 
             /* 게시글 등록 화면으로 이동 */
             $(".write-btn").on("click", function () {
-                location.href = "/board/review/enroll";
+                location.href = "/board/reviews/enroll";
             });
 
             /* 리뷰 평점 값 초기화 */
@@ -182,7 +182,7 @@
 
         function showMessage() {
             let message = [[${message}]];
-            if (message !== null) {
+            if (message) {
                 alert(message);
             }
         }
@@ -191,7 +191,7 @@
         function page(page) {
             let searchDateType = $(".search-date-type").val();
             let searchQuery = $(".search-query").val();
-            location.href = "/board/review?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+            location.href = "/board/reviews?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
         }
     </script>
 </body>

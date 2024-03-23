@@ -26,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class CartControllerTest {
@@ -48,13 +50,6 @@ class CartControllerTest {
     @Autowired CartService cartService;
     @Autowired ColorRepository colorRepository;
     @Autowired SizeRepository sizeRepository;
-
-    @AfterEach
-    void afterEach() {
-        cartProductRepository.deleteAll();
-        cartRepository.deleteAll();
-        memberRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("장바구니 화면 보이는지 테스트")
@@ -72,22 +67,22 @@ class CartControllerTest {
     @WithAccount("test1234")
     public void addCart() throws Exception {
         Product product = Product.builder().name("test").productDetail("test").price(10000).build();
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
 
         Color color = new Color();
         color.setId(1L);
-        colorRepository.save(color);
+        Color savedColor = colorRepository.save(color);
 
         Size size = new Size();
         size.setId(1L);
-        sizeRepository.save(size);
+        Size savedSize = sizeRepository.save(size);
 
         CartProductListDTO cartProductListDTO = new CartProductListDTO();
-        cartProductListDTO.setProductId(1L);
+        cartProductListDTO.setProductId(savedProduct.getId());
         List<CartProductDTO> cartProductDTOList = new ArrayList<>();
         CartProductDTO cartProductDTO = new CartProductDTO();
-        cartProductDTO.setColorId(1L);
-        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setColorId(savedColor.getId());
+        cartProductDTO.setSizeId(savedSize.getId());
         cartProductDTO.setQuantity(1);
         cartProductDTOList.add(cartProductDTO);
         cartProductListDTO.setCartProductDTOList(cartProductDTOList);

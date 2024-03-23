@@ -4,7 +4,7 @@ import com.windsome.constant.ProductSellStatus;
 import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.entity.Category;
 import com.windsome.entity.auditing.BaseEntity;
-import com.windsome.entity.board.Review;
+import com.windsome.entity.board.Board;
 import lombok.*;
 
 import javax.persistence.*;
@@ -48,7 +48,7 @@ public class Product extends BaseEntity {
     private List<ProductImage> productImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    private List<Board> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductColor> colors = new ArrayList<>();

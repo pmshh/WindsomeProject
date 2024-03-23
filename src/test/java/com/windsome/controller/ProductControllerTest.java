@@ -4,10 +4,8 @@ import com.windsome.advice.MemberControllerAdvice;
 import com.windsome.controller.product.ProductController;
 import com.windsome.dto.board.review.ProductReviewDTO;
 import com.windsome.dto.product.InventoryDTO;
-import com.windsome.dto.product.ProductColorResponseDTO;
 import com.windsome.dto.product.ProductFormDTO;
-import com.windsome.dto.product.ProductSizeResponseDTO;
-import com.windsome.service.board.ReviewService;
+import com.windsome.service.board.BoardService;
 import com.windsome.service.product.InventoryService;
 import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.Test;
@@ -31,17 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(ProductController.class)
-@AutoConfigureMockMvc
 @MockBean(JpaMetamodelMappingContext.class)
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class ProductControllerTest {
 
-    @Autowired MockMvc mockMvc;
-
     @Autowired private ProductController productController;
 
     @MockBean private ProductService productService;
-    @MockBean private ReviewService reviewService;
+    @MockBean private BoardService boardService;
     @MockBean private InventoryService inventoryService;
     @MockBean MemberControllerAdvice memberControllerAdvice;
 
@@ -59,7 +54,7 @@ class ProductControllerTest {
 
         when(inventoryService.getInventories(productId)).thenReturn(mockInventoryList);
         when(productService.getProductFormDto(productId)).thenReturn(productFormDTO);
-        when(reviewService.getProductReviewList(productId, pageable)).thenReturn(reviewPage);
+        when(boardService.getProductReviewList(productId, pageable)).thenReturn(reviewPage);
 
         // When
         String viewName = productController.showProductDetail(Optional.of(1), productId, mockRedirectAttributes, mockModel);

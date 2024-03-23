@@ -6,12 +6,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoticeUpdateDto {
+public class NoticeUpdateDTO {
 
     public String title;
 
     public String content;
 
-    public boolean noticeYN;
+    public boolean hasNotice;
 
 }

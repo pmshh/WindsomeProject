@@ -1,7 +1,7 @@
 package com.windsome.dto.board.review;
 
+import com.windsome.entity.board.Board;
 import com.windsome.entity.product.Product;
-import com.windsome.entity.board.Review;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -22,11 +22,11 @@ public class ProductReviewDTO {
 
     private int hits; // 조회수
 
-    public static ProductReviewDTO createProductReviewDTO(Review review, Product product) {
+    public static ProductReviewDTO createProductReviewDTO(Board review, Product product) {
         ProductReviewDTO productReviewDTO = new ProductReviewDTO();
         productReviewDTO.setReviewId(review.getId());
         productReviewDTO.setContent(review.getContent());
-        productReviewDTO.setRegDate(review.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        productReviewDTO.setRegDate(review.getRegTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         productReviewDTO.setCreatedBy(review.getMember().getName());
         productReviewDTO.setRating(review.getRating());
         productReviewDTO.setHits(review.getHits());

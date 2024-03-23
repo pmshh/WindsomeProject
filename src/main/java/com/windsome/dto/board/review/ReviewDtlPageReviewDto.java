@@ -1,14 +1,14 @@
 package com.windsome.dto.board.review;
 
+import com.windsome.entity.board.Board;
 import com.windsome.entity.product.ProductImage;
-import com.windsome.entity.board.Review;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter @Setter
-public class ReviewDtlPageReviewDto {
+public class ReviewDtlPageReviewDTO {
 
     /**
      * 리뷰 정보
@@ -38,15 +38,15 @@ public class ReviewDtlPageReviewDto {
 
     private int salePrice;
 
-    public static ReviewDtlPageReviewDto createReviewDtlPageDto(Review review, ProductImage productImage) {
-        ReviewDtlPageReviewDto reviewDtlPageReviewDto = new ReviewDtlPageReviewDto();
+    public static ReviewDtlPageReviewDTO createReviewDtlPageDto(Board review, String representativeImageUrl) {
+        ReviewDtlPageReviewDTO reviewDtlPageReviewDto = new ReviewDtlPageReviewDTO();
         reviewDtlPageReviewDto.setReviewId(review.getId());
         reviewDtlPageReviewDto.setTitle(review.getTitle());
         reviewDtlPageReviewDto.setRating(review.getRating());
         reviewDtlPageReviewDto.setContent(review.getContent());
         reviewDtlPageReviewDto.setPassword(review.getPassword());
 
-        reviewDtlPageReviewDto.setImageUrl(productImage.getImageUrl());
+        reviewDtlPageReviewDto.setImageUrl(representativeImageUrl);
         reviewDtlPageReviewDto.setProductId(review.getProduct().getId());
         reviewDtlPageReviewDto.setProductName(review.getProduct().getName());
         reviewDtlPageReviewDto.setPrice(review.getProduct().getPrice());

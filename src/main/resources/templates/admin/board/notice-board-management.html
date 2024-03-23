@@ -55,7 +55,7 @@
                                             <span>공지</span>
                                         </td>
                                         <td class="base-table__cell left">
-                                            <a th:href="@{'/board/notice/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
+                                            <a th:href="@{'/board/notices/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
                                         </td>
                                         <td class="base-table__cell">
                                             <span th:text="${fixTopNotice.member.name}"></span>
@@ -85,7 +85,7 @@
                                             <span th:text="${noticeList.getTotalElements() - (noticeList.getSize() * noticeList.getNumber()) - status.index}"></span>
                                         </td>
                                         <td class="base-table__cell left">
-                                            <a th:href="@{'/board/notice/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
+                                            <a th:href="@{'/board/notices/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
                                         </td>
                                         <td class="base-table__cell">
                                             <span th:text="${notice.createdBy}"></span>
@@ -143,7 +143,7 @@
                             </ul>
                         </div>
 
-                        <div class="search-input-container" th:object="${noticeSearchDto}">
+                        <div class="search-input-container" th:object="${searchDTO}">
                             <i class="fa-solid fa-angle-right"></i>
                             <span class="txt">검색어</span>
                             <select class="search-date-type" th:field="*{searchDateType}">
@@ -198,7 +198,7 @@
 
         /* 게시글 등록 화면으로 이동하는 함수 */
         function handleWriteButtonClick() {
-            location.href = '/board/notice/enroll';
+            location.href = '/board/notices/enroll';
         }
 
         /* 검색 함수 */
@@ -243,7 +243,7 @@
             let noticeId = $(this).attr("data-noticeId");
             let noticeYn = $(this).hasClass("top-fix-btn");
             $.ajax({
-                url: '/admin/board/notice/' + noticeId,
+                url: '/admin/board/notices/' + noticeId,
                 type: 'patch',
                 data: {
                     noticeId: noticeId,
@@ -263,7 +263,7 @@
         function page(page) {
             let searchDateType = $(".search-date-type").val();
             let searchQuery = $(".search-query").val();
-            location.href = "/admin/board/notice?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
+            location.href = "/admin/board/notices?page=" + page + "&searchDateType=" + searchDateType + "&searchQuery=" + searchQuery;
         }
 
         /* 체크 박스 전체 선택/해제 함수 */
@@ -278,7 +278,7 @@
         /* 게시글 삭제 함수 */
         function deleteNotice(noticeIds) {
             $.ajax({
-                url: "/admin/board/notice",
+                url: "/admin/board/notices",
                 type: "delete",
                 traditional: true,
                 data: {

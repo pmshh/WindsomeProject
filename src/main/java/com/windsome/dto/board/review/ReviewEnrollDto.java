@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewEnrollDto {
+public class ReviewEnrollDTO {
 
     private Long productId; // 상품 id
 

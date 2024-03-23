@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QaDtlDto {
+public class QaDtlDTO {
 
     private Long qaId;
 
@@ -17,18 +17,18 @@ public class QaDtlDto {
 
     private String password;
 
-    private boolean secretYN;
+    private boolean hasPrivate;
 
     private LocalDateTime regTime;
 
     private String createdBy;
 
-    public QaDtlDto(QaDtlDtoInterface qaDtlDtoInterface, String createdBy) {
-        this.qaId = qaDtlDtoInterface.getQaId();
+    public QaDtlDTO(QaDtlDtoInterface qaDtlDtoInterface, String createdBy) {
+        this.qaId = qaDtlDtoInterface.getBoardId();
         this.title = qaDtlDtoInterface.getTitle();
         this.content = qaDtlDtoInterface.getContent();
         this.password = qaDtlDtoInterface.getPassword();
-        this.secretYN = qaDtlDtoInterface.getSecretYN();
+        this.hasPrivate = qaDtlDtoInterface.getHasPrivate();
         this.regTime = qaDtlDtoInterface.getRegTime();
         this.createdBy = createdBy;
     }

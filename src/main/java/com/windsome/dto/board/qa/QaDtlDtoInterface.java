@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 
 public interface QaDtlDtoInterface {
 
-    Long getQaId();
+    Long getBoardId();
     String getTitle();
     String getContent();
     String getPassword();
-    boolean getSecretYN();
+    boolean getHasPrivate();
     LocalDateTime getRegTime();
     Long getMemberId();
 }

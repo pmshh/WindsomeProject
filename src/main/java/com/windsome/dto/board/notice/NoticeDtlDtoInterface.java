@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public interface NoticeDtlDtoInterface {
 
-    Long getNoticeId();
+    Long getBoardId();
     String getTitle();
     String getContent();
-    boolean getNoticeYN();
+    boolean getHasNotice();
     Long getMemberId();
     LocalDateTime getRegTime();
 }

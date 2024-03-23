@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDto {
+public class NoticeDTO {
 
     public String title;
 
@@ -19,5 +19,5 @@ public class NoticeDto {
 
     public LocalDateTime regTime;
 
-    public boolean noticeYN;
+    public boolean hasNotice;
 }

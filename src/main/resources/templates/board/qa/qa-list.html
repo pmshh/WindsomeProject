@@ -59,7 +59,7 @@
                                                 <span th:if="${qa.state.name == T(com.windsome.constant.Role).ADMIN.name}" th:text="${qa.createdBy}"></span>
                                             </td>
                                             <td class="base-table__cell">
-                                                <span class="txtNum gray-col txt11" th:text="${qa.regDate}">2024-02-06</span>
+                                                <span th:text="${qa.regDate}">2024-02-06</span>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -106,7 +106,7 @@
                                 </ul>
                             </div>
 
-                            <div class="search-input-container" th:object="${qaSearchDto}">
+                            <div class="search-input-container" th:object="${searchDTO}">
                                 <i class="fa-solid fa-angle-right"></i>
                                 <span class="txt">검색어</span>
                                 <select class="search-date-type" th:field="*{searchDateType}">
@@ -148,14 +148,14 @@
 
         function showMessage() {
             let message = [[${message}]];
-            if (message !== null) {
+            if (message) {
                 alert(message);
             }
         }
 
         function setSearchParameters() {
-            let query = [[${qaSearchDto.searchQuery}]];
-            let type = [[${qaSearchDto.searchDateType}]];
+            let query = [[${searchDTO.searchQuery}]];
+            let type = [[${searchDTO.searchDateType}]];
             $(".search-query").val(query);
             $(".search-date-type").val(type).prop("selected", true);
         }

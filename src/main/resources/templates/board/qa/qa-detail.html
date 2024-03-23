@@ -21,148 +21,151 @@
                     <div class="divider"></div>
                 </div>
 
-                <div class="section-body qa-dtl-body mt-5">
+                <div class="section-body qa-dtl-body row">
 
-                    <div class="table-box">
-                        <table>
-                            <colgroup>
-                                <col style="width:130px;">
-                                <col style="width: auto;">
-                            </colgroup>
-                            <tbody>
-                            <tr>
-                                <td colspan="2" class="board-title">
-                                    <span th:text="${qaDtlDtoList.get(0).title}"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="board-date-con">
-                                    <ul class="etcArea">
-                                        <li th:text="${qaDtlDtoList.get(0).createdBy}"></li>
-                                        <li><span class="txtNum"
-                                                  th:text="${#temporals.format(qaDtlDtoList.get(0).regTime, 'yyyy-MM-dd')}"></span>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-12 col-md-10">
+                        <div class="table-box">
+                            <table>
+                                <colgroup>
+                                    <col style="width:130px;">
+                                    <col style="width: auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <td colspan="2" class="board-title">
+                                        <span th:text="${qaDtlDtoList.get(0).title}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="board-date-con">
+                                        <ul class="etcArea">
+                                            <li th:text="${qaDtlDtoList.get(0).createdBy}"></li>
+                                            <li><span class="txtNum"
+                                                      th:text="${#temporals.format(qaDtlDtoList.get(0).regTime, 'yyyy-MM-dd')}"></span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                        <div class="detail">
-                            <div class="article" th:utext="${qaDtlDtoList.get(0).content}"></div>
+                            <div class="detail">
+                                <div class="article" th:utext="${qaDtlDtoList.get(0).content}"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="password-box">
-                        <span class="pw-txt">비밀번호</span>
-                        <input class="password-input" type="password" minlength="8" maxlength="20">
-                        <span class="help"><i class="xi-warning"></i>삭제하려면 비밀번호를 입력하세요.</span>
-                    </div>
+                        <div class="password-box">
+                            <span class="pw-txt">비밀번호</span>
+                            <input class="password-input" type="password" minlength="8" maxlength="20">
+                            <span class="help"><i class="xi-warning"></i>삭제하려면 비밀번호를 입력하세요.</span>
+                        </div>
 
-                    <div class="btn-box">
-                        <button class="button button--white button--100x30 list-btn" type="button">목록</button>
-                        <button class="button button--black button--100x30 reply-btn" type="button">답글</button>
-                        <button class="button button--white button--100x30 del-btn" type="button">삭제</button>
-                        <button class="button button--white button--100x30 update-btn" type="button">수정</button>
-                    </div>
+                        <div class="btn-box">
+                            <button class="button button--white button--100x30 list-btn" type="button">목록</button>
+                            <button class="button button--black button--100x30 reply-btn" type="button">답글</button>
+                            <button class="button button--white button--100x30 del-btn" type="button">삭제</button>
+                            <button class="button button--white button--100x30 update-btn" type="button">수정</button>
+                        </div>
 
-                    <div class="comment-box">
+                        <div class="comment-box">
 
-                        <div class="comment-list">
-                            <ul>
-                                <li th:each="comment, status:${commentDtoList}">
-                                    <div class="comment-top">
-                                        <strong th:text="${comment.createdBy}"></strong>
-                                        <span class="date" th:text="${#temporals.format(comment.regTime, 'yyyy-MM-dd')}">2024-02-13</span>
-                                    </div>
+                            <div class="comment-list">
+                                <ul>
+                                    <li th:each="comment, status:${commentDtoList}">
+                                        <div class="comment-top">
+                                            <strong th:text="${comment.createdBy}"></strong>
+                                            <span class="date" th:text="${#temporals.format(comment.regTime, 'yyyy-MM-dd')}">2024-02-13</span>
+                                        </div>
 
-                                    <span class="btn" th:if="${comment.userIdentifier == member.userIdentifier || member.state.name == T(com.windsome.constant.Role).ADMIN.name}">
+                                        <span class="btn" th:if="${comment.userIdentifier == member.userIdentifier || member.state.name == T(com.windsome.constant.Role).ADMIN.name}">
                                         <a href="#" class="show-form-btn" th:data-commentId="${comment.commentId}">수정</a>
                                         <a href="#" class="comment-del-btn" th:data-commentId="${comment.commentId}">삭제</a>
                                     </span>
 
-                                    <form th:id="${'commentUpdateForm' + comment.commentId}" class="comment-update-form displaynone">
-                                        <div class="input">
-                                            <strong th:text="${member.name}"></strong>
-                                            <div class="secret-box">
-                                                <input th:id="${'updateComSecretCheck' + comment.commentId}" type="checkbox" checked>
-                                                <label th:for="${'updateComSecretCheck' + comment.commentId}">비밀댓글</label>
+                                        <form th:id="${'commentUpdateForm' + comment.commentId}" class="comment-update-form displaynone">
+                                            <div class="input">
+                                                <strong th:text="${member.name}"></strong>
+                                                <div class="secret-box">
+                                                    <input th:id="${'updateComSecretCheck' + comment.commentId}" type="checkbox" checked>
+                                                    <label th:for="${'updateComSecretCheck' + comment.commentId}">비밀댓글</label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="view">
-                                            <textarea th:text="${comment.content}" th:id="${'commentContent'+comment.commentId}"></textarea>
-                                            <span class="submit">
+                                            <div class="view">
+                                                <textarea th:text="${comment.content}" th:id="${'commentContent'+comment.commentId}"></textarea>
+                                                <span class="submit">
                                                 <a href="#" th:data-commentId="${comment.commentId}" class="comment-update-btn">수정</a>
                                                 <a href="#" class="comment-cancel-btn">취소</a>
                                             </span>
+                                            </div>
+                                        </form>
+
+                                        <div class="comment">
+                                            <th:block th:if="${comment.hasPrivate == true}">
+                                                <th:block th:if="${comment.userIdentifier == member.userIdentifier || member.state.name == T(com.windsome.constant.Role).ADMIN.name}">
+                                                    <i class="xi-lock-o"></i><span th:text="${comment.content}"></span>
+                                                </th:block>
+                                                <th:block th:if="${comment.userIdentifier != member.userIdentifier && member.state.name != T(com.windsome.constant.Role).ADMIN.name}">
+                                                    <i class="xi-lock-o"></i><span>비밀 댓글입니다.</span>
+                                                </th:block>
+                                            </th:block>
+
+                                            <th:block th:if="${comment.hasPrivate == false}">
+                                                <span th:text="${comment.content}"></span>
+                                            </th:block>
                                         </div>
-                                    </form>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                    <div class="comment">
-                                        <th:block th:if="${comment.secretYN == true}">
-                                            <th:block th:if="${comment.userIdentifier == member.userIdentifier || member.state.name == T(com.windsome.constant.Role).ADMIN.name}">
-                                                <i class="xi-lock-o"></i><span th:text="${comment.content}"></span>
-                                            </th:block>
-                                            <th:block th:if="${comment.userIdentifier != member.userIdentifier && member.state.name != T(com.windsome.constant.Role).ADMIN.name}">
-                                                <i class="xi-lock-o"></i><span>비밀 댓글입니다.</span>
-                                            </th:block>
-                                        </th:block>
-
-                                        <th:block th:if="${comment.secretYN == false}">
-                                            <span th:text="${comment.content}"></span>
-                                        </th:block>
+                            <div class="comment-write">
+                                <div class="input">
+                                    <strong th:text="${member.name}"></strong>
+                                    <div class="secret-box">
+                                        <input id="secret-check" type="checkbox" checked>
+                                        <label for="secret-check">비밀댓글</label>
                                     </div>
+                                </div>
+                                <div class="view">
+                                    <textarea class="comment-content-input" placeholder="댓글을 남겨보세요."></textarea>
+                                    <a class="comment-enroll-btn">확인</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="board-movement" th:if="${qaDtlDtoList.size() > 1}">
+                            <ul th:if="${qaDtlDtoList.size() == 3}">
+                                <li class="prev">
+                                    <strong>이전글</strong>
+                                    <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(2).qaId}}"><span
+                                            th:text="${qaDtlDtoList.get(2).title}"></span></a>
+                                </li>
+                                <li class="next">
+                                    <strong>다음글</strong>
+                                    <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
+                                            th:text="${qaDtlDtoList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
+
+                            <!-- 이전글만 존재하는 경우 -->
+                            <ul th:if="${qaDtlDtoList.size() == 2 && qaDtlDtoList.get(0).qaId > qaDtlDtoList.get(1).qaId}">
+                                <li class="only-prev">
+                                    <strong>이전글</strong>
+                                    <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
+                                            th:text="${qaDtlDtoList.get(1).title}"></span></a>
+                                </li>
+                            </ul>
+
+                            <!-- 다음글만 존재하는 경우 -->
+                            <ul th:if="${qaDtlDtoList.size() == 2 && qaDtlDtoList.get(0).qaId < qaDtlDtoList.get(1).qaId}">
+                                <li class="next">
+                                    <strong>다음글</strong>
+                                    <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
+                                            th:text="${qaDtlDtoList.get(1).title}"></span></a>
                                 </li>
                             </ul>
                         </div>
-
-                        <div class="comment-write">
-                            <div class="input">
-                                <strong th:text="${member.name}"></strong>
-                                <div class="secret-box">
-                                    <input id="secret-check" type="checkbox" checked>
-                                    <label for="secret-check">비밀댓글</label>
-                                </div>
-                            </div>
-                            <div class="view">
-                                <textarea class="comment-content-input" placeholder="댓글을 남겨보세요."></textarea>
-                                <a class="comment-enroll-btn">확인</a>
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="board-movement">
-                        <ul th:if="${qaDtlDtoList.size() == 3}">
-                            <li class="prev">
-                                <strong>이전글</strong>
-                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(2).qaId}}"><span
-                                        th:text="${qaDtlDtoList.get(2).title}"></span></a>
-                            </li>
-                            <li class="next">
-                                <strong>다음글</strong>
-                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
-                                        th:text="${qaDtlDtoList.get(1).title}"></span></a>
-                            </li>
-                        </ul>
-
-                        <!-- 이전글만 존재하는 경우 -->
-                        <ul th:if="${qaDtlDtoList.size() == 2 && qaDtlDtoList.get(0).qaId > qaDtlDtoList.get(1).qaId}">
-                            <li class="only-prev">
-                                <strong>이전글</strong>
-                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
-                                        th:text="${qaDtlDtoList.get(1).title}"></span></a>
-                            </li>
-                        </ul>
-
-                        <!-- 다음글만 존재하는 경우 -->
-                        <ul th:if="${qaDtlDtoList.size() == 2 && qaDtlDtoList.get(0).qaId < qaDtlDtoList.get(1).qaId}">
-                            <li class="next">
-                                <strong>다음글</strong>
-                                <a th:href="@{'/board/qa/' + ${qaDtlDtoList.get(1).qaId}}"><span
-                                        th:text="${qaDtlDtoList.get(1).title}"></span></a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </section>
@@ -233,7 +236,7 @@
         /* 댓글 등록 */
         $(".comment-enroll-btn").click(function () {
             let content = $(".comment-content-input").val();
-            let secretYN = $("#secret-check").is(':checked');
+            let hasPrivate = $("#secret-check").is(':checked');
             if (confirm("댓글을 등록하시겠습니까?")) {
                 $.ajax({
                     url: '/board/comment/enroll',
@@ -241,7 +244,7 @@
                     data: {
                         qaId: qaId,
                         content: content,
-                        secretYN: secretYN,
+                        hasPrivate: hasPrivate,
                     },
                     success(res) {
                         alert(res);
@@ -272,13 +275,13 @@
             e.preventDefault();
             let commentId = $(this).attr("data-commentId");
             let contentVal = $("#commentContent" + commentId).val();
-            let secretYN = $("#updateComSecretCheck" + commentId).is(':checked');
+            let hasPrivate = $("#updateComSecretCheck" + commentId).is(':checked');
             $.ajax({
                 url:'/board/comment/' + commentId,
                 type: 'patch',
                 data: {
                     content: contentVal,
-                    secretYN: secretYN
+                    hasPrivate: hasPrivate
                 },
                 success(res) {
                     alert(res);

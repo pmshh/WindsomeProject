@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
+public class CommentDTO {
 
     private Long commentId; // 기본키
 
@@ -24,13 +24,13 @@ public class CommentDto {
 
     private String content; // 댓글 내용
 
-    private boolean secretYN; // 비밀글 설정 여부
+    private boolean hasPrivate; // 비밀글 설정 여부
 
-    public CommentDto(String content) {
+    public CommentDTO(String content) {
         this.content = content;
     }
 
-    public CommentDto(Long commentId, String userIdentifier, String createdBy, Role state, LocalDateTime regTime, String content, boolean secretYN) {
+    public CommentDTO(Long commentId, String userIdentifier, String createdBy, Role state, LocalDateTime regTime, String content, boolean hasPrivate) {
         this.commentId = commentId;
         this.userIdentifier = userIdentifier;
         this.createdBy = createdBy;
@@ -43,6 +43,6 @@ public class CommentDto {
         this.role = role;
         this.regTime = regTime;
         this.content = content;
-        this.secretYN = secretYN;
+        this.hasPrivate = hasPrivate;
     }
 }

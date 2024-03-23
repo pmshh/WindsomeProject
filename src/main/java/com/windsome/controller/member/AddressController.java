@@ -1,4 +1,4 @@
-package com.windsome.controller;
+package com.windsome.controller.member;
 
 import com.windsome.service.member.AddressService;
 import lombok.RequiredArgsConstructor;

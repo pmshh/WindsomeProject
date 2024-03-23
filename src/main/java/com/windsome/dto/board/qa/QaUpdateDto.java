@@ -1,13 +1,13 @@
 package com.windsome.dto.board.qa;
 
-import com.windsome.entity.board.Qa;
+import com.windsome.entity.board.Board;
 import lombok.*;
 
 @Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QaUpdateDto {
+public class QaUpdateDTO {
 
     private Long qaId;
 
@@ -17,15 +17,15 @@ public class QaUpdateDto {
 
     private String password;
 
-    private boolean secretYN;
+    private boolean hasPrivate;
 
-    public static QaUpdateDto createDto(Qa qa) {
-        return QaUpdateDto.builder()
+    public static QaUpdateDTO createDto(Board qa) {
+        return QaUpdateDTO.builder()
                 .qaId(qa.getId())
                 .title(qa.getTitle())
                 .content(qa.getContent())
                 .password(qa.getPassword())
-                .secretYN(qa.isSecretYN())
+                .hasPrivate(qa.isHasPrivate())
                 .build();
     }
 }

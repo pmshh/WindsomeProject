@@ -6,11 +6,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentUpdateDto {
+public class CommentUpdateDTO {
 
     private Long commentId; // 댓글 번호
 
     private String content; // 댓글 내용
 
-    private boolean secretYN; // 비밀글 설정 여부
+    private boolean hasPrivate; // 비밀글 설정 여부
 }

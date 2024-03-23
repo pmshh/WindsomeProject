@@ -1,6 +1,6 @@
 package com.windsome.entity.board;
 
-import com.windsome.dto.board.qa.CommentEnrollDto;
+import com.windsome.dto.board.qa.CommentEnrollDTO;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import lombok.*;
@@ -23,20 +23,20 @@ public class Comment extends BaseTimeEntity {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "qa_id")
-    private Qa qa;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @Lob
     private String content;
 
-    private boolean secretYN;
+    private boolean hasPrivate; // 비밀 댓글 여부
 
-    public static Comment toEntity(CommentEnrollDto commentEnrollDto, Qa qa, Member member) {
+    public static Comment toEntity(CommentEnrollDTO commentEnrollDto, Board qa, Member member) {
         return Comment.builder()
                 .member(member)
-                .qa(qa)
+                .board(qa)
                 .content(commentEnrollDto.getContent())
-                .secretYN(commentEnrollDto.isSecretYN())
+                .hasPrivate(commentEnrollDto.isHasPrivate())
                 .build();
     }
 }

@@ -80,9 +80,9 @@
                         게시판 관리
                     </a>
                     <div class="collapse sub-menu" id="board-management-submenu">
-                        <a th:href="@{/admin/board/notice}" th:classappend="${currentMenu == 'noticeManagement'}? active">Notice</a>
+                        <a th:href="@{/admin/board/notices}" th:classappend="${currentMenu == 'noticeManagement'}? active">Notice</a>
                         <a th:href="@{/admin/board/qa}" th:classappend="${currentMenu == 'qaManagement'}? active">Q&A</a>
-                        <a th:href="@{/admin/board/review}" th:classappend="${currentMenu == 'reviewManagement'}? active">Review</a>
+                        <a th:href="@{/admin/board/reviews}" th:classappend="${currentMenu == 'reviewManagement'}? active">Review</a>
                     </div>
                     <hr class="line">
                     <a th:href="@{/}" class="sidebar-link">

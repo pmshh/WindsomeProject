@@ -23,8 +23,8 @@
 
                     <div class="section-body notice-form-body row">
 
-                        <div class="review-form-wrap col-11 col-md-10 col-xxl-8">
-                            <form th:object="${notice}" method="post">
+                        <div class="review-form-wrap col-11 col-md-10">
+                            <form th:object="${noticeDetail}" method="post">
                                 <div class="table-wrapper">
                                     <table class="base-table base-table--post">
                                         <colgroup>
@@ -34,10 +34,10 @@
                                         <tbody class="base-table__body">
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" scope="row">
-                                                <label th:for="*{noticeYN}">공지 여부 <span>*</span></label>
+                                                <label th:for="*{hasNotice}">공지 여부 <span>*</span></label>
                                             </th>
                                             <td class="base-table__cell check">
-                                                <input class="noticeYN-input" type="checkbox" id="noticeYN" th:field="*{noticeYN}">
+                                                <input class="noticeYN-input" type="checkbox" id="noticeYN" th:field="*{hasNotice}">
                                                 <label for="noticeYN">상단 고정</label>
                                             </td>
                                         </tr>
@@ -95,13 +95,13 @@
 
             /* 게시글 수정 */
             $(".save-btn").click(function () {
-                let noticeId = [[${notice.id}]];
+                let noticeId = [[${noticeDetail.id}]];
                 let titleInputVal = $(".title-input").val();
                 let contentInputVal = editor.getData();
                 let noticeYNVal = $(".noticeYN-input").val();
 
                 $.ajax({
-                    url: "/board/notice/" + noticeId,
+                    url: "/board/notices/" + noticeId,
                     type: "PATCH",
                     data: {
                         title: titleInputVal,
@@ -110,7 +110,7 @@
                     },
                     success(result) {
                         alert(result);
-                        location.href = '/board/notice/' + noticeId
+                        location.href = '/board/notices/' + noticeId
                     },
                     error(request) {
                         alert(request.responseText);
@@ -122,9 +122,9 @@
             $(".cancel-btn").click(function () {
                 let page = [[${page}]];
                 if (page !== null) {
-                    location.href = '/board/notice?page=' + page;
+                    location.href = '/board/notices?page=' + page;
                 }
-                location.href = '/board/notice?page=0';
+                location.href = '/board/notices?page=0';
             });
 
             /* 게시글 제목 글자 수 제한 */

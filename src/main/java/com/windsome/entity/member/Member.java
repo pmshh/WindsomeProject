@@ -3,7 +3,7 @@ package com.windsome.entity.member;
 import com.windsome.constant.Role;
 import com.windsome.dto.order.OrderRequestDTO;
 import com.windsome.entity.auditing.BaseTimeEntity;
-import com.windsome.entity.board.Review;
+import com.windsome.entity.board.Board;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,7 +44,7 @@ public class Member extends BaseTimeEntity {
     private int totalUsedPoints; // 총 사용 포인트
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    private List<Board> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();

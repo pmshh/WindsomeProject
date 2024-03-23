@@ -23,7 +23,7 @@
 
                     <div class="section-body qaForm-body row">
 
-                        <div class="review-form-wrap col-11 col-md-10 col-xxl-8">
+                        <div class="review-form-wrap col-12 col-md-10">
                             <form id="qaUpdateForm" th:action="@{'/board/qa/update'}" th:object="${qaUpdateDto}" method="post">
                                 <div class="table-wrapper">
                                     <table class="base-table base-table--post">
@@ -109,7 +109,7 @@
                 let qaId = [[${qaUpdateDto.qaId}]]
                 let titleInputVal = $("select[name=title] option:selected").val();
                 let contentInputVal = editor.getData();
-                let radioVal = $('input[name="secret"]:checked').val();
+                let hasPrivate = $('input[name="secret"]:checked').val();
 
                 /* 제목 빈값 검사 */
                 if (titleInputVal === '') {
@@ -142,7 +142,7 @@
                                 qaId: qaId,
                                 title: $("select[name=title] option:selected").text(),
                                 content: contentInputVal,
-                                secretYN: radioVal
+                                hasPrivate: hasPrivate
                             },
                             success(res) {
                                 alert(res);

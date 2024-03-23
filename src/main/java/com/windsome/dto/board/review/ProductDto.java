@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class ProductDto {
+public class ProductDTO {
 
     private Long productId;
 
@@ -20,8 +20,8 @@ public class ProductDto {
     private int salePrice;
 
     // ToDo - model Mapper 적용
-    public static ProductDto createProductDto(Product product, String imageUrl) {
-        ProductDto productDto = new ProductDto();
+    public static ProductDTO createProductDto(Product product, String imageUrl) {
+        ProductDTO productDto = new ProductDTO();
         productDto.setProductId(product.getId());
         productDto.setProductName(product.getName());
         productDto.setImageUrl(imageUrl);

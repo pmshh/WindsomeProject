@@ -1,9 +1,8 @@
-package com.windsome.controller;
+package com.windsome.controller.order;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.order.*;
 import com.windsome.entity.member.Member;
-import com.windsome.repository.member.MemberRepository;
 import com.windsome.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

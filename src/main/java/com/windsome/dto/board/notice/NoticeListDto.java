@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class NoticeListDto {
+public class NoticeListDTO {
 
     private Long noticeId;
 
@@ -22,15 +22,15 @@ public class NoticeListDto {
 
     private String regDate;
 
-    private boolean noticeYN;
+    private boolean hasNotice;
 
     @QueryProjection
-    public NoticeListDto(Long noticeId, String title, String content, String createdBy, LocalDateTime regDate, boolean noticeYN) {
+    public NoticeListDTO(Long noticeId, String title, String content, String createdBy, LocalDateTime regDate, boolean hasNotice) {
         this.noticeId = noticeId;
         this.title = title;
         this.content = content;
         this.createdBy = createdBy;
         this.regDate = regDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.noticeYN = noticeYN;
+        this.hasNotice = hasNotice;
     }
 }

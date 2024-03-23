@@ -1,4 +1,4 @@
-package com.windsome.controller;
+package com.windsome.controller.member;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.constant.Role;

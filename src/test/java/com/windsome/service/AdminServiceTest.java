@@ -11,7 +11,7 @@ import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
 import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
-import com.windsome.repository.board.qa.QaRepository;
+import com.windsome.repository.board.BoardRepository;
 import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
@@ -56,7 +56,7 @@ class AdminServiceTest {
     @Mock private PaymentRepository paymentRepository;
     @Mock private OrderRepository orderRepository;
     @Mock private OrderProductRepository orderProductRepository;
-    @Mock private QaRepository qaRepository;
+    @Mock private BoardRepository boardRepository;
     @Mock private ModelMapper modelMapper;
     @Mock private PasswordEncoder passwordEncoder;
 
@@ -68,7 +68,7 @@ class AdminServiceTest {
         // Given
         when(memberRepository.count()).thenReturn(10L);
         when(productRepository.count()).thenReturn(20L);
-        when(qaRepository.count()).thenReturn(5L);
+        when(boardRepository.count()).thenReturn(5L);
         when(paymentRepository.getTotalPaymentPrice()).thenReturn(500L);
 
         CategorySalesResult categorySalesResult1 = mock(CategorySalesResult.class);
@@ -88,7 +88,7 @@ class AdminServiceTest {
         // Then
         verify(memberRepository, times(1)).count();
         verify(productRepository, times(1)).count();
-        verify(qaRepository, times(1)).count();
+        verify(boardRepository, times(1)).count();
         verify(paymentRepository, times(1)).getTotalPaymentPrice();
         verify(orderProductRepository, times(1)).getCategorySalesCount();
 

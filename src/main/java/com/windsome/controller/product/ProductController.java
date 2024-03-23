@@ -1,8 +1,8 @@
 package com.windsome.controller.product;
 
+import com.windsome.service.board.BoardService;
 import com.windsome.service.product.InventoryService;
 import com.windsome.service.product.ProductService;
-import com.windsome.service.board.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ProductController {
 
     private final ProductService productService;
-    private final ReviewService reviewService;
+    private final BoardService boardService;
     private final InventoryService inventoryService;
 
     /**
@@ -32,7 +32,7 @@ public class ProductController {
         model.addAttribute("inventories", inventoryService.getInventories(productId));
         try {
             model.addAttribute("product", productService.getProductFormDto(productId));
-            model.addAttribute("reviews", reviewService.getProductReviewList(productId, pageable));
+            model.addAttribute("reviews", boardService.getProductReviewList(productId, pageable));
             model.addAttribute("maxPage", 5);
         } catch (EntityNotFoundException e) {
             redirectAttr.addFlashAttribute("message", "상품 정보를 불러오던 도중 오류가 발생하였습니다.");

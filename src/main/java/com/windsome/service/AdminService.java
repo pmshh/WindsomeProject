@@ -28,7 +28,7 @@ import com.windsome.entity.order.OrderProduct;
 import com.windsome.entity.order.Payment;
 import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
-import com.windsome.repository.board.qa.QaRepository;
+import com.windsome.repository.board.BoardRepository;
 import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.order.OrderRepository;
@@ -61,7 +61,7 @@ public class AdminService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
-    private final QaRepository qaRepository;
+    private final BoardRepository boardRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final SizeRepository sizeRepository;
@@ -79,7 +79,7 @@ public class AdminService {
         DashboardInfoDto dashboardInfoDto = new DashboardInfoDto();
         dashboardInfoDto.setTotalMembers(memberRepository.count());
         dashboardInfoDto.setTotalProducts(productRepository.count());
-        dashboardInfoDto.setTotalQaPosts(qaRepository.count());
+        dashboardInfoDto.setTotalQaPosts(boardRepository.count());
         dashboardInfoDto.setTotalOrderPrice(paymentRepository.getTotalPaymentPrice());
         dashboardInfoDto.setCategorySalesList(orderProductRepository.getCategorySalesCount().stream()
                 .map(CategorySalesDto::new)
