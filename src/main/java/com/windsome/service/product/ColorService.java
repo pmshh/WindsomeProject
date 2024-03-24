@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,10 +16,11 @@ public class ColorService {
 
     private final ColorRepository colorRepository;
 
-    /**
-     * OrderService - Color 조회
-     */
     public Color getColorByColorId(Long colorId) {
         return colorRepository.findById(colorId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public List<Color> getColors() {
+        return colorRepository.findAll();
     }
 }

@@ -2,18 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/layouts/default-layout.html :: head"></div>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
 </head>
 
 <body>
-    <main class="def-main-area">
-        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+<main class="admin-main-area">
+    <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='noticeManagement')"></div>
 
-        <article class="def-content-area">
-            <div th:replace="/layouts/default-layout.html :: nav"></div>
+    <article class="admin-content-area">
+        <div th:replace="/layouts/admin-layout.html :: nav"></div>
 
             <!-- section start -->
-            <section class="def-section-area">
+            <section class="admin-section-area">
                 <div class="container-fluid ">
 
                     <div class="section-header">
@@ -37,8 +37,10 @@
                                                 <label th:for="*{hasNotice}">공지 여부 <span>*</span></label>
                                             </th>
                                             <td class="base-table__cell check">
-                                                <input class="noticeYN-input" type="checkbox" id="noticeYN" th:field="*{hasNotice}">
-                                                <label for="noticeYN">상단 고정</label>
+                                                <label>
+                                                    <input class="has-notice-input" type="checkbox" th:field="*{hasNotice}">
+                                                    상단 고정
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr class="base-table__row">
@@ -98,19 +100,19 @@
                 let noticeId = [[${noticeDetail.id}]];
                 let titleInputVal = $(".title-input").val();
                 let contentInputVal = editor.getData();
-                let noticeYNVal = $(".noticeYN-input").val();
+                let hasNotice = $(".has-notice-input").val();
 
                 $.ajax({
-                    url: "/board/notices/" + noticeId,
-                    type: "PATCH",
+                    url: "/admin/board/notices/update/" + noticeId,
+                    type: "PUT",
                     data: {
                         title: titleInputVal,
                         content: contentInputVal,
-                        noticeYN: noticeYNVal
+                        hasNotice: hasNotice
                     },
                     success(result) {
                         alert(result);
-                        location.href = '/board/notices/' + noticeId
+                        location.href = '/admin/board/notices/' + noticeId
                     },
                     error(request) {
                         alert(request.responseText);
@@ -121,10 +123,10 @@
             /* 공지사항 게시판으로 이동 */
             $(".cancel-btn").click(function () {
                 let page = [[${page}]];
-                if (page !== null) {
-                    location.href = '/board/notices?page=' + page;
+                if (page) {
+                    location.href = '/admin/board/notices?page=' + page;
                 }
-                location.href = '/board/notices?page=0';
+                location.href = '/admin/board/notices?page=0';
             });
 
             /* 게시글 제목 글자 수 제한 */

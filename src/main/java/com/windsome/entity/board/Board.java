@@ -1,5 +1,6 @@
 package com.windsome.entity.board;
 
+import com.windsome.dto.board.BoardDTO;
 import com.windsome.dto.board.notice.NoticeDTO;
 import com.windsome.dto.board.notice.NoticeUpdateDTO;
 import com.windsome.dto.board.qa.QaEnrollDTO;
@@ -14,6 +15,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
@@ -61,43 +63,15 @@ public class Board extends BaseTimeEntity {
     /**
      * Notice 관련
      */
-    public static Board createNotice(NoticeDTO noticeDto, Member member) {
-        Board board = Board.builder()
-                .boardType("Notice")
-                .member(member)
-                .title(noticeDto.getTitle())
-                .content(noticeDto.getContent())
-                .hasNotice(noticeDto.isHasNotice())
-                .build();
-        board.setRegTime(LocalDateTime.now());
-        board.setUpdateTime(LocalDateTime.now());
-        return board;
-    }
-
-    public void updateNotice(NoticeUpdateDTO noticeUpdateDto) {
-        this.title = noticeUpdateDto.getTitle();
-        this.content = noticeUpdateDto.getContent();
-        this.hasNotice = noticeUpdateDto.isHasNotice();
+    public void updateNotice(BoardDTO boardDTO) {
+        this.title = boardDTO.getTitle();
+        this.content = boardDTO.getContent();
+        this.hasNotice = boardDTO.isHasNotice();
     }
 
     /**
      * Q&A 관련
      */
-    public static Board createQa(QaEnrollDTO qaEnrollDto, Member member) {
-        Board board = Board.builder()
-                .boardType("Q&A")
-                .member(member)
-                .title(qaEnrollDto.getTitle())
-                .content(qaEnrollDto.getContent())
-                .password(qaEnrollDto.getPassword())
-                .hasPrivate(qaEnrollDto.isHasPrivate())
-                .originNo(qaEnrollDto.getOriginNo())
-                .build();
-        board.setRegTime(LocalDateTime.now());
-        board.setUpdateTime(LocalDateTime.now());
-        return board;
-    }
-
     public void updateQa(QaUpdateDTO qaUpdateDto) {
         this.title = qaUpdateDto.getTitle();
         this.content = qaUpdateDto.getContent();
@@ -113,22 +87,6 @@ public class Board extends BaseTimeEntity {
     /**
      * Review
      */
-    public static Board createReview(ReviewEnrollDTO reviewEnrollDto, Product product, Member member) {
-        Board board = Board.builder()
-                .boardType("Review")
-                .product(product)
-                .member(member)
-                .title(reviewEnrollDto.getTitle())
-                .content(reviewEnrollDto.getContent())
-                .password(reviewEnrollDto.getPassword())
-                .rating(reviewEnrollDto.getRating())
-                .hits(0)
-                .build();
-        board.setRegTime(LocalDateTime.now());
-        board.setUpdateTime(LocalDateTime.now());
-        return board;
-    }
-
     public void updateReview(ReviewUpdateDTO reviewUpdateDto) {
         this.setTitle(reviewUpdateDto.getTitle());
         this.setContent(reviewUpdateDto.getContent());

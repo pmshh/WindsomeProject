@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NoticeDTO {
 
+    public String boardType;
+
     public String title;
 
     public String content;

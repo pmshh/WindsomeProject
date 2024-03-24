@@ -225,7 +225,6 @@ public class ProductService {
         }
     }
 
-
     /**
      * OrderService - 상품 정보 조회
      * @return 상품 정보를 담은 ProductInfoResponseDTO 객체
@@ -254,5 +253,13 @@ public class ProductService {
      */
     public Long getReviewPageItemListCount(String searchQuery) {
         return productRepository.getReviewPageItemListCount(searchQuery);
+    }
+
+    public long getTotalProducts() {
+        return productRepository.count();
+    }
+
+    public Page<Product> getProducts(ProductSearchDTO productSearchDto, Pageable pageable) {
+        return productRepository.findProducts(productSearchDto, pageable);
     }
 }

@@ -82,10 +82,6 @@
 
                             </div>
 
-                            <div class="button-container" sec:authorize="hasRole('ADMIN')">
-                                <button class="button button--white button--65x30 write-btn">글쓰기</button>
-                            </div>
-
                             <div class="pagination-container"
                                  th:with="start=${(noticeList.number/maxPage)*maxPage + 1}, end=(${(noticeList.totalPages == 0) ? 1 :
                                          (start + (maxPage - 1) < noticeList.totalPages ? start + (maxPage - 1) : noticeList.totalPages)})">

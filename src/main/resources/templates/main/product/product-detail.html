@@ -26,7 +26,6 @@
                 <div class="section-body product-dtl-body">
 
                     <div class="product-dtl row justify-content-center">
-
                         <!-- product-img-wrap start -->
                         <div class="product-img-wrap col-auto">
                             <div class="main-img-box">
@@ -159,7 +158,7 @@
                                                         <span th:text="${reviews.getTotalElements() - (reviews.getSize() * reviews.getNumber()) - status.index}"></span>
                                                     </td>
                                                     <td class="base-table__cell left pl20">
-                                                        <a class="base-table__link" th:href="${'/board/review/' + review.reviewId}">
+                                                        <a class="base-table__link" th:href="${'/board/reviews/' + review.reviewId}">
                                                             <span th:text="${review.content}"></span>
                                                         </a>
                                                     </td>
@@ -199,7 +198,7 @@
 
                                 <div class="button-container">
                                     <button class="button button--white button--65x30 write-btn">WRITE</button>
-                                    <button class="button button--white button--65x30 list-btn" onclick="location.href='/board/review'">LIST</button>
+                                    <button class="button button--white button--65x30 list-btn" onclick="location.href='/board/reviews'">LIST</button>
                                 </div>
 
                                 <div class="pagination-container"
@@ -596,12 +595,12 @@
         let productId = [[${product.id}]];
 
         $.ajax({
-            url: "/board/review/check/" + productId,
+            url: "/board/reviews/check/" + productId,
             type: "POST",
             dataType: "text",
             cache: false,
             success: function () {
-                location.href = "/board/review/enroll?productId=" + productId;
+                location.href = "/board/reviews/enroll?productId=" + productId;
             },
             error: function (request) {
                 alert(request.responseText);

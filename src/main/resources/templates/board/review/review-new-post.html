@@ -213,8 +213,9 @@
                         type: "POST",
                         dataType: "text",
                         cache: false,
-                        success: function (result, status) {
+                        success: function () {
                             let param = {
+                                boardType: "Review",
                                 productId: productId,
                                 title: $(".title-input").val(),
                                 rating: $("input[name='rating']:checked").val(),

@@ -1,7 +1,9 @@
 package com.windsome.controller;
 
 import com.windsome.WithAccount;
+import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
+import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import com.windsome.service.member.MemberService;
 import org.junit.jupiter.api.AfterEach;
@@ -29,18 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberControllerTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired
-    MemberService memberService;
+    @Autowired MemberService memberService;
     @Autowired MemberRepository memberRepository;
     @Autowired PasswordEncoder passwordEncoder;
+    @Autowired AddressRepository addressRepository;
 
-    @AfterEach
-    void afterEach() {
-        memberRepository.deleteAll();
-    }
-
-    @DisplayName("회원 가입 화면 보이는지 테스트")
     @Test
+    @DisplayName("회원 가입 화면 보이는지 테스트")
     void signUpForm() throws Exception {
         mockMvc.perform(get("/members/new"))
                 .andDo(print())
@@ -49,8 +46,8 @@ class MemberControllerTest {
                 .andExpect(model().attributeExists("signUpRequestDTO"));
     }
 
-    @DisplayName("회원 가입 처리 - 입력값 오류")
     @Test
+    @DisplayName("회원 가입 처리 - 입력값 오류")
     void signUpSubmit_with_wrong_input() throws Exception {
         mockMvc.perform(post("/members/new")
                         .param("userIdentifier", "test1234")
@@ -66,8 +63,8 @@ class MemberControllerTest {
                 .andExpect(view().name("member/register")); // 회원 등록 페이지로 리다이렉트되어야 함
     }
 
-    @DisplayName("회원 가입 처리 - 입력값 정상")
     @Test
+    @DisplayName("회원 가입 처리 - 입력값 정상")
     void signUpSubmit() throws Exception {
         mockMvc.perform(post("/members/new")
                         .param("userIdentifier", "test1234")
@@ -88,22 +85,26 @@ class MemberControllerTest {
         assertNotEquals(member.getPassword(), "test1234");
     }
 
-    @WithAccount("test1234")
-    @DisplayName("프로필 수정 화면 보이는지 테스트")
     @Test
+    @DisplayName("프로필 수정 화면 보이는지 테스트")
+    @WithAccount("USER")
     void updateProfileForm() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("test1234");
+        Member member = memberRepository.findByUserIdentifier("USER");
+        Address address = new Address();
+        address.setMember(member);
+        address.setDefault(true);
+        addressRepository.save(address);
 
         mockMvc.perform(get("/members/" + member.getId() + "/edit"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("member"));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("프로필 수정 - 입력값 정상")
     @Test
+    @DisplayName("프로필 수정 - 입력값 정상")
+    @WithAccount("USER")
     void updateProfile() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("test1234");
+        Member member = memberRepository.findByUserIdentifier("USER");
 
         mockMvc.perform(post("/members/" + member.getId() + "/update")
                         .param("userIdentifier", member.getUserIdentifier())
@@ -124,9 +125,9 @@ class MemberControllerTest {
         assertTrue(passwordEncoder.matches("change1234", member.getPassword()));
     }
 
-    @WithAccount("USER")
-    @DisplayName("프로필 수정 - 입력값 에러")
     @Test
+    @DisplayName("프로필 수정 - 입력값 에러")
+    @WithAccount("USER")
     void updateProfile_with_error() throws Exception {
         Member member = memberRepository.findByUserIdentifier("USER");
 
@@ -150,9 +151,9 @@ class MemberControllerTest {
         assertFalse(passwordEncoder.matches("changePassword123", member.getPassword()));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("이메일 중복 체크 후 이메일 인증 - 성공")
     @Test
+    @DisplayName("이메일 중복 체크 후 이메일 인증 - 성공")
+    @WithAccount("USER")
     void confirmEmail() throws Exception {
         mockMvc.perform(get("/members/email-verification")
                         .param("email", "newemail@test.com"))
@@ -160,20 +161,20 @@ class MemberControllerTest {
                 .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("이메일 중복 체크 후 이메일 인증 - 실패")
     @Test
+    @DisplayName("이메일 중복 체크 후 이메일 인증 - 실패")
+    @WithAccount("USER")
     void confirmEmailFail() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("test1234");
+        Member member = memberRepository.findByUserIdentifier("USER");
         mockMvc.perform(get("/members/email-verification")
                         .param("email", member.getEmail()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("이미 사용중인 이메일입니다."));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("아이디 중복 체크 - 성공")
     @Test
+    @DisplayName("아이디 중복 체크 - 성공")
+    @WithAccount("USER")
     void duplicateCheckEmail() throws Exception {
         mockMvc.perform(post("/members/check-userid")
                         .param("userId", "test12345678")
@@ -182,11 +183,11 @@ class MemberControllerTest {
                 .andExpect(content().string("사용 가능한 아이디입니다."));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("아이디 중복 체크 - 실패")
     @Test
+    @DisplayName("아이디 중복 체크 - 실패")
+    @WithAccount("USER")
     void duplicateCheckEmailFail() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("test1234");
+        Member member = memberRepository.findByUserIdentifier("USER");
         mockMvc.perform(post("/members/check-userid")
                         .param("userId", member.getUserIdentifier())
                         .with(csrf()))
@@ -194,9 +195,9 @@ class MemberControllerTest {
                 .andExpect(content().string("이미 사용중인 아이디입니다."));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("아이디/비밀번호 찾기 화면 보이는지 테스트")
     @Test
+    @DisplayName("아이디/비밀번호 찾기 화면 보이는지 테스트")
+    @WithAccount("USER")
     void findAccount() throws Exception {
         mockMvc.perform(get("/forgot-credentials")
                         .param("action", "find-id"))
@@ -204,9 +205,9 @@ class MemberControllerTest {
                 .andExpect(view().name("member/find-account"));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("아이디 찾기 화면 (쿼리 파라미터 숨기기 위한 용도) 보이는지 테스트")
     @Test
+    @DisplayName("아이디 찾기 화면 (쿼리 파라미터 숨기기 위한 용도) 보이는지 테스트")
+    @WithAccount("USER")
     void findIdRedirect() throws Exception {
         mockMvc.perform(get("/forgot-credentials/userid-lookup-result-redirect")
                         .param("name", "test")
@@ -214,17 +215,17 @@ class MemberControllerTest {
                 .andExpect(redirectedUrl("/forgot-credentials/userid-lookup-result"));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("아이디 찾기 화면 보이는지 테스트")
     @Test
+    @DisplayName("아이디 찾기 화면 보이는지 테스트")
+    @WithAccount("USER")
     void findId() throws Exception {
         mockMvc.perform(get("/forgot-credentials/userid-lookup-result"))
                 .andExpect(view().name("member/userid-lookup-result"));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("비밀번호 변경 화면 (쿼리 파라미터 숨기기 위한 용도) 보이는지 테스트")
     @Test
+    @DisplayName("비밀번호 변경 화면 (쿼리 파라미터 숨기기 위한 용도) 보이는지 테스트")
+    @WithAccount("USER")
     void updatePwRedirect() throws Exception {
         mockMvc.perform(get("/forgot-credentials/password-lookup-result-redirect")
                         .param("userIdentifier", "test")
@@ -233,29 +234,29 @@ class MemberControllerTest {
                 .andExpect(redirectedUrl("/forgot-credentials/password-lookup-result"));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("비밀번호 변경 화면 보이는지 테스트")
     @Test
+    @DisplayName("비밀번호 변경 화면 보이는지 테스트")
+    @WithAccount("USER")
     void updatePwForm() throws Exception {
         mockMvc.perform(get("/forgot-credentials/password-lookup-result"))
                 .andExpect(view().name("member/password-lookup-result"));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("비밀번호 변경 테스트")
     @Test
+    @DisplayName("비밀번호 변경 테스트")
+    @WithAccount("USER")
     void updatePw() throws Exception {
         mockMvc.perform(post("/forgot-credentials/reset-password")
-                        .param("userIdentifier", "test1234")
+                        .param("userIdentifier", "USER")
                         .param("password", "testtest1234@")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("비밀번호가 변경되었습니다."));
     }
 
-    @WithAccount("test1234")
-    @DisplayName("아이디/비밀번호 찾기 화면 - 이메일 인증 테스트")
     @Test
+    @DisplayName("아이디/비밀번호 찾기 화면 - 이메일 인증 테스트")
+    @WithAccount("USER")
     void findIdPwEmailConfirm() throws Exception {
         mockMvc.perform(post("/forgot-credentials/email-verification")
                         .param("email", "test1234@email.com")
@@ -263,9 +264,9 @@ class MemberControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @WithAccount("test1234")
-    @DisplayName("마이 페이지 화면 보이는지 테스트")
     @Test
+    @DisplayName("마이 페이지 화면 보이는지 테스트")
+    @WithAccount("USER")
     void mypage() throws Exception {
         mockMvc.perform(get("/mypage"))
                 .andExpect(model().attributeExists("orderStatusCounts"))

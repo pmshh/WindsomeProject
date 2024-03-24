@@ -15,21 +15,26 @@
 @import "layout/pagination";
 
 /***** pages *****/
-@import "pages/admin/board/notice-board-management"; //  admin start
-@import "pages/admin/board/qa-board-management";
-@import "pages/admin/board/review-board-management";
+@import "pages/admin/board/notice/notice-board-management"; //  admin start
+@import "pages/admin/board/notice/notice-detail";
+@import "pages/admin/board/notice/notice-form";
+@import "pages/admin/board/qa/qa-board-management";
+@import "pages/admin/board/review/review-board-management";
+
 @import "pages/admin/member/member-management";
 @import "pages/admin/member/member-form";
+
 @import "pages/admin/order/order-detail";
 @import "pages/admin/order/order-form";
 @import "pages/admin/order/order-management";
+
 @import "pages/admin/product/product-form";
 @import "pages/admin/product/product-management";
+
 @import "pages/admin/dashboard";
 
 @import "pages/board/notice/notice-list"; // board start
 @import "pages/board/notice/notice-detail";
-@import "pages/board/notice/notice-form";
 @import "pages/board/qa/qa-list";
 @import "pages/board/qa/qa-detail";
 @import "pages/board/qa/qa-form";

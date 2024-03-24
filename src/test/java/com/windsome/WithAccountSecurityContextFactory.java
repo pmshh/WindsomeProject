@@ -20,35 +20,28 @@ import java.util.Objects;
 public class WithAccountSecurityContextFactory implements WithSecurityContextFactory<WithAccount> {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
 
     @Override
     public SecurityContext createSecurityContext(WithAccount withAccount) {
         String userIdentifier = withAccount.value();
 
-        SignUpRequestDTO signUpRequestDTO = SignUpRequestDTO.builder()
+        Member member = Member.builder()
                 .userIdentifier(userIdentifier)
-                .email(userIdentifier + "@email.com")
                 .name("홍길동")
                 .password("test1234")
                 .tel("01012341234")
-                .zipcode("test")
-                .addr("test")
-                .addrDetail("test")
+                .email("email@naver.com")
+                .role(Role.USER)
+                .availablePoints(0)
+                .totalEarnedPoints(0)
+                .totalUsedPoints(0)
                 .build();
-        memberService.createAccount(signUpRequestDTO);
+        Member savedMember = memberRepository.save(member);
 
-        Member member = memberRepository.findByUserIdentifier(userIdentifier);
-        member.setRole(Role.ADMIN);
-        memberRepository.save(member);
-
-        if (Objects.equals(userIdentifier, "USER")) {
-            member.setRole(Role.USER);
-            memberRepository.save(member);
-        } else if (Objects.equals(userIdentifier, "ADMIN")) {
-            member.setRole(Role.ADMIN);
-            memberRepository.save(member);
+        if (Objects.equals(userIdentifier, "ADMIN")) {
+            savedMember.setRole(Role.ADMIN);
+            memberRepository.save(savedMember);
         }
 
         UserDetails principal = customUserDetailsService.loadUserByUsername(userIdentifier);

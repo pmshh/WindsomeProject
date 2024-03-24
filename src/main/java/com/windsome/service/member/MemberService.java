@@ -13,6 +13,8 @@ import com.windsome.service.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,35 +42,8 @@ public class MemberService {
     private final EmailService emailService;
     private final AddressRepository addressRepository;
 
-    public void createOrLogin(Member member) {
-        if (member.getOauth() != null) {//카카오 로그인
-            String rawPassword = member.getPassword();
-            if (kakaoValidateDuplicateUser(member).isEmpty()) {
-                // 회원가입
-                String encPassword = passwordEncoder.encode(member.getPassword());
-                member.setPassword(encPassword);
-                memberRepository.save(member);
-            }
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getUserIdentifier(), rawPassword));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
-            validateDuplicateUser(member);
-            String encPassword = passwordEncoder.encode(member.getPassword());
-            member.setPassword(encPassword);
-            memberRepository.save(member);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public void validateDuplicateUser(Member member){
-        memberRepository.findByName(member.getName()).ifPresent(m -> {
-                    throw new IllegalStateException("이미 존재하는 회원");
-                });
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Member> kakaoValidateDuplicateUser(Member member){
-        return memberRepository.findOneByUserIdentifier(member.getUserIdentifier());
+    public Member getMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     /**
@@ -242,5 +217,19 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(EntityNotFoundException::new);
         Address address = addressRepository.findByMemberIdAndIsDefault(member.getId(), true).orElseThrow(EntityNotFoundException::new);
         return MemberDetailDTO.createMemberDetailDTO(member, address);
+    }
+
+    /**
+     * 관리자 페이지 - 전체 회원 수 조회
+     */
+    public long getTotalMembers() {
+        return memberRepository.count();
+    }
+
+    /**
+     * 관리자 페이지 - 회원 목록 조회
+     */
+    public Page<MemberListResponseDTO> getMembersByCriteria(MemberListSearchDTO memberListSearchDto, Pageable pageable) {
+        return memberRepository.findMembersByCriteria(memberListSearchDto, pageable);
     }
 }

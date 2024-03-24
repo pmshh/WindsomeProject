@@ -53,7 +53,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 조회 기능 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void getItemList() throws Exception {
         given(adminService.getProductList(any(ProductSearchDTO.class), any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
 
@@ -67,7 +67,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 등록 화면 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void showItemFormTest() throws Exception {
         mockMvc.perform(get("/admin/products/new"))
                 .andExpect(status().isOk())
@@ -77,7 +77,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 등록 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void enrollItemTest() throws Exception {
         // Mocking
         given(productService.createProduct(any(ProductFormDTO.class), anyList())).willReturn(1L);
@@ -102,7 +102,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 상세 화면 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void viewItemDetailTest() throws Exception {
         // Mocking
         Long productId = 1L;
@@ -126,7 +126,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 수정 화면 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void showUpdateItemFormTest() throws Exception {
         // Mocking
         Long productId = 1L;
@@ -147,7 +147,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 수정 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void updateItemTest() throws Exception {
         // Mocking
         given(productService.updateProduct(any(ProductFormDTO.class), anyList())).willReturn(1L);
@@ -171,7 +171,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 이미지 삭제 성공 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void deleteItemImageSuccessTest() throws Exception {
         // Mocking - 이미지 삭제가 성공하는 경우
         doNothing().when(productService).deleteProductImage(anyLong());
@@ -186,7 +186,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 이미지 삭제 실패 - 존재하지 않는 이미지")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void deleteItemImageFailureNotFoundTest() throws Exception {
         // Mocking - 존재하지 않는 이미지 삭제 시 EntityNotFoundException이 발생하는 경우
         doThrow(EntityNotFoundException.class).when(productService).deleteProductImage(anyLong());
@@ -201,7 +201,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 이미지 삭제 실패 - 이미지 삭제 중 에러 발생")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void deleteItemImageFailureErrorTest() throws Exception {
         // Mocking - 이미지 삭제 중 에러가 발생하는 경우
         String errorMessage = "이미지 삭제 중 에러가 발생했습니다.";
@@ -218,7 +218,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 삭제 테스트 - 성공")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void deleteItemSuccessTest() throws Exception {
         // Mocking - 상품 삭제가 성공하는 경우
         Long[] productIds = {1L, 2L, 3L};
@@ -239,7 +239,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("상품 삭제 테스트 - 실패")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void deleteItemFailureTest() throws Exception {
         // Mocking - 일치하는 상품 정보가 없는 경우
         Long[] productIds = {1L, 2L, 3L};
@@ -260,7 +260,7 @@ class AdminProductControllerTest {
 
     @Test
     @DisplayName("카테고리 조회 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void getItemCategoriesTest() throws Exception {
         // Perform & Verify
         mockMvc.perform(get("/admin/products/categories").with(csrf()))

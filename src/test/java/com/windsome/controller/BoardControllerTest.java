@@ -56,43 +56,6 @@ public class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("공지사항 등록 화면 보이는지 테스트")
-    public void enrollNoticeForm() throws Exception {
-        mockMvc.perform(get("/board/notices/enroll"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("noticeDto"))
-                .andExpect(view().name("board/notice/notice-new-post"));
-    }
-
-    @Test
-    @WithAccount("ADMIN")
-    @DisplayName("공지사항 등록 성공 테스트")
-    public void enrollNoticeWithSuccess() throws Exception {
-        mockMvc.perform(post("/board/notices/enroll")
-                        .param("title","test")
-                        .param("content","test")
-                        .param("hasNotice","true")
-                        .with(csrf()))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/board/notices"))
-                .andExpect(flash().attribute("message", "게시글이 등록되었습니다."));;
-    }
-
-    @Test
-    @WithAccount("USER")
-    @DisplayName("공지사항 등록 실패 테스트")
-    public void enrollNoticeWithFail() throws Exception {
-        mockMvc.perform(post("/board/notices/enroll")
-                        .param("title","test")
-                        .param("content","test")
-                        .param("hasNotice","true")
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("message", "작성 권한이 없습니다."))
-                .andExpect(view().name("board/notice/notice-new-post"));
-    }
-
-    @Test
     @WithAccount("ADMIN")
     @DisplayName("공지사항 상세 화면 보이는지 테스트")
     public void noticeDtl() throws Exception {
@@ -105,55 +68,6 @@ public class BoardControllerTest {
                 .andExpect(model().attributeExists("noticeDtlList"))
                 .andExpect(model().attributeExists("page"))
                 .andExpect(view().name("board/notice/notice-detail"));
-    }
-
-    @Test
-    @WithAccount("ADMIN")
-    @DisplayName("공지사항 수정 화면 보이는지 테스트")
-    public void updateNoticeForm() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("ADMIN");
-        Board board = Board.builder().boardType("Notice").title("test").content("test").member(member).build();
-        boardRepository.save(board);
-        Board findBoard = boardRepository.findByMemberId(member.getId());
-
-        mockMvc.perform(get("/board/notices/update/{noticeId}", findBoard.getId()))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("noticeDetail"))
-                .andExpect(model().attributeExists("page"))
-                .andExpect(view().name("board/notice/notice-update-post"));
-    }
-
-    @Test
-    @WithAccount("ADMIN")
-    @DisplayName("공지사항 수정 테스트")
-    public void updateNotice() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("ADMIN");
-        Board board = Board.builder().boardType("Notice").title("test").content("test").member(member).build();
-        boardRepository.save(board);
-        Board findBoard = boardRepository.findByMemberId(member.getId());
-
-        mockMvc.perform(patch("/board/notices/{noticeId}", findBoard.getId())
-                        .param("title","title 수정")
-                        .param("content", "content 수정")
-                        .param("hasPrivate", "true")
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().string("게시글이 수정되었습니다."));
-    }
-
-    @Test
-    @WithAccount("ADMIN")
-    @DisplayName("공지사항 삭제 테스트")
-    public void deleteNotice() throws Exception {
-        Member member = memberRepository.findByUserIdentifier("ADMIN");
-        Board board = Board.builder().boardType("Notice").title("test").content("test").member(member).build();
-        boardRepository.save(board);
-        Board findBoard = boardRepository.findByMemberId(member.getId());
-
-        mockMvc.perform(delete("/board/notices/{noticeId}", findBoard.getId())
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().string("게시글이 삭제되었습니다."));
     }
 
     /**

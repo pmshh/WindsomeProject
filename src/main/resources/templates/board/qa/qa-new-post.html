@@ -197,6 +197,7 @@
                         url: '/board/qa/enroll',
                         type: 'POST',
                         data: {
+                            boardType: "Q&A",
                             title: $("select[name=title] option:selected").text(),
                             content: contentInputVal,
                             password: passwordInputVal,

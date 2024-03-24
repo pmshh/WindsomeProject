@@ -55,7 +55,7 @@
                                             <span>공지</span>
                                         </td>
                                         <td class="base-table__cell left">
-                                            <a th:href="@{'/board/notices/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
+                                            <a th:href="@{'/admin/board/notices/' + ${fixTopNotice.id} + '?page=' + ${page}}"><strong th:text="${fixTopNotice.title}"></strong></a>
                                         </td>
                                         <td class="base-table__cell">
                                             <span th:text="${fixTopNotice.member.name}"></span>
@@ -64,7 +64,8 @@
                                             <span th:text="${#temporals.format(fixTopNotice.regTime, 'yyyy-MM-dd')}"></span>
                                         </td>
                                         <td class="base-table__cell">
-                                            <button class="button button--white button--90x30 top-unfix-btn" th:data-noticeId="${fixTopNotice.id}">공지 내리기</button>
+                                            <button class="button button--white button--65x30 notice-update-btn me-1" th:data-noticeId="${fixTopNotice.id}" type="button">수정</button>
+                                            <button class="button button--black button--65x30 top-unfix-btn" th:data-noticeId="${fixTopNotice.id}">공지 해제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -85,7 +86,7 @@
                                             <span th:text="${noticeList.getTotalElements() - (noticeList.getSize() * noticeList.getNumber()) - status.index}"></span>
                                         </td>
                                         <td class="base-table__cell left">
-                                            <a th:href="@{'/board/notices/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
+                                            <a th:href="@{'/admin/board/notices/' + ${notice.noticeId} + '?page=' + ${page}}"><span th:text="${notice.title}"></span></a>
                                         </td>
                                         <td class="base-table__cell">
                                             <span th:text="${notice.createdBy}"></span>
@@ -94,7 +95,8 @@
                                             <span th:text="${notice.regDate}">2024-02-06</span>
                                         </td>
                                         <td class="base-table__cell">
-                                            <button class="button button--white button--65x30 top-fix-btn" th:data-noticeId="${notice.noticeId}">공지 설정</button>
+                                            <button class="button button--white button--65x30 notice-update-btn me-1" th:data-noticeId="${notice.noticeId}" type="button">수정</button>
+                                            <button class="button button--white button--65x30 top-fix-btn" th:data-noticeId="${notice.noticeId}" type="button">공지 설정</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -189,6 +191,9 @@
 
             /* 공지 설정 버튼 클릭 처리 */
             $(".top-fix-btn").click(handleTopButtonClick);
+
+            /* 수정 버튼 클릭 처리 */
+            $(".notice-update-btn").click(handleNoticeUpdateBtnClick);
         });
 
         function initSubMenu() {
@@ -198,7 +203,7 @@
 
         /* 게시글 등록 화면으로 이동하는 함수 */
         function handleWriteButtonClick() {
-            location.href = '/board/notices/enroll';
+            location.href = '/admin/board/notices/enroll';
         }
 
         /* 검색 함수 */
@@ -213,10 +218,10 @@
 
         /* 선택된 게시글 삭제 함수 */
         function handleDeleteSelectedButtonClick() {
-            let noticeIds = getSelectedNoticeIds();
-            if (noticeIds.length > 0) {
+            let boardIds = getSelectedNoticeIds();
+            if (boardIds.length > 0) {
                 if (confirm("게시글을 삭제하시겠습니까?")) {
-                    deleteNotice(noticeIds);
+                    deleteNotice(boardIds);
                 }
             } else {
                 alert("게시글을 1개 이상 선택해 주세요.")
@@ -225,10 +230,15 @@
 
         /* 게시글 전체 삭제 함수 */
         function handleDeleteAllButtonClick() {
-            let noticeIds = getSelectedNoticeIds();
-            if (noticeIds.length > 0) {
+            // 체크 박스 전체 선택
+            $("input[name='check']").each(function () {
+                $("input[name=check]").prop("checked", true);
+            });
+
+            let boardIds = getSelectedNoticeIds();
+            if (boardIds.length > 0) {
                 if (confirm("전체 게시글을 삭제하시겠습니까?")) {
-                    deleteNotice(noticeIds);
+                    deleteNotice(boardIds);
                 } else {
                     // 체크 박스 전체 선택 해제
                     $("input[name='check']").each(function () {
@@ -243,7 +253,7 @@
             let noticeId = $(this).attr("data-noticeId");
             let noticeYn = $(this).hasClass("top-fix-btn");
             $.ajax({
-                url: '/admin/board/notices/' + noticeId,
+                url: '/admin/board/notices/update/' + noticeId + '/has-private',
                 type: 'patch',
                 data: {
                     noticeId: noticeId,
@@ -276,14 +286,13 @@
         }
 
         /* 게시글 삭제 함수 */
-        function deleteNotice(noticeIds) {
+        function deleteNotice(boardIds) {
             $.ajax({
-                url: "/admin/board/notices",
+                url: "/admin/board/delete",
                 type: "delete",
-                traditional: true,
-                data: {
-                    noticeIds: noticeIds
-                },
+                contentType: "application/json",
+                dataType: "text",
+                data: JSON.stringify(boardIds),
                 success(res) {
                     alert(res);
                     location.reload(true);
@@ -303,6 +312,12 @@
                 }
             });
             return noticeIds;
+        }
+
+        /* 공지 수정 화면으로 이동하는 함수 */
+        function handleNoticeUpdateBtnClick() {
+            let noticeId = $(this).attr("data-noticeId");
+            location.href = '/admin/board/notices/update/' + noticeId;
         }
     </script>
 

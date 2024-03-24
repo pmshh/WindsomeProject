@@ -217,16 +217,16 @@
 
         /* 단일 게시글 삭제 함수 */
         function handleDeleteButtonClick() {
-            let reviewId = $(this).attr("data-reviewId");
-            deleteReview([reviewId]);
+            let boardId = $(this).attr("data-reviewId");
+            deleteReview([boardId]);
         }
 
         /* 선택된 게시글 삭제 함수 */
         function handleDeleteSelectedButtonClick() {
-            let reviewIds = getReviewIds();
-            if (reviewIds.length > 0) {
+            let boardIds = getReviewIds();
+            if (boardIds.length > 0) {
                 if (confirm("게시글을 삭제하시겠습니까?")) {
-                    deleteReview(reviewIds);
+                    deleteReview(boardIds);
                 }
             } else {
                 alert("게시글을 1개 이상 선택해 주세요.")
@@ -235,10 +235,10 @@
 
         /* 게시글 전체 삭제 함수 */
         function handleDeleteAllButtonClick() {
-            let reviewIds = getReviewIds();
-            if (reviewIds.length > 0) {
+            let boardIds = getReviewIds();
+            if (boardIds.length > 0) {
                 if (confirm("전체 게시글을 삭제하시겠습니까?")) {
-                    deleteReview(reviewIds);
+                    deleteReview(boardIds);
                 } else {
                     // 체크 박스 전체 선택 해제
                     $("input[name='check']").each(function () {
@@ -265,14 +265,14 @@
         }
 
         /* 게시글 삭제 함수 */
-        function deleteReview(reviewIds) {
+        function deleteReview(boardIds) {
             $.ajax({
-                url: "/admin/board/reviews/",
+                url: "/admin/board/delete",
                 type: "delete",
+                contentType: "application/json",
+                dataType: "text",
                 traditional: true,
-                data: {
-                    reviewIds: reviewIds
-                },
+                data: JSON.stringify(boardIds),
                 success(res) {
                     alert(res);
                     location.reload(true);

@@ -1,6 +1,7 @@
 package com.windsome.controller.board;
 
 import com.windsome.config.security.CurrentMember;
+import com.windsome.dto.board.BoardDTO;
 import com.windsome.dto.board.SearchDTO;
 import com.windsome.dto.board.notice.*;
 import com.windsome.dto.board.qa.QaEnrollDTO;
@@ -36,7 +37,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
 
     /**
-     * 공지사항 게시판 화면
+     * 공지 전체 조회
      */
     @GetMapping("/notices")
     public String notices(SearchDTO searchDTO, Optional<Integer> page, Model model) {
@@ -53,31 +54,7 @@ public class BoardController {
     }
 
     /**
-     * 공지사항 등록 화면
-     */
-    @GetMapping("/notices/enroll")
-    public String enrollNoticeForm(Model model) {
-        model.addAttribute("noticeDto", new NoticeDTO());
-        return "board/notice/notice-new-post";
-    }
-
-    /**
-     * 공지사항 등록
-     */
-    @PostMapping("/notices/enroll")
-    public String enrollNotice(NoticeDTO noticeDto, @CurrentMember Member member, RedirectAttributes redirectAttr, Model model) {
-        if (!boardService.isAdmin(member)) {
-            model.addAttribute("message", "작성 권한이 없습니다.");
-            model.addAttribute("noticeDto", noticeDto);
-            return "board/notice/notice-new-post";
-        }
-        boardService.enrollNotice(noticeDto, member);
-        redirectAttr.addFlashAttribute("message", "게시글이 등록되었습니다.");
-        return "redirect:/board/notices";
-    }
-
-    /**
-     * 공지사항 상세 화면
+     * 공지 상세 조회
      */
     @GetMapping("/notices/{noticeId}")
     public String noticeDtl(@PathVariable(value = "noticeId") Long noticeId, Optional<Integer> page, Model model, RedirectAttributes redirectAttr) {
@@ -92,54 +69,7 @@ public class BoardController {
     }
 
     /**
-     * 공지사항 수정 화면
-     */
-    @GetMapping("/notices/update/{noticeId}")
-    public String updateNoticeForm(@PathVariable(value = "noticeId") Long noticeId, Optional<Integer> page, Model model) {
-        try {
-            Board board = boardService.getNotice(noticeId);
-            model.addAttribute("noticeDetail", board);
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("message", "존재하지 않는 게시글입니다.");
-            return "board/notice/notice-detail";
-        }
-        model.addAttribute("page", page.orElse(0));
-        return "board/notice/notice-update-post";
-    }
-
-    /**
-     * 공지사항 수정
-     */
-    @PatchMapping("/notices/{noticeId}")
-    public ResponseEntity<String> updateNotice(@PathVariable(value = "noticeId") Long noticeId, NoticeUpdateDTO noticeUpdateDto) {
-        try {
-            boardService.updateNotice(noticeId, noticeUpdateDto);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body("존재하지 않는 게시글입니다.");
-
-        }
-        return ResponseEntity.ok().body("게시글이 수정되었습니다.");
-    }
-
-    /**
-     * 공지사항 삭제
-     */
-    @DeleteMapping("/notices/{noticeId}")
-    public ResponseEntity<String> deleteNotice(@PathVariable(value = "noticeId") Long noticeId, @CurrentMember Member member) {
-        if (!boardService.isAdmin(member)) {
-            return ResponseEntity.badRequest().body("삭제 권한이 없습니다.");
-        }
-
-        try {
-            boardService.deletePost(noticeId);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.badRequest().body("잘못된 접근입니다.");
-        }
-        return ResponseEntity.ok().body("게시글이 삭제되었습니다.");
-    }
-
-    /**
-     * Q&A 게시판 화면
+     * Q&A 전체 조회
      */
     @GetMapping("/qa")
     public String qa(SearchDTO searchDTO, Optional<Integer> page, Model model) {
@@ -166,9 +96,9 @@ public class BoardController {
      * Q&A 등록
      */
     @PostMapping("/qa/enroll")
-    public ResponseEntity<String> enrollQa(@CurrentMember Member member, QaEnrollDTO qaEnrollDto) {
+    public ResponseEntity<String> enrollQa(@CurrentMember Member member, BoardDTO boardDTO) {
         try {
-            boardService.enrollQa(qaEnrollDto, member);
+            boardService.enrollQa(boardDTO, member);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("게시글을 등록하던 도중 오류가 발생하였습니다.");
         }
@@ -203,7 +133,7 @@ public class BoardController {
     }
 
     /**
-     * Q&A 상세 화면
+     * Q&A 상세 조회
      */
     @GetMapping("/qa/{qaId}")
     public String qaDtl(@PathVariable(value = "qaId") Long qaId, @RequestParam(required = false) String password,
@@ -280,7 +210,7 @@ public class BoardController {
     }
 
     /**
-     * 리뷰 게시판 화면
+     * 리뷰 전체 조회
      */
     @GetMapping("/reviews")
     public String review(SearchDTO searchDTO, Optional<Integer> page, Model model) {
@@ -292,7 +222,7 @@ public class BoardController {
     }
 
     /**
-     * 리뷰 상세 화면
+     * 리뷰 상세 조회
      */
     @GetMapping("/reviews/{reviewId}")
     public String reviewDtl(@PathVariable(value = "reviewId") Long reviewId, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -340,10 +270,10 @@ public class BoardController {
      * 리뷰 등록
      */
     @PostMapping("/reviews/enroll")
-    public ResponseEntity<String> enrollReview(@RequestBody ReviewEnrollDTO reviewEnrollDto, @CurrentMember Member member) {
+    public ResponseEntity<String> enrollReview(@RequestBody BoardDTO boardDTO, @CurrentMember Member member) {
         try {
-            boardService.enrollReview(reviewEnrollDto, member);
-            boardService.setRatingAvg(reviewEnrollDto.getProductId());
+            boardService.enrollReview(boardDTO, member);
+            boardService.setRatingAvg(boardDTO.getProductId());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("리뷰 등록 도중 오류가 발생하였습니다.");
         }

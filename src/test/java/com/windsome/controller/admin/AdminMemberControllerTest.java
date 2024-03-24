@@ -44,7 +44,7 @@ class AdminMemberControllerTest {
 
     @Test
     @DisplayName("회원 목록 조회 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void getMembersTest() throws Exception {
         // Mocking
         given(adminService.getMemberListForAdminPage(any(MemberListSearchDTO.class), any())).willReturn(new PageImpl<>(Collections.emptyList()));
@@ -64,7 +64,7 @@ class AdminMemberControllerTest {
 
     @Test
     @DisplayName("회원 상세 조회 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void getMemberByIdTest() throws Exception {
         // Mocking
         AdminMemberDetailDTO testDto = AdminMemberDetailDTO.builder()
@@ -92,7 +92,7 @@ class AdminMemberControllerTest {
 
     @Test
     @DisplayName("회원 수정 화면 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void showMemberEditFormTest() throws Exception {
         // Given
         AdminMemberDetailDTO testDto = AdminMemberDetailDTO.builder()
@@ -120,7 +120,7 @@ class AdminMemberControllerTest {
 
     @Test
     @DisplayName("회원 정보 수정 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void updateMemberTest() throws Exception {
         // Given
         AdminMemberDetailDTO testDto = AdminMemberDetailDTO.builder()
@@ -159,7 +159,7 @@ class AdminMemberControllerTest {
 
     @Test
     @DisplayName("회원 권한 수정 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void updateMemberRoleTest() throws Exception {
         // Given
         doNothing().when(adminService).updateMemberRole(anyLong(), any(Role.class));
@@ -176,7 +176,7 @@ class AdminMemberControllerTest {
 
     @Test
     @DisplayName("회원 삭제 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void deleteMemberTest() throws Exception {
         // Given
         Long[] memberIds = {1L, 2L, 3L};

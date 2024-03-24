@@ -47,10 +47,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/", "/login/**", "/logout", "/members/new/**", "/members/check-userid", "/members/email-verification",
                         "/forgot-credentials/**", "/product/**", "/board/**", "/payment", "/oauth2/**","/payment/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
+
+        http.exceptionHandling().accessDeniedPage("/error");
 
         http.sessionManagement(
                 session -> session

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +33,11 @@ public class SizeService {
         return false;
     }
 
-    /**
-     * OrderService - Size 조회
-     */
     public Size getSizeBySizeId(Long sizeId) {
         return sizeRepository.findById(sizeId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public List<Size> getSizes() {
+        return sizeRepository.findAll();
     }
 }

@@ -1,6 +1,7 @@
 package com.windsome.service.board;
 
 import com.windsome.constant.Role;
+import com.windsome.dto.board.BoardDTO;
 import com.windsome.dto.board.SearchDTO;
 import com.windsome.dto.board.notice.*;
 import com.windsome.dto.board.qa.*;
@@ -17,6 +18,7 @@ import com.windsome.service.member.MemberService;
 import com.windsome.service.product.ProductImageService;
 import com.windsome.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +52,15 @@ public class BoardService {
     private final ProductService productService;
     private final ProductImageService productImageService;
     private final CommentService commentService;
+    private final ModelMapper modelMapper;
+
+    public Long saveBoard(Board board) {
+        return boardRepository.save(board).getId();
+    }
+
+    public Board getBoardByBoardId(Long noticeId) {
+        return boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
+    }
 
     /**
      * 공지 전체 조회
@@ -66,15 +77,6 @@ public class BoardService {
     }
 
     /**
-     * 공지 등록
-     */
-    public Long enrollNotice(NoticeDTO noticeDto, Member member) {
-        Board board = Board.createNotice(noticeDto, member);
-        Board savedBoard = boardRepository.save(board);
-        return savedBoard.getId();
-    }
-
-    /**
      * 공지 상세 조회
      */
     public List<NoticeDtlDTO> getNoticeDtlList(Long noticeId) {
@@ -87,46 +89,6 @@ public class BoardService {
     }
 
     /**
-     * 공지 수정
-     */
-    public void updateNotice(Long noticeId, NoticeUpdateDTO noticeUpdateDto) {
-        Board board = boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-        board.updateNotice(noticeUpdateDto);
-        boardRepository.save(board);
-    }
-
-    /**
-     * 공지 수정 - 공지 상세 조회
-     */
-    public Board getNotice(Long noticeId) {
-        return boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-    }
-
-    /**
-     * 관리자 권한 검증
-     */
-    public boolean isAdmin(Member member) {
-        return member.getRole().equals(Role.ADMIN);
-    }
-
-    /**
-     * 공지글 설정 가능 여부 검증
-     */
-    public boolean checkNoticeYN(Long noticeId, boolean noticeYn) {
-        Board board = boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-        return board.isHasNotice() == noticeYn;
-    }
-
-    /**
-     * 공지글 설정 수정
-     */
-    public void updateNoticeYN(Long noticeId, boolean noticeYn) {
-        Board notice = boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-        notice.setHasNotice(noticeYn);
-        boardRepository.save(notice);
-    }
-
-    /**
      * Q&A 전체 조회
      */
     public Page<QaListDTO> getQaList(SearchDTO searchDTO, Pageable pageable) {
@@ -136,18 +98,19 @@ public class BoardService {
     /**
      * Q&A 등록
      */
-    public void enrollQa(QaEnrollDTO qaEnrollDto, Member member) {
+    public void enrollQa(BoardDTO boardDTO, Member member) {
         // Dto -> Entity 변환
-        Board qa = Board.createQa(qaEnrollDto, member);
+        Board board = modelMapper.map(boardDTO, Board.class);
+        board.setMember(member);
 
         // 답글 작성인 경우 뷰에서 originNo 값을 전달
         // originNo 값이 0인 경우 원글 작성, 값이 0 이상인 경우 답글 작성
-        if (qaEnrollDto.getOriginNo() == 0) {
-            boardRepository.save(qa);
-            qa.initReplyInfo(qa.getId(), 0, 0);
+        if (boardDTO.getOriginNo() == 0) {
+            boardRepository.save(board);
+            board.initReplyInfo(board.getId(), 0, 0);
         } else {
-            Board findQa = boardRepository.findById(qaEnrollDto.getOriginNo()).orElseThrow(EntityNotFoundException::new);
-            qa.initReplyInfo(findQa.getOriginNo(), findQa.getGroupOrder() + 1, findQa.getGroupLayer() + 1);
+            Board findQa = boardRepository.findById(boardDTO.getOriginNo()).orElseThrow(EntityNotFoundException::new);
+            board.initReplyInfo(findQa.getOriginNo(), findQa.getGroupOrder() + 1, findQa.getGroupLayer() + 1);
 
             // 답글들 중에 원글 groupOrd 보다 큰 값을 가진 경우, 기존 groupOrd 값에 +1 (최신 답글이 제일 위로 올라옴)
             List<Board> qaList = boardRepository.findByOriginNoAndGroupOrderGreaterThan(findQa.getOriginNo(), findQa.getGroupOrder());
@@ -156,7 +119,7 @@ public class BoardService {
                 boardRepository.save(post);
             });
         }
-        boardRepository.save(qa);
+        boardRepository.save(board);
     }
 
     /**
@@ -202,20 +165,20 @@ public class BoardService {
     }
 
     /**
-     * Q&A 업데이트
+     * Q&A 수정 - Q&A 조회
+     */
+    public QaUpdateDTO getQaForUpdate(Long qaId) {
+        Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
+        return QaUpdateDTO.createDto(qa);
+    }
+
+    /**
+     * Q&A 수정
      */
     public void updateQa(QaUpdateDTO qaUpdateDto) {
         Board qa = boardRepository.findById(qaUpdateDto.getQaId()).orElseThrow(EntityNotFoundException::new);
         qa.updateQa(qaUpdateDto);
         boardRepository.save(qa);
-    }
-
-    /**
-     * Qa 단일 게시글 상세 조회 (for. 게시글 수정)
-     */
-    public QaUpdateDTO getQaForUpdate(Long qaId) {
-        Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
-        return QaUpdateDTO.createDto(qa);
     }
 
     /**
@@ -230,15 +193,6 @@ public class BoardService {
      */
     public Page<ReviewListDTO> getReviews(SearchDTO searchDTO, Pageable pageable) {
         return boardRepository.getReviews(searchDTO, pageable);
-    }
-
-    /**
-     * 리뷰 등록
-     */
-    public void enrollReview(ReviewEnrollDTO reviewEnrollDto, Member member){
-        Product product = productService.getProductByProductId(reviewEnrollDto.getProductId());
-        Board review = Board.createReview(reviewEnrollDto, product, member);
-        boardRepository.save(review);
     }
 
     /**
@@ -257,6 +211,17 @@ public class BoardService {
         Product product = productService.getProductByProductId(productId);
         String representativeImageUrl = productImageService.getRepresentativeImageUrl(productId, true);
         return ProductDTO.createProductDto(product, representativeImageUrl);
+    }
+
+    /**
+     * 리뷰 등록
+     */
+    public void enrollReview(BoardDTO boardDTO, Member member){
+        Product product = productService.getProductByProductId(boardDTO.getProductId());
+        Board board = modelMapper.map(boardDTO, Board.class);
+        board.setMember(member);
+        board.setProduct(product);
+        boardRepository.save(board);
     }
 
     /**
@@ -304,9 +269,10 @@ public class BoardService {
     }
 
     /**
-     * 상품 리뷰 평균 평점
+     * 상품 리뷰 평균 평점 수정
      */
     public void setRatingAvg(Long productId) {
+        // 상품 리뷰 평균 평점 업데이트
         Product product = productService.getProductByProductId(productId);
         product.setAverageRating(boardRepository.getRatingAvg(productId));
         productService.saveProduct(product);
@@ -352,7 +318,7 @@ public class BoardService {
     }
 
     /**
-     * 게시글 단일 삭제
+     * 게시글 삭제
      */
     public void deletePost(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
@@ -360,12 +326,9 @@ public class BoardService {
     }
 
     /**
-     * 게시글 복수 삭제
+     * 관리자 페이지 - 전체 Q&A 게시글 수
      */
-    public void deletePosts(Long[] boardIds) {
-        for (Long boardId : boardIds) {
-            Board board = boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
-            boardRepository.delete(board);
-        }
+    public long getTotalQaPosts() {
+        return boardRepository.getTotalQaPosts();
     }
 }

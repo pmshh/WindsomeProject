@@ -52,6 +52,10 @@ public class OrderService {
     private final ColorService colorService;
     private final SizeService sizeService;
 
+    public Order getOrderByOrderId(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+    }
+
     /**
      * 주문 조회
      */
@@ -205,6 +209,20 @@ public class OrderService {
         orderDetail.setOrderDetailProductList(orderDetailProductDTOList);
 
         return orderDetail;
+    }
+
+    /**
+     * 관리자 페이지 - 주문 조회
+     */
+    public List<Order> getOrderListForAdmin(String userIdentifier, Pageable pageable) {
+        return orderRepository.findOrderListForAdmin(userIdentifier, pageable);
+    }
+
+    /**
+     * 관리자 페이지 - 주문 조회 카운트 쿼리
+     */
+    public Long getOrderListCountForAdmin(String userIdentifier) {
+        return orderRepository.countOrderList(userIdentifier);
     }
 
     private List<OrderProduct> createOrderProductList(List<OrderProductRequestDTO> orderProductRequestDTOList) {

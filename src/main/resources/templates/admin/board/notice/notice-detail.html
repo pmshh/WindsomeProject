@@ -2,18 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/layouts/default-layout.html :: head"></div>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
 </head>
 
 <body>
-<main class="def-main-area">
-        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='noticeManagement')"></div>
 
-        <article class="def-content-area">
-            <div th:replace="/layouts/default-layout.html :: nav"></div>
+        <article class="admin-content-area">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
 
             <!-- section start -->
-            <section class="def-section-area">
+            <section class="admin-section-area">
                 <div class="container-fluid">
 
                     <div class="section-header">
@@ -21,7 +21,7 @@
                         <div class="divider"></div>
                     </div>
 
-                    <div class="section-body notice-detail-body row">
+                    <div class="section-body admin-notice-detail-body row">
                         <div class="col-12 col-md-10">
                             <div class="table-box">
                                 <table>
@@ -54,19 +54,21 @@
                             </div>
 
                             <div class="btn-box">
-                                <button class="button button--white button--90x30 list-btn" onclick="location.href='/board/notices'" type="button">목록</button>
+                                <button class="button button--white button--90x30 list-btn" type="button">목록</button>
+                                <button class="button button--black button--90x30 del-btn" type="button">삭제</button>
+                                <button class="button button--white button--90x30 update-btn" type="button">수정</button>
                             </div>
 
                             <div class="board-movement" th:if="${noticeDtlList.size() > 1}">
                                 <ul th:if="${noticeDtlList.size() == 3}">
                                     <li class="prev">
                                         <strong>이전글</strong>
-                                        <a th:href="@{'/board/notices/' + ${noticeDtlList.get(2).noticeId}}"><span
+                                        <a th:href="@{'/admin/board/notices/' + ${noticeDtlList.get(2).noticeId}}"><span
                                                 th:text="${noticeDtlList.get(2).title}"></span></a>
                                     </li>
                                     <li class="next">
                                         <strong>다음글</strong>
-                                        <a th:href="@{'/board/notices/' + ${noticeDtlList.get(1).noticeId}}"><span
+                                        <a th:href="@{'/admin/board/notices/' + ${noticeDtlList.get(1).noticeId}}"><span
                                                 th:text="${noticeDtlList.get(1).title}"></span></a>
                                     </li>
                                 </ul>
@@ -76,16 +78,17 @@
                                         th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId > noticeDtlList.get(1).noticeId}">
                                     <li class="only-prev">
                                         <strong>이전글</strong>
-                                        <a th:href="@{'/board/notices/' + ${noticeDtlList.get(1).noticeId}}"><span
+                                        <a th:href="@{'/admin/board/notices/' + ${noticeDtlList.get(1).noticeId}}"><span
                                                 th:text="${noticeDtlList.get(1).title}"></span></a>
                                     </li>
                                 </ul>
 
                                 <!-- 다음글만 존재하는 경우 -->
-                                <ul th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
+                                <ul
+                                        th:if="${noticeDtlList.size() == 2 && noticeDtlList.get(0).noticeId < noticeDtlList.get(1).noticeId}">
                                     <li class="next">
                                         <strong>다음글</strong>
-                                        <a th:href="@{'/board/notices/' + ${noticeDtlList.get(1).noticeId}}"><span
+                                        <a th:href="@{'/admin/board/notices/' + ${noticeDtlList.get(1).noticeId}}"><span
                                                 th:text="${noticeDtlList.get(1).title}"></span></a>
                                     </li>
                                 </ul>
@@ -95,14 +98,57 @@
                 </div>
             </section>
 
-            <div th:replace="/layouts/default-layout.html :: footer"></div>
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script th:inline="javascript">
         $(function () {
+            /* 게시글 삭제 */
+            $(".del-btn").click(function () {
+                if (confirm("게시글을 삭제하시겠습니까?")) {
+                    let boardIds = [];
+                    let boardId = [[${ noticeDtlList.get(0).noticeId }]];
+                    boardIds.push(boardId);
+
+                    $.ajax({
+                        url: "/admin/board/notices/delete/",
+                        type: "DELETE",
+                        contentType: "application/json",
+                        dataType: "text",
+                        data: JSON.stringify(boardIds),
+                        success(result) {
+                            alert(result);
+                            location.href = '/admin/board/notices';
+                        },
+                        error(request) {
+                            alert(request.responseText);
+                        }
+                    })
+                }
+                return false;
+            });
+
+            /* 공지사항 게시판으로 이동 */
+            $(".list-btn").click(function () {
+                let page = [[${ page }]];
+                if (page) {
+                    location.href = '/admin/board/notices?page=' + page;
+                }
+                location.href = '/admin/board/notices?page=0';
+            });
+
+            /* 게시글 수정 화면으로 이동 */
+            $(".update-btn").click(function () {
+                let page = [[${ page }]];
+                let noticeId = [[${ noticeDtlList.get(0).noticeId }]];
+                if (page) {
+                    location.href = '/admin/board/notices/update/' + noticeId + '?page=' + page;
+                }
+                location.href = '/admin/board/notices/update/' + noticeId + '?page=0';
+            });
         });
     </script>
 </body>

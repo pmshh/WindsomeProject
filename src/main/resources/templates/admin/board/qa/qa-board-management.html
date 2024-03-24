@@ -175,7 +175,7 @@
 
         /* 게시글 등록 화면으로 이동하는 함수 */
         function handleWriteButtonClick() {
-            location.href = '/board/notice/enroll';
+            location.href = '/board/qa/enroll';
         }
 
         /* 검색 함수 */
@@ -190,16 +190,16 @@
 
         /* 단일 게시글 삭제 함수 */
         function handleDeleteButtonClick() {
-            let qaId = $(this).attr("data-qaId");
-            deleteQa([qaId]);
+            let boardId = $(this).attr("data-qaId");
+            deleteQa([boardId]);
         }
 
         /* 선택된 게시글 삭제 함수 */
         function handleDeleteSelectedButtonClick() {
-            let qaIds = getSelectedQaIds();
-            if (qaIds.length > 0) {
+            let boardIds = getSelectedQaIds();
+            if (boardIds.length > 0) {
                 if (confirm("게시글을 삭제하시겠습니까?")) {
-                    deleteQa(qaIds);
+                    deleteQa(boardIds);
                 }
             } else {
                 alert("게시글을 1개 이상 선택해 주세요.")
@@ -208,10 +208,10 @@
 
         /* 게시글 전체 삭제 함수 */
         function handleDeleteAllButtonClick() {
-            let qaIds = getSelectedQaIds();
-            if (qaIds.length > 0) {
+            let boardIds = getSelectedQaIds();
+            if (boardIds.length > 0) {
                 if (confirm("전체 게시글을 삭제하시겠습니까?")) {
-                    deleteQa(qaIds);
+                    deleteQa(boardIds);
                 } else {
                     // 체크 박스 전체 선택 해제
                     $("input[name='check']").each(function () {
@@ -238,14 +238,13 @@
         }
 
         /* 게시글 삭제 함수 */
-        function deleteQa(qaIds) {
+        function deleteQa(boardIds) {
             $.ajax({
-                url: "/admin/board/qa/",
+                url: "/admin/board/delete",
                 type: "delete",
-                traditional: true,
-                data: {
-                    qaIds: qaIds
-                },
+                contentType: "application/json",
+                dataType: "text",
+                data: JSON.stringify(boardIds),
                 success(res) {
                     alert(res);
                     location.reload(true);

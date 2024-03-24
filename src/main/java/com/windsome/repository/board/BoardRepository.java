@@ -36,6 +36,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
             " union all (select b.board_id as boardId, b.title, b.content, b.password, b.has_private as hasPrivate, b.reg_time as regTime, b.member_id as memberId from board b where b.board_id > :boardId and b.board_type = 'Q&A' order by b.board_id asc limit 1)", nativeQuery = true)
     List<QaDtlDtoInterface> getQaDtl(@Param("boardId") Long boardId);
 
+    @Query(value = "select count(*) from Board b where b.boardType = 'Q&A'")
+    long getTotalQaPosts();
+
     /**
      * Review
      */

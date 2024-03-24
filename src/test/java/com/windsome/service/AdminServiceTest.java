@@ -4,21 +4,22 @@ import com.windsome.constant.Role;
 import com.windsome.dto.admin.CategorySalesResult;
 import com.windsome.dto.admin.DashboardInfoDto;
 import com.windsome.dto.admin.OrderManagementDTO;
+import com.windsome.dto.board.BoardDTO;
 import com.windsome.dto.member.AdminMemberDetailDTO;
 import com.windsome.dto.product.ProductSearchDTO;
+import com.windsome.entity.board.Board;
 import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
 import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
-import com.windsome.repository.board.BoardRepository;
-import com.windsome.repository.member.AddressRepository;
-import com.windsome.repository.member.MemberRepository;
-import com.windsome.repository.order.OrderRepository;
-import com.windsome.repository.orderProduct.OrderProductRepository;
-import com.windsome.repository.payment.PaymentRepository;
-import com.windsome.repository.product.ProductRepository;
-import com.windsome.repository.productImage.ProductImageRepository;
+import com.windsome.service.board.BoardService;
+import com.windsome.service.member.AddressService;
+import com.windsome.service.member.MemberService;
+import com.windsome.service.order.OrderProductService;
+import com.windsome.service.order.OrderService;
+import com.windsome.service.order.PaymentService;
+import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static com.windsome.TestUtil.createMember;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,15 +50,15 @@ import static org.mockito.Mockito.*;
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class AdminServiceTest {
 
-    @Mock private MemberRepository memberRepository;
-    @Mock private AddressRepository addressRepository;
-    @Mock private ProductRepository productRepository;
-    @Mock private PaymentRepository paymentRepository;
-    @Mock private OrderRepository orderRepository;
-    @Mock private OrderProductRepository orderProductRepository;
-    @Mock private BoardRepository boardRepository;
     @Mock private ModelMapper modelMapper;
     @Mock private PasswordEncoder passwordEncoder;
+    @Mock private MemberService memberService;
+    @Mock private AddressService addressService;
+    @Mock private ProductService productService;
+    @Mock private PaymentService paymentService;
+    @Mock private OrderService orderService;
+    @Mock private OrderProductService orderProductService;
+    @Mock private BoardService boardService;
 
     @InjectMocks private AdminService adminService;
 
@@ -66,10 +66,10 @@ class AdminServiceTest {
     @DisplayName("대시보드 데이터 조회")
     public void testGetDashboardData() {
         // Given
-        when(memberRepository.count()).thenReturn(10L);
-        when(productRepository.count()).thenReturn(20L);
-        when(boardRepository.count()).thenReturn(5L);
-        when(paymentRepository.getTotalPaymentPrice()).thenReturn(500L);
+        when(memberService.getTotalMembers()).thenReturn(10L);
+        when(productService.getTotalProducts()).thenReturn(20L);
+        when(boardService.getTotalQaPosts()).thenReturn(5L);
+        when(paymentService.getTotalPaymentPrice()).thenReturn(500L);
 
         CategorySalesResult categorySalesResult1 = mock(CategorySalesResult.class);
         when(categorySalesResult1.getCategory()).thenReturn(1L);
@@ -80,17 +80,17 @@ class AdminServiceTest {
         when(categorySalesResult2.getOrderQuantity()).thenReturn(200L);
 
         List<CategorySalesResult> categorySalesResults = Arrays.asList(categorySalesResult1, categorySalesResult2);
-        when(orderProductRepository.getCategorySalesCount()).thenReturn(categorySalesResults);
+        when(orderProductService.getCategorySalesCount()).thenReturn(categorySalesResults);
 
         // When
         DashboardInfoDto dashboardInfoDto = adminService.getDashboardData();
 
         // Then
-        verify(memberRepository, times(1)).count();
-        verify(productRepository, times(1)).count();
-        verify(boardRepository, times(1)).count();
-        verify(paymentRepository, times(1)).getTotalPaymentPrice();
-        verify(orderProductRepository, times(1)).getCategorySalesCount();
+        verify(memberService, times(1)).getTotalMembers();
+        verify(productService, times(1)).getTotalProducts();
+        verify(boardService, times(1)).getTotalQaPosts();
+        verify(paymentService, times(1)).getTotalPaymentPrice();
+        verify(orderProductService, times(1)).getCategorySalesCount();
 
         assertEquals(10L, dashboardInfoDto.getTotalMembers());
         assertEquals(20L, dashboardInfoDto.getTotalProducts());
@@ -103,21 +103,124 @@ class AdminServiceTest {
         assertEquals(200L, dashboardInfoDto.getCategorySalesList().get(1).getOrderQuantity());
     }
 
+    /**
+     * 상품 관리 TEST
+     */
+    @Test
+    @DisplayName("상품 조회 - 상품이 존재하는 경우")
+    void testGetProductList_ProductsExist() {
+        // Given
+        ProductSearchDTO productSearchDto = new ProductSearchDTO();
+        Pageable pageable = mock(Pageable.class);
+
+        List<Product> products = new ArrayList<>();
+        products.add(new Product());
+        products.add(new Product());
+
+        when(productService.getProducts(productSearchDto, pageable)).thenReturn(new PageImpl<>(products));
+
+        // When
+        Page<Product> resultPage = adminService.getProductList(productSearchDto, pageable);
+
+        // Then
+        assertEquals(2, resultPage.getContent().size());
+        verify(productService, times(1)).getProducts(productSearchDto, pageable);
+    }
+
+    @Test
+    @DisplayName("상품 조회 - 상품이 존재하지 않는 경우")
+    void testGetProductList_NoProducts() {
+        // Given
+        ProductSearchDTO productSearchDto = new ProductSearchDTO();
+        Pageable pageable = mock(Pageable.class);
+
+        List<Product> products = new ArrayList<>();
+
+        when(productService.getProducts(productSearchDto, pageable)).thenReturn(new PageImpl<>(products));
+
+        // When
+        Page<Product> resultPage = adminService.getProductList(productSearchDto, pageable);
+
+        // Then
+        assertEquals(0, resultPage.getContent().size());
+        verify(productService, times(1)).getProducts(productSearchDto, pageable);
+    }
+
+    /**
+     * 주문 관리 TEST
+     */
+    @Test
+    @DisplayName("주문 조회 - 주문이 존재하는 경우")
+    void testGetOrderList_OrdersExist() {
+        // Given
+        String userIdentifier = "user1";
+        Pageable pageable = mock(Pageable.class);
+
+        Member member = createMember(1L);
+
+        List<Order> orders = new ArrayList<>();
+        Order order1 = new Order();
+        order1.setOrderDate(LocalDateTime.now());
+        order1.setMember(member);
+        orders.add(order1);
+        Order order2 = new Order();
+        order2.setOrderDate(LocalDateTime.now());
+        order2.setMember(member);
+        orders.add(order2);
+
+        when(orderService.getOrderListForAdmin(userIdentifier, pageable)).thenReturn(orders);
+        when(orderService.getOrderListCountForAdmin(userIdentifier)).thenReturn(2L);
+
+        // When
+        Page<OrderManagementDTO> resultPage = adminService.getOrderList(userIdentifier, pageable);
+
+        // Then
+        assertEquals(2, resultPage.getContent().size());
+        assertEquals(2L, resultPage.getTotalElements());
+        verify(orderService, times(1)).getOrderListForAdmin(userIdentifier, pageable);
+        verify(orderService, times(1)).getOrderListCountForAdmin(userIdentifier);
+    }
+
+    @Test
+    @DisplayName("주문 조회 - 주문이 존재하지 않는 경우")
+    void testGetOrderList_NoOrders() {
+        // Given
+        String userIdentifier = "user123";
+        Pageable pageable = mock(Pageable.class);
+
+        List<Order> orders = new ArrayList<>();
+
+        when(orderService.getOrderListForAdmin(userIdentifier, pageable)).thenReturn(orders);
+        when(orderService.getOrderListCountForAdmin(userIdentifier)).thenReturn(0L);
+
+        // When
+        Page<OrderManagementDTO> resultPage = adminService.getOrderList(userIdentifier, pageable);
+
+        // Then
+        assertEquals(0, resultPage.getContent().size());
+        assertEquals(0L, resultPage.getTotalElements());
+        verify(orderService, times(1)).getOrderListForAdmin(userIdentifier, pageable);
+        verify(orderService, times(1)).getOrderListCountForAdmin(userIdentifier);
+    }
+
+    /**
+     * 회원 관리 TEST
+     */
     @Test
     @DisplayName("회원 상세 정보 조회")
     public void testGetMemberDetails() {
         // Given
         Long accountId = 1L;
         Member member = createMember(accountId);
-        when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(member));
-        when(addressRepository.findByMemberIdAndIsDefault(accountId, true)).thenReturn(Optional.of(new Address()));
+        when(memberService.getMemberByMemberId(accountId)).thenReturn(member);
+        when(addressService.getAddressByMemberIdAndIsDefault(accountId, true)).thenReturn(new Address());
 
         // When
         AdminMemberDetailDTO result = adminService.getMemberDetails(accountId);
 
         // Then
-        verify(memberRepository, times(1)).findById(accountId);
-        verify(addressRepository, times(1)).findByMemberIdAndIsDefault(accountId, true);
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
+        verify(addressService, times(1)).getAddressByMemberIdAndIsDefault(accountId, true);
         assertEquals(member.getId(), result.getId());
         assertEquals(member.getUserIdentifier(), result.getUserIdentifier());
         assertEquals(member.getPassword(), result.getPassword());
@@ -133,19 +236,19 @@ class AdminServiceTest {
     public void testGetMemberDetails_ThrowsEntityNotFoundException() {
         // Given
         Long accountId = 1L;
-        when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.empty());
+        when(memberService.getMemberByMemberId(accountId)).thenThrow(EntityNotFoundException.class);
 
         // When
         Executable executable = () -> adminService.getMemberDetails(accountId);
 
         // Then
         assertThrows(EntityNotFoundException.class, executable);
-        verify(memberRepository, times(1)).findById(accountId);
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
     }
 
     @Test
     @DisplayName("회원 상세 정보 업데이트")
-    public void testUpdateMemberDetails() throws Exception {
+    public void testUpdateMemberDetails() {
         // Given
         AdminMemberDetailDTO dto = AdminMemberDetailDTO.builder()
                 .id(1L)
@@ -171,19 +274,19 @@ class AdminServiceTest {
         member.setTotalUsedPoints(dto.getTotalUsedPoints());
         member.setTotalEarnedPoints(dto.getTotalEarnedPoints());
 
-        when(memberRepository.findById(dto.getId())).thenReturn(java.util.Optional.of(member));
+        when(memberService.getMemberByMemberId(dto.getId())).thenReturn(member);
         when(passwordEncoder.encode("newpassword")).thenReturn("$2a$10$gLKb.8YwrDpQVmbZpRiMzOaEmI6oUxgWDEO75nKoqyQKOWoBvC.Ci");
-        when(addressRepository.findByMemberIdAndIsDefault(member.getId(), true)).thenReturn(Optional.of(new Address()));
+        when(addressService.getAddressByMemberIdAndIsDefault(member.getId(), true)).thenReturn(new Address());
 
         // When
         adminService.updateMember(dto);
 
         // Then
-        verify(memberRepository, times(1)).findById(dto.getId());
+        verify(memberService, times(1)).getMemberByMemberId(dto.getId());
         verify(modelMapper, times(1)).map(dto, member);
         verify(passwordEncoder, times(1)).encode(dto.getPassword());
-        verify(memberRepository, times(1)).save(member);
-        verify(addressRepository, times(1)).save(any(Address.class));
+        verify(memberService, times(1)).saveMember(member);
+        verify(addressService, times(1)).saveAddress(any(Address.class));
 
         // Verify that the member was updated correctly
         assertEquals(dto.getId(), member.getId());
@@ -204,12 +307,12 @@ class AdminServiceTest {
                 .id(1L)
                 .build();
 
-        when(memberRepository.findById(dto.getId())).thenReturn(java.util.Optional.empty());
+        when(memberService.getMemberByMemberId(dto.getId())).thenThrow(EntityNotFoundException.class);
 
         // When/Then
         assertThrows(EntityNotFoundException.class, () -> adminService.updateMember(dto));
-        verify(memberRepository, times(1)).findById(dto.getId());
-        verifyNoMoreInteractions(modelMapper, passwordEncoder, memberRepository);
+        verify(memberService, times(1)).getMemberByMemberId(dto.getId());
+        verifyNoMoreInteractions(modelMapper, passwordEncoder, memberService);
     }
 
     @Test
@@ -223,14 +326,14 @@ class AdminServiceTest {
         existingMember.setId(accountId);
         existingMember.setRole(Role.USER);
 
-        when(memberRepository.findById(accountId)).thenReturn(Optional.of(existingMember));
+        when(memberService.getMemberByMemberId(accountId)).thenReturn(existingMember);
 
         // When
         adminService.updateMemberRole(accountId, newRole);
 
         // Then
-        verify(memberRepository, times(1)).findById(accountId);
-        verify(memberRepository, times(1)).save(existingMember);
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
+        verify(memberService, times(1)).saveMember(existingMember);
 
         assertEquals(newRole, existingMember.getRole());
     }
@@ -242,7 +345,7 @@ class AdminServiceTest {
         Long accountId = 1L;
         Role newRole = Role.ADMIN;
 
-        when(memberRepository.findById(accountId)).thenReturn(Optional.empty());
+        when(memberService.getMemberByMemberId(accountId)).thenThrow(EntityNotFoundException.class);
 
         // When, Then
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
@@ -250,8 +353,8 @@ class AdminServiceTest {
         });
 
         assertEquals(EntityNotFoundException.class, exception.getClass());
-        verify(memberRepository, times(1)).findById(accountId);
-        verify(memberRepository, never()).save(any());
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
+        verify(memberService, never()).saveMember(any());
     }
 
     @Test
@@ -263,14 +366,14 @@ class AdminServiceTest {
         Member member = new Member();
         member.setRole(Role.USER);
 
-        when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(member));
+        when(memberService.getMemberByMemberId(accountId)).thenReturn(member);
 
         // When
         adminService.deleteMembers(accountIds);
 
         // Then
         assertEquals(member.isDeleted(), true);
-        verify(memberRepository, times(1)).findById(accountId);
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
     }
 
     @Test
@@ -282,14 +385,14 @@ class AdminServiceTest {
         Member adminMember = new Member();
         adminMember.setRole(Role.ADMIN);
 
-        when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.of(adminMember));
+        when(memberService.getMemberByMemberId(accountId)).thenReturn(adminMember);
 
         // When, Then
         AdminDeletionException exception = assertThrows(AdminDeletionException.class, () -> {
             adminService.deleteMembers(accountIds);
         });
         assertEquals(adminMember.isDeleted(), false);
-        verify(memberRepository, times(1)).findById(accountId);
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
     }
 
     @Test
@@ -298,107 +401,220 @@ class AdminServiceTest {
         // Given
         Long accountId = 1L;
         Long[] accountIds = {1L};
-        when(memberRepository.findById(accountId)).thenReturn(java.util.Optional.empty());
+        when(memberService.getMemberByMemberId(accountId)).thenThrow(EntityNotFoundException.class);
 
         // When, Then
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
             adminService.deleteMembers(accountIds);
         });
 
-        verify(memberRepository, times(1)).findById(accountId);
+        verify(memberService, times(1)).getMemberByMemberId(accountId);
+    }
+
+    /**
+     * 게시판 관리 TEST
+     */
+    @Test
+    @DisplayName("공지사항 등록")
+    public void testEnrollNotice() {
+        // given
+        BoardDTO boardDTO = new BoardDTO();
+        Member member = new Member();
+
+        Board board = new Board();
+        board.setId(1L);
+        board.setMember(member);
+
+        when(boardService.saveBoard(any())).thenReturn(board.getId());
+        when(modelMapper.map(boardDTO, Board.class)).thenReturn(board);
+
+        // when
+        Long savedNoticeId = adminService.enrollNotice(boardDTO, member);
+
+        // then
+        verify(boardService, times(1)).saveBoard(any());
+        assertEquals(1L, savedNoticeId);
     }
 
     @Test
-    @DisplayName("주문 조회 - 주문이 존재하는 경우")
-    void testGetOrderList_OrdersExist() {
-        // Given
-        String userIdentifier = "user1";
-        Pageable pageable = mock(Pageable.class);
+    @DisplayName("공지사항 수정 - 성공")
+    public void testUpdateNotice_Success() {
+        // given
+        Long noticeId = 1L;
+        BoardDTO boardDTO = new BoardDTO();
+        boardDTO.setTitle("수정 test");
+        boardDTO.setContent("수정 test");
+        boardDTO.setHasNotice(false);
 
-        Member member = createMember(1L);
+        Board existingNotice = new Board();
+        existingNotice.setId(noticeId);
+        existingNotice.setTitle("기존 제목");
+        existingNotice.setContent("기존 내용");
+        existingNotice.setRegTime(LocalDateTime.now());
 
-        List<Order> orders = new ArrayList<>();
-        Order order1 = new Order();
-        order1.setOrderDate(LocalDateTime.now());
-        order1.setMember(member);
-        orders.add(order1);
-        Order order2 = new Order();
-        order2.setOrderDate(LocalDateTime.now());
-        order2.setMember(member);
-        orders.add(order2);
+        when(boardService.getBoardByBoardId(anyLong())).thenReturn(existingNotice);
 
-        when(orderRepository.findOrderListForAdmin(userIdentifier, pageable)).thenReturn(orders);
-        when(orderRepository.countOrderList(userIdentifier)).thenReturn(2L);
+        // when
+        adminService.updateNotice(noticeId, boardDTO);
 
-        // When
-        Page<OrderManagementDTO> resultPage = adminService.getOrderList(userIdentifier, pageable);
-
-        // Then
-        assertEquals(2, resultPage.getContent().size());
-        assertEquals(2L, resultPage.getTotalElements());
-        verify(orderRepository, times(1)).findOrderListForAdmin(userIdentifier, pageable);
-        verify(orderRepository, times(1)).countOrderList(userIdentifier);
+        // then
+        verify(boardService, times(1)).getBoardByBoardId(noticeId);
+        verify(boardService, times(1)).saveBoard(existingNotice);
+        assertEquals("수정 test", existingNotice.getTitle());
+        assertEquals("수정 test", existingNotice.getContent());
     }
 
     @Test
-    @DisplayName("주문 조회 - 주문이 존재하지 않는 경우")
-    void testGetOrderList_NoOrders() {
-        // Given
-        String userIdentifier = "user123";
-        Pageable pageable = mock(Pageable.class);
+    @DisplayName("공지사항 수정 - 공지사항을 찾을 수 없는 경우")
+    public void testUpdateNotice_NotFound() {
+        // given
+        BoardDTO boardDTO = new BoardDTO();
+        boardDTO.setTitle("수정 test");
+        boardDTO.setContent("수정 test");
+        boardDTO.setHasNotice(false);
+        Long noticeId = 1L;
 
-        List<Order> orders = new ArrayList<>();
+        when(boardService.getBoardByBoardId(anyLong())).thenThrow(EntityNotFoundException.class);
 
-        when(orderRepository.findOrderListForAdmin(userIdentifier, pageable)).thenReturn(orders);
-        when(orderRepository.countOrderList(userIdentifier)).thenReturn(0L);
-
-        // When
-        Page<OrderManagementDTO> resultPage = adminService.getOrderList(userIdentifier, pageable);
-
-        // Then
-        assertEquals(0, resultPage.getContent().size());
-        assertEquals(0L, resultPage.getTotalElements());
-        verify(orderRepository, times(1)).findOrderListForAdmin(userIdentifier, pageable);
-        verify(orderRepository, times(1)).countOrderList(userIdentifier);
+        // when, then
+        assertThrows(EntityNotFoundException.class, () -> adminService.updateNotice(noticeId, boardDTO));
+        verify(boardService, times(1)).getBoardByBoardId(noticeId);
+        verifyNoMoreInteractions(boardService);
     }
 
     @Test
-    @DisplayName("상품 조회 - 상품이 존재하는 경우")
-    void testGetProductList_ProductsExist() {
-        // Given
-        ProductSearchDTO productSearchDto = new ProductSearchDTO();
-        Pageable pageable = mock(Pageable.class);
+    @DisplayName("공지글 설정 가능 여부 검증 - 가능")
+    public void testCheckNoticeYN_NoticeYN() {
+        // given
+        Long noticeId = 1L;
+        boolean noticeYN = true;
 
-        List<Product> products = new ArrayList<>();
-        products.add(new Product());
-        products.add(new Product());
+        Board notice = new Board();
+        notice.setHasNotice(false);
 
-        when(productRepository.findProducts(productSearchDto, pageable)).thenReturn(new PageImpl<>(products));
+        when(boardService.getBoardByBoardId(noticeId)).thenReturn(notice);
 
-        // When
-        Page<Product> resultPage = adminService.getProductList(productSearchDto, pageable);
+        // when
+        boolean result = adminService.checkNoticeYN(noticeId, noticeYN);
 
-        // Then
-        assertEquals(2, resultPage.getContent().size());
-        verify(productRepository, times(1)).findProducts(productSearchDto, pageable);
+        // then
+        assertFalse(result);
+    }
+
+
+    @Test
+    @DisplayName("공지글 설정 가능 여부 검증 - 불가능(이미 공지글로 설정된 경우)")
+    public void testCheckNoticeYN_NotNoticeYN() {
+        // given
+        Long noticeId = 1L;
+        boolean noticeYN = true;
+
+        Board notice = new Board();
+        notice.setHasNotice(true);
+
+        when(boardService.getBoardByBoardId(noticeId)).thenReturn(notice);
+
+        // when
+        boolean result = adminService.checkNoticeYN(noticeId, noticeYN);
+
+        // then
+        assertTrue(result);
     }
 
     @Test
-    @DisplayName("상품 조회 - 상품이 존재하지 않는 경우")
-    void testGetProductList_NoProducts() {
-        // Given
-        ProductSearchDTO productSearchDto = new ProductSearchDTO();
-        Pageable pageable = mock(Pageable.class);
+    @DisplayName("공지글 설정 가능 여부 검증 - 존재하지 않는 공지글")
+    public void testCheckNoticeYN_EntityNotFoundException() {
+        // given
+        Long noticeId = 1L;
+        boolean noticeYN = true;
+        when(boardService.getBoardByBoardId(noticeId)).thenThrow(EntityNotFoundException.class);
 
-        List<Product> products = new ArrayList<>();
+        // when, then
+        assertThrows(EntityNotFoundException.class, () -> adminService.checkNoticeYN(noticeId, noticeYN));
+    }
 
-        when(productRepository.findProducts(productSearchDto, pageable)).thenReturn(new PageImpl<>(products));
+    @Test
+    @DisplayName("공지글 설정 수정 - 공지글로 변경")
+    public void testUpdateNoticeYN_SetNoticeYN() {
+        // given
+        Long noticeId = 1L;
+        boolean noticeYn = true;
 
-        // When
-        Page<Product> resultPage = adminService.getProductList(productSearchDto, pageable);
+        Board notice = new Board();
+        notice.setHasNotice(false);
 
-        // Then
-        assertEquals(0, resultPage.getContent().size());
-        verify(productRepository, times(1)).findProducts(productSearchDto, pageable);
+        when(boardService.getBoardByBoardId(noticeId)).thenReturn(notice);
+
+        // when
+        adminService.updateNoticeYN(noticeId, noticeYn);
+
+        // then
+        assertTrue(notice.isHasNotice());
+        verify(boardService).saveBoard(notice);
+    }
+
+    @Test
+    @DisplayName("공지글 설정 수정 - 공지글 해제")
+    public void testUpdateNoticeYN_UnsetNoticeYN() {
+        // given
+        Long noticeId = 1L;
+        boolean noticeYn = false;
+
+        Board notice = new Board();
+        notice.setHasNotice(true);
+
+        when(boardService.getBoardByBoardId(noticeId)).thenReturn(notice);
+
+        // when
+        adminService.updateNoticeYN(noticeId, noticeYn);
+
+        // then
+        assertFalse(notice.isHasNotice());
+        verify(boardService).saveBoard(notice);
+    }
+
+    @Test
+    @DisplayName("공지글 설정 수정 - 존재하지 않는 공지글")
+    public void testUpdateNoticeYN_EntityNotFoundException() {
+        // given
+        Long noticeId = 1L;
+        boolean noticeYn = true;
+
+        when(boardService.getBoardByBoardId(noticeId)).thenThrow(EntityNotFoundException.class);
+
+        // when, then
+        assertThrows(EntityNotFoundException.class, () -> adminService.updateNoticeYN(noticeId, noticeYn));
+        verify(boardService, never()).saveBoard(any());
+    }
+
+    @Test
+    @DisplayName("게시글 여러건 삭제 - 성공")
+    public void testDeletePosts_Success() {
+        // given
+        Long[] noticeIds = {1L, 2L, 3L};
+        Board notice1 = new Board();
+        Board notice2 = new Board();
+        Board notice3 = new Board();
+        when(boardService.getBoardByBoardId(1L)).thenReturn(notice1);
+        when(boardService.getBoardByBoardId(2L)).thenReturn(notice2);
+        when(boardService.getBoardByBoardId(3L)).thenReturn(notice3);
+
+        // when
+        adminService.deletePosts(noticeIds);
+
+        // then
+        verify(boardService, times(3)).getBoardByBoardId(any());
+        verify(boardService, times(3)).deletePost(any());
+    }
+
+    @Test
+    @DisplayName("게시글 여러건 삭제 - 존재하지 않는 게시글")
+    public void testDeletePosts_EntityNotFoundException() {
+        // given
+        Long[] noticeIds = {1L, 2L, 3L};
+        when(boardService.getBoardByBoardId(anyLong())).thenThrow(EntityNotFoundException.class);
+
+        // when, then
+        assertThrows(EntityNotFoundException.class, () -> adminService.deletePosts(noticeIds));
     }
 }

@@ -189,6 +189,10 @@ input[type=text], input[type=password] {
   outline: none;
 }
 
+textarea {
+  outline: none;
+}
+
 select {
   height: 30px;
   line-height: 29px;
@@ -833,6 +837,137 @@ a.btn-normal {
   color: #353535;
   vertical-align: top;
   margin-top: 2px;
+}
+
+.admin-notice-detail-body .table-box {
+  width: 100%;
+  border-bottom: 1px solid #e5e5e5;
+}
+.admin-notice-detail-body .table-box table {
+  width: 100%;
+  position: relative;
+  margin: 10px 0 0;
+  border: 1px solid #e5e5e5;
+  border-right: none;
+  border-left: none;
+  border-top-color: #fff;
+  color: #fff;
+  line-height: 1.7;
+  font-size: 12px;
+}
+.admin-notice-detail-body .table-box table td {
+  padding: 8px 10px 7px;
+  border-top: 1px solid #e5e5e5;
+  color: #353535;
+  vertical-align: middle;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.admin-notice-detail-body .table-box table td.board-title {
+  height: 80px;
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  line-height: 24px;
+}
+.admin-notice-detail-body .table-box table td.board-title span {
+  padding-left: 15px;
+  padding-top: 5px;
+  display: inline-block;
+  word-break: keep-all;
+}
+.admin-notice-detail-body .table-box table td.board-date-con {
+  border-bottom: 1px solid #e5e5e5;
+}
+.admin-notice-detail-body .table-box table td.board-date-con li {
+  display: inline-block;
+  margin: 0;
+  padding: 8px 15px 8px;
+  vertical-align: top;
+  line-height: 28px;
+  color: #666;
+}
+.admin-notice-detail-body .table-box table td.board-date-con li span.txtNum {
+  display: inline-block;
+  font-size: 11px;
+  color: #939393;
+  word-break: normal;
+}
+.admin-notice-detail-body .table-box .detail {
+  line-height: 1.8;
+  font-size: 13px;
+  padding: 40px 25px;
+  border-top: none;
+  margin: -9px 0 0;
+  word-break: break-all;
+}
+.admin-notice-detail-body .table-box .detail .article {
+  word-wrap: break-word;
+}
+.admin-notice-detail-body .table-box .detail .article p {
+  margin: 0;
+}
+.admin-notice-detail-body .btn-box {
+  width: 100%;
+  margin: 10px 0 40px;
+  padding: 10px 0;
+  text-align: center;
+}
+.admin-notice-detail-body .btn-box button.list-btn {
+  float: left;
+}
+.admin-notice-detail-body .btn-box button.update-btn,
+.admin-notice-detail-body .btn-box button.del-btn {
+  float: right;
+  margin-left: 5px;
+}
+.admin-notice-detail-body .board-movement {
+  width: 100%;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+  margin: 60px 0 40px;
+  background: #fff;
+  font-size: 12px;
+}
+.admin-notice-detail-body .board-movement li {
+  overflow: hidden;
+  padding: 0 20px;
+  border-bottom: 1px solid #eaeaea;
+  line-height: 180%;
+  color: #aaa;
+}
+.admin-notice-detail-body .board-movement li strong {
+  width: 6%;
+  padding-left: 0px;
+  font-weight: normal;
+  float: left;
+  padding: 10px;
+}
+.admin-notice-detail-body .board-movement li a {
+  width: 80%;
+  border-left: 0px solid #eaeaea;
+  color: #666;
+  float: left;
+  padding: 10px;
+  text-decoration: none;
+}
+.admin-notice-detail-body .board-movement li.only-prev {
+  border: 0;
+}
+.admin-notice-detail-body .board-movement li.next {
+  border: 0;
+}
+
+.notice-form-body form table tbody td input[type=checkbox] {
+  width: auto;
+  height: 20px;
+  vertical-align: middle;
+}
+.notice-form-body form .btn-box {
+  padding: 10px 0;
+  text-align: center;
+  display: block;
+  margin-top: 50px;
 }
 
 .qa-mng-body .qa-list-container {
@@ -1901,25 +2036,6 @@ a.btn-normal {
 .notice-body .notice-list-container .table-wrapper {
   min-width: 1300px;
 }
-.notice-body .button-container {
-  margin: 20px 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: end;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.notice-body .button-container .posts-del-btn,
-.notice-body .button-container .all-post-del-btn {
-  margin-left: 5px;
-}
-.notice-body .button-container .write-btn {
-  margin-left: 30px;
-}
 .notice-body .search-input-container {
   padding: 20px 0 20px 10px;
   color: #2e2e2e;
@@ -2063,7 +2179,7 @@ a.btn-normal {
   padding: 10px 0;
   text-align: center;
 }
-.notice-detail-body .btn-box button.cancel-btn {
+.notice-detail-body .btn-box button.list-btn {
   float: left;
 }
 .notice-detail-body .btn-box button.update-btn,
@@ -2106,18 +2222,6 @@ a.btn-normal {
 }
 .notice-detail-body .board-movement li.next {
   border: 0;
-}
-
-.notice-form-body form table tbody td input[type=checkbox] {
-  width: auto;
-  height: 20px;
-  vertical-align: middle;
-}
-.notice-form-body form .btn-box {
-  padding: 10px 0;
-  text-align: center;
-  display: block;
-  margin-top: 50px;
 }
 
 .qa-body .qa-list-container {

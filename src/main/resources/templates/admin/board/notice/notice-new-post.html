@@ -2,18 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/layouts/default-layout.html :: head"></div>
+    <div th:replace="/layouts/admin-layout.html :: head"></div>
 </head>
 
 <body>
-    <main class="def-main-area">
-        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+    <main class="admin-main-area">
+        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='noticeManagement')"></div>
 
-        <article class="def-content-area">
-            <div th:replace="/layouts/default-layout.html :: nav"></div>
+        <article class="admin-content-area">
+            <div th:replace="/layouts/admin-layout.html :: nav"></div>
 
             <!-- section start -->
-            <section class="def-section-area">
+            <section class="admin-section-area">
                 <div class="container-fluid">
 
                     <div class="section-header">
@@ -23,7 +23,7 @@
 
                     <div class="section-body notice-form-body row">
                         <div class="review-form-wrap col-11 col-md-10">
-                            <form id="noticeEnrollForm" th:action="@{'/board/notices/enroll'}" th:object="${noticeDto}" method="post">
+                            <form id="notice-enroll-form" th:action="@{'/admin/board/notices/enroll'}" th:object="${boardDTO}" method="post">
                                 <div class="table-wrapper">
                                     <table class="base-table base-table--post">
                                         <colgroup>
@@ -31,6 +31,7 @@
                                             <col style="width: auto;">
                                         </colgroup>
                                         <tbody class="base-table__body">
+                                        <input type="hidden" name="boardType" value="Notice">
                                         <tr class="base-table__row">
                                             <th class="base-table__header-cell" scope="row">
                                                 <label th:for="*{hasNotice}">공지 여부 <span>*</span></label>
@@ -60,7 +61,7 @@
 
                                 <div class="btn-box">
                                     <button class="button button--black button--130x40 enroll-btn" type="button">등록</button>
-                                    <button class="button button--white button--130x40" type="button" onclick="location.href='/board/notices'">취소</button>
+                                    <button class="button button--white button--130x40" type="button" onclick="location.href='/admin/board/notices'">취소</button>
                                 </div>
                             </form>
                         </div>
@@ -68,11 +69,11 @@
                 </div>
             </section>
 
-            <div th:replace="/layouts/default-layout.html :: footer"></div>
+            <div th:replace="/layouts/admin-layout.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
     <!-- editor -->
     <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
     <script src="/node_modules/@ckeditor/ckeditor5-build-classic/build/translations/ko.js"></script>
@@ -123,7 +124,7 @@
 
                 /* 최종 유효성 검사 */
                 if (checkTitle && checkContent) {
-                    $("#noticeEnrollForm").submit();
+                    $("#notice-enroll-form").submit();
                 }
             });
 

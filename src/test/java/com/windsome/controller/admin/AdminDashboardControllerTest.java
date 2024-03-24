@@ -50,7 +50,7 @@ class AdminDashboardControllerTest {
 
     @Test
     @DisplayName("dashboard 화면 잘 보이는지 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void getDashboard() throws Exception {
         DashboardInfoDto dashboardInfoDto = new DashboardInfoDto();
         given(adminService.getDashboardData()).willReturn(dashboardInfoDto);

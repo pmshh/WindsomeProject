@@ -45,7 +45,7 @@ class AdminOrderControllerTest {
 
     @Test
     @DisplayName("주문 조회 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void getOrderListTest() throws Exception {
         // Mocking
         Page<OrderManagementDTO> orders = new PageImpl<>(Collections.emptyList()); // 빈 페이지 생성
@@ -58,7 +58,7 @@ class AdminOrderControllerTest {
 
     @Test
     @DisplayName("주문 취소 테스트")
-    @WithAccount("admin1234")
+    @WithAccount("ADMIN")
     void cancelOrderTest() throws Exception {
         // Mocking
         Long[] orderIds = {1L, 2L, 3L};
