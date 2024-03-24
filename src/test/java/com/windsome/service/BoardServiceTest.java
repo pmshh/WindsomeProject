@@ -235,7 +235,7 @@ class BoardServiceTest {
         when(boardRepository.findById(anyLong())).thenReturn(Optional.of(mockNotice));
 
         // when
-        boardService.deleteNotice(noticeId);
+        boardService.deletePost(noticeId);
 
         // then
         verify(boardRepository, times(1)).findById(noticeId);
@@ -251,7 +251,7 @@ class BoardServiceTest {
         when(boardRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // when, then
-        assertThrows(EntityNotFoundException.class, () -> boardService.deleteNotice(noticeId));
+        assertThrows(EntityNotFoundException.class, () -> boardService.deletePost(noticeId));
         verify(boardRepository, times(1)).findById(noticeId);
         verify(boardRepository, times(0)).deleteById(noticeId);
     }
@@ -299,7 +299,7 @@ class BoardServiceTest {
         when(boardRepository.findById(3L)).thenReturn(Optional.of(notice3));
 
         // when
-        boardService.deleteNotices(noticeIds);
+        boardService.deletePosts(noticeIds);
 
         // then
         verify(boardRepository, times(3)).findById(any());
@@ -314,7 +314,7 @@ class BoardServiceTest {
         when(boardRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // when, then
-        assertThrows(EntityNotFoundException.class, () -> boardService.deleteNotices(noticeIds));
+        assertThrows(EntityNotFoundException.class, () -> boardService.deletePosts(noticeIds));
     }
 
     @Test
@@ -594,7 +594,7 @@ class BoardServiceTest {
         when(boardRepository.findById(qaId)).thenReturn(java.util.Optional.of(qa));
 
         // When
-        boardService.deleteQa(qaId);
+        boardService.deletePost(qaId);
 
         // Then
         verify(boardRepository, times(1)).findById(qaId); // findById 메소드가 호출됐는지 검증
@@ -614,7 +614,7 @@ class BoardServiceTest {
         }
 
         // When
-        boardService.deleteQas(qaIds);
+        boardService.deletePosts(qaIds);
 
         // Then
         for (Long qaId : qaIds) {
@@ -951,7 +951,7 @@ class BoardServiceTest {
         when(boardRepository.findById(reviewId)).thenReturn(Optional.of(review));
 
         // when
-        boardService.deleteReview(reviewId);
+        boardService.deletePost(reviewId);
 
         // then
         verify(boardRepository, times(1)).delete(review);
@@ -966,7 +966,7 @@ class BoardServiceTest {
         when(boardRepository.findById(reviewId)).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(EntityNotFoundException.class, () -> {boardService.deleteReview(reviewId);});
+        assertThrows(EntityNotFoundException.class, () -> {boardService.deletePost(reviewId);});
     }
 
     @Test
@@ -1256,7 +1256,7 @@ class BoardServiceTest {
         when(boardRepository.findById(3L)).thenReturn(Optional.of(review3));
 
         // when
-        boardService.deleteReviews(reviewIds);
+        boardService.deletePosts(reviewIds);
 
         // then
         verify(boardRepository, times(3)).delete(any());
@@ -1271,7 +1271,7 @@ class BoardServiceTest {
         when(boardRepository.findById(any())).thenReturn(Optional.empty());
 
         // then
-        assertThrows(EntityNotFoundException.class, () -> {boardService.deleteReviews(reviewIds);});
+        assertThrows(EntityNotFoundException.class, () -> {boardService.deletePosts(reviewIds);});
 
         // verify
         verify(boardRepository, never()).delete(any());

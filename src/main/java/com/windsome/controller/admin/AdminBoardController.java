@@ -38,7 +38,7 @@ public class AdminBoardController {
     @DeleteMapping("/board/notices")
     public ResponseEntity<String> deleteNotice(@RequestParam(value = "noticeIds") Long[] noticeIds) {
         try {
-            boardService.deleteNotices(noticeIds);
+            boardService.deletePosts(noticeIds);
             return ResponseEntity.ok().body("게시글이 삭제되었습니다.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 게시글입니다.");
@@ -79,7 +79,7 @@ public class AdminBoardController {
     @DeleteMapping("/board/qa")
     public ResponseEntity<String> deleteQa(Long[] qaIds) {
         try {
-            boardService.deleteQas(qaIds);
+            boardService.deletePosts(qaIds);
             return ResponseEntity.ok().body("게시글이 삭제되었습니다.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 게시글입니다.");
@@ -103,7 +103,7 @@ public class AdminBoardController {
     @DeleteMapping("/board/reviews")
     public ResponseEntity<String> deleteReview(Long[] reviewIds) {
         try {
-            boardService.deleteReviews(reviewIds);
+            boardService.deletePosts(reviewIds);
             return ResponseEntity.ok().body("게시글이 삭제되었습니다.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 게시글입니다.");

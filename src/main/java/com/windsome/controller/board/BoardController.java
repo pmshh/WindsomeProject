@@ -131,7 +131,7 @@ public class BoardController {
         }
 
         try {
-            boardService.deleteNotice(noticeId);
+            boardService.deletePost(noticeId);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("잘못된 접근입니다.");
         }
@@ -167,9 +167,6 @@ public class BoardController {
      */
     @PostMapping("/qa/enroll")
     public ResponseEntity<String> enrollQa(@CurrentMember Member member, QaEnrollDTO qaEnrollDto) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
-        }
         try {
             boardService.enrollQa(qaEnrollDto, member);
         } catch (EntityNotFoundException e) {
@@ -199,9 +196,6 @@ public class BoardController {
      */
     @PostMapping("/qa/{qaId}/password-verification")
     public ResponseEntity<String> secret(@CurrentMember Member member, @PathVariable(value = "qaId") Long qaId, String password) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
-        }
         if (boardService.validatePost(member, qaId, password)) {
             return ResponseEntity.badRequest().body("비밀번호가 일치하지 않습니다.");
         }
@@ -278,7 +272,7 @@ public class BoardController {
             if (!boardService.validatePostPassword(qaId, password)) {
                 return ResponseEntity.badRequest().body("삭제 권한이 없습니다.");
             }
-            boardService.deleteQa(qaId);
+            boardService.deletePost(qaId);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 게시글 입니다.");
         }
@@ -370,10 +364,6 @@ public class BoardController {
      */
     @PatchMapping("/reviews/{reviewId}")
     public ResponseEntity<String> updateReview(@PathVariable(value = "reviewId") Long reviewId, @RequestBody ReviewUpdateDTO reviewUpdateDto, @CurrentMember Member member) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해주세요.");
-        }
-
         try {
             if (boardService.validateReviewOwnership(reviewId, member)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
@@ -392,13 +382,10 @@ public class BoardController {
      */
     @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<String> deleteReview(@PathVariable(value = "reviewId") Long reviewId, Long productId, @CurrentMember Member member) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해주세요.");
-        }
         if (boardService.validateReviewOwnership(reviewId, member)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
         }
-        boardService.deleteReview(reviewId);
+        boardService.deletePost(reviewId);
         boardService.setRatingAvg(productId);
         return ResponseEntity.ok().body("리뷰가 삭제되었습니다.");
     }

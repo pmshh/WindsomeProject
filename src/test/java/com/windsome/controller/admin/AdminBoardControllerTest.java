@@ -71,7 +71,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteNoticeSuccessTest() throws Exception {
         // Mocking - 게시글 삭제가 성공하는 경우
-        doNothing().when(boardService).deleteNotices(any(Long[].class));
+        doNothing().when(boardService).deletePosts(any(Long[].class));
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/notices")
@@ -88,7 +88,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteNoticeFailureNotFoundTest() throws Exception {
         // Mocking - 존재하지 않는 게시글 삭제 시 EntityNotFoundException이 발생하는 경우
-        doThrow(EntityNotFoundException.class).when(boardService).deleteNotices(any(Long[].class));
+        doThrow(EntityNotFoundException.class).when(boardService).deletePosts(any(Long[].class));
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/notices")
@@ -171,7 +171,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteQaSuccessTest() throws Exception {
         // Given
-        doNothing().when(boardService).deleteQas(any());
+        doNothing().when(boardService).deletePosts(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/qa")
@@ -187,7 +187,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteNonExistingQaTest() throws Exception {
         // Given
-        doThrow(EntityNotFoundException.class).when(boardService).deleteQas(any());
+        doThrow(EntityNotFoundException.class).when(boardService).deletePosts(any());
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/qa")
@@ -220,7 +220,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteReviewExistingTest() throws Exception {
         // Given
-        doNothing().when(boardService).deleteReviews(any(Long[].class));
+        doNothing().when(boardService).deletePosts(any(Long[].class));
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/reviews")
@@ -236,7 +236,7 @@ class AdminBoardControllerTest {
     @WithAccount("admin1234")
     void deleteReviewNotFoundTest() throws Exception {
         // Given
-        doThrow(EntityNotFoundException.class).when(boardService).deleteReviews(any(Long[].class));
+        doThrow(EntityNotFoundException.class).when(boardService).deletePosts(any(Long[].class));
 
         // Perform & Verify
         mockMvc.perform(delete("/admin/board/reviews")

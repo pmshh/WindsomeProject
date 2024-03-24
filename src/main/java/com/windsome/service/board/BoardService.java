@@ -52,21 +52,21 @@ public class BoardService {
     private final CommentService commentService;
 
     /**
-     * 공지사항 게시판 - 일반 공지사항 조회
+     * 공지 전체 조회
      */
     public Page<NoticeListDTO> getNoticeList(SearchDTO searchDTO, Pageable pageable) {
         return boardRepository.getNoticeList(searchDTO, pageable);
     }
 
     /**
-     * 공지사항 게시판 - 상단 고정 공지사항 조회
+     * 상단 고정 공지 조회
      */
     public List<Board> getFixTopNoticeList() {
         return boardRepository.findAllByHasNoticeOrderByRegTimeDesc(true);
     }
 
     /**
-     * 공지사항 등록
+     * 공지 등록
      */
     public Long enrollNotice(NoticeDTO noticeDto, Member member) {
         Board board = Board.createNotice(noticeDto, member);
@@ -75,7 +75,7 @@ public class BoardService {
     }
 
     /**
-     * 공지사항 상세 화면 - 공지사항 조회
+     * 공지 상세 조회
      */
     public List<NoticeDtlDTO> getNoticeDtlList(Long noticeId) {
         List<NoticeDtlDTO> noticeDtlDTOList = new ArrayList<>();
@@ -87,7 +87,7 @@ public class BoardService {
     }
 
     /**
-     * 공지사항 수정
+     * 공지 수정
      */
     public void updateNotice(Long noticeId, NoticeUpdateDTO noticeUpdateDto) {
         Board board = boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
@@ -96,18 +96,10 @@ public class BoardService {
     }
 
     /**
-     * 공지사항 수정 화면 - 공지사항 조회
+     * 공지 수정 - 공지 상세 조회
      */
     public Board getNotice(Long noticeId) {
         return boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-    }
-
-    /**
-     * 게시글 삭제 (단건 삭제)
-     */
-    public void deleteNotice(Long noticeId) {
-        boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-        boardRepository.deleteById(noticeId);
     }
 
     /**
@@ -115,16 +107,6 @@ public class BoardService {
      */
     public boolean isAdmin(Member member) {
         return member.getRole().equals(Role.ADMIN);
-    }
-
-    /**
-     * 게시글 삭제 (여러건 삭제)
-     */
-    public void deleteNotices(Long[] noticeIds) {
-        for (Long noticeId : noticeIds) {
-            Board notice = boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-            boardRepository.delete(notice);
-        }
     }
 
     /**
@@ -145,7 +127,7 @@ public class BoardService {
     }
 
     /**
-     * Q&A 게시판 - 게시글 조회
+     * Q&A 전체 조회
      */
     public Page<QaListDTO> getQaList(SearchDTO searchDTO, Pageable pageable) {
         return boardRepository.getQaList(searchDTO, pageable);
@@ -212,24 +194,6 @@ public class BoardService {
     }
 
     /**
-     * Q&A 삭제
-     */
-    public void deleteQa(Long qaId) {
-        Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
-        boardRepository.delete(qa);
-    }
-
-    /**
-     * 관리자 페이지 - Q&A 선택/전체 삭제
-     */
-    public void deleteQas(Long[] qaIds) {
-        for (Long qaId : qaIds) {
-            Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
-            boardRepository.delete(qa);
-        }
-    }
-
-    /**
      * 게시글 비밀번호 검증
      */
     public boolean validatePostPassword(Long qaId, String password) {
@@ -262,6 +226,13 @@ public class BoardService {
     }
 
     /**
+     * 리뷰 전체 조회
+     */
+    public Page<ReviewListDTO> getReviews(SearchDTO searchDTO, Pageable pageable) {
+        return boardRepository.getReviews(searchDTO, pageable);
+    }
+
+    /**
      * 리뷰 등록
      */
     public void enrollReview(ReviewEnrollDTO reviewEnrollDto, Member member){
@@ -271,7 +242,7 @@ public class BoardService {
     }
 
     /**
-     * 리뷰 등록 화면 - 상품 검색(상품 리스트 조회)
+     * 리뷰 등록 - 상품 검색
      */
     public PageImpl<ProductListDTO> getProductList(ProductSearchDTO searchDto, Pageable pageable) {
         List<ProductListDTO> content = productService.getReviewPageItemList(searchDto.getSearchQuery(), pageable);
@@ -280,7 +251,7 @@ public class BoardService {
     }
 
     /**
-     * 리뷰 등록 화면 - 상품 상세 화면에서 리뷰 작성 화면 접근 시, 리뷰 등록 화면에 해당 상품 정보 출력
+     * 리뷰 등록 - 상품 상세 화면에서 리뷰 작성 화면 접근 시, 리뷰 등록 화면에 해당 상품 정보 출력
      */
     public ProductDTO getProduct(Long productId) {
         Product product = productService.getProductByProductId(productId);
@@ -289,29 +260,12 @@ public class BoardService {
     }
 
     /**
-     * 리뷰 상세 화면 - 리뷰 조회
+     * 리뷰 상세 조회
      */
     public ReviewDtlPageReviewDTO getReviewDtl(Long reviewId) {
         Board review = boardRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
         String representativeImageUrl = productImageService.getRepresentativeImageUrl(review.getProduct().getId(), true);
         return ReviewDtlPageReviewDTO.createReviewDtlPageDto(review, representativeImageUrl);
-    }
-
-    /**
-     * 리뷰 수정
-     */
-    public void updateReview(ReviewUpdateDTO reviewUpdateDto) {
-        Board findReview = boardRepository.findById(reviewUpdateDto.getReviewId()).orElseThrow(EntityNotFoundException::new);
-        findReview.updateReview(reviewUpdateDto);
-        boardRepository.save(findReview);
-    }
-
-    /**
-     * 리뷰 삭제
-     */
-    public void deleteReview(Long reviewId) {
-        Board review = boardRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
-        boardRepository.delete(review);
     }
 
     /**
@@ -323,10 +277,12 @@ public class BoardService {
     }
 
     /**
-     * 리뷰 게시판 - 리뷰 조회
+     * 리뷰 수정
      */
-    public Page<ReviewListDTO> getReviews(SearchDTO searchDTO, Pageable pageable) {
-        return boardRepository.getReviews(searchDTO, pageable);
+    public void updateReview(ReviewUpdateDTO reviewUpdateDto) {
+        Board findReview = boardRepository.findById(reviewUpdateDto.getReviewId()).orElseThrow(EntityNotFoundException::new);
+        findReview.updateReview(reviewUpdateDto);
+        boardRepository.save(findReview);
     }
 
     /**
@@ -396,11 +352,19 @@ public class BoardService {
     }
 
     /**
-     * 리뷰 삭제
+     * 게시글 단일 삭제
      */
-    public void deleteReviews(Long[] reviewIds) {
-        for (Long reviewId : reviewIds) {
-            Board board = boardRepository.findById(reviewId).orElseThrow(EntityNotFoundException::new);
+    public void deletePost(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
+        boardRepository.delete(board);
+    }
+
+    /**
+     * 게시글 복수 삭제
+     */
+    public void deletePosts(Long[] boardIds) {
+        for (Long boardId : boardIds) {
+            Board board = boardRepository.findById(boardId).orElseThrow(EntityNotFoundException::new);
             boardRepository.delete(board);
         }
     }
