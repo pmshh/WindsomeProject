@@ -38,7 +38,6 @@
             flex-direction: column;
             min-width: 440px;
             max-width: 440px;
-            padding-top: 30px;
 
             .product-title {
                 margin-bottom: 20px;
@@ -52,8 +51,11 @@
             .product-desc {
                 margin-bottom: 20px;
 
-                p {
-                    font-size: 14px;
+                p, li {
+                    margin: 0;
+                    font-size: 11px;
+                    line-height: 20px;
+                    color: #4d4d4d;
                 }
             }
 
@@ -394,7 +396,7 @@
 
     .product-additional {
         width: 90%;
-        margin: 100px auto 0;
+        margin: 200px auto 0;
 
         .product-review-warp {
             .product-review-header {

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderProductRepository extends JpaRepository<OrderProduct, Long> {
@@ -15,9 +16,10 @@ public interface OrderProductRepository extends JpaRepository<OrderProduct, Long
             "from order_product op " +
             "join product p on p.product_id = op.product_id " +
             "right outer join category c on c.category_id = p.cate_id " +
+            "where op.order_product_status NOT IN ('CANCELED', 'RETURNED', 'EXCHANGED') " +
             "group by category " +
             "order by category asc", nativeQuery = true)
-    List<CategorySalesResult> getCategorySalesCount();
+    Optional<List<CategorySalesResult>> getCategorySalesCount();
 
-    List<OrderProduct> findByOrderId(Long orderId);
+    Optional<List<OrderProduct>> findByOrderId(Long orderId);
 }

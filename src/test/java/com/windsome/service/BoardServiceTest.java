@@ -13,6 +13,7 @@ import com.windsome.entity.member.Member;
 import com.windsome.entity.product.Product;
 import com.windsome.entity.product.ProductImage;
 import com.windsome.repository.board.BoardRepository;
+import com.windsome.repository.product.ProductRepository;
 import com.windsome.service.board.BoardService;
 import com.windsome.service.board.CommentService;
 import com.windsome.service.member.MemberService;
@@ -47,14 +48,14 @@ import static org.mockito.Mockito.times;
 @TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"})
 class BoardServiceTest {
 
-    @Mock private BoardRepository boardRepository;
-    @Mock private MemberService memberService;
-    @Mock private ProductService productService;
-    @Mock private ProductImageService productImageService;
-    @Mock private CommentService commentService;
-    @Mock private ModelMapper modelMapper;
-
     @InjectMocks private BoardService boardService;
+
+    @Mock BoardRepository boardRepository;
+    @Mock ProductRepository productRepository;
+    @Mock MemberService memberService;
+    @Mock ProductImageService productImageService;
+    @Mock CommentService commentService;
+    @Mock ModelMapper modelMapper;
 
     /**
      * Notice TEST
@@ -480,14 +481,14 @@ class BoardServiceTest {
         Product product = new Product();
         Board board = new Board();
 
-        when(productService.getProductByProductId(1L)).thenReturn(product);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(modelMapper.map(boardDTO, Board.class)).thenReturn(board);
 
         // when
         boardService.enrollReview(boardDTO, member);
 
         // then
-        verify(productService, times(1)).getProductByProductId(1L);
+        verify(productRepository, times(1)).findById(1L);
         verify(boardRepository, times(1)).save(any());
     }
 
@@ -499,13 +500,13 @@ class BoardServiceTest {
         boardDTO.setProductId(2L);
         Member member = new Member();
 
-        when(productService.getProductByProductId(boardDTO.getProductId())).thenThrow(new EntityNotFoundException());
+        when(productRepository.findById(boardDTO.getProductId())).thenThrow(new EntityNotFoundException());
 
         // then
         assertThrows(EntityNotFoundException.class, () -> {boardService.enrollReview(boardDTO, member);});
 
         // verify
-        verify(productService, times(1)).getProductByProductId(2L);
+        verify(productRepository, times(1)).findById(2L);
         verify(boardRepository, never()).save(any());
     }
 
@@ -519,8 +520,8 @@ class BoardServiceTest {
         List<ProductListDTO> productList = new ArrayList<>();
         productList.add(new ProductListDTO());
         productList.add(new ProductListDTO());
-        when(productService.getReviewPageItemList(any(), any())).thenReturn(productList);
-        when(productService.getReviewPageItemListCount(any())).thenReturn(2L);
+        when(productRepository.getReviewPageItemList(any(), any())).thenReturn(productList);
+        when(productRepository.getReviewPageItemListCount(any())).thenReturn(2L);
 
         // when
         PageImpl<ProductListDTO> resultPage = boardService.getProductList(searchDto, pageable);
@@ -538,7 +539,7 @@ class BoardServiceTest {
         Long productId = 1L;
         Product product = new Product();
         product.setName("상품1");
-        when(productService.getProductByProductId(productId)).thenReturn(product);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 
         ProductImage productImage = new ProductImage();
         productImage.setImageUrl("이미지URL");
@@ -557,7 +558,7 @@ class BoardServiceTest {
     public void testGetProduct_EntityNotFoundException() {
         // given
         Long itemId = 1L;
-        when(productService.getProductByProductId(anyLong())).thenThrow(new EntityNotFoundException());
+        when(productRepository.findById(anyLong())).thenThrow(new EntityNotFoundException());
 
         // then
         assertThrows(EntityNotFoundException.class, () -> {boardService.getProduct(itemId);});
@@ -731,7 +732,7 @@ class BoardServiceTest {
         reviewList.add(review1);
 
         when(boardRepository.findByProductIdOrderByIdDesc(productId, pageable)).thenReturn(reviewList);
-        when(productService.getProductByProductId(productId)).thenReturn(product);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(boardRepository.countByProductId(productId)).thenReturn(1L);
 
         // when
@@ -757,7 +758,7 @@ class BoardServiceTest {
         reviewList.add(review);
 
         when(boardRepository.findByProductIdOrderByIdDesc(productId, pageable)).thenReturn(reviewList);
-        when(productService.getProductByProductId(productId)).thenThrow(new EntityNotFoundException());
+        when(productRepository.findById(productId)).thenThrow(new EntityNotFoundException());
 
         // then
         assertThrows(EntityNotFoundException.class, () -> {boardService.getProductReviewList(productId, pageable);});
@@ -771,17 +772,17 @@ class BoardServiceTest {
         Product product = new Product();
         product.setId(productId);
 
-        when(productService.getProductByProductId(productId)).thenReturn(product);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(boardRepository.getRatingAvg(productId)).thenReturn(BigDecimal.valueOf(5));
 
         // when
         boardService.setRatingAvg(productId);
 
         // then
-        verify(productService, times(1)).getProductByProductId(productId);
+        verify(productRepository, times(1)).findById(productId);
         verify(boardRepository, times(1)).getRatingAvg(productId);
         assertEquals(BigDecimal.valueOf(5), product.getAverageRating());
-        verify(productService, times(1)).saveProduct(product);
+        verify(productRepository, times(1)).save(product);
     }
 
     @Test
@@ -789,13 +790,13 @@ class BoardServiceTest {
     public void testSetRatingAvg_EntityNotFoundException() {
         // given
         Long productId = 1L;
-        when(productService.getProductByProductId(anyLong())).thenThrow(new EntityNotFoundException());
+        when(productRepository.findById(anyLong())).thenThrow(new EntityNotFoundException());
 
         // then
         assertThrows(EntityNotFoundException.class, () -> {boardService.setRatingAvg(productId);});
 
         // verify
-        verify(productService, times(1)).getProductByProductId(productId);
+        verify(productRepository, times(1)).findById(productId);
         verify(boardRepository, never()).getRatingAvg(productId);
     }
 

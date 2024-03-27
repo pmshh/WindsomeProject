@@ -2,7 +2,7 @@ package com.windsome.service;
 
 import com.windsome.constant.Role;
 import com.windsome.dto.admin.CategorySalesResult;
-import com.windsome.dto.admin.DashboardInfoDto;
+import com.windsome.dto.admin.DashboardInfoDTO;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.dto.board.BoardDTO;
 import com.windsome.dto.member.AdminMemberDetailDTO;
@@ -13,6 +13,7 @@ import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
 import com.windsome.entity.product.Product;
 import com.windsome.exception.AdminDeletionException;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.board.BoardService;
 import com.windsome.service.member.AddressService;
 import com.windsome.service.member.MemberService;
@@ -83,7 +84,7 @@ class AdminServiceTest {
         when(orderProductService.getCategorySalesCount()).thenReturn(categorySalesResults);
 
         // When
-        DashboardInfoDto dashboardInfoDto = adminService.getDashboardData();
+        DashboardInfoDTO dashboardInfoDto = adminService.getDashboardData();
 
         // Then
         verify(memberService, times(1)).getTotalMembers();

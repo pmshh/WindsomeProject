@@ -2,17 +2,13 @@ package com.windsome.repository.productImage;
 
 import com.windsome.entity.product.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
 
-    List<ProductImage> findByProductIdOrderByIdAsc(Long productId);
+    List<ProductImage> findAllByProductIdOrderByIdAsc(Long productId);
 
     ProductImage findByProductIdAndIsRepresentativeImage(Long productId, boolean isRepresentative);
-
-    Optional<List<ProductImage>> findByProductId(Long productId);
 }

@@ -1,7 +1,6 @@
 package com.windsome.controller.product;
 
 import com.windsome.service.board.BoardService;
-import com.windsome.service.product.InventoryService;
 import com.windsome.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +20,6 @@ public class ProductController {
 
     private final ProductService productService;
     private final BoardService boardService;
-    private final InventoryService inventoryService;
 
     /**
      * 상품 상세 화면
@@ -29,7 +27,6 @@ public class ProductController {
     @GetMapping("/product/{productId}")
     public String showProductDetail(Optional<Integer> page, @PathVariable("productId") Long productId, RedirectAttributes redirectAttr, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 5);
-        model.addAttribute("inventories", inventoryService.getInventories(productId));
         try {
             model.addAttribute("product", productService.getProductFormDto(productId));
             model.addAttribute("reviews", boardService.getProductReviewList(productId, pageable));

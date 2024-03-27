@@ -16,8 +16,8 @@ public class CartProductService {
     /**
      * 장바구니 상품 조회
      */
-    public CartProduct getCartProductByProductIdAndColorIdAndSizeId(Long productId, Long colorId, Long sizeId) {
-        return cartProductRepository.findByProductIdAndColorIdAndSizeId(productId, colorId, sizeId);
+    public CartProduct getCartProductByProductIdAndColorAndSize(Long productId, String color, String size) {
+        return cartProductRepository.findByProductIdAndColorAndSize(productId, color, size);
     }
 
     /**

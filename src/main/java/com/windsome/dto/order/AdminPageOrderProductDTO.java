@@ -10,9 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminPageOrderProductDTO {
+
     private Long orderProductId; // 주문 상품 id
-    private Long colorId; // 색상 id
-    private Long sizeId; // 사이즈 id
+
+    private String color; // 색상
+
+    private String size; // 사이즈
+
     private int orderQuantity; // 주문 개수
+
     private String orderProductStatus; // 주문 상품 상태
+
 }

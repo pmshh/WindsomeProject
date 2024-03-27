@@ -2,11 +2,11 @@ package com.windsome.controller.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
-import com.windsome.dto.admin.PageDto;
+import com.windsome.dto.admin.PageDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.ProductFormDTO;
 import com.windsome.exception.ProductImageDeletionException;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.product.CategoryService;
 import com.windsome.service.product.ProductService;
 import org.junit.jupiter.api.DisplayName;
@@ -45,8 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class AdminProductControllerTest {
 
-    @MockBean
-    ProductService productService;
+    @MockBean ProductService productService;
     @MockBean AdminService adminService;
     @MockBean CategoryService categoryService;
     @Autowired MockMvc mockMvc;
@@ -107,7 +106,7 @@ class AdminProductControllerTest {
         // Mocking
         Long productId = 1L;
         ProductFormDTO productFormDto = new ProductFormDTO();
-        PageDto pageDto = new PageDto();
+        PageDTO pageDto = new PageDTO();
         given(productService.getProductFormDto(productId)).willReturn(productFormDto);
 
         // Performing request
@@ -131,7 +130,7 @@ class AdminProductControllerTest {
         // Mocking
         Long productId = 1L;
         ProductFormDTO productFormDto = new ProductFormDTO();
-        PageDto pageDto = new PageDto();
+        PageDTO pageDto = new PageDTO();
         given(productService.getProductFormDto(productId)).willReturn(productFormDto);
 
         // Performing request
@@ -222,7 +221,7 @@ class AdminProductControllerTest {
     void deleteItemSuccessTest() throws Exception {
         // Mocking - 상품 삭제가 성공하는 경우
         Long[] productIds = {1L, 2L, 3L};
-        doNothing().when(productService).deleteProduct(any());
+        doNothing().when(productService).deleteProducts(any());
 
         // productIds 배열을 JSON 문자열로 변환
         String jsonProductIds = new ObjectMapper().writeValueAsString(productIds);
@@ -243,7 +242,7 @@ class AdminProductControllerTest {
     void deleteItemFailureTest() throws Exception {
         // Mocking - 일치하는 상품 정보가 없는 경우
         Long[] productIds = {1L, 2L, 3L};
-        doThrow(new Exception()).when(productService).deleteProduct(any());
+        doThrow(new Exception()).when(productService).deleteProducts(any());
 
         // productIds 배열을 JSON 문자열로 변환
         String jsonProductIds = new ObjectMapper().writeValueAsString(productIds);

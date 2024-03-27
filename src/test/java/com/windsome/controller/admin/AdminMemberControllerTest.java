@@ -5,7 +5,7 @@ import com.windsome.WithAccount;
 import com.windsome.constant.Role;
 import com.windsome.dto.member.AdminMemberDetailDTO;
 import com.windsome.dto.member.MemberListSearchDTO;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

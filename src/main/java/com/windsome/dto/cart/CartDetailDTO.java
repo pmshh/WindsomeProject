@@ -5,7 +5,7 @@ import lombok.*;
 @Getter @Setter
 @ToString
 @NoArgsConstructor
-public class CartDetailDto {
+public class CartDetailDTO {
 
     private Long cartProductId; // cart에 담긴 상품 id
 
@@ -15,13 +15,9 @@ public class CartDetailDto {
 
     private double discount; // 할인율
 
-    private Long colorId; // 색상 id
+    private String color; // 색상
 
-    private String colorName; // 색상 이름
-
-    private Long sizeId; // 사이즈 id
-
-    private String sizeName; // 사이즈 이름
+    private String size; // 사이즈
 
     private int stockQuantity; // 재고 수량
 
@@ -35,15 +31,13 @@ public class CartDetailDto {
 
     private String imageUrl; // 상품 대표 이미지 url
 
-    public CartDetailDto(Long cartProductId, Long productId, String productName, double discount, Long colorId, String colorName, Long sizeId, String sizeName, int stockQuantity, int orderQuantity, int price, String imageUrl) {
+    public CartDetailDTO(Long cartProductId, Long productId, String productName, double discount, String color, String size, int stockQuantity, int orderQuantity, int price, String imageUrl) {
         this.cartProductId = cartProductId;
         this.productId = productId;
         this.productName = productName;
         this.discount = discount;
-        this.colorId = colorId;
-        this.colorName = colorName;
-        this.sizeId = sizeId;
-        this.sizeName = sizeName;
+        this.color = color;
+        this.size = size;
         this.stockQuantity = stockQuantity;
         this.orderQuantity = orderQuantity;
         this.price = price;

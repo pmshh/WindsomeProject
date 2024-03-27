@@ -1,4 +1,4 @@
-package com.windsome.controller;
+package com.windsome.controller.cart;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.cart.CartProductListDTO;

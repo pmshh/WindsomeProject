@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ColorDTO {
+@AllArgsConstructor
+public class ProductOptionDTO {
 
-    private Long id;
+    private String color;
 
-    private String name;
-
-    private String code;
+    private String size;
 }

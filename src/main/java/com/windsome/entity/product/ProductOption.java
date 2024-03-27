@@ -1,8 +1,5 @@
 package com.windsome.entity.product;
 
-import com.windsome.entity.Color;
-import com.windsome.entity.Size;
-import com.windsome.entity.product.Product;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,29 +7,25 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString
-public class Inventory {
+@ToString(exclude = "product")
+public class ProductOption {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "inventory_id")
+    @Column(name = "product_option_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id")
-    private Size size;
+    private String color;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id")
-    private Color color;
+    private String size;
 
     private int quantity;
 
     /**
-     * 생성자, 메소드...
+     * Constructors, Getters, Setters, etc.
      */
     public void removeStock(int orderQuantity) {
         this.quantity -= orderQuantity;

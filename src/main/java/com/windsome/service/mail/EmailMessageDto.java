@@ -8,6 +8,8 @@ import lombok.Data;
 public class EmailMessageDto {
 
     private String to;
+
     private String subject;
+
     private String message;
 }

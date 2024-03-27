@@ -54,7 +54,7 @@ public class Member extends BaseTimeEntity {
     private String oauth;
 
     /**
-     * 생성자, 메소드 등
+     * Constructors, Getters, Setters, etc.
      */
     public void addPoint(OrderRequestDTO orderRequestDTO) {
         int curPoint = this.availablePoints;

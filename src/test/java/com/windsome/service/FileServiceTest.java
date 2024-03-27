@@ -1,5 +1,6 @@
 package com.windsome.service;
 
+import com.windsome.service.file.FileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class FileServiceTest {
 
-    @InjectMocks private FileService fileService;
+    @InjectMocks FileService fileService;
 
     @Test
     @DisplayName("파일 업로드 성공")

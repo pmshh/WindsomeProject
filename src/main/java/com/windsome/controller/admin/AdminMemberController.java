@@ -5,7 +5,7 @@ import com.windsome.dto.member.AdminMemberDetailDTO;
 import com.windsome.dto.member.AdminMemberFormDTO;
 import com.windsome.dto.member.MemberListSearchDTO;
 import com.windsome.exception.AdminDeletionException;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;

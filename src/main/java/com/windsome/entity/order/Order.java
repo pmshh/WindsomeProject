@@ -67,7 +67,7 @@ public class Order {
     private Payment payment; // 결제 정보
 
     /**
-     * Order 객체 생성
+     * Constructors, Getters, Setters, etc.
      */
     public static Order createOrder(Member member, List<OrderProduct> orderProductList, OrderRequestDTO orderRequestDTO, Payment payment) {
         Order order = Order.builder()

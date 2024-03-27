@@ -9,14 +9,10 @@ import com.windsome.dto.board.review.*;
 import com.windsome.entity.board.Board;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.product.Product;
-import com.windsome.entity.product.ProductImage;
 import com.windsome.repository.board.BoardRepository;
-import com.windsome.repository.member.MemberRepository;
 import com.windsome.repository.product.ProductRepository;
-import com.windsome.repository.productImage.ProductImageRepository;
 import com.windsome.service.member.MemberService;
 import com.windsome.service.product.ProductImageService;
-import com.windsome.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -26,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -47,20 +42,12 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final ProductRepository productRepository;
 
+    private final ModelMapper modelMapper;
     private final MemberService memberService;
-    private final ProductService productService;
     private final ProductImageService productImageService;
     private final CommentService commentService;
-    private final ModelMapper modelMapper;
-
-    public Long saveBoard(Board board) {
-        return boardRepository.save(board).getId();
-    }
-
-    public Board getBoardByBoardId(Long noticeId) {
-        return boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
-    }
 
     /**
      * 공지 전체 조회
@@ -157,14 +144,6 @@ public class BoardService {
     }
 
     /**
-     * 게시글 비밀번호 검증
-     */
-    public boolean validatePostPassword(Long qaId, String password) {
-        Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
-        return qa.getPassword().equals(password);
-    }
-
-    /**
      * Q&A 수정 - Q&A 조회
      */
     public QaUpdateDTO getQaForUpdate(Long qaId) {
@@ -182,7 +161,15 @@ public class BoardService {
     }
 
     /**
-     * 댓글 조회
+     * Q&A 삭제 - 게시글 비밀번호 검증
+     */
+    public boolean validatePostPassword(Long qaId, String password) {
+        Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
+        return qa.getPassword().equals(password);
+    }
+
+    /**
+     * Q&A - 댓글 조회
      */
     public List<CommentDTO> getCommentList(Long qaId) {
         return commentService.getCommentDtoList(qaId);
@@ -196,11 +183,11 @@ public class BoardService {
     }
 
     /**
-     * 리뷰 등록 - 상품 검색
+     * 리뷰 등록 - 상품 리스트 조회
      */
     public PageImpl<ProductListDTO> getProductList(ProductSearchDTO searchDto, Pageable pageable) {
-        List<ProductListDTO> content = productService.getReviewPageItemList(searchDto.getSearchQuery(), pageable);
-        Long count = productService.getReviewPageItemListCount(searchDto.getSearchQuery());
+        List<ProductListDTO> content = productRepository.getReviewPageItemList(searchDto.getSearchQuery(), pageable);
+        Long count = productRepository.getReviewPageItemListCount(searchDto.getSearchQuery());
         return new PageImpl<ProductListDTO>(content, pageable, count);
     }
 
@@ -208,7 +195,7 @@ public class BoardService {
      * 리뷰 등록 - 상품 상세 화면에서 리뷰 작성 화면 접근 시, 리뷰 등록 화면에 해당 상품 정보 출력
      */
     public ProductDTO getProduct(Long productId) {
-        Product product = productService.getProductByProductId(productId);
+        Product product = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
         String representativeImageUrl = productImageService.getRepresentativeImageUrl(productId, true);
         return ProductDTO.createProductDto(product, representativeImageUrl);
     }
@@ -217,7 +204,7 @@ public class BoardService {
      * 리뷰 등록
      */
     public void enrollReview(BoardDTO boardDTO, Member member){
-        Product product = productService.getProductByProductId(boardDTO.getProductId());
+        Product product = productRepository.findById(boardDTO.getProductId()).orElseThrow(EntityNotFoundException::new);
         Board board = modelMapper.map(boardDTO, Board.class);
         board.setMember(member);
         board.setProduct(product);
@@ -258,7 +245,7 @@ public class BoardService {
 
         List<ProductReviewDTO> productReviewDTOList = new ArrayList<>();
         for (Board review : content) {
-            Product product = productService.getProductByProductId(review.getProduct().getId());
+            Product product = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
 
             ProductReviewDTO productReviewDTO = ProductReviewDTO.createProductReviewDTO(review, product);
             productReviewDTOList.add(productReviewDTO);
@@ -269,13 +256,13 @@ public class BoardService {
     }
 
     /**
-     * 상품 리뷰 평균 평점 수정
+     * 상품 리뷰 등록 - 상품 평균 평점 수정
      */
     public void setRatingAvg(Long productId) {
         // 상품 리뷰 평균 평점 업데이트
-        Product product = productService.getProductByProductId(productId);
+        Product product  = productRepository.findById(productId).orElseThrow(EntityNotFoundException::new);
         product.setAverageRating(boardRepository.getRatingAvg(productId));
-        productService.saveProduct(product);
+        productRepository.save(product);
     }
 
     /**
@@ -330,5 +317,13 @@ public class BoardService {
      */
     public long getTotalQaPosts() {
         return boardRepository.getTotalQaPosts();
+    }
+
+    public Long saveBoard(Board board) {
+        return boardRepository.save(board).getId();
+    }
+
+    public Board getBoardByBoardId(Long noticeId) {
+        return boardRepository.findById(noticeId).orElseThrow(EntityNotFoundException::new);
     }
 }

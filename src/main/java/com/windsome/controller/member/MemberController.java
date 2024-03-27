@@ -34,7 +34,6 @@ public class MemberController {
     private final MemberService memberService;
     private final SignUpDtoValidator signUpDtoValidator;
     private final ProfileFormDtoValidator profileFormDtoValidator;
-    private final ModelMapper modelMapper;
 
     /**
      * 회원 등록 화면
@@ -106,7 +105,12 @@ public class MemberController {
             }
         }
 
-        memberService.updateMember(member.getId(), memberFormDto);
+        try {
+            memberService.updateMember(member.getId(), memberFormDto);
+        } catch (EntityNotFoundException e) {
+            attributes.addFlashAttribute("message", "회원 혹은 배송지와 일치하는 정보가 없습니다.");
+            return "redirect:/members/" + member.getId() + "/edit";
+        }
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:/members/" + member.getId() + "/edit";
     }

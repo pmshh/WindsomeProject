@@ -2,9 +2,6 @@ package com.windsome.service;
 
 import com.windsome.constant.*;
 import com.windsome.dto.order.*;
-import com.windsome.entity.Color;
-import com.windsome.entity.product.Inventory;
-import com.windsome.entity.Size;
 import com.windsome.entity.cart.CartProduct;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
@@ -12,12 +9,14 @@ import com.windsome.entity.order.OrderProduct;
 import com.windsome.entity.order.Payment;
 import com.windsome.entity.product.Product;
 import com.windsome.entity.product.ProductImage;
+import com.windsome.entity.product.ProductOption;
 import com.windsome.repository.order.OrderRepository;
 import com.windsome.service.cart.CartProductService;
 import com.windsome.service.member.MemberService;
 import com.windsome.service.order.OrderService;
 import com.windsome.service.order.PaymentService;
 import com.windsome.service.product.*;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,17 +41,15 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
-    @Mock private OrderRepository orderRepository;
-    @Mock private ProductService productService;
-    @Mock private MemberService memberService;
-    @Mock private ProductImageService productImageService;
-    @Mock private CartProductService cartProductService;
-    @Mock private PaymentService paymentService;
-    @Mock private InventoryService inventoryService;
-    @Mock private ColorService colorService;
-    @Mock private SizeService sizeService;
-
     @InjectMocks private OrderService orderService;
+
+    @Mock OrderRepository orderRepository;
+    @Mock ProductService productService;
+    @Mock MemberService memberService;
+    @Mock ProductImageService productImageService;
+    @Mock CartProductService cartProductService;
+    @Mock PaymentService paymentService;
+    @Mock ProductOptionService productOptionService;
 
     @Test
     @DisplayName("주문 조회 - 주문이 존재하는 경우")
@@ -101,16 +98,23 @@ class OrderServiceTest {
     @Test
     void testGetOrderProductsInfo() {
         // Given
-        OrderProductListDTO orderProductListDTO = createOrderProductListDTO();
         Product product = createProduct();
         ProductImage productImage = new ProductImage();
         productImage.setImageUrl("url");
+
         CartProduct cartProduct = new CartProduct();
         cartProduct.setId(1L);
 
+        OrderProductListDTO orderProductListDTO = createOrderProductListDTO();
+        OrderProductDTO orderProductDTO = new OrderProductDTO();
+        orderProductDTO.setProductId(product.getId());
+        orderProductDTO.setColor("블랙");
+        orderProductDTO.setSize("M");
+        orderProductDTO.setOrderQuantity(100);
+
         when(productService.getProductByProductId(anyLong())).thenReturn(product);
         when(productImageService.getRepresentativeImageUrl(anyLong(), anyBoolean())).thenReturn(productImage.getImageUrl());
-        when(cartProductService.getCartProductByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(cartProduct);
+        when(cartProductService.getCartProductByProductIdAndColorAndSize(anyLong(), any(), any())).thenReturn(cartProduct);
 
         // When
         List<OrderProductResponseDTO> orderProductsInfo = orderService.getOrderProductsInfo(orderProductListDTO);
@@ -126,30 +130,26 @@ class OrderServiceTest {
         OrderRequestDTO orderRequestDTO = createOrderRequestDTO();
         orderRequestDTO.setEarnedPoints(900);
         orderRequestDTO.setUsedPoints(1000);
+
         Long memberId = 1L;
-
         Member member = createMember(); member.setAvailablePoints(1000); member.setTotalEarnedPoints(1000);
-        when(memberService.getMemberByMemberId(memberId)).thenReturn(member);
-
         Product product = createProduct();
+
+        List<ProductOption> productOptionList = new ArrayList<>();
+        ProductOption productOption = createProductOption(product);
+        productOptionList.add(productOption);
+
+        when(memberService.getMemberByMemberId(memberId)).thenReturn(member);
         when(productService.getProductByProductId(anyLong())).thenReturn(product);
-
-        Color color = new Color(); color.setId(1L);
-        when(colorService.getColorByColorId(anyLong())).thenReturn(color);
-
-        Size size = new Size(); size.setId(1L);
-        when(sizeService.getSizeBySizeId(anyLong())).thenReturn(size);
-
-        Inventory inventory = new Inventory(); inventory.setQuantity(2);
-        when(inventoryService.getInventoryByProductIdAndColorIdAndSizeId(product.getId(), color.getId(), size.getId())).thenReturn(inventory);
-
+        when(productOptionService.getProductOptionByProductIdAndColorAndSize(product.getId(), "블랙", "M")).thenReturn(productOption);
+        when(productOptionService.getProductOptionsByProductId(product.getId())).thenReturn(productOptionList);
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
             Order orderArgument = invocation.getArgument(0);
             // 여기서 실제 데이터베이스에 Order 객체를 저장하고 반환된 Order 객체의 ID를 설정
             orderArgument.setId(1L); // 예시로 ID를 1로 설정
             return orderArgument;
         });
-        when(cartProductService.getCartProductByProductIdAndColorIdAndSizeId(1L, 1L, 1L)).thenReturn(new CartProduct());
+        when(cartProductService.getCartProductByProductIdAndColorAndSize(1L, "블랙", "M")).thenReturn(new CartProduct());
 
         // When
         Long orderId = orderService.order(orderRequestDTO, memberId);
@@ -160,15 +160,23 @@ class OrderServiceTest {
         assertEquals(member.getAvailablePoints(), 900); // 기존 0 포인트 + 900 포인트
         assertEquals(member.getTotalEarnedPoints(), 1900); // 기존 1000 포인트 + 900 포인트
         assertEquals(member.getTotalUsedPoints(), 1000); // 총 사용 포인트
-        assertEquals(inventory.getQuantity(), 1); // 상품 재고 감소 확인
+        assertEquals(productOption.getQuantity(), 99); // 상품 재고 감소 확인
 
         verify(orderRepository, times(1)).save(any(Order.class));
         verify(cartProductService, times(1)).deleteCartProduct(any(CartProduct.class));
-        verify(colorService, times(1)).getColorByColorId(anyLong());
-        verify(sizeService, times(1)).getSizeBySizeId(anyLong());
-        verify(inventoryService, times(1)).getInventoryByProductIdAndColorIdAndSizeId(anyLong(),anyLong(),anyLong());
-        verify(inventoryService, times(1)).getInventoriesByProductId(anyLong());
+        verify(productOptionService, times(1)).getProductOptionByProductIdAndColorAndSize(product.getId(), "블랙", "M");
+        verify(productOptionService, times(1)).getProductOptionsByProductId(product.getId());
         verify(paymentService, times(1)).savePayment(any(Payment.class));
+    }
+
+    @NotNull
+    private static ProductOption createProductOption(Product product) {
+        ProductOption productOption = new ProductOption();
+        productOption.setProduct(product);
+        productOption.setColor("블랙");
+        productOption.setSize("M");
+        productOption.setQuantity(100);
+        return productOption;
     }
 
     @DisplayName("주문 취소 권한 검사 - 주문 취소 권한이 있는 경우")
@@ -238,10 +246,10 @@ class OrderServiceTest {
         Member member = createMember(); member.setAvailablePoints(1000); member.setTotalEarnedPoints(2000); member.setTotalUsedPoints(1000);
         Product product = createProduct();
         Order order = createOrder(member, product);
-        Inventory inventory = new Inventory(); inventory.setQuantity(2);
+        ProductOption productOption = createProductOption(product);
 
         when(orderRepository.findById(orderId)).thenReturn(java.util.Optional.of(order));
-        when(inventoryService.getInventoryByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(inventory);
+        when(productOptionService.getProductOptionByProductIdAndColorAndSize(anyLong(), any(), any())).thenReturn(productOption);
 
         // When
         assertDoesNotThrow(() -> orderService.cancelOrder(orderId));
@@ -257,7 +265,7 @@ class OrderServiceTest {
         for (OrderProduct orderProduct : order.getOrderProducts()) {
             assertEquals(orderProduct.getOrderProductStatus(), OrderProductStatus.CANCELED);
         }
-        assertEquals(inventory.getQuantity(), 3); // 재고 복구 확인
+        assertEquals(productOption.getQuantity(), 101); // 재고 복구 확인
     }
 
     @DisplayName("존재하지 않는 주문 취소")
@@ -303,17 +311,11 @@ class OrderServiceTest {
         order.setUsedPoints(1000);
         order.setEarnedPoints(900);
 
-        Color color = new Color();
-        color.setId(1L);
-
-        Size size = new Size();
-        size.setId(1L);
-
         List<OrderProduct> orderProductList = new ArrayList<>();
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setProduct(product);
-        orderProduct.setColor(color);
-        orderProduct.setSize(size);
+        orderProduct.setColor("블랙");
+        orderProduct.setSize("M");
         orderProduct.setOrder(order);
         orderProduct.setOrderProductStatus(OrderProductStatus.ORDER);
         orderProduct.setOrderQuantity(1);
@@ -353,8 +355,8 @@ class OrderServiceTest {
         List<OrderProductRequestDTO> orderProductRequestDTOList = new ArrayList<>();
         OrderProductRequestDTO orderProductRequestDTO = new OrderProductRequestDTO();
         orderProductRequestDTO.setProductId(1L);
-        orderProductRequestDTO.setColorId(1L);
-        orderProductRequestDTO.setSizeId(1L);
+        orderProductRequestDTO.setColor("블랙");
+        orderProductRequestDTO.setSize("M");
         orderProductRequestDTO.setPrice(30000);
         orderProductRequestDTO.setOrderQuantity(1);
         orderProductRequestDTOList.add(orderProductRequestDTO);
@@ -388,10 +390,8 @@ class OrderServiceTest {
         for (long i = 1; i <= 3; i++) {
             OrderProductDTO orderProductDTO = new OrderProductDTO();
             orderProductDTO.setProductId(i);
-            orderProductDTO.setColorId(i);
-            orderProductDTO.setColorName("Color " + i);
-            orderProductDTO.setSizeId(i);
-            orderProductDTO.setSizeName("Size " + i);
+            orderProductDTO.setColor("블랙" + i);
+            orderProductDTO.setSize("M" + i);
             orderProductDTO.setOrderQuantity(1);
             orderProductDTOList.add(orderProductDTO);
         }

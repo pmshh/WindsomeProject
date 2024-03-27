@@ -3,7 +3,7 @@ package com.windsome.controller.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.windsome.WithAccount;
 import com.windsome.dto.admin.OrderManagementDTO;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.order.OrderService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

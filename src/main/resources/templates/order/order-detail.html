@@ -155,7 +155,9 @@
                                             <td class="base-table__cell left top pl20">
                                                 <a class="base-table__product-name" th:href="${'/product/' + orderProduct.productId}"th:text="${orderProduct.productName}"></a>
                                                 <div class="base-table__option-wrap mt5">
-                                                    [옵션: <span th:text="${orderProduct.colorName}"></span>/<span th:text="${orderProduct.sizeName}"></span> size]
+                                                    <th:block th:if="${orderProduct.color == 'N/A'}">[옵션: X]</th:block>
+                                                    <th:block th:if="${orderProduct.color != 'N/A' && orderProduct.size == 'N/A'}">[옵션: <span th:text="${orderProduct.color}"></span>]</th:block>
+                                                    <th:block th:if="${orderProduct.color != 'N/A' && orderProduct.size != 'N/A'}">[옵션: <span th:text="${orderProduct.color}"></span>/<span th:text="${orderProduct.size}"></span> size]</th:block>
                                                 </div>
                                             </td>
                                             <td class="base-table__cell order-count">
@@ -179,9 +181,9 @@
                                     <tfoot class="base-table__footer">
                                         <tr class="base-table__row">
                                             <td class="base-table__cell" colspan="7">
-                                                상품구매금액 <strong th:text="${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 3000), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}"></strong>
-                                                + 배송비 <span th:text="${orderDetail.totalOrderPrice >= 30000 ? 0 : '3,000'}"></span>
-                                                = 합계 : <strong class="ml10 txtBold txt18" th:text="|${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></strong>
+                                                <span class="me-2">상품구매금액(<span class="tfoot-total-product-price" th:text="${orderDetail.totalOrderPrice < 30000 ? #numbers.formatInteger((orderDetail.totalOrderPrice - 3000), 0, 'COMMA') : #numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}"></span>)</span>
+                                                + <span class="mx-2">배송비(<span class="tfoot-delivery-price" th:text="${orderDetail.totalOrderPrice >= 30000 ? 0 : '3,000'}"></span>)</span>
+                                                = <span class="ms-2 txtBold"> 합계 : <strong class="tfoot-total-order-price" th:text="|${#numbers.formatInteger(orderDetail.totalOrderPrice, 0, 'COMMA')}원|"></strong></span>
                                             </td>
                                         </tr>
                                     </tfoot>

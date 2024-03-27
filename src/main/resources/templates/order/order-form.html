@@ -302,11 +302,12 @@
                             </div>
                             <div class="description">
                                 <strong class="name" th:text="${product.name}"></strong>
-                                <span class="option">[옵션: <span th:text="${product.colorName}"></span>/<span th:text="${product.sizeName}"></span> size]</span>
+                                <th:block th:if="${product.color != 'N/A' && product.size == 'N/A'}"><span class="option">[옵션: <span th:text="${product.color}"></span>]</span></th:block>
+                                <th:block th:if="${product.color != 'N/A' && product.size != 'N/A'}"><span class="option">[옵션: <span th:text="${product.color}"></span>/<span th:text="${product.size}"></span> size]</span></th:block>
                                 <span class="quantity">수량: <span th:text="${product.orderQuantity}"></span>개</span>
                                 <strong th:if="${product.discount > 0}" class="price" th:text="|${#numbers.formatInteger(((product.price * (1 - product.discount)) * product.orderQuantity), 0, 'COMMA')}원|"></strong>
                                 <strong th:unless="${product.discount > 0}" class="price" th:text="|${#numbers.formatInteger((product.price * product.orderQuantity), 0, 'COMMA')}원|"></strong>
-                                <input type="hidden" class="data-info" th:data-color-id="${product.colorId}" th:data-size-id="${product.sizeId}" th:data-product-id="${product.id}" th:data-product-name="${product.name}" th:data-product-image-url="${product.imageUrl}" th:data-price="${product.price}" th:data-discount="${product.discount}" th:data-quantity="${product.orderQuantity}">
+                                <input type="hidden" class="data-info" th:data-color="${product.color}" th:data-size="${product.size}" th:data-product-id="${product.id}" th:data-product-name="${product.name}" th:data-product-image-url="${product.imageUrl}" th:data-price="${product.price}" th:data-discount="${product.discount}" th:data-quantity="${product.orderQuantity}">
                             </div>
                             <div class="button-wrapper">
                                 <button class="delete-btn" type="button" th:data-cart-product-id="${product.cartProductId}"></button>
@@ -1159,7 +1160,7 @@
                     pg : 'html5_inicis.INIpayTest',
                     pay_method : 'card',                                    // 결제 방식
                     merchant_uid: generateOrderNumber(),                    // 주문 번호
-                    name : "의류",                                           // 상품 이름
+                    name : "윈섬 결제",                                       // 상품 이름
                     amount : 100,                                           // 상품 가격
                     buyer_email : buyerEmail,                               // 구매자 이메일
                     buyer_name : buyerName,                                 // 구매자 이름
@@ -1294,15 +1295,15 @@
                                 let price = hiddenDataInfoInput.attr("data-price");
                                 let discount = hiddenDataInfoInput.attr("data-discount");
                                 let orderQuantity = hiddenDataInfoInput.attr("data-quantity");
-                                let colorId = hiddenDataInfoInput.attr("data-color-id");
-                                let sizeId = hiddenDataInfoInput.attr("data-size-id");
+                                let color = hiddenDataInfoInput.attr("data-color");
+                                let size = hiddenDataInfoInput.attr("data-size");
                                 if (discount > 0) {
                                     price = Math.floor(price * (1 - discount));
                                 }
 
                                 formContents += "<input name='orderProductDtoList[" + index + "].productId' type='hidden' value='" + productId + "'>";
-                                formContents += "<input name='orderProductDtoList[" + index + "].colorId' type='hidden' value='" + colorId + "'>";
-                                formContents += "<input name='orderProductDtoList[" + index + "].sizeId' type='hidden' value='" + sizeId + "'>";
+                                formContents += "<input name='orderProductDtoList[" + index + "].color' type='hidden' value='" + color + "'>";
+                                formContents += "<input name='orderProductDtoList[" + index + "].size' type='hidden' value='" + size + "'>";
                                 formContents += "<input name='orderProductDtoList[" + index + "].price' type='hidden' value='" + price + "'>";
                                 formContents += "<input name='orderProductDtoList[" + index + "].orderQuantity' type='hidden' value='" + orderQuantity + "'>";
                             });

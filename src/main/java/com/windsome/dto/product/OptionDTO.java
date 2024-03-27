@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OptionDTO {
 
-    private Long sizeId; // 사이즈 id
-    private Long colorId; // 컬러 id
+    private String color; // 컬러
+
+    private String size; // 사이즈
+
     private int quantity; // 재고
 }

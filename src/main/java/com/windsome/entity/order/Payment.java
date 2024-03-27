@@ -27,6 +27,9 @@ public class Payment {
     @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Order order;
 
+    /**
+     * Constructors, Getters, Setters, etc.
+     */
     public static Payment createPayment(OrderRequestDTO orderRequestDTO) {
         return Payment.builder()
                 .price(orderRequestDTO.getTotalPaymentPrice())

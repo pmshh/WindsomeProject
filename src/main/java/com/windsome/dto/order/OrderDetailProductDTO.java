@@ -1,18 +1,12 @@
 package com.windsome.dto.order;
 
 import com.windsome.constant.OrderProductStatus;
-import com.windsome.dto.product.InventoryDTO;
-import com.windsome.dto.product.ProductColorResponseDTO;
-import com.windsome.dto.product.ProductSizeResponseDTO;
 import com.windsome.entity.order.OrderProduct;
-import com.windsome.entity.product.Inventory;
+import com.windsome.entity.product.ProductOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -32,38 +26,48 @@ public class OrderDetailProductDTO {
 
     private int productPrice; // 상품 금액
 
-    private Long colorId; // 색상 id
+    private String color; // 색상
 
-    private String colorName; // 색상 이름
-
-    private Long sizeId; // 사이즈 id
-
-    private String sizeName; // 사이즈 이름
+    private String size; // 사이즈
 
     private int quantity; // 재고 수량
 
     private OrderProductStatus orderProductStatus; // 주문 상품 상태
 
-    private int deliveryPrice = 2500; // 배송비
+    private int deliveryPrice = 3000; // 배송비
 
+    /**
+     * 생성자, 메소드
+     */
+    public static OrderDetailProductDTO createDTO(OrderProduct orderProduct, String imageUrl, int inventory) {
+        return OrderDetailProductDTO.builder()
+                .orderProductId(orderProduct.getId())
+                .imageUrl(imageUrl)
+                .productId(orderProduct.getProduct().getId())
+                .productName(orderProduct.getProduct().getName())
+                .orderQuantity(orderProduct.getOrderQuantity())
+                .productPrice(orderProduct.getPrice())
+                .color("N/A")
+                .size("N/A")
+                .orderProductStatus(orderProduct.getOrderProductStatus())
+                .deliveryPrice(orderProduct.getPrice() * orderProduct.getOrderQuantity() >= 30000 ? 0 : 3000)
+                .quantity(inventory)
+                .build();
+    }
 
-    public static OrderDetailProductDTO createDTO(OrderProduct orderProduct, String imageUrl, Inventory inventory) {
-        OrderDetailProductDTO orderDetailProductDTO = new OrderDetailProductDTO();
-        orderDetailProductDTO.setOrderProductId(orderProduct.getId());
-        orderDetailProductDTO.setImageUrl(imageUrl);
-        orderDetailProductDTO.setProductId(orderProduct.getProduct().getId());
-        orderDetailProductDTO.setProductName(orderProduct.getProduct().getName());
-        orderDetailProductDTO.setOrderQuantity(orderProduct.getOrderQuantity());
-        orderDetailProductDTO.setProductPrice(orderProduct.getPrice());
-        orderDetailProductDTO.setColorId(orderProduct.getColor().getId());
-        orderDetailProductDTO.setColorName(orderProduct.getColor().getName());
-        orderDetailProductDTO.setSizeId(orderProduct.getSize().getId());
-        orderDetailProductDTO.setSizeName(orderProduct.getSize().getName());
-        orderDetailProductDTO.setOrderProductStatus(orderProduct.getOrderProductStatus());
-        if (orderProduct.getPrice() * orderProduct.getOrderQuantity() > 30000) {
-            orderDetailProductDTO.setDeliveryPrice(0);
-        }
-        orderDetailProductDTO.setQuantity(inventory.getQuantity());
-        return orderDetailProductDTO;
+    public static OrderDetailProductDTO createDTO(OrderProduct orderProduct, String imageUrl, ProductOption productOption) {
+        return OrderDetailProductDTO.builder()
+                .orderProductId(orderProduct.getId())
+                .imageUrl(imageUrl)
+                .productId(orderProduct.getProduct().getId())
+                .productName(orderProduct.getProduct().getName())
+                .orderQuantity(orderProduct.getOrderQuantity())
+                .productPrice(orderProduct.getPrice())
+                .color(orderProduct.getColor())
+                .size(orderProduct.getSize())
+                .orderProductStatus(orderProduct.getOrderProductStatus())
+                .deliveryPrice(orderProduct.getPrice() * orderProduct.getOrderQuantity() >= 30000 ? 0 : 3000)
+                .quantity(productOption.getQuantity())
+                .build();
     }
 }

@@ -35,7 +35,7 @@ public class Address extends BaseTimeEntity {
     private boolean isDefault; // 기본 배송지 여부
 
     /**
-     * 생성자, 메소드 등
+     * Constructors, Getters, Setters, etc.
      */
     @Override
     public boolean equals(Object o) {

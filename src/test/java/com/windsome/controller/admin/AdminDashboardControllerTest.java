@@ -1,13 +1,13 @@
 package com.windsome.controller.admin;
 
 import com.windsome.WithAccount;
-import com.windsome.dto.admin.DashboardInfoDto;
+import com.windsome.dto.admin.DashboardInfoDTO;
 import com.windsome.dto.admin.OrderManagementDTO;
 import com.windsome.dto.board.SearchDTO;
 import com.windsome.dto.board.qa.QaListDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.entity.product.Product;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.board.BoardService;
 import com.windsome.service.order.OrderService;
 import com.windsome.service.product.ProductService;
@@ -52,7 +52,7 @@ class AdminDashboardControllerTest {
     @DisplayName("dashboard 화면 잘 보이는지 테스트")
     @WithAccount("ADMIN")
     void getDashboard() throws Exception {
-        DashboardInfoDto dashboardInfoDto = new DashboardInfoDto();
+        DashboardInfoDTO dashboardInfoDto = new DashboardInfoDTO();
         given(adminService.getDashboardData()).willReturn(dashboardInfoDto);
 
         Page<Product> products = new PageImpl<>(Collections.emptyList());

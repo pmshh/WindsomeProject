@@ -1,4 +1,4 @@
-package com.windsome.advice;
+package com.windsome.controller.advice;
 
 import com.windsome.config.security.CurrentMember;
 import com.windsome.entity.member.Member;

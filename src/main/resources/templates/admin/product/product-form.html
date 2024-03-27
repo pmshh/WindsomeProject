@@ -24,177 +24,299 @@
 
                     <div class="section-body product-form-body row">
 
-                        <form class="col-12 col-xl-8" th:if="${type == 'update' || type == 'detail'}" id="updateForm" th:action="@{'/admin/products/' + ${productFormDto.id}}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
-                            <div class="table-wrapper">
-                                <table class="base-table base-table--two-columns">
-                                   <colgroup>
-                                       <col style="width:130px;">
-                                       <col style="width: auto;">
-                                   </colgroup>
-                                   <tbody class="base-table__body">
-                                       <input class="id-input" th:type="hidden" th:field="*{id}">
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{productSellStatus}">판매 상태 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <select class="base-table__select sell-status-select" th:if="${type == 'update'}" th:field="*{productSellStatus}">
-                                                   <option selected value="none">선택</option>
-                                                   <option value="AVAILABLE">판매가능</option>
-                                                   <option value="SOLD_OUT">품절</option>
-                                                   <option value="DISCONTINUED">단종</option>
-                                               </select>
-                                               <select class="base-table__select sell-status-select" th:if="${type} == 'detail'" disabled th:field="*{productSellStatus}">
-                                                   <option selected value="none">선택</option>
-                                                   <option value="AVAILABLE">판매가능</option>
-                                                   <option value="SOLD_OUT">품절</option>
-                                                   <option value="DISCONTINUED">단종</option>
-                                               </select>
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label>카테고리 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <select class="base-table__select parent-cate-select" th:if="${type == 'update'}">
-                                                   <option selected value="0">선택</option>
-                                               </select>
-                                               <select class="base-table__select child-cate-select" th:if="${type == 'update'}"  th:field="*{categoryId}">
-                                                   <option selected value="0">선택</option>
-                                               </select>
+                        <div  class="col-12 col-xl-10">
+                            <form th:if="${type == 'update' || type == 'detail'}" id="updateForm" th:action="@{'/admin/products/' + ${productFormDto.id}}" method="post" th:object="${productFormDto}" enctype="multipart/form-data">
+                                <div class="table-wrapper">
+                                    <table class="base-table base-table--two-columns">
+                                        <colgroup>
+                                            <col style="width:130px;">
+                                            <col style="width: auto;">
+                                        </colgroup>
+                                        <tbody class="base-table__body">
+                                        <input class="id-input" th:type="hidden" th:field="*{id}">
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{productSellStatus}">판매 상태 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <select class="base-table__select base-table__select--big sell-status-select" th:if="${type == 'update'}" th:field="*{productSellStatus}">
+                                                    <option selected value="none">선택</option>
+                                                    <option value="AVAILABLE">판매가능</option>
+                                                    <option value="SOLD_OUT">품절</option>
+                                                    <option value="DISCONTINUED">단종</option>
+                                                </select>
+                                                <select class="base-table__select base-table__select--big sell-status-select" th:if="${type} == 'detail'" disabled th:field="*{productSellStatus}">
+                                                    <option selected value="none">선택</option>
+                                                    <option value="AVAILABLE">판매가능</option>
+                                                    <option value="SOLD_OUT">품절</option>
+                                                    <option value="DISCONTINUED">단종</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label>카테고리 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <select class="base-table__select base-table__select--big parent-cate-select" th:if="${type == 'update'}">
+                                                    <option selected value="0">선택(대분류)</option>
+                                                </select>
+                                                <select class="base-table__select base-table__select--big child-cate-select" th:if="${type == 'update'}"  th:field="*{categoryId}">
+                                                    <option selected value="0">선택(중분류)</option>
+                                                </select>
 
-                                               <select class="base-table__select base-table__select--big parent-cate-select" th:if="${type == 'detail'}" disabled>
-                                                   <option selected value="0">선택</option>
-                                               </select>
-                                               <select class="base-table__select base-table__select--big child-cate-select" th:if="${type == 'detail'}" th:field="*{categoryId}" disabled>
-                                                   <option selected value="0">선택</option>
-                                               </select>
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{name}">상품명 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--w100p name-input" th:if="${type == 'update'}" type="text" th:field="*{name}">
-                                               <input class="base-table__input base-table__input--w100p name-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{name}">
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{price}">가격 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--w100p price-input" th:if="${type == 'update'}" type="text" th:field="*{price}">
-                                               <input class="base-table__input base-table__input--w100p price-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{price}">
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{discount}">할인율 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <input class="base-table__input base-table__input--w100p discount-interface" th:if="${type == 'update'}" maxlength="2" th:value="*{discount}">
-                                               <input class="base-table__input base-table__input--w100p discount-interface"  th:if="${type == 'detail'}" readonly maxlength="2" th:value="*{discount}">
-                                               <input class="base-table__input base-table__input--w100p discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
-                                               <span class="displayblock">할인 가격 : <span class="discounted-price"></span></span>
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label>옵션 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <div class="d-flex option-select-wrapper">
-                                                   <th:block th:if="${type == 'update'}">
-                                                       <select class="base-table__select--big size-select me-1">
-                                                           <option value="0" selected>선택(사이즈)</option>
-                                                       </select>
-                                                       <select class="base-table__select--big color-select me-1">
-                                                           <option value="0" selected>선택(색상)</option>
-                                                       </select>
-                                                       <button class="button button--white button--90x30 add-option-button" type="button">옵션 추가</button>
-                                                       <button class="button button--white button--90x30 option-reset-btn" type="button">옵션 초기화</button>
-                                                   </th:block>
+                                                <select class="base-table__select base-table__select--big base-table__select--big parent-cate-select" th:if="${type == 'detail'}" disabled>
+                                                    <option selected value="0">선택(대분류)</option>
+                                                </select>
+                                                <select class="base-table__select base-table__select--big base-table__select--big child-cate-select" th:if="${type == 'detail'}" th:field="*{categoryId}" disabled>
+                                                    <option selected value="0">선택(중분류)</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{name}">상품명 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input name-input" th:if="${type == 'update'}" type="text" th:field="*{name}">
+                                                <input class="base-table__input name-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{name}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell"  scope="row">
+                                                <label th:for="*{inventory}">재고 <span>*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input inventory-input" type="text" th:field="*{inventory}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{price}">가격 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input price-input" th:if="${type == 'update'}" type="text" th:field="*{price}">
+                                                <input class="base-table__input price-input" th:if="${type == 'detail'}" readonly type="text" th:field="*{price}">
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{discount}">할인율 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="base-table__input discount-interface" th:if="${type == 'update'}" maxlength="2" th:value="*{discount}">
+                                                <input class="base-table__input discount-interface"  th:if="${type == 'detail'}" readonly maxlength="2" th:value="*{discount}">
+                                                <input class="base-table__input discount-input" type="hidden" th:value="*{discount}" th:field="*{discount}" name="discount" id="discount">
+                                                <span class="displayblock mt-1">할인 가격 : <span class="discounted-price"></span></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label>옵션 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <div class="d-flex option-select-wrapper">
+                                                    <th:block th:if="${type == 'update'}">
+                                                        <select class="base-table__select--big color-select me-1">
+                                                            <option value="N/A" selected>선택(색상)</option>
+                                                            <option value="화이트" data-color-code="#FFFFFF">화이트</option>
+                                                            <option value="블랙" data-color-code="#000000">블랙</option>
+                                                            <option value="회색" data-color-code="#808080">회색</option>
+                                                            <option value="네이비 블루" data-color-code="#000080">네이비 블루</option>
+                                                            <option value="스카이 블루" data-color-code="#87CEEB">스카이 블루</option>
+                                                            <option value="민트 그린" data-color-code="#98FB98">민트 그린</option>
+                                                            <option value="올리브 그린" data-color-code="#808000">올리브 그린</option>
+                                                            <option value="카키 그린" data-color-code="#556B2F">카키 그린</option>
+                                                            <option value="라임 그린" data-color-code="#00FF00">라임 그린</option>
+                                                            <option value="다크 그린" data-color-code="#006400">다크 그린</option>
+                                                            <option value="레드" data-color-code="#FF0000">레드</option>
+                                                            <option value="라즈베리 레드" data-color-code="#E30B5D">라즈베리 레드</option>
+                                                            <option value="핑크" data-color-code="#FFC0CB">핑크</option>
+                                                            <option value="코랄" data-color-code="#FF7F50">코랄</option>
+                                                            <option value="오렌지" data-color-code="#FFA500">오렌지</option>
+                                                            <option value="옐로우" data-color-code="#FFFF00">옐로우</option>
+                                                            <option value="머스타드" data-color-code="#FFD700">머스타드</option>
+                                                            <option value="베이지" data-color-code="#F5F5DC">베이지</option>
+                                                            <option value="샌드" data-color-code="#F4A460">샌드</option>
+                                                            <option value="크림" data-color-code="#FFF8DC">크림</option>
+                                                            <option value="아이보리" data-color-code="#FFFFF0">아이보리</option>
+                                                            <option value="퍼플" data-color-code="#800080">퍼플</option>
+                                                            <option value="라벤더" data-color-code="#E6E6FA">라벤더</option>
+                                                            <option value="버건디" data-color-code="#800020">버건디</option>
+                                                            <option value="와인 레드" data-color-code="#722F37">와인 레드</option>
+                                                            <option value="체리 레드" data-color-code="#DE3163">체리 레드</option>
+                                                            <option value="코코아 브라운" data-color-code="#D2691E">코코아 브라운</option>
+                                                            <option value="탄" data-color-code="#483C32">탄</option>
+                                                            <option value="카멜" data-color-code="#C19A6B">카멜</option>
+                                                            <option value="코코넛 브라운" data-color-code="#965A3E">코코넛 브라운</option>
+                                                            <option value="다크 브라운" data-color-code="#654321">다크 브라운</option>
+                                                            <option value="머루" data-color-code="#722F37">머루</option>
+                                                            <option value="베이비 블루" data-color-code="#89CFF0">베이비 블루</option>
+                                                            <option value="퍼시안 블루" data-color-code="#1C39BB">퍼시안 블루</option>
+                                                            <option value="시에나" data-color-code="#A0522D">시에나</option>
+                                                            <option value="레몬 옐로우" data-color-code="#FFF44F">레몬 옐로우</option>
+                                                            <option value="황토색" data-color-code="#E97451">황토색</option>
+                                                            <option value="머스터드 옐로우" data-color-code="#FFDB58">머스터드 옐로우</option>
+                                                            <option value="버터 크림" data-color-code="#F5E6C4">버터 크림</option>
+                                                            <option value="헌터 그린" data-color-code="#355E3B">헌터 그린</option>
+                                                            <option value="다크 그레이" data-color-code="#A9A9A9">다크 그레이</option>
+                                                            <option value="라이트 그레이" data-color-code="#D3D3D3">라이트 그레이</option>
+                                                            <option value="로즈 골드" data-color-code="#B76E79">로즈 골드</option>
+                                                            <option value="살구색" data-color-code="#FFDAB9">살구색</option>
+                                                            <option value="마호가니" data-color-code="#C04000">마호가니</option>
+                                                            <option value="크림 화이트" data-color-code="#FFFDD0">크림 화이트</option>
+                                                            <option value="펄 그레이" data-color-code="#EAE0C8">펄 그레이</option>
+                                                            <option value="슬레이트 그레이" data-color-code="#708090">슬레이트 그레이</option>
+                                                            <option value="차콜 그레이" data-color-code="#464646">차콜 그레이</option>
+                                                            <option value="미디엄 블루" data-color-code="#0000CD">미디엄 블루</option>
+                                                        </select>
+                                                        <select class="base-table__select--big size-select me-1">
+                                                            <option value="N/A" selected>선택(사이즈)</option>
+                                                            <option value="FREE">FREE</option>
+                                                            <option value="SM">SM</option>
+                                                            <option value="M">M</option>
+                                                            <option value="L">L</option>
+                                                            <option value="XL">XL</option>
+                                                            <option value="XXL">XXL</option>
+                                                        </select>
+                                                        <button class="button button--white button--90x30 add-option-button" type="button">옵션 추가</button>
+                                                        <button class="button button--white button--90x30 option-reset-btn" type="button">옵션 초기화</button>
+                                                    </th:block>
 
-                                                   <th:block th:if="${type == 'detail'}">
-                                                       <select class="base-table__select--big size-select me-1" disabled>
-                                                           <option value="0" selected>선택(사이즈)</option>
-                                                       </select>
-                                                       <select class="base-table__select--big color-select me-1" disabled>
-                                                           <option value="0" selected>선택(색상)</option>
-                                                       </select>
-                                                   </th:block>
-                                               </div>
-                                               <div class="displaynone option-table mt-2">
-                                                   <table>
-                                                       <colgroup>
-                                                           <col style="width: 70px">
-                                                           <col style="width: auto">
-                                                           <col style="width: 150px">
-                                                           <col style="width: 150px">
-                                                       </colgroup>
-                                                       <thead>
-                                                           <tr>
-                                                               <th scope="col">크기</th>
-                                                               <th scope="col">색상</th>
-                                                               <th scope="col">재고</th>
-                                                               <th scope="col">선택</th>
-                                                           </tr>
-                                                       </thead>
-                                                       <tbody class="option-table-body">
-                                                            <!-- 동적으로 태그 생성 -->
-                                                       </tbody>
-                                                   </table>
-                                               </div>
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label th:for="*{productDetail}">상품 상세 내용 <span class="required-field">*</span></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <textarea th:if="${type == 'update'}" th:field="*{productDetail}" class="text-editor"></textarea>
-                                               <textarea th:if="${type == 'detail'}" th:field="*{productDetail}" disabled></textarea>
-                                           </td>
-                                       </tr>
-                                       <tr class="base-table__row" th:if="${type == 'update'}" th:each="productImage, status: ${productFormDto.productImageDTOList}">
-                                           <th class="base-table__header-cell" scope="row">
-                                               <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
-                                           </th>
-                                           <td class="base-table__cell">
-                                               <input class="fake-input" type="text" th:value="${not #strings.isEmpty(productImage.originalImageName)} ? ${productImage.originalImageName} : '상품 이미지 ' + ${status.index+1}">
-                                               <input class="real-input" type="file" name="productImageFile" th:id="${'img' + status.index+1}">
-                                               <label class="button button--white button--90x40 find-file" th:for="${'img' + status.index+1}">파일 찾기</label>
-                                               <button class="button button--black button--90x40 file-delete-btn" type="button" th:data-index="${status.index + 1}" th:data-product-image-id="${productImage.id}" th:data-server-image-name="${productImage.serverImageName}">삭제</button>
-                                               <input type="hidden" name="productImageIds" th:value="${productImage.id}">
-                                           </td>
-                                       </tr>
+                                                    <th:block th:if="${type == 'detail'}">
+                                                        <select class="base-table__select--big color-select me-1">
+                                                            <option value="N/A" selected>선택(색상)</option>
+                                                            <option value="화이트" data-color-code="#FFFFFF">화이트</option>
+                                                            <option value="블랙" data-color-code="#000000">블랙</option>
+                                                            <option value="회색" data-color-code="#808080">회색</option>
+                                                            <option value="네이비 블루" data-color-code="#000080">네이비 블루</option>
+                                                            <option value="스카이 블루" data-color-code="#87CEEB">스카이 블루</option>
+                                                            <option value="민트 그린" data-color-code="#98FB98">민트 그린</option>
+                                                            <option value="올리브 그린" data-color-code="#808000">올리브 그린</option>
+                                                            <option value="카키 그린" data-color-code="#556B2F">카키 그린</option>
+                                                            <option value="라임 그린" data-color-code="#00FF00">라임 그린</option>
+                                                            <option value="다크 그린" data-color-code="#006400">다크 그린</option>
+                                                            <option value="레드" data-color-code="#FF0000">레드</option>
+                                                            <option value="라즈베리 레드" data-color-code="#E30B5D">라즈베리 레드</option>
+                                                            <option value="핑크" data-color-code="#FFC0CB">핑크</option>
+                                                            <option value="코랄" data-color-code="#FF7F50">코랄</option>
+                                                            <option value="오렌지" data-color-code="#FFA500">오렌지</option>
+                                                            <option value="옐로우" data-color-code="#FFFF00">옐로우</option>
+                                                            <option value="머스타드" data-color-code="#FFD700">머스타드</option>
+                                                            <option value="베이지" data-color-code="#F5F5DC">베이지</option>
+                                                            <option value="샌드" data-color-code="#F4A460">샌드</option>
+                                                            <option value="크림" data-color-code="#FFF8DC">크림</option>
+                                                            <option value="아이보리" data-color-code="#FFFFF0">아이보리</option>
+                                                            <option value="퍼플" data-color-code="#800080">퍼플</option>
+                                                            <option value="라벤더" data-color-code="#E6E6FA">라벤더</option>
+                                                            <option value="버건디" data-color-code="#800020">버건디</option>
+                                                            <option value="와인 레드" data-color-code="#722F37">와인 레드</option>
+                                                            <option value="체리 레드" data-color-code="#DE3163">체리 레드</option>
+                                                            <option value="코코아 브라운" data-color-code="#D2691E">코코아 브라운</option>
+                                                            <option value="탄" data-color-code="#483C32">탄</option>
+                                                            <option value="카멜" data-color-code="#C19A6B">카멜</option>
+                                                            <option value="코코넛 브라운" data-color-code="#965A3E">코코넛 브라운</option>
+                                                            <option value="다크 브라운" data-color-code="#654321">다크 브라운</option>
+                                                            <option value="머루" data-color-code="#722F37">머루</option>
+                                                            <option value="베이비 블루" data-color-code="#89CFF0">베이비 블루</option>
+                                                            <option value="퍼시안 블루" data-color-code="#1C39BB">퍼시안 블루</option>
+                                                            <option value="시에나" data-color-code="#A0522D">시에나</option>
+                                                            <option value="레몬 옐로우" data-color-code="#FFF44F">레몬 옐로우</option>
+                                                            <option value="황토색" data-color-code="#E97451">황토색</option>
+                                                            <option value="머스터드 옐로우" data-color-code="#FFDB58">머스터드 옐로우</option>
+                                                            <option value="버터 크림" data-color-code="#F5E6C4">버터 크림</option>
+                                                            <option value="헌터 그린" data-color-code="#355E3B">헌터 그린</option>
+                                                            <option value="다크 그레이" data-color-code="#A9A9A9">다크 그레이</option>
+                                                            <option value="라이트 그레이" data-color-code="#D3D3D3">라이트 그레이</option>
+                                                            <option value="로즈 골드" data-color-code="#B76E79">로즈 골드</option>
+                                                            <option value="살구색" data-color-code="#FFDAB9">살구색</option>
+                                                            <option value="마호가니" data-color-code="#C04000">마호가니</option>
+                                                            <option value="크림 화이트" data-color-code="#FFFDD0">크림 화이트</option>
+                                                            <option value="펄 그레이" data-color-code="#EAE0C8">펄 그레이</option>
+                                                            <option value="슬레이트 그레이" data-color-code="#708090">슬레이트 그레이</option>
+                                                            <option value="차콜 그레이" data-color-code="#464646">차콜 그레이</option>
+                                                            <option value="미디엄 블루" data-color-code="#0000CD">미디엄 블루</option>
+                                                        </select>
+                                                        <select class="base-table__select--big size-select me-1">
+                                                            <option value="N/A" selected>선택(사이즈)</option>
+                                                            <option value="FREE">FREE</option>
+                                                            <option value="SM">SM</option>
+                                                            <option value="M">M</option>
+                                                            <option value="L">L</option>
+                                                            <option value="XL">XL</option>
+                                                            <option value="XXL">XXL</option>
+                                                        </select>
+                                                    </th:block>
+                                                </div>
+                                                <div class="displaynone option-table mt-2">
+                                                    <table>
+                                                        <colgroup>
+                                                            <col style="width: 25%">
+                                                            <col style="width: 25%">
+                                                            <col style="width: 25%">
+                                                            <col style="width: 25%">
+                                                        </colgroup>
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col">색상</th>
+                                                            <th scope="col">사이즈</th>
+                                                            <th scope="col">재고</th>
+                                                            <th scope="col">선택</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="option-table-body">
+                                                        <!-- 동적으로 태그 생성 -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="*{productDetail}">상품 상세 내용 <span class="required-field">*</span></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <textarea th:if="${type == 'update'}" th:field="*{productDetail}" class="text-editor"></textarea>
+                                                <textarea th:if="${type == 'detail'}" th:field="*{productDetail}" disabled></textarea>
+                                            </td>
+                                        </tr>
+                                        <tr class="base-table__row" th:if="${type == 'update'}" th:each="productImage, status: ${productFormDto.productImageDTOList}">
+                                            <th class="base-table__header-cell" scope="row">
+                                                <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                            </th>
+                                            <td class="base-table__cell">
+                                                <input class="fake-input" type="text" th:value="${not #strings.isEmpty(productImage.originalImageName)} ? ${productImage.originalImageName} : '상품 이미지 ' + ${status.index+1}">
+                                                <input class="real-input" type="file" name="productImageFile" th:id="${'img' + status.index+1}">
+                                                <label class="button button--white button--90x40 find-file" th:for="${'img' + status.index+1}">파일 찾기</label>
+                                                <button class="button button--black button--90x40 file-delete-btn" type="button" th:data-index="${status.index + 1}" th:data-product-image-id="${productImage.id}" th:data-server-image-name="${productImage.serverImageName}">삭제</button>
+                                                <input type="hidden" name="productImageIds" th:value="${productImage.id}">
+                                            </td>
+                                        </tr>
 
-                                       <th:block th:if="${type == 'detail'}">
-                                           <tr class="base-table__row" th:each="productImage, status: ${productFormDto.productImageDTOList}">
-                                               <th class="base-table__header-cell" scope="row">
-                                                   <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
-                                               </th>
-                                               <td class="base-table__cell">
-                                                   <input class="fake-input" type="text" readonly="readonly" th:value="${not #strings.isEmpty(productImage.originalImageName)} ? ${productImage.originalImageName} : '상품 이미지 ' + ${status.index+1}">
-                                                   <input type="file" class="real-input" name="productImageFile" th:id="${'img' + status.index+1}" readonly="readonly">
-                                                   <input type="hidden" name="productImageIds" th:value="${productImage.id}">
-                                               </td>
-                                           </tr>
-                                       </th:block>
-                                   </tbody>
-                               </table>
-                            </div>
+                                        <th:block th:if="${type == 'detail'}">
+                                            <tr class="base-table__row" th:each="productImage, status: ${productFormDto.productImageDTOList}">
+                                                <th class="base-table__header-cell" scope="row">
+                                                    <label th:for="${'img' + status.index+1}" th:text="'상품 이미지 ' + ${status.index+1}"></label>
+                                                </th>
+                                                <td class="base-table__cell">
+                                                    <input class="fake-input" type="text" readonly="readonly" th:value="${not #strings.isEmpty(productImage.originalImageName)} ? ${productImage.originalImageName} : '상품 이미지 ' + ${status.index+1}">
+                                                    <input type="file" class="real-input" name="productImageFile" th:id="${'img' + status.index+1}" readonly="readonly">
+                                                    <input type="hidden" name="productImageIds" th:value="${productImage.id}">
+                                                </td>
+                                            </tr>
+                                        </th:block>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                            <div class="btn-box">
-                                <button th:if="${type == 'detail'}" class="button button--black button--130x40 go-to-edit-button" type="button">상품 수정</button>
-                                <button th:if="${type == 'detail'}" class="button button--white button--130x40 back-to-list-button" type="button">상품 목록</button>
-                                <button th:if="${type == 'update'}" class="button button--black button--130x40 product-update-button" type="button">저장</button>
-                                <button th:if="${type == 'update'}" class="button button--white button--130x40 cancel-button" type="button">취소</button>
-                            </div>
-                        </form>
+                                <div class="btn-box">
+                                    <button th:if="${type == 'detail'}" class="button button--black button--130x40 go-to-edit-button" type="button">상품 수정</button>
+                                    <button th:if="${type == 'detail'}" class="button button--white button--130x40 back-to-list-button" type="button">상품 목록</button>
+                                    <button th:if="${type == 'update'}" class="button button--black button--130x40 product-update-button" type="button">저장</button>
+                                    <button th:if="${type == 'update'}" class="button button--white button--130x40 cancel-button" type="button">취소</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -220,10 +342,62 @@
     <script th:inline="javascript">
         let updateForm = $("#updateForm");
 
+        const colorCodes = {
+            "화이트": "#FFFFFF",
+            "블랙": "#000000",
+            "회색": "#808080",
+            "네이비 블루": "#000080",
+            "스카이 블루": "#87CEEB",
+            "민트 그린": "#98FB98",
+            "올리브 그린": "#808000",
+            "카키 그린": "#556B2F",
+            "라임 그린": "#00FF00",
+            "다크 그린": "#006400",
+            "레드": "#FF0000",
+            "라즈베리 레드": "#E30B5D",
+            "핑크": "#FFC0CB",
+            "코랄": "#FF7F50",
+            "오렌지": "#FFA500",
+            "옐로우": "#FFFF00",
+            "머스타드": "#FFD700",
+            "베이지": "#F5F5DC",
+            "샌드": "#F4A460",
+            "크림": "#FFF8DC",
+            "아이보리": "#FFFFF0",
+            "퍼플": "#800080",
+            "라벤더": "#E6E6FA",
+            "버건디": "#800020",
+            "와인 레드": "#722F37",
+            "체리 레드": "#DE3163",
+            "코코아 브라운": "#D2691E",
+            "탄": "#483C32",
+            "카멜": "#C19A6B",
+            "코코넛 브라운": "#965A3E",
+            "다크 브라운": "#654321",
+            "머루": "#722F37",
+            "베이비 블루": "#89CFF0",
+            "퍼시안 블루": "#1C39BB",
+            "시에나": "#A0522D",
+            "레몬 옐로우": "#FFF44F",
+            "황토색": "#E97451",
+            "머스터드 옐로우": "#FFDB58",
+            "버터 크림": "#F5E6C4",
+            "헌터 그린": "#355E3B",
+            "다크 그레이": "#A9A9A9",
+            "라이트 그레이": "#D3D3D3",
+            "로즈 골드": "#B76E79",
+            "살구색": "#FFDAB9",
+            "마호가니": "#C04000",
+            "크림 화이트": "#FFFDD0",
+            "펄 그레이": "#EAE0C8",
+            "슬레이트 그레이": "#708090",
+            "차콜 그레이": "#464646",
+            "미디엄 블루": "#0000CD"
+        };
+
         $(function () {
+            showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
             initializeClassicEditor(); // 위지웍 에디터 초기화
-            initializeProductSizeOptions(); // 상품 사이즈 option 태그 동적 생성
-            initializeProductColorOptions(); // 상품 색상 option 태그 동적 생성
             initializeCategoryOptions(); // 카테고리 option 태그 동적 생성
             initializeDiscountValues(); // 할인율, 할인 가격 설정
             loadProductOptions(); // 상품의 기존 옵션 값을 로드하고 화면에 보여주는 함수
@@ -256,47 +430,19 @@
             $(document).on("click", ".option-delete-btn", deleteProductOption);
         });
 
+        function showMessage() {
+            let message = [[${message}]];
+            if (message) {
+                alert(message);
+            }
+        }
+
         /* 위지웍 에디터 초기화 함수 */
         function initializeClassicEditor() {
             ClassicEditor.create(document.querySelector('.text-editor'))
                 .catch(error => {
                     console.error(error);
                 });
-        }
-
-        /* 상품 사이즈 option 태그 동적 생성 함수 */
-        function initializeProductSizeOptions() {
-            $.ajax({
-                url: "/admin/products/sizes",
-                type: "get",
-                success: function (res) {
-                    let sizeList = JSON.parse(res);
-                    let sizeSelectElement = $(".size-select");
-
-                    $.each(sizeList, function(index, item) {
-                        let optionElement = $("<option></option>").attr("value", item.id).text(item.name);
-                        sizeSelectElement.append(optionElement);
-                    });
-                },
-            });
-        }
-
-        /* 상품 색상 option 태그 동적 생성 함수 */
-        function initializeProductColorOptions() {
-            $.ajax({
-                url: "/admin/products/colors",
-                type: "get",
-                success: function (res) {
-                    let colorList = JSON.parse(res);
-                    let colorSelectElement = $(".color-select");
-
-                    $.each(colorList, function(index, item) {
-                        let optionElement = $("<option></option>").attr("value", item.id).text(item.name);
-                        optionElement.data("code", item.code);
-                        colorSelectElement.append(optionElement);
-                    });
-                },
-            })
         }
 
         /* 카테고리 option 태그 동적 생성 함수 */
@@ -385,13 +531,13 @@
                 return false;
             }
 
-            if (productNmVal === '') {
-                alert("상품명을 입력하세요.");
-                $('.name-input').focus();
-                window.scrollTo(0, 0);
-                isValidated = false;
-                return false;
-            }
+            // if (productNmVal === '') {
+            //     alert("상품명을 입력하세요.");
+            //     $('.name-input').focus();
+            //     window.scrollTo(0, 0);
+            //     isValidated = false;
+            //     return false;
+            // }
 
             if (priceVal === '') {
                 alert("가격을 입력하세요.");
@@ -439,12 +585,12 @@
 
             if (isValidated) {
                 $(".option-table-body").find('tr').each(function (index) {
-                    let sizeVal = $(this).find('.size-input').val();
                     let colorVal = $(this).find('.color-input').val();
+                    let sizeVal = $(this).find('.size-input').val();
                     let quantityVal = $(this).find('.quantity-input').val();
 
-                    form.append("<input type='hidden' name='optionDTOList[" + index + "].sizeId' value='" + sizeVal + "'>");
-                    form.append("<input type='hidden' name='optionDTOList[" + index + "].colorId' value='" + colorVal + "'>");
+                    form.append("<input type='hidden' name='optionDTOList[" + index + "].color' value='" + colorVal + "'>");
+                    form.append("<input type='hidden' name='optionDTOList[" + index + "].size' value='" + sizeVal + "'>");
                     form.append("<input type='hidden' name='optionDTOList[" + index + "].quantity' value='" + quantityVal + "'>");
                 });
 
@@ -540,47 +686,50 @@
 
         /* 페이지 로딩 시 기존 상품 옵션 동적 추가 */
         function loadProductOptions() {
-            let inventories = [[${inventories}]];
+            let productOptions = [[${productFormDto.optionDTOList}]];
             let pageType = [[${type}]];
-            if (inventories.length >= 1) {
-                $.each(inventories, function (index, item) {
+
+            if (productOptions.length >= 1) {
+                $.each(productOptions, function (index, item) {
+                    let colorCode = colorCodes[item.color];
+
                     if (pageType === 'update') {
                         $(".option-table-body").append(
                             "<tr>" +
-                            "<td>" +
-                            "<span class='size'>" + item.sizeName + "</span>" +
-                            "<input class='size-input' type='hidden' value='" + item.sizeId + "'>" +
-                            "</td>" +
-                            "<td class='left'>" +
-                            "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + item.colorCode + ";'></span>" +
-                            "<span class='color'>" + item.colorName + "</span>" +
-                            "<input class='color-input' type='hidden' value='" + item.colorId + "'>" +
-                            "</td>" +
-                            "<td>" +
-                            "<input placeholder='재고를 입력하세요.' type='text' value='" + item.quantity + "' class='base-table__input quantity-input'>" +
-                            "</td>" +
-                            "<td>" +
-                            "<button class='button button--white button--65x30 option-delete-btn' type='button'>삭제</button>" +
-                            "</td>" +
+                                "<td class='left'>" +
+                                    "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + colorCode + ";'></span>" +
+                                    "<span class='color'>" + item.color + "</span>" +
+                                    "<input class='color-input' type='hidden' value='" + item.color + "'>" +
+                                "</td>" +
+                                "<td>" +
+                                    "<span class='size'>" + item.size + "</span>" +
+                                    "<input class='size-input' type='hidden' value='" + item.size + "'>" +
+                                "</td>" +
+                                "<td>" +
+                                    "<input placeholder='재고를 입력하세요.' type='text' value='" + item.quantity + "' class='base-table__input quantity-input'>" +
+                                "</td>" +
+                                "<td>" +
+                                    "<button class='button button--white button--65x30 option-delete-btn' type='button'>삭제</button>" +
+                                "</td>" +
                             "</tr>");
                     } else {
                         $(".option-table-body").append(
                             "<tr>" +
-                            "<td>" +
-                            "<span class='size'>" + item.sizeName + "</span>" +
-                            "<input class='size-input' type='hidden' value='" + item.sizeId + "'>" +
-                            "</td>" +
-                            "<td class='left'>" +
-                            "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + item.colorCode + ";'></span>" +
-                            "<span class='color'>" + item.colorName + "</span>" +
-                            "<input class='color-input' type='hidden' value='" + item.colorId + "'>" +
-                            "</td>" +
-                            "<td>" +
-                            "<input placeholder='재고를 입력하세요.' type='text' value='" + item.quantity + "' class='base-table__input quantity-input' readonly>" +
-                            "</td>" +
-                            "<td>" +
-                            "-" +
-                            "</td>" +
+                                "<td class='left'>" +
+                                    "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + colorCode + ";'></span>" +
+                                    "<span class='color'>" + item.color + "</span>" +
+                                    "<input class='color-input' type='hidden' value='" + item.color + "'>" +
+                                "</td>" +
+                                "<td>" +
+                                "<span class='size'>" + item.size + "</span>" +
+                                "<input class='size-input' type='hidden' value='" + item.size + "'>" +
+                                "</td>" +
+                                "<td>" +
+                                    "<input placeholder='재고를 입력하세요.' type='text' value='" + item.quantity + "' class='base-table__input quantity-input' readonly>" +
+                                "</td>" +
+                                "<td>" +
+                                    "-" +
+                                "</td>" +
                             "</tr>");
                     }
                 });
@@ -601,13 +750,9 @@
             let colorVal = $(".color-select").val();
             let size = $(".size-select option:selected").text();
             let color = $(".color-select option:selected").text();
-            let colorCode = $(".color-select option:selected").data("code");
+            let colorCode = colorCodes[colorVal];
 
-            if (sizeVal === "0") {
-                alert("사이즈를 선택해 주세요.");
-                return false;
-            }
-            if (colorVal === "0") {
+            if (colorVal === "N/A") {
                 alert("색상을 선택해 주세요.");
                 return false;
             }
@@ -630,21 +775,21 @@
             } else {
                 $(".option-table-body").append(
                     "<tr>" +
-                    "<td>" +
-                    "<span class='size'>" + size + "</span>" +
-                    "<input class='size-input' type='hidden' value='" + sizeVal + "'>" +
-                    "</td>" +
-                    "<td class='left'>" +
-                    "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + colorCode + ";'></span>" +
-                    "<span class='color'>" + color + "</span>" +
-                    "<input class='color-input' type='hidden' value='" + colorVal + "'>" +
-                    "</td>" +
-                    "<td>" +
-                    "<input placeholder='재고를 입력하세요.' type='text' class='base-table__input quantity-input'>" +
-                    "</td>" +
-                    "<td>" +
-                    "<button class='button button--white button--65x30 option-delete-btn' type='button'>삭제</button>" +
-                    "</td>" +
+                        "<td class='left'>" +
+                            "<span class='me-2' style='display: inline-block; width: 15px; height: 15px; border: 1px solid #000; vertical-align: middle; background-color:" + colorCode + ";'></span>" +
+                            "<span class='color'>" + colorVal + "</span>" +
+                            "<input class='color-input' type='hidden' value='" + colorVal + "'>" +
+                        "</td>" +
+                        "<td>" +
+                        "<span class='size'>" + sizeVal + "</span>" +
+                        "<input class='size-input' type='hidden' value='" + sizeVal + "'>" +
+                        "</td>" +
+                        "<td>" +
+                            "<input placeholder='재고를 입력하세요.' type='text' class='base-table__input quantity-input'>" +
+                        "</td>" +
+                        "<td>" +
+                            "<button class='button button--white button--65x30 option-delete-btn' type='button'>삭제</button>" +
+                        "</td>" +
                     "</tr>");
                 $(".option-table").removeClass("displaynone");
             }

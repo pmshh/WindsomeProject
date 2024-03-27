@@ -22,13 +22,9 @@ public class OrderHistProductResponseDTO {
 
     private int orderQuantity; // 주문 개수
 
-    private Long colorId; // 색상 id
+    private String color; // 색상
 
-    private String colorName; // 색상 이름
-
-    private Long sizeId; // 사이즈 id
-
-    private String sizeName; // 사이즈 이름
+    private String size; // 사이즈
 
     private OrderProductStatus orderProductStatus; // 주문 상품 현황
 
@@ -39,10 +35,8 @@ public class OrderHistProductResponseDTO {
         this.name = productInfoDto.getName();
         this.price = orderProduct.getPrice();
         this.orderQuantity = orderProduct.getOrderQuantity();
-        this.colorId = orderProduct.getColor().getId();
-        this.colorName = orderProduct.getColor().getName();
-        this.sizeId = orderProduct.getSize().getId();
-        this.sizeName = orderProduct.getSize().getName();
+        this.color = orderProduct.getColor();
+        this.size = orderProduct.getSize();
         this.orderProductStatus = orderProduct.getOrderProductStatus();
         this.imageUrl = productInfoDto.getImageUrl();
     }

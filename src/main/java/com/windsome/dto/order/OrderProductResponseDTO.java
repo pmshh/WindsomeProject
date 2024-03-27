@@ -25,13 +25,9 @@ public class OrderProductResponseDTO {
 
     private double discount; // 할인율
 
-    private Long colorId; // 색상 id
+    private String color; // 색상
 
-    private String colorName; // 색상 이름
-
-    private Long sizeId; // 사이즈 id
-
-    private String sizeName; // 사이즈 이름
+    private String size; // 사이즈
 
     private int orderQuantity; // 주문 수량
 
@@ -42,10 +38,8 @@ public class OrderProductResponseDTO {
                 .discount(product.getDiscount())
                 .name(product.getName())
                 .imageUrl(imageUrl)
-                .colorId(orderProductDTO.getColorId())
-                .colorName(orderProductDTO.getColorName())
-                .sizeId(orderProductDTO.getSizeId())
-                .sizeName(orderProductDTO.getSizeName())
+                .color(orderProductDTO.getColor())
+                .size(orderProductDTO.getSize())
                 .orderQuantity(orderProductDTO.getOrderQuantity())
                 .cartProductId(cartProduct != null ? cartProduct.getId() : null)
                 .build();

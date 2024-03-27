@@ -7,17 +7,16 @@ import com.windsome.constant.ProductSellStatus;
 import com.windsome.dto.member.MemberDetailDTO;
 import com.windsome.dto.order.*;
 import com.windsome.dto.product.ProductInfoResponseDTO;
-import com.windsome.entity.Color;
 import com.windsome.entity.member.Address;
-import com.windsome.entity.product.Inventory;
-import com.windsome.entity.Size;
 import com.windsome.entity.cart.CartProduct;
 import com.windsome.entity.member.Member;
 import com.windsome.entity.order.Order;
 import com.windsome.entity.order.OrderProduct;
 import com.windsome.entity.order.Payment;
 import com.windsome.entity.product.Product;
+import com.windsome.entity.product.ProductOption;
 import com.windsome.repository.order.OrderRepository;
+import com.windsome.service.product.ProductOptionService;
 import com.windsome.service.member.AddressService;
 import com.windsome.service.cart.CartProductService;
 import com.windsome.service.member.MemberService;
@@ -41,19 +40,37 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+
     private final ProductService productService;
     private final MemberService memberService;
     private final AddressService addressService;
     private final ProductImageService productImageService;
     private final CartProductService cartProductService;
     private final PaymentService paymentService;
-    private final InventoryService inventoryService;
     private final OrderProductService orderProductService;
-    private final ColorService colorService;
-    private final SizeService sizeService;
+    private final ProductOptionService productOptionService;
 
+    /**
+     * 주문 조회
+     */
+    @Transactional(readOnly = true)
     public Order getOrderByOrderId(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    /**
+     * 주문 List 조회
+     */
+    @Transactional(readOnly = true)
+    public List<Order> getOrderByMemberId(Long memberId) {
+        return orderRepository.findByMemberId(memberId);
+    }
+
+    /**
+     * 회원의 총 주문 금액 조회
+     */
+    public Long getTotalOrderAmountByMemberId(Long memberId) {
+        return orderRepository.getTotalOrderAmountByMemberId(memberId);
     }
 
     /**
@@ -113,7 +130,7 @@ public class OrderService {
                 .map(orderProductDTO -> {
                     Product product = productService.getProductByProductId(orderProductDTO.getProductId());
                     String repImageUrl = productImageService.getRepresentativeImageUrl(orderProductDTO.getProductId(), true);
-                    CartProduct cartProduct = cartProductService.getCartProductByProductIdAndColorIdAndSizeId(product.getId(), orderProductDTO.getColorId(), orderProductDTO.getSizeId());
+                    CartProduct cartProduct = cartProductService.getCartProductByProductIdAndColorAndSize(product.getId(), orderProductDTO.getColor(), orderProductDTO.getSize());
                     return OrderProductResponseDTO.createDTO(orderProductDTO, product, repImageUrl, cartProduct);
                 })
                 .collect(Collectors.toList());
@@ -162,6 +179,38 @@ public class OrderService {
     }
 
     /**
+     * 주문 상세 조회
+     */
+    public OrderDetailDTO getOrderDetail(Long orderId) {
+        // 주문, 주문 상품 정보 조회
+        OrderDetailDTO orderDetail = orderRepository.getOrderDetail(orderId);
+        List<OrderProduct> orderProductList = orderProductService.getOrderProductsByOrderId(orderId);
+
+        // 주문 상세 상품 정보 리스트 생성
+        List<OrderDetailProductDTO> orderDetailProductDTOList = orderProductList.stream().map(orderProduct -> {
+            // 대표 이미지 URL 조회
+            String repImageUrl = productImageService.getRepresentativeImageUrl(orderProduct.getProduct().getId(), true);
+
+            // 주문 상품에 옵션이 있는 경우
+            if (!Objects.equals(orderProduct.getColor(), "N/A")) {
+                // 재고 정보 조회
+                ProductOption productOption = productOptionService.getProductOptionByProductIdAndColorAndSize(orderProduct.getProduct().getId(), orderProduct.getColor(), orderProduct.getSize());
+
+                // OrderDetailProductDTO 생성
+                return OrderDetailProductDTO.createDTO(orderProduct, repImageUrl, productOption);
+            // 주문 상품에 옵션이 없는 경우
+            } else {
+                // OrderDetailProductDTO 생성
+                return OrderDetailProductDTO.createDTO(orderProduct, repImageUrl, orderProduct.getProduct().getInventory());
+            }
+        }).collect(Collectors.toList());
+        // 주문 상세 정보에 상세 상품 리스트 설정
+        orderDetail.setOrderDetailProductList(orderDetailProductDTOList);
+
+        return orderDetail;
+    }
+
+    /**
      * 주문 취소
      */
     public void cancelOrder(Long orderId) {
@@ -180,35 +229,31 @@ public class OrderService {
 
         // 주문 취소 (주문 상태 변경, 결제 상태 변경, 주문 상품 상태 변경, 재고 수량 복구)
         order.setOrderStatus(OrderStatus.CANCELED);
+        order.setPrice(0);
+        order.getPayment().setPrice(0);
+        order.setUsedPoints(0);
+        order.setEarnedPoints(0);
+        order.setProductCount(0);
         order.getPayment().setStatus(PaymentStatus.PAYMENT_CANCELLED);
         for (OrderProduct orderProduct : order.getOrderProducts()) {
-            Inventory inventory = inventoryService.getInventoryByProductIdAndColorIdAndSizeId(orderProduct.getProduct().getId(), orderProduct.getColor().getId(), orderProduct.getSize().getId());
-            inventory.setQuantity(inventory.getQuantity() + orderProduct.getOrderQuantity());
+            // 주문 상품에 옵션이 있는 경우
+            if (!Objects.equals(orderProduct.getColor(), "N/A")) {
+                // 상품 옵션 조회
+                ProductOption productOption = productOptionService.getProductOptionByProductIdAndColorAndSize(orderProduct.getProduct().getId(), orderProduct.getColor(), orderProduct.getSize());
+
+                // 상품 재고 복구
+                productOption.setQuantity(productOption.getQuantity() + orderProduct.getOrderQuantity());
+            } else {
+                // 상품 조회
+                Product product = productService.getProductByProductId(orderProduct.getProduct().getId());
+
+                // 상품 재고 복구
+                product.setInventory(product.getInventory() + orderProduct.getOrderQuantity());
+            }
+
+            // 주문 상품 상태 수정
             orderProduct.setOrderProductStatus(OrderProductStatus.CANCELED);
         }
-    }
-
-    /**
-     * 주문 상세 조회
-     */
-    public OrderDetailDTO getOrderDetail(Long orderId) {
-        // 주문, 주문 상품 정보 조회
-        OrderDetailDTO orderDetail = orderRepository.getOrderDetail(orderId);
-        List<OrderProduct> orderProductList = orderProductService.getOrderProductsByOrderId(orderId);
-
-        // 주문 상세 상품 정보 리스트 생성
-        List<OrderDetailProductDTO> orderDetailProductDTOList = orderProductList.stream().map(orderProduct -> {
-            // 대표 이미지 URL 조회
-            String repImageUrl = productImageService.getRepresentativeImageUrl(orderProduct.getProduct().getId(), true);
-            // 재고 정보 조회
-            Inventory inventory = inventoryService.getInventoryByProductIdAndColorIdAndSizeId(orderProduct.getProduct().getId(), orderProduct.getColor().getId(), orderProduct.getSize().getId());
-            // OrderDetailProductDTO 생성
-            return OrderDetailProductDTO.createDTO(orderProduct, repImageUrl, inventory);
-        }).collect(Collectors.toList());
-        // 주문 상세 정보에 상세 상품 리스트 설정
-        orderDetail.setOrderDetailProductList(orderDetailProductDTOList);
-
-        return orderDetail;
     }
 
     /**
@@ -228,24 +273,31 @@ public class OrderService {
     private List<OrderProduct> createOrderProductList(List<OrderProductRequestDTO> orderProductRequestDTOList) {
         return orderProductRequestDTOList.stream()
                 .map(orderProductRequestDto -> {
-                    // 상품, 색상, 사이즈 조회
+                    // 상품 조회
                     Product product = productService.getProductByProductId(orderProductRequestDto.getProductId());
-                    Color color = colorService.getColorByColorId(orderProductRequestDto.getColorId());
-                    Size size = sizeService.getSizeBySizeId(orderProductRequestDto.getSizeId());
 
-                    // 상품 재고 감소
-                    Inventory inventory = inventoryService.getInventoryByProductIdAndColorIdAndSizeId(product.getId(), color.getId(), size.getId());
-                    inventory.removeStock(orderProductRequestDto.getOrderQuantity());
+                    // 주문 상품에 옵션이 있는 경우
+                    if (!Objects.equals(orderProductRequestDto.getColor(), "N/A")) {
+                        // 상품 옵션 조회
+                        ProductOption productOption = productOptionService.getProductOptionByProductIdAndColorAndSize(product.getId(), orderProductRequestDto.getColor(), orderProductRequestDto.getSize());
 
-                    // 상품의 재고가 0개인 경우 품절 처리
-                    List<Inventory> inventories = inventoryService.getInventoriesByProductId(product.getId());
-                    boolean isOutOfStock = inventories.stream().allMatch(i -> i.getQuantity() == 0);
-                    if (isOutOfStock) {
-                        product.setProductSellStatus(ProductSellStatus.SOLD_OUT);
+                        // 상품 재고 감소
+                        productOption.removeStock(orderProductRequestDto.getOrderQuantity());
+
+                        // 상품의 재고가 0개인 경우 품절 처리
+                        List<ProductOption> productOptionList = productOptionService.getProductOptionsByProductId(product.getId());
+                        boolean isOutOfStock = productOptionList.stream().allMatch(i -> i.getQuantity() == 0);
+                        if (isOutOfStock) {
+                            product.setProductSellStatus(ProductSellStatus.SOLD_OUT);
+                        }
+                    // 주문 상품에 옵션이 없는 경우
+                    } else {
+                        // 상품 재고 감소
+                        product.setInventory(product.getInventory() - orderProductRequestDto.getOrderQuantity());
                     }
 
                     // 주문 상품 생성
-                    return OrderProduct.createOrderProduct(product, orderProductRequestDto.getOrderQuantity(), color, size);
+                    return OrderProduct.createOrderProduct(product, orderProductRequestDto);
                 })
                 .collect(Collectors.toList());
     }
@@ -296,7 +348,7 @@ public class OrderService {
 
     private void deleteCartProducts(List<OrderProduct> orderProductList) {
         orderProductList.stream()
-                .map(orderProduct -> cartProductService.getCartProductByProductIdAndColorIdAndSizeId(orderProduct.getProduct().getId(), orderProduct.getColor().getId(), orderProduct.getSize().getId()))
+                .map(orderProduct -> cartProductService.getCartProductByProductIdAndColorAndSize(orderProduct.getProduct().getId(), orderProduct.getColor(), orderProduct.getSize()))
                 .filter(Objects::nonNull)
                 .forEach(cartProductService::deleteCartProduct);
     }

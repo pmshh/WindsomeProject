@@ -1,7 +1,7 @@
 package com.windsome.dto.product;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.windsome.entity.Category;
+import com.windsome.entity.product.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +27,7 @@ public class MainPageProductDTO {
 
     private double discount;
 
-    private List<ProductColorCodeDTO> colorCodeDTOList = new ArrayList<>();
+    private List<ProductOptionColorDTO> productOptionColors = new ArrayList<>();
 
     @QueryProjection
     public MainPageProductDTO(Long id, String productName, Category category, String productDetail, String imageUrl, Integer price, double discount) {

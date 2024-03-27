@@ -3,9 +3,8 @@ package com.windsome.controller.admin;
 import com.windsome.config.security.CurrentMember;
 import com.windsome.dto.board.BoardDTO;
 import com.windsome.dto.board.SearchDTO;
-import com.windsome.dto.board.notice.NoticeUpdateDTO;
 import com.windsome.entity.member.Member;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -64,7 +63,7 @@ public class AdminBoardController {
     @GetMapping("/notices/{noticeId}")
     public String noticeDtl(@PathVariable(value = "noticeId") Long noticeId, Optional<Integer> page, Model model, RedirectAttributes redirectAttr) {
         try {
-            model.addAttribute("noticeDtlList", adminService.getNoticeDtlList(noticeId));
+            model.addAttribute("noticeDtlList", boardService.getNoticeDtlList(noticeId));
         } catch (EntityNotFoundException e) {
             redirectAttr.addFlashAttribute("message", "존재하지 않는 게시글입니다.");
             return "redirect:/board/notices";
@@ -79,7 +78,7 @@ public class AdminBoardController {
     @GetMapping("/notices/update/{noticeId}")
     public String updateNoticeForm(@PathVariable(value = "noticeId") Long noticeId, Optional<Integer> page, Model model) {
         try {
-            model.addAttribute("noticeDetail", adminService.getNotice(noticeId));
+            model.addAttribute("noticeDetail", boardService.getBoardByBoardId(noticeId));
         } catch (EntityNotFoundException e) {
             model.addAttribute("message", "존재하지 않는 게시글입니다.");
             return "admin/board/notice/notice-detail";

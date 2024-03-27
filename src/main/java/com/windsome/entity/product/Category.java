@@ -1,4 +1,4 @@
-package com.windsome.entity;
+package com.windsome.entity.product;
 
 import lombok.*;
 

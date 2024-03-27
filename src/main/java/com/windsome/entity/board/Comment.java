@@ -31,6 +31,9 @@ public class Comment extends BaseTimeEntity {
 
     private boolean hasPrivate; // 비밀 댓글 여부
 
+    /**
+     * Constructors, Getters, Setters, etc.
+     */
     public static Comment toEntity(CommentEnrollDTO commentEnrollDto, Board qa, Member member) {
         return Comment.builder()
                 .member(member)

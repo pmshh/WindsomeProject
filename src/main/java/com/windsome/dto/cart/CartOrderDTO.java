@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class CartOrderDto {
+public class CartOrderDTO {
 
     private List<Long> cartProductIds;
 

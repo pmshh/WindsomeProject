@@ -18,11 +18,11 @@ public class OrderProductService {
     private final OrderProductRepository orderProductRepository;
 
     public List<OrderProduct> getOrderProductsByOrderId(Long orderId) {
-        return orderProductRepository.findByOrderId(orderId);
+        return orderProductRepository.findByOrderId(orderId).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<CategorySalesResult> getCategorySalesCount() {
-        return orderProductRepository.getCategorySalesCount();
+        return orderProductRepository.getCategorySalesCount().orElseThrow(EntityNotFoundException::new);
     }
 
     public OrderProduct getOrderProductByOrderProductId(Long orderProductId) {

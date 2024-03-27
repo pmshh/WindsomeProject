@@ -79,19 +79,19 @@
                                     <tr class="base-table__row sum">
                                         <th class="base-table__header-cell" scope="row">총 주문금액</th>
                                         <td class="base-table__cell">
-                                            <input class="base-table__input total-order-price-input" type="text" th:value="${orderDetail.totalOrderPrice}" readonly>
+                                            <input class="base-table__input total-order-price-input" type="text" th:value="${orderDetail.totalOrderPrice}">
                                         </td>
                                     </tr>
                                     <tr class="base-table__row">
                                         <th class="base-table__header-cell" scope="row">총 부가결제금액</th>
                                         <td class="base-table__cell">
-                                            <input class="base-table__input used-points-input" type="text" th:value="${orderDetail.usedPoints}" readonly>
+                                            <input class="base-table__input used-points-input" type="text" th:value="${orderDetail.usedPoints}">
                                         </td>
                                     </tr>
                                     <tr class="base-table__row">
                                         <th class="base-table__header-cell" scope="row">적립금</th>
                                         <td class="base-table__cell">
-                                            <input class="base-table__input earned-points-input" type="text" th:value="${orderDetail.earnedPoints}" readonly>
+                                            <input class="base-table__input earned-points-input" type="text" th:value="${orderDetail.earnedPoints}">
                                         </td>
                                     </tr>
                                     </tbody>
@@ -108,7 +108,7 @@
                                     <tr class="base-table__row sum">
                                         <th class="base-table__header-cell" scope="row">총 결제금액</th>
                                         <td class="base-table__cell">
-                                            <input class="base-table__input total-payment-price-input" type="text" th:value="${orderDetail.totalPaymentPrice}" readonly>
+                                            <input class="base-table__input total-payment-price-input" type="text" th:value="${orderDetail.totalPaymentPrice}">
                                         </td>
                                     </tr>
                                     <tr class="base-table__row">
@@ -153,11 +153,13 @@
                                             <td class="base-table__cell left top pl20">
                                                 <a class="base-table__product-name" th:href="${'/product/' + orderProduct.productId}"th:text="${orderProduct.productName}"></a>
                                                 <div class="base-table__option-wrap mt5">
-                                                    [옵션: <span class="color-name" th:text="${orderProduct.colorName}"></span>/<span class="size-name" th:text="${orderProduct.sizeName}"></span> size]
-                                                    <input type="hidden" class="hidden-color-id-input" th:value="${orderProduct.colorId}">
-                                                    <input type="hidden" class="hidden-size-id-input" th:value="${orderProduct.sizeId}">
+                                                    <th:block th:if="${orderProduct.color == 'N/A'}">[옵션: X]</th:block>
+                                                    <th:block th:if="${orderProduct.color != 'N/A' && orderProduct.size == 'N/A'}">[옵션: <span th:text="${orderProduct.color}" class="color-name"></span>]</th:block>
+                                                    <th:block th:if="${orderProduct.color != 'N/A' && orderProduct.size != 'N/A'}">[옵션: <span th:text="${orderProduct.color}" class="color-name"></span>/<span th:text="${orderProduct.size}" class="size-name"></span> size]</th:block>
+                                                    <input type="hidden" class="hidden-color-input" th:value="${orderProduct.color}">
+                                                    <input type="hidden" class="hidden-size-input" th:value="${orderProduct.size}">
                                                 </div>
-                                                <div class="option-change-wrap">
+                                                <div class="option-change-wrap" th:if="${orderProduct.color != 'N/A'}">
                                                     <button class="option-change-btn button button--white button--65x30 mt-2">옵션변경</button>
                                                     <div class="option-change">
                                                         <div class="header">
@@ -171,14 +173,14 @@
                                                                     <li>
                                                                         <span>색상</span>
                                                                         <select class="color-select" th:id="${'color-select-' + orderProduct.productId}" th:data-product-id="${orderProduct.productId}">
-                                                                            <option value="*" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                                            <option value="N/A" selected>- [필수] 옵션을 선택해 주세요 -</option>
                                                                             <option value="**" disabled>-------------------</option>
                                                                         </select>
                                                                     </li>
-                                                                    <li>
+                                                                    <li th:if="${orderProduct.size != 'N/A'}">
                                                                         <span>사이즈</span>
                                                                         <select class="size-select" th:id="${'size-select-' + orderProduct.productId}" th:data-product-id="${orderProduct.productId}">
-                                                                            <option value="*" selected>- [필수] 옵션을 선택해 주세요 -</option>
+                                                                            <option value="N/A" selected>- [필수] 옵션을 선택해 주세요 -</option>
                                                                             <option value="**" disabled>-------------------</option>
                                                                         </select>
                                                                     </li>
@@ -357,8 +359,8 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script th:inline="javascript">
         $(function () {
-            initializeColorSelect(); // 색상 셀렉트 옵션 값 초기화
             refreshOrderPriceInfo(); // 주문 상품 정보 금액 관련 정보 업데이트
+            initializeColorSelect(); // 색상 셀렉트 옵션 값 초기화
             initializeAddressInputValues(); // 주소 입력창에 회원의 주소 값을 저장하는 함수
             initializeTelInputValues(); // 휴대전화 입력창에 회원의 휴대전화 값을 저장하는 함수
 
@@ -400,18 +402,25 @@
             let sizeSelect = $(this).parent().siblings(".content").find(".size-select");
             let colorVal = $(colorSelect).val();
             let sizeVal = $(sizeSelect).val();
-            let colorName = $(this).parent().siblings(".content").find(".color-select option:selected").text();
-            let sizeName = $(this).parent().siblings(".content").find(".size-select option:selected").text().replace("Size", "").trim();
 
-            if (colorVal === '*' || sizeVal === '*') {
-                alert("필수 옵션을 선택해 주세요.");
-                return false;
+            if (sizeSelect.length === 0) {
+                sizeVal = "N/A";
+
+                if (colorVal === 'N/A') {
+                    alert("필수 옵션을 선택해 주세요.");
+                    return false;
+                }
+            } else {
+                if (colorVal === 'N/A' || sizeVal === 'N/A') {
+                    alert("필수 옵션을 선택해 주세요.");
+                    return false;
+                }
             }
 
-            $(this).parent().parent().parent().parent().find('.color-name').text(colorName);
-            $(this).parent().parent().parent().parent().find('.size-name').text(sizeName);
-            $(this).parent().parent().parent().parent().find('.base-table__option-wrap').find(".hidden-color-id-input").val(colorVal);
-            $(this).parent().parent().parent().parent().find('.base-table__option-wrap').find(".hidden-size-id-input").val(sizeVal);
+            $(this).parent().parent().parent().parent().find('.color-name').text(colorVal);
+            $(this).parent().parent().parent().parent().find('.size-name').text(sizeVal);
+            $(this).parent().parent().parent().parent().find('.base-table__option-wrap').find(".hidden-color-input").val(colorVal);
+            $(this).parent().parent().parent().parent().find('.base-table__option-wrap').find(".hidden-size-input").val(sizeVal);
 
             $(".option-change").hide();
         }
@@ -420,22 +429,23 @@
         function initializeColorSelect() {
             $(".color-select").each(function () {
                 let productId = $(this).data("product-id");
+                let colorSelect = $(this);
                 $.ajax({
-                    url: "/admin/orders/inventories/" + productId,
+                    url: "/admin/orders/product-options/" + productId,
                     type: "get",
+                    contentType: "application/json",
                     dataType: "json",
                     success: function (res) {
-                        const colors = [...new Set(res.map(inventory => `${inventory.colorId}-${inventory.colorName}`))];
+                        let colors = Array.from(new Set(res.map(item => item.color)));
                         $.each(colors, function(index, color) {
-                            const [colorId, colorName] = color.split('-');
-                            $("#color-select-" +productId).append($('<option>', {
-                                value: colorId,
-                                text: colorName
+                            colorSelect.append($('<option>', {
+                                value: color,
+                                text: color
                             }));
                         });
                     },
-                    error: function () {
-                        alert("실패");
+                    error: function (request) {
+                        console.log(request.responseText)
                     },
                 })
             });
@@ -443,11 +453,11 @@
 
         /* 색상 선택에 따라 해당하는 사이즈 옵션을 초기화하고, 품절 여부를 표시하여 사이즈 옵션을 설정 */
         function initializeSizeSelect() {
-            let selectedColorId = $(this).val(); // 블랙
+            let selectedColor = $(this).val(); // 블랙
             let productId = $(this).data("product-id");
             $('#size-select-' + productId).empty().append(
                 $('<option>', {
-                    value: '*',
+                    value: 'N/A',
                     text: '- [필수] 옵션을 선택해 주세요 -',
                     selected: true
                 }),
@@ -459,25 +469,26 @@
             );
 
             $.ajax({
-                url: "/admin/orders/inventories/" + productId,
+                url: "/admin/orders/product-options/" + productId,
                 type: "get",
+                contentType: "application/json",
                 dataType: "json",
                 success: function (res) {
-                    let sizes = res.filter(item => item.colorId === Number(selectedColorId)).map(item => ({ sizeId: item.sizeId, sizeName: item.sizeName }));
-                    $.each(sizes, function(index, size) {
-                        let optionText = size.sizeName + " Size";
-                        let inventory = res.find(item => item.colorId === Number(selectedColorId) && item.sizeId === size.sizeId);
-                        if (inventory && inventory.quantity === 0) {
-                            optionText += " [품절]";
+                    $.each(res, function(index, item) {
+                        if (item.color === selectedColor) {
+                            let optionText = item.size + " Size";
+                            if (item.quantity === 0) {
+                                optionText += " [품절]";
+                            }
+                            $('.size-select').append($('<option>', {
+                                value: item.size,
+                                text: optionText
+                            }));
                         }
-                        $('#size-select-' + productId).append($('<option>', {
-                            value: size.sizeId,
-                            text: optionText
-                        }));
                     });
                 },
-                error: function () {
-                    alert("실패");
+                error: function (request) {
+                    alert(request.responseText);
                 },
             })
         }
@@ -502,6 +513,7 @@
                 $(this).val(maxOrderQuantity);
                 return false;
             }
+            refreshPaymentInfo();
             refreshOrderPriceInfo();
         }
 
@@ -532,7 +544,38 @@
                     return false;
                 }
             }
+            refreshPaymentInfo();
             refreshOrderPriceInfo();
+        }
+
+        /* 결제 정보 업데이트 */
+        function refreshPaymentInfo() {
+            let totalProductPrice = 0;
+            let deliveryPrice = 3000;
+            let totalOrderPrice = 0;
+            let usedPoints = $(".used-points-input").val();
+
+            $(".order-products-container .base-table__body tr").each(function () {
+                let orderQuantity = parseInt($(this).find(".base-table__order-quantity-input").val());
+                let productPrice = parseInt($(this).find(".base-table__order-quantity-input").attr("data-product-price"));
+
+                totalProductPrice += productPrice * orderQuantity;
+            });
+            if (totalProductPrice >= 30000) {
+                deliveryPrice = 0;
+            }
+
+            totalOrderPrice = totalProductPrice + deliveryPrice;
+            if (totalOrderPrice === 3000) {
+                $(".total-order-price-input").val(0);
+                $(".used-points-input").val(0);
+                $(".earned-points-input").val(0);
+                $(".total-payment-price-input").val(0);
+            } else {
+                $(".total-order-price-input").val(totalOrderPrice);
+                $(".earned-points-input").val(totalOrderPrice * 0.03);
+                $(".total-payment-price-input").val(totalOrderPrice - usedPoints);
+            }
         }
 
         /* 주문 상품 정보 금액 관련 정보 업데이트 */
@@ -547,15 +590,25 @@
 
                 totalProductPrice += productPrice * orderQuantity;
             });
+
             if (totalProductPrice >= 30000) {
                 deliveryPrice = 0;
             }
+
             totalOrderPrice = totalProductPrice + deliveryPrice;
-            $(".tfoot-total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-            $(".tfoot-delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-            $(".tfoot-total-order-price").text((totalOrderPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
-            $(".total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
-            $(".delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            if (totalOrderPrice === 3000) {
+                $(".tfoot-total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                $(".tfoot-delivery-price").text('0');
+                $(".tfoot-total-order-price").text("0원");
+                $(".total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+                $(".delivery-price").text("0원");
+            } else {
+                $(".tfoot-total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                $(".tfoot-delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                $(".tfoot-total-order-price").text((totalOrderPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+                $(".total-product-price").text(totalProductPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+                $(".delivery-price").text(deliveryPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "원");
+            }
         }
 
         /* 주소 입력창에 회원의 주소 값을 저장하는 함수 */
@@ -668,14 +721,14 @@
             $(".order-products-container .base-table__body tr").each(function (index) {
                 // 주문 상품 정보 동적 태그 추가
                 let orderProductId = $(this).find(".hidden-order-product-id-input").val();
-                let colorId = $(this).find(".hidden-color-id-input").val();
-                let sizeId = $(this).find(".hidden-size-id-input").val();
+                let color = $(this).find(".hidden-color-input").val();
+                let size = $(this).find(".hidden-size-input").val();
                 let orderQuantity = $(this).find(".base-table__order-quantity-input").val();
                 let orderProductStatus = $(this).find(".order-product-status-select").val();
 
                 let formContents = "<input type='hidden' name='orderProducts[" + index + "].orderProductId' value='" + orderProductId + "'>";
-                formContents += "<input type='hidden' name='orderProducts[" + index + "].colorId' value='" + colorId + "'>";
-                formContents += "<input type='hidden' name='orderProducts[" + index + "].sizeId' value='" + sizeId + "'>";
+                formContents += "<input type='hidden' name='orderProducts[" + index + "].color' value='" + color + "'>";
+                formContents += "<input type='hidden' name='orderProducts[" + index + "].size' value='" + size + "'>";
                 formContents += "<input type='hidden' name='orderProducts[" + index + "].orderQuantity' value='" + orderQuantity + "'>";
                 formContents += "<input type='hidden' name='orderProducts[" + index + "].orderProductStatus' value='" + orderProductStatus + "'>";
 

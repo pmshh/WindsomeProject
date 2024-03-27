@@ -10,7 +10,6 @@ import com.windsome.constant.ProductSellStatus;
 import com.windsome.dto.product.MainPageProductDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.QMainPageProductDTO;
-import com.windsome.entity.*;
 import com.windsome.entity.product.Product;
 import com.windsome.entity.product.QProduct;
 import com.windsome.entity.product.QProductImage;

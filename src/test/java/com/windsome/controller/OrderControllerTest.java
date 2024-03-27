@@ -1,6 +1,6 @@
 package com.windsome.controller;
 
-import com.windsome.advice.MemberControllerAdvice;
+import com.windsome.controller.advice.MemberControllerAdvice;
 import com.windsome.controller.order.OrderController;
 import com.windsome.dto.member.MemberDetailDTO;
 import com.windsome.dto.order.*;
@@ -39,10 +39,10 @@ public class OrderControllerTest {
 
     @Autowired MockMvc mockMvc;
 
-    @Autowired private OrderController orderController;
+    @Autowired OrderController orderController;
 
-    @MockBean private OrderService orderService;
-    @MockBean private MemberRepository memberRepository;
+    @MockBean OrderService orderService;
+    @MockBean MemberRepository memberRepository;
     @MockBean MemberControllerAdvice memberControllerAdvice;
 
     @Test

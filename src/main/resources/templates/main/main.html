@@ -71,7 +71,7 @@
                                 </a>
                                 <div class="desc">
                                     <div class="color mb-1">
-                                        <span class="color-code" th:each="colorCodeDTO: ${product.colorCodeDTOList}" th:style="'background-color: ' + ${colorCodeDTO.colorCode}"></span>
+                                        <span class="color-code" th:each="color, status : ${product.productOptionColors}" th:data-color="${color.color}"></span>
                                     </div>
                                     <div class="name">
                                         <a>[[${product.productName}]]</a>
@@ -141,13 +141,72 @@
     <div th:replace="/layouts/default-layout.html :: commonJs"></div>
 
     <script th:inline="javascript">
+        const colorCodes = {
+            "화이트": "#FFFFFF",
+            "블랙": "#000000",
+            "회색": "#808080",
+            "네이비 블루": "#000080",
+            "스카이 블루": "#87CEEB",
+            "민트 그린": "#98FB98",
+            "올리브 그린": "#808000",
+            "카키 그린": "#556B2F",
+            "라임 그린": "#00FF00",
+            "다크 그린": "#006400",
+            "레드": "#FF0000",
+            "라즈베리 레드": "#E30B5D",
+            "핑크": "#FFC0CB",
+            "코랄": "#FF7F50",
+            "오렌지": "#FFA500",
+            "옐로우": "#FFFF00",
+            "머스타드": "#FFD700",
+            "베이지": "#F5F5DC",
+            "샌드": "#F4A460",
+            "크림": "#FFF8DC",
+            "아이보리": "#FFFFF0",
+            "퍼플": "#800080",
+            "라벤더": "#E6E6FA",
+            "버건디": "#800020",
+            "와인 레드": "#722F37",
+            "체리 레드": "#DE3163",
+            "코코아 브라운": "#D2691E",
+            "탄": "#483C32",
+            "카멜": "#C19A6B",
+            "코코넛 브라운": "#965A3E",
+            "다크 브라운": "#654321",
+            "머루": "#722F37",
+            "베이비 블루": "#89CFF0",
+            "퍼시안 블루": "#1C39BB",
+            "시에나": "#A0522D",
+            "레몬 옐로우": "#FFF44F",
+            "황토색": "#E97451",
+            "머스터드 옐로우": "#FFDB58",
+            "버터 크림": "#F5E6C4",
+            "헌터 그린": "#355E3B",
+            "다크 그레이": "#A9A9A9",
+            "라이트 그레이": "#D3D3D3",
+            "로즈 골드": "#B76E79",
+            "살구색": "#FFDAB9",
+            "마호가니": "#C04000",
+            "크림 화이트": "#FFFDD0",
+            "펄 그레이": "#EAE0C8",
+            "슬레이트 그레이": "#708090",
+            "차콜 그레이": "#464646",
+            "미디엄 블루": "#0000CD"
+        };
+
         $(function() {
             showMessage(); // 페이지가 로드될 때 메시지를 확인하고 알림을 표시하는 함수
+
+            $(".color-code").each(function () {
+                let color = $(this).data("color");
+                let colorCode = colorCodes[color];
+                $(this).css("background-color", colorCode);
+            });
         });
 
         function showMessage() {
             let message = [[${message}]];
-            if (message !== null) {
+            if (message) {
                 alert(message);
             }
         }

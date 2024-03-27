@@ -9,10 +9,15 @@ import lombok.Setter;
 public class ProductListDTO {
 
     private String imageUrl;
+
     private Long productId;
+
     private String productName;
+
     private int price;
+
     private double discount;
+
     private int salePrice;
 
     public ProductListDTO(String imageUrl, Long productId, String productName, int price, double discount) {

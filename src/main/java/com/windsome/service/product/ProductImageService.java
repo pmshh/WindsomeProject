@@ -2,7 +2,7 @@ package com.windsome.service.product;
 
 import com.windsome.entity.product.ProductImage;
 import com.windsome.repository.productImage.ProductImageRepository;
-import com.windsome.service.FileService;
+import com.windsome.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,36 @@ public class ProductImageService {
     private String productImgLocation;
 
     private final ProductImageRepository productImageRepository;
+
     private final FileService fileService;
+
+    /**
+     * Entity 저장
+     */
+    public void save(ProductImage productImage) {
+        productImageRepository.save(productImage);
+    }
+
+    /**
+     * 이미지 단건 조회
+     */
+    public ProductImage getProductImageByProductImageId(Long productImageId) {
+        return productImageRepository.findById(productImageId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    /**
+     * 이미지 List 조회
+     */
+    public List<ProductImage> getProductImagesByProductId(Long productId) {
+        return productImageRepository.findAllByProductIdOrderByIdAsc(productId);
+    }
+
+    /**
+     * 대표 이미지 url 조회
+     */
+    public String getRepresentativeImageUrl(Long productId, boolean isRepresentative) {
+        return productImageRepository.findByProductIdAndIsRepresentativeImage(productId, isRepresentative).getImageUrl();
+    }
 
     /**
      * 이미지 등록
@@ -62,12 +92,5 @@ public class ProductImageService {
             // 이미지 정보 DB 업데이트
             savedProductImage.updateProductImage(originalImageName, serverImageName, imageUrl);
         }
-    }
-
-    /**
-     * OrderService - 대표 이미지 url 조회
-     */
-    public String getRepresentativeImageUrl(Long productId, boolean isRepresentative) {
-        return productImageRepository.findByProductIdAndIsRepresentativeImage(productId, true).getImageUrl();
     }
 }

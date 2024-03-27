@@ -72,7 +72,7 @@
                                                     <img class="base-table__small-image" th:src="${order.repProductImage}">
                                                 </td>
                                                 <td class="base-table__cell left top">
-                                                    <strong th:if="${order.orderHistProductList.size > 1}" th:text="${order.repProductName + ' 외 ' + #lists.size(order.orderHistProductList.size) + '건'}"></strong>
+                                                    <strong th:if="${order.orderHistProductList.size > 1}" th:text="${order.repProductName + ' 외 ' + (order.orderHistProductList.size - 1) + '건'}"></strong>
                                                     <strong th:unless="${order.orderHistProductList.size > 1}" th:text="${order.repProductName}"></strong>
                                                 </td>
                                                 <td class="base-table__cell">
@@ -203,7 +203,7 @@
             });
 
             if (orderIds.length === 0) {
-                alert("상품을 선택해 주세요.");
+                alert("삭제할 주문을 선택해 주세요.");
             } else {
                 if (confirm("주문을 취소하시겠습니까?")) {
                     $.ajax({

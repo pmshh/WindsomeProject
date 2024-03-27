@@ -1,8 +1,7 @@
 package com.windsome.entity.order;
 
 import com.windsome.constant.OrderProductStatus;
-import com.windsome.entity.Color;
-import com.windsome.entity.Size;
+import com.windsome.dto.order.OrderProductRequestDTO;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import com.windsome.entity.product.Product;
 import lombok.*;
@@ -35,24 +34,20 @@ public class OrderProduct extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private OrderProductStatus orderProductStatus; // 주문 상품 현황 (주문, 취소, 교환, 반품)
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id")
-    private Color color;
+    private String color; // 색상
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id")
-    private Size size;
+    private String size; // 사이즈
 
     /**
-     * 주문 상품 객체 생성
+     * Constructors, Getters, Setters, etc.
      */
-    public static OrderProduct createOrderProduct(Product product, int orderQuantity, Color color, Size size) {
+    public static OrderProduct createOrderProduct(Product product, OrderProductRequestDTO orderProductRequestDTO) {
         return OrderProduct.builder()
                 .product(product)
                 .price((int) Math.floor(product.getPrice() * (1-product.getDiscount())))
-                .orderQuantity(orderQuantity)
-                .color(color)
-                .size(size)
+                .color(orderProductRequestDTO.getColor())
+                .size(orderProductRequestDTO.getSize())
+                .orderQuantity(orderProductRequestDTO.getOrderQuantity())
                 .orderProductStatus(OrderProductStatus.ORDER)
                 .build();
     }

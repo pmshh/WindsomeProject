@@ -56,10 +56,8 @@
                                                 <input type="hidden" class="price-hidden-input" th:value="${cartProduct.price}" th:id="${'hidden-price-id-' + cartProduct.cartProductId}">
                                                 <input type="hidden" class="sale-price-hidden-input" th:value="${cartProduct.salePrice}" th:id="${'hidden-sale-price-' + cartProduct.cartProductId}">
                                                 <input type="hidden" class="order-quantity-hidden-input" th:value="${cartProduct.orderQuantity}" th:id="${'hidden-order-quantity-' + cartProduct.cartProductId}">
-                                                <input type="hidden" class="color-id-hidden-input" th:value="${cartProduct.colorId}" th:id="${'hidden-color-id-' + cartProduct.cartProductId}">
-                                                <input type="hidden" class="color-name-hidden-input" th:value="${cartProduct.colorName}" th:id="${'hidden-color-name-' + cartProduct.cartProductId}">
-                                                <input type="hidden" class="size-id-hidden-input" th:value="${cartProduct.sizeId}" th:id="${'hidden-size-id-' + cartProduct.cartProductId}">
-                                                <input type="hidden" class="size-name-hidden-input" th:value="${cartProduct.sizeName}" th:id="${'hidden-size-name-' + cartProduct.cartProductId}">
+                                                <input type="hidden" class="color-hidden-input" th:value="${cartProduct.color}" th:id="${'hidden-color-' + cartProduct.cartProductId}">
+                                                <input type="hidden" class="size-hidden-input" th:value="${cartProduct.size}" th:id="${'hidden-size-' + cartProduct.cartProductId}">
                                             </td>
                                             <td class="base-table__cell base-table__cell--thumbnail">
                                                 <a th:href="${'/product/' + cartProduct.productId}">
@@ -69,7 +67,9 @@
                                             <td class="base-table__cell left top pl20">
                                                 <a class="base-table__product-name" th:href="${'/product/' + cartProduct.productId}" th:text="${cartProduct.productName}"></a>
                                                 <div class="base-table__option-wrap mt5">
-                                                    [옵션: <span th:text="${cartProduct.colorName}"></span>/<span th:text="${cartProduct.sizeName}"></span> size]
+                                                    <th:block th:if="${cartProduct.color == 'N/A'}">[옵션: X]</th:block>
+                                                    <th:block th:if="${cartProduct.color != 'N/A' && cartProduct.size == 'N/A'}">[옵션: <span th:text="${cartProduct.color}"></span>]</th:block>
+                                                    <th:block th:if="${cartProduct.color != 'N/A' && cartProduct.size != 'N/A'}">[옵션: <span th:text="${cartProduct.color}"></span>/<span th:text="${cartProduct.size}"></span> size]</th:block>
                                                 </div>
                                             </td>
                                             <td class="base-table__cell">
@@ -95,7 +95,7 @@
                                                 <span>조건</span>
                                             </td>
                                             <td class="base-table__cell">
-                                                <button class="button button--black button--90x30 single-order-btn mb5" type="button" th:data-cart-product-id="${cartProduct.cartProductId}" th:data-order-quantity="${cartProduct.orderQuantity}" th:data-color-id="${cartProduct.colorId}" th:data-color-name="${cartProduct.colorName}" th:data-size-id="${cartProduct.sizeId}" th:data-size-name="${cartProduct.sizeName}" >주문하기</button>
+                                                <button class="button button--black button--90x30 single-order-btn mb5" type="button" th:data-cart-product-id="${cartProduct.cartProductId}" th:data-order-quantity="${cartProduct.orderQuantity}" th:data-color="${cartProduct.color}" th:data-size="${cartProduct.size}">주문하기</button>
                                                 <button class="button button--white button--90x30 delete-cart-product" type="button" th:data-cart-product-id="${cartProduct.cartProductId}">삭제</button>
                                             </td>
                                         </tr>
@@ -247,17 +247,13 @@
             let cartProductId = $(this).attr("data-cart-product-id");
             let productIdVal = $("#hidden-product-id-" + cartProductId).val();
             let orderQuantityVal = $("#hidden-order-quantity-" + cartProductId).val();
-            let colorId = $(this).attr("data-color-id");
-            let colorName = $(this).attr("data-color-name");
-            let sizeId = $(this).attr("data-size-id");
-            let sizeName = $(this).attr("data-size-name");
+            let color = $(this).attr("data-color");
+            let size = $(this).attr("data-size");
 
             let formContents = "<input name='orderProducts[0].productId' type='hidden' value='" + productIdVal + "'>";
             formContents += "<input name='orderProducts[0].quantity' type='hidden' value='" + orderQuantityVal + "'>";
-            formContents += "<input name='orderProducts[0].colorId' type='hidden' value='" + colorId + "'>";
-            formContents += "<input name='orderProducts[0].colorName' type='hidden' value='" + colorName + "'>";
-            formContents += "<input name='orderProducts[0].sizeId' type='hidden' value='" + sizeId + "'>";
-            formContents += "<input name='orderProducts[0].sizeName' type='hidden' value='" + sizeName + "'>";
+            formContents += "<input name='orderProducts[0].color' type='hidden' value='" + color + "'>";
+            formContents += "<input name='orderProducts[0].size' type='hidden' value='" + size + "'>";
 
             orderForm.html(formContents);
             orderForm.submit();
@@ -273,17 +269,13 @@
                 $(".base-table__cell--info").each(function (index, element) {
                     if ($(element).find(".cart-check").is(":checked")) {
                         let productId = $(element).find(".productId-hidden-input").val();
-                        let colorId = $(element).find(".color-id-hidden-input").val();
-                        let colorName = $(element).find(".color-name-hidden-input").val();
-                        let sizeId = $(element).find(".size-id-hidden-input").val();
-                        let sizeName = $(element).find(".size-name-hidden-input").val();
+                        let color = $(element).find(".color-hidden-input").val();
+                        let size = $(element).find(".size-hidden-input").val();
                         let orderQuantity = $(element).find(".order-quantity-hidden-input").val();
 
                         formContents += "<input name='orderProducts[" + orderNum + "].productId' type='hidden' value='" + productId + "'>";
-                        formContents += "<input name='orderProducts[" + orderNum + "].colorId' type='hidden' value='" + colorId + "'>";
-                        formContents += "<input name='orderProducts[" + orderNum + "].colorName' type='hidden' value='" + colorName + "'>";
-                        formContents += "<input name='orderProducts[" + orderNum + "].sizeId' type='hidden' value='" + sizeId + "'>";
-                        formContents += "<input name='orderProducts[" + orderNum + "].sizeName' type='hidden' value='" + sizeName + "'>";
+                        formContents += "<input name='orderProducts[" + orderNum + "].color' type='hidden' value='" + color + "'>";
+                        formContents += "<input name='orderProducts[" + orderNum + "].size' type='hidden' value='" + size + "'>";
                         formContents += "<input name='orderProducts[" + orderNum + "].orderQuantity' type='hidden' value='" + orderQuantity + "'>";
 
                         orderNum++;
@@ -309,17 +301,13 @@
             if (confirm("전체 상품을 주문하시겠습니까?")) {
                 $(".base-table__cell--info").each(function (index, element) {
                     let productId = $(element).find(".productId-hidden-input").val();
-                    let colorId = $(element).find(".color-id-hidden-input").val();
-                    let colorName = $(element).find(".color-name-hidden-input").val();
-                    let sizeId = $(element).find(".size-id-hidden-input").val();
-                    let sizeName = $(element).find(".size-name-hidden-input").val();
+                    let color = $(element).find(".color-hidden-input").val();
+                    let size = $(element).find(".size-hidden-input").val();
                     let orderQuantity = $(element).find(".order-quantity-hidden-input").val();
 
                     formContents += "<input name='orderProducts[" + orderNum + "].productId' type='hidden' value='" + productId + "'>";
-                    formContents += "<input name='orderProducts[" + orderNum + "].colorId' type='hidden' value='" + colorId + "'>";
-                    formContents += "<input name='orderProducts[" + orderNum + "].colorName' type='hidden' value='" + colorName + "'>";
-                    formContents += "<input name='orderProducts[" + orderNum + "].sizeId' type='hidden' value='" + sizeId + "'>";
-                    formContents += "<input name='orderProducts[" + orderNum + "].sizeName' type='hidden' value='" + sizeName + "'>";
+                    formContents += "<input name='orderProducts[" + orderNum + "].color' type='hidden' value='" + color + "'>";
+                    formContents += "<input name='orderProducts[" + orderNum + "].size' type='hidden' value='" + size + "'>";
                     formContents += "<input name='orderProducts[" + orderNum + "].orderQuantity' type='hidden' value='" + orderQuantity + "'>";
 
                     orderNum++;

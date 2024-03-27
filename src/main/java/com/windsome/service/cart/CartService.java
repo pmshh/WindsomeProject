@@ -1,9 +1,8 @@
 package com.windsome.service.cart;
 
-import com.windsome.dto.cart.CartDetailDto;
+import com.windsome.dto.cart.CartDetailDTO;
 import com.windsome.dto.cart.CartProductDTO;
 import com.windsome.dto.cart.CartProductListDTO;
-import com.windsome.entity.*;
 import com.windsome.entity.cart.Cart;
 import com.windsome.entity.cart.CartProduct;
 import com.windsome.entity.member.Member;
@@ -11,9 +10,7 @@ import com.windsome.entity.product.Product;
 import com.windsome.repository.cartProduct.CartProductRepository;
 import com.windsome.repository.cart.CartRepository;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.repository.product.ColorRepository;
 import com.windsome.repository.product.ProductRepository;
-import com.windsome.repository.product.SizeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,14 +28,12 @@ public class CartService {
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
     private final CartProductRepository cartProductRepository;
-    private final ColorRepository colorRepository;
-    private final SizeRepository sizeRepository;
 
     /**
      * 장바구니 화면 조회
      */
     @Transactional(readOnly = true)
-    public List<CartDetailDto> getCartProducts(String userIdentifier) {
+    public List<CartDetailDTO> getCartProducts(String userIdentifier) {
         Member member = memberRepository.findByUserIdentifier(userIdentifier);
         Cart cart = cartRepository.findByMemberId(member.getId());
         return cart != null ? cartProductRepository.findCartDetailDtoList(cart.getId()) : Collections.emptyList();
@@ -61,14 +56,12 @@ public class CartService {
 
         // 장바구니에 상품이 이미 담겨있다면, 상품의 수량을 업데이트하고, 담겨있지 않다면 새로운 상품을 장바구니에 추가
         for (CartProductDTO cartProductDTO : cartProductListDTO.getCartProductDTOList()) {
-            CartProduct findCartProduct = cartProductRepository.findByProductIdAndColorIdAndSizeId(product.getId(), cartProductDTO.getColorId(), cartProductDTO.getSizeId());
+            CartProduct findCartProduct = cartProductRepository.findByProductIdAndColorAndSize(product.getId(), cartProductDTO.getColor(), cartProductDTO.getSize());
 
             if (findCartProduct != null) {
                 findCartProduct.addQuantity(cartProductDTO.getQuantity());
             } else {
-                Color color = colorRepository.findById(cartProductDTO.getColorId()).orElseThrow(EntityNotFoundException::new);
-                Size size = sizeRepository.findById(cartProductDTO.getSizeId()).orElseThrow(EntityNotFoundException::new);
-                CartProduct cartProduct = CartProduct.createCartProduct(cart, product, color, size, cartProductDTO.getQuantity());
+                CartProduct cartProduct = CartProduct.createCartProduct(cartProductDTO, cart, product);
                 cartProductRepository.save(cartProduct);
             }
         }

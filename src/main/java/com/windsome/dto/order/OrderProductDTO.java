@@ -10,10 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OrderProductDTO {
+
     private Long productId; // 상품 id
-    private Long colorId; // 색상 id
-    private String colorName; // 색상 이름
-    private Long sizeId; // 사이즈 id
-    private String sizeName; // 사이즈 이름
+
+    private String color; // 색상
+
+    private String size; // 사이즈
+
     private int orderQuantity; // 주문 수량
+
 }

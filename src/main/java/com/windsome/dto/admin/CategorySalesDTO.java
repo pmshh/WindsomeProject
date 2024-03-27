@@ -6,12 +6,12 @@ import lombok.Setter;
 
 @Getter @Setter
 @AllArgsConstructor
-public class CategorySalesDto {
+public class CategorySalesDTO {
 
     public Long category;
     public Long orderQuantity;
 
-    public CategorySalesDto(CategorySalesResult data) {
+    public CategorySalesDTO(CategorySalesResult data) {
         this.category = data.getCategory();
         this.orderQuantity = data.getOrderQuantity();
     }

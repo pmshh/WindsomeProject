@@ -11,7 +11,7 @@ import com.windsome.entity.board.Board;
 import com.windsome.entity.member.Member;
 import com.windsome.repository.board.BoardRepository;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.service.AdminService;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.board.BoardService;
 import com.windsome.service.cart.CartService;
 import org.junit.jupiter.api.DisplayName;
@@ -114,7 +114,7 @@ class AdminBoardControllerTest {
         noticeDtlDTO.setHasNotice(false);
         noticeDtlDTOList.add(noticeDtlDTO);
 
-        when(adminService.getNoticeDtlList(savedBoard.getId())).thenReturn(noticeDtlDTOList);
+        when(boardService.getNoticeDtlList(savedBoard.getId())).thenReturn(noticeDtlDTOList);
 
         mockMvc.perform(get("/admin/board/notices/{noticeId}", savedBoard.getId()))
                 .andExpect(status().isOk())
@@ -131,7 +131,7 @@ class AdminBoardControllerTest {
         Board board = Board.builder().boardType("Notice").title("test").content("test").member(member).hasNotice(false).build();
         Board savedBoard = boardRepository.save(board);
 
-        when(adminService.getNotice(savedBoard.getId())).thenReturn(board);
+        when(boardService.getBoardByBoardId(savedBoard.getId())).thenReturn(board);
 
         mockMvc.perform(get("/admin/board/notices/update/{noticeId}", savedBoard.getId()))
                 .andExpect(status().isOk())

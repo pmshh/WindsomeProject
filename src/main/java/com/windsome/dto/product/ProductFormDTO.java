@@ -30,6 +30,8 @@ public class ProductFormDTO {
     @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String productDetail;
 
+    private int inventory; // 재고
+
     private ProductSellStatus productSellStatus; // 상품 판매 상태
 
     private List<ProductImageDTO> productImageDTOList = new ArrayList<>(); // 상품 이미지 리스트

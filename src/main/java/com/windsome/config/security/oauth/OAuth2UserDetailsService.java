@@ -43,7 +43,7 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
 
         if ("kakao".equals(oauthClientName)) {
             Map<String, Object> kakaoAttributes = oAuth2User.getAttribute("kakao_account");
-            userIdentifier = "kakao_" + kakaoAttributes.get("id");
+            userIdentifier = "kakao_" + oAuth2User.getAttributes().get("id");
             name = ((Map<String, String>) oAuth2User.getAttribute("properties")).get("nickname");
             email = (String) kakaoAttributes.get("email");
         } else if ("naver".equals(oauthClientName)) {

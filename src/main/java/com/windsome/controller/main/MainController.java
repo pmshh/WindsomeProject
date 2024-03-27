@@ -1,8 +1,7 @@
-package com.windsome.controller;
+package com.windsome.controller.main;
 
 import com.windsome.dto.product.ProductSearchDTO;
-import com.windsome.service.product.CategoryService;
-import com.windsome.service.product.ProductService;
+import com.windsome.service.main.MainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MainController {
 
-    private final ProductService productService;
-    private final CategoryService categoryService;
+    private final MainService mainService;
 
     /**
      * 메인 화면
@@ -26,8 +24,8 @@ public class MainController {
     @GetMapping("/")
     public String home(ProductSearchDTO productSearchDto, Optional<Integer> page, Model model) {
         Pageable pageable = PageRequest.of(page.orElse(0), 9);
-        model.addAttribute("products", productService.getMainPageProducts(productSearchDto, pageable));
-        model.addAttribute("categories", categoryService.fetchCategories());
+        model.addAttribute("products", mainService.getMainPageProducts(productSearchDto, pageable));
+        model.addAttribute("categories", mainService.getCategories());
         model.addAttribute("productSearchDto", productSearchDto);
         model.addAttribute("maxPage", 10);
         return "main/main";

@@ -1,10 +1,8 @@
 package com.windsome.service;
 
-import com.windsome.dto.cart.CartDetailDto;
+import com.windsome.dto.cart.CartDetailDTO;
 import com.windsome.dto.cart.CartProductDTO;
 import com.windsome.dto.cart.CartProductListDTO;
-import com.windsome.entity.Color;
-import com.windsome.entity.Size;
 import com.windsome.entity.cart.Cart;
 import com.windsome.entity.cart.CartProduct;
 import com.windsome.entity.member.Member;
@@ -12,9 +10,7 @@ import com.windsome.entity.product.Product;
 import com.windsome.repository.cart.CartRepository;
 import com.windsome.repository.cartProduct.CartProductRepository;
 import com.windsome.repository.member.MemberRepository;
-import com.windsome.repository.product.ColorRepository;
 import com.windsome.repository.product.ProductRepository;
-import com.windsome.repository.product.SizeRepository;
 import com.windsome.service.cart.CartService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,8 +39,6 @@ class CartServiceTest {
     @Mock private MemberRepository memberRepository;
     @Mock private CartRepository cartRepository;
     @Mock private CartProductRepository cartProductRepository;
-    @Mock private ColorRepository colorRepository;
-    @Mock private SizeRepository sizeRepository;
 
     @InjectMocks private CartService cartService;
 
@@ -61,7 +55,7 @@ class CartServiceTest {
         when(cartRepository.findByMemberId(member.getId())).thenReturn(cart);
 
         // When
-        List<CartDetailDto> cartProducts = cartService.getCartProducts(userIdentifier);
+        List<CartDetailDTO> cartProducts = cartService.getCartProducts(userIdentifier);
 
         // Then
         assertEquals(0, cartProducts.size());
@@ -80,15 +74,15 @@ class CartServiceTest {
         Cart cart = new Cart();
         cart.setId(1L);
 
-        CartDetailDto cartDetailDto = new CartDetailDto(); // Mocked data
-        List<CartDetailDto> expectedCartProducts = Collections.singletonList(cartDetailDto);
+        CartDetailDTO cartDetailDto = new CartDetailDTO(); // Mocked data
+        List<CartDetailDTO> expectedCartProducts = Collections.singletonList(cartDetailDto);
 
         when(memberRepository.findByUserIdentifier(userIdentifier)).thenReturn(member);
         when(cartRepository.findByMemberId(member.getId())).thenReturn(cart);
         when(cartProductRepository.findCartDetailDtoList(cart.getId())).thenReturn(expectedCartProducts);
 
         // When
-        List<CartDetailDto> cartProducts = cartService.getCartProducts(userIdentifier);
+        List<CartDetailDTO> cartProducts = cartService.getCartProducts(userIdentifier);
 
         // Then
         assertEquals(1, cartProducts.size());
@@ -106,15 +100,12 @@ class CartServiceTest {
         Product product = Product.builder().id(1L).build();
         Cart cart = Cart.builder().id(1L).build();
 
-        Color color = Color.builder().id(1L).build();
-        Size size = Size.builder().id(1L).build();
-
         CartProductListDTO cartProductListDTO = new CartProductListDTO();
         cartProductListDTO.setProductId(1L);
         List<CartProductDTO> cartProductDTOList = new ArrayList<>();
         CartProductDTO cartProductDTO = new CartProductDTO();
-        cartProductDTO.setColorId(1L);
-        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setColor("블랙");
+        cartProductDTO.setSize("M");
         cartProductDTO.setQuantity(1);
         cartProductDTOList.add(cartProductDTO);
         cartProductListDTO.setCartProductDTOList(cartProductDTOList);
@@ -122,9 +113,7 @@ class CartServiceTest {
         when(productRepository.findById(anyLong())).thenReturn(java.util.Optional.of(product));
         when(memberRepository.findByUserIdentifier("user1")).thenReturn(member);
         when(cartRepository.findByMemberId(member.getId())).thenReturn(cart);
-        when(colorRepository.findById(anyLong())).thenReturn(Optional.ofNullable(color));
-        when(sizeRepository.findById(anyLong())).thenReturn(Optional.ofNullable(size));
-        when(cartProductRepository.findByProductIdAndColorIdAndSizeId(anyLong(), anyLong(), anyLong())).thenReturn(null);
+        when(cartProductRepository.findByProductIdAndColorAndSize(anyLong(), anyString(), anyString())).thenReturn(null);
 
         // When
         assertDoesNotThrow(() -> cartService.addCartProduct(cartProductListDTO, "user1"));
@@ -133,7 +122,7 @@ class CartServiceTest {
         verify(productRepository, times(1)).findById(anyLong());
         verify(memberRepository, times(1)).findByUserIdentifier("user1");
         verify(cartRepository, times(1)).findByMemberId(member.getId());
-        verify(cartProductRepository, times(1)).findByProductIdAndColorIdAndSizeId(anyLong(),anyLong(),anyLong());
+        verify(cartProductRepository, times(1)).findByProductIdAndColorAndSize(anyLong(),anyString(), anyString());
         verify(cartProductRepository, times(1)).save(any(CartProduct.class));
     }
 
@@ -145,8 +134,8 @@ class CartServiceTest {
         cartProductListDTO.setProductId(1L);
         List<CartProductDTO> cartProductDTOList = new ArrayList<>();
         CartProductDTO cartProductDTO = new CartProductDTO();
-        cartProductDTO.setColorId(1L);
-        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setColor("블랙");
+        cartProductDTO.setSize("M");
         cartProductDTO.setQuantity(1);
         cartProductDTOList.add(cartProductDTO);
         cartProductListDTO.setCartProductDTOList(cartProductDTOList);
@@ -165,8 +154,8 @@ class CartServiceTest {
         cartProductListDTO.setProductId(1L);
         List<CartProductDTO> cartProductDTOList = new ArrayList<>();
         CartProductDTO cartProductDTO = new CartProductDTO();
-        cartProductDTO.setColorId(1L);
-        cartProductDTO.setSizeId(1L);
+        cartProductDTO.setColor("블랙");
+        cartProductDTO.setSize("M");
         cartProductDTO.setQuantity(1);
         cartProductDTOList.add(cartProductDTO);
         cartProductListDTO.setCartProductDTOList(cartProductDTOList);

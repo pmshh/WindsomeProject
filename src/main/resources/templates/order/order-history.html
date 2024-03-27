@@ -62,9 +62,11 @@
                                                 <td class="base-table__cell left top pl20">
                                                     <a class="base-table__product-name" th:href="${'/product/' + orderProduct.id}" th:text="${orderProduct.name}"></a>
                                                     <div class="base-table__option-wrap mt5">
-                                                        [옵션: <span th:text="${orderProduct.colorName}"></span>/<span th:text="${orderProduct.sizeName}"></span> size]
+                                                        <th:block th:if="${orderProduct.color == 'N/A'}">[옵션: X]</th:block>
+                                                        <th:block th:if="${orderProduct.color != 'N/A' && orderProduct.size == 'N/A'}">[옵션: <span th:text="${orderProduct.color}"></span>]</th:block>
+                                                        <th:block th:if="${orderProduct.color != 'N/A' && orderProduct.size != 'N/A'}">[옵션: <span th:text="${orderProduct.color}"></span>/<span th:text="${orderProduct.size}"></span> size]</th:block>
                                                         <!-- js에서 활용하기 위한 데이터 -->
-                                                        <input type="hidden" class="data-info" th:data-color-id="${orderProduct.colorId}" th:data-size-id="${orderProduct.sizeId}" th:data-color-name="${orderProduct.colorName}" th:data-size-name="${orderProduct.sizeName}">
+                                                        <input type="hidden" class="data-info" th:data-color="${orderProduct.color}" th:data-size="${orderProduct.size}">
                                                     </div>
                                                 </td>
                                                 <td class="base-table__cell">

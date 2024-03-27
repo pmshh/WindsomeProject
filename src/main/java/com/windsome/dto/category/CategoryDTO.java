@@ -1,6 +1,6 @@
 package com.windsome.dto.category;
 
-import com.windsome.entity.Category;
+import com.windsome.entity.product.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto {
+public class CategoryDTO {
 
     private Long id;
 
@@ -23,12 +23,12 @@ public class CategoryDto {
 
     private Long parent;
 
-    private List<CategoryDto> children;
+    private List<CategoryDTO> children;
 
     /**
      * Entity -> Dto
      */
-    public CategoryDto(Category category) {
+    public CategoryDTO(Category category) {
         this.id = category.getId();
         this.name = category.getName();
         this.tier = category.getTier();
@@ -37,6 +37,6 @@ public class CategoryDto {
         } else {
             this.parent = category.getParent().getId();
         }
-        this.children = category.getChildren().stream().map(CategoryDto::new).collect(Collectors.toList());
+        this.children = category.getChildren().stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 }

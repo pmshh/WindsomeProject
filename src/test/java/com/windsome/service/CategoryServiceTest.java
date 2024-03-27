@@ -2,9 +2,9 @@ package com.windsome.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.windsome.dto.category.CategoryDto;
+import com.windsome.dto.category.CategoryDTO;
 import com.windsome.dto.category.MainPageCategoryDTO;
-import com.windsome.entity.Category;
+import com.windsome.entity.product.Category;
 import com.windsome.repository.category.CategoryRepository;
 import com.windsome.service.product.CategoryService;
 import org.junit.jupiter.api.DisplayName;
@@ -30,10 +30,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
 
-    @Mock private CategoryRepository categoryRepository;
-    @Mock private ObjectMapper objectMapper;
+    @Mock CategoryRepository categoryRepository;
+    @Mock ObjectMapper objectMapper;
 
-    @InjectMocks private CategoryService categoryService;
+    @InjectMocks CategoryService categoryService;
 
     @Test
     @DisplayName("메인 페이지 카테고리 조회")
@@ -46,7 +46,7 @@ class CategoryServiceTest {
         when(categoryRepository.mainPageCategory()).thenReturn(expectedCategories);
 
         // When
-        List<MainPageCategoryDTO> actualCategories = categoryService.fetchCategories();
+        List<MainPageCategoryDTO> actualCategories = categoryService.getCategories();
 
         // Then
         assertNotNull(actualCategories);
@@ -68,15 +68,15 @@ class CategoryServiceTest {
         Category category2 = new Category(2L, "카테고리2", null, null, new ArrayList<>());
         List<Category> categories = Arrays.asList(category1, category2);
 
-        List<CategoryDto> expectedCategoryDtos = categories.stream()
-                .map(CategoryDto::new)
+        List<CategoryDTO> expectedCategoryDtos = categories.stream()
+                .map(CategoryDTO::new)
                 .collect(Collectors.toList());
 
         given(categoryRepository.findAllByParentIsNull()).willReturn(categories);
         given(objectMapper.writeValueAsString(expectedCategoryDtos)).willReturn("dummyJsonString");
 
         // When
-        String result = categoryService.fetchProductCategories();
+        String result = categoryService.getProductCategories();
 
         // Then
         assertThat(result).isNotNull();

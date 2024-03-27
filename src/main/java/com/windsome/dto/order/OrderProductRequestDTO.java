@@ -12,9 +12,9 @@ public class OrderProductRequestDTO {
 
     private Long productId; // 상품 id
 
-    private Long colorId; // 색상 id
+    private String color; // 색상
 
-    private Long sizeId; // 사이즈 id
+    private String size; // 사이즈
 
     private int price; // 가격
 

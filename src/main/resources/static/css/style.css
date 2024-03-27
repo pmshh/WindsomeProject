@@ -197,6 +197,7 @@ select {
   height: 30px;
   line-height: 29px;
   border: 1px solid #ddd;
+  outline: none;
 }
 
 .ck.ck-editor {
@@ -1719,13 +1720,6 @@ a.btn-normal {
 .product-form-body form .base-table .base-table__body .base-table__cell textarea:focus::placeholder {
   color: transparent;
 }
-.product-form-body form .base-table .base-table__body .base-table__cell .sell-status-select {
-  width: 100%;
-}
-.product-form-body form .base-table .base-table__body .base-table__cell .parent-cate-select,
-.product-form-body form .base-table .base-table__body .base-table__cell .child-cate-select {
-  width: calc(50% - 2px);
-}
 .product-form-body form .base-table .base-table__body .base-table__cell .option-select-wrapper .option-reset-btn {
   margin-left: auto;
 }
@@ -3169,7 +3163,6 @@ a.btn-normal {
           flex-direction: column;
   min-width: 440px;
   max-width: 440px;
-  padding-top: 30px;
 }
 .product-dtl-body .product-dtl .product-info-wrap .product-title {
   margin-bottom: 20px;
@@ -3181,8 +3174,11 @@ a.btn-normal {
 .product-dtl-body .product-dtl .product-info-wrap .product-desc {
   margin-bottom: 20px;
 }
-.product-dtl-body .product-dtl .product-info-wrap .product-desc p {
-  font-size: 14px;
+.product-dtl-body .product-dtl .product-info-wrap .product-desc p, .product-dtl-body .product-dtl .product-info-wrap .product-desc li {
+  margin: 0;
+  font-size: 11px;
+  line-height: 20px;
+  color: #4d4d4d;
 }
 .product-dtl-body .product-dtl .product-info-wrap .product-price {
   padding-left: 5px !important;
@@ -3492,7 +3488,7 @@ a.btn-normal {
 }
 .product-dtl-body .product-additional {
   width: 90%;
-  margin: 100px auto 0;
+  margin: 200px auto 0;
 }
 .product-dtl-body .product-additional .product-review-warp .product-review-header h3 {
   padding: 0 10px 0 9px;

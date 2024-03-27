@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductColorCodeDTO {
+public class ProductOptionColorDTO {
 
-    private String colorCode; // 색상 코드
+    private String color; // 색상
 }

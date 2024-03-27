@@ -3,9 +3,11 @@ package com.windsome.controller.admin;
 import com.windsome.constant.OrderProductStatus;
 import com.windsome.constant.OrderStatus;
 import com.windsome.dto.order.AdminPageOrderDTO;
-import com.windsome.repository.product.InventoryRepository;
-import com.windsome.service.AdminService;
+import com.windsome.entity.product.ProductOption;
+import com.windsome.repository.product.ProductOptionRepository;
+import com.windsome.service.admin.AdminService;
 import com.windsome.service.order.OrderService;
+import com.windsome.service.product.ProductOptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,18 +18,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminOrderController {
 
-    private final OrderService orderService;
     private final AdminService adminService;
-    private final InventoryRepository inventoryRepository;
+    private final OrderService orderService;
+    private final ProductOptionService productOptionService;
 
     /**
-     * 주문 관리 - 조회
+     * 주문 전체 조회
      */
     @GetMapping("/orders")
     public String getOrderList(@RequestParam(name = "userIdentifier", required = false, defaultValue = "") String userIdentifier,
@@ -39,7 +42,7 @@ public class AdminOrderController {
     }
 
     /**
-     * 주문 상세
+     * 주문 상세 조회
      */
     @GetMapping("/orders/{orderId}")
     public String showOrderDetail(@PathVariable("orderId") Long orderId, Model model) {
@@ -71,7 +74,7 @@ public class AdminOrderController {
     }
 
     /**
-     * 주문 관리 - 주문 취소
+     * 주문 취소
      */
     @PostMapping("/orders/cancel")
     public ResponseEntity<String> cancelOrder(@RequestBody Long[] orderIds) {
@@ -83,8 +86,11 @@ public class AdminOrderController {
         }
     }
 
-    @GetMapping("/orders/inventories/{productId}")
-    public ResponseEntity<Object> getInventories(@PathVariable("productId") Long productId) {
-        return ResponseEntity.ok().body(inventoryRepository.getInventoriesByProductId(productId));
+    /**
+     * 주문 상품 옵션 조회
+     */
+    @GetMapping("/orders/product-options/{productId}")
+    public ResponseEntity<Object> getProductOptions(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok().body(adminService.getProductOptionsByProductId(productId));
     }
 }

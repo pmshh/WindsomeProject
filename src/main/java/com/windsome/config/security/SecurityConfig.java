@@ -52,7 +52,7 @@ public class SecurityConfig {
                         "/forgot-credentials/**", "/product/**", "/board/**", "/payment", "/oauth2/**","/payment/**").permitAll()
                 .anyRequest().authenticated();
 
-        http.exceptionHandling().accessDeniedPage("/error");
+//        http.exceptionHandling().accessDeniedPage("/error");
 
         http.sessionManagement(
                 session -> session

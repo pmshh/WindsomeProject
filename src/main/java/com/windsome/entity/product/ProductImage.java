@@ -27,6 +27,9 @@ public class ProductImage extends BaseTimeEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    /**
+     * Constructors, Getters, Setters, etc.
+     */
     public void updateProductImage(String originalImageName, String serverImageName, String imageUrl) {
         this.originalImageName = originalImageName;
         this.serverImageName = serverImageName;

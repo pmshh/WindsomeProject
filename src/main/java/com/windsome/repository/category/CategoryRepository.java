@@ -1,7 +1,7 @@
 package com.windsome.repository.category;
 
 import com.windsome.dto.category.MainPageCategoryDTO;
-import com.windsome.entity.Category;
+import com.windsome.entity.product.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

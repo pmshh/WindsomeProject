@@ -11,11 +11,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartProductDTO {
-    @NotNull(message = "색상 아이디는 필수 입력 값 입니다.")
-    private Long colorId; // 색상 id
+    private String color; // 색상
 
-    @NotNull(message = "사이즈 아이디는 필수 입력 값 입니다.")
-    private Long sizeId; // 사이즈 id
+    private String size; // 사이즈
 
     @Min(value = 1, message = "최소 1개 이상 담아주세요.")
     private int quantity; // 주문 수량
