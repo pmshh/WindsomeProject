@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentEnrollDTO {
-
     private Long qaId;
 
     private String content;

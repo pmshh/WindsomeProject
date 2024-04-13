@@ -65,10 +65,15 @@ public class MemberService {
      * 회원 가입
      */
     public void createAccount(SignUpRequestDTO signUpRequestDTO) {
+        // DTO -> Entity 변환
         Member member = modelMapper.map(signUpRequestDTO, Member.class);
         member.setPassword(passwordEncoder.encode(signUpRequestDTO.getPassword()));
         member.setRole(Role.USER);
+
+        // 회원가입 시 입력한 주소 정보가 배송지 테이블에 기본 배송지로 저장됨
         addressRepository.save(signUpRequestDTO.toAddress(member, signUpRequestDTO));
+
+        // 회원 저장
         memberRepository.save(member);
     }
 

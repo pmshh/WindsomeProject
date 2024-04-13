@@ -43,7 +43,6 @@ public class SignUpRequestDTO {
     @NotBlank
     private String addr;
 
-    @NotBlank
     private String addrDetail;
 
     public Address toAddress(Member member, SignUpRequestDTO signUpRequestDTO) {

@@ -137,7 +137,7 @@
 
                         $.ajax({
                             url: '/board/qa/update',
-                            type: 'patch',
+                            type: 'put',
                             data: {
                                 qaId: qaId,
                                 title: $("select[name=title] option:selected").text(),
@@ -146,7 +146,7 @@
                             },
                             success(res) {
                                 alert(res);
-                                location.href = '/board/qa';
+                                location.href = '/board/qa/' + qaId;
                             },
                             error(request) {
                                 alert(request.responseText);

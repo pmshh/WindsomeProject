@@ -1,7 +1,5 @@
 package com.windsome.config.p6spy;
 
-import com.windsome.config.p6spy.P6SpyEventListener;
-import com.windsome.config.p6spy.P6SpyFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -70,7 +70,7 @@ public class OrderController {
     /**
      * 주문 취소
      */
-    @PatchMapping("/orders/{orderId}/cancel")
+    @DeleteMapping("/orders/{orderId}/cancel")
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId, @CurrentMember Member member) {
         if (orderService.verifyOrderCancellationPermission(orderId, member.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("주문 취소 권한이 없습니다.");
@@ -81,7 +81,7 @@ public class OrderController {
     }
 
     /**
-     * 주문 상세
+     * 주문 상세 조회
      */
     @GetMapping("/orders/{orderId}")
     public String showOrderDetail(@PathVariable(value = "orderId") Long orderId, Model model) {

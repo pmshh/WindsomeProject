@@ -208,7 +208,7 @@
                 if (confirm("주문을 취소하시겠습니까?")) {
                     $.ajax({
                         url: "/admin/orders/cancel",
-                        type: "POST",
+                        type: "DELETE",
                         contentType: "application/json",
                         dataType: "text",
                         data: JSON.stringify(orderIds),

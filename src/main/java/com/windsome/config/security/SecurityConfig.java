@@ -48,9 +48,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/board/qa").permitAll()
+                .antMatchers("/board/qa/**").permitAll()
                 .antMatchers("/", "/login/**", "/logout", "/members/new/**", "/members/check-userid", "/members/email-verification",
-                        "/forgot-credentials/**", "/product/**", "/board/**", "/payment", "/oauth2/**","/payment/**").permitAll()
-                .anyRequest().authenticated();
+                        "/forgot-credentials/**", "/product/**", "/board/**", "/payment", "/oauth2/**", "/payment/**").permitAll()
+                .anyRequest().permitAll();
 
 //        http.exceptionHandling().accessDeniedPage("/error");
 

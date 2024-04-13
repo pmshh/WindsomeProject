@@ -25,9 +25,6 @@ public class CommentController {
      */
     @PostMapping("/comment/enroll")
     public ResponseEntity<String> enrollComment(@CurrentMember Member member, CommentEnrollDTO commentEnrollDto) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
-        }
         try {
             commentService.enrollComment(commentEnrollDto, member);
         } catch (EntityNotFoundException e) {
@@ -39,12 +36,8 @@ public class CommentController {
     /**
      * 댓글 수정
      */
-    @PatchMapping("/comment/{commentId}")
+    @PutMapping("/comment/{commentId}")
     public ResponseEntity<String> updateComment(@CurrentMember Member member, CommentUpdateDTO commentUpdateDto) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
-        }
-
         try {
             if (commentService.validateComment(member, commentUpdateDto.getCommentId())) {
                 return ResponseEntity.badRequest().body("댓글 수정 권한이 없습니다.");
@@ -61,13 +54,9 @@ public class CommentController {
      */
     @DeleteMapping("/comment/{commentId}")
     public ResponseEntity<String> deleteComment(@CurrentMember Member member, @PathVariable Long commentId) {
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용해 주세요.");
-        }
-
         try {
             if (commentService.validateComment(member, commentId)) {
-                return ResponseEntity.badRequest().body("댓글 수정 권한이 없습니다.");
+                return ResponseEntity.badRequest().body("댓글 삭제 권한이 없습니다.");
             }
             commentService.deleteComment(commentId);
         } catch (EntityNotFoundException e) {

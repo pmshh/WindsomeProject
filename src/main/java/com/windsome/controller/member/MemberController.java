@@ -50,7 +50,7 @@ public class MemberController {
     @PostMapping("/members/new")
     public String createMember(@Valid SignUpRequestDTO signUpRequestDTO, Errors errors, RedirectAttributes redirectAttr, Model model) {
         if (errors.hasErrors()) {
-            model.addAttribute("message", "잘못된 접근입니다.");
+            model.addAttribute("message", "회원가입 도중 오류가 발생하였습니다.");
             return "member/register";
         }
 

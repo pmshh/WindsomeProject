@@ -76,7 +76,7 @@ public class AdminOrderController {
     /**
      * 주문 취소
      */
-    @PostMapping("/orders/cancel")
+    @DeleteMapping("/orders/cancel")
     public ResponseEntity<String> cancelOrder(@RequestBody Long[] orderIds) {
         try {
             adminService.cancelOrders(orderIds);

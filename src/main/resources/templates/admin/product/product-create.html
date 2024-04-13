@@ -202,7 +202,7 @@
                                             <td class="base-table__cell">
                                                 <input class="fake-input" type="text" th:value="${'상품 이미지 ' + num}">
                                                 <label class="button button--white button--90x40 find-file" th:for="${'imageg' + num}">파일 찾기</label>
-                                                <input type="file" class="real-input" name="productImageFile" th:id="${'imageg' + num}">
+                                                <input type="file" class="real-input" name="productImageFile" th:id="${'imageg' + num}" th:data-index="${num}">
                                                 <button class="button button--black button--90x40 image-upload-cancel-btn" type="button" th:data-index="${num}">취소</button>
                                             </td>
                                         </tr>
@@ -328,13 +328,11 @@
             let fileName = $(this).val().split("\\").pop();
             let fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 
-            console.log($(this));
-
             if (!["jpg", "jpeg", "gif", "png", "bmp"].includes(fileExt)) {
                 alert("이미지 파일만 등록이 가능합니다.");
                 $(this).val("");
                 $(this).siblings('.fake-input').val("상품 이미지 " + $(this).attr("data-index"));
-                return;
+                return false;
             }
 
             $(this).siblings(".fake-input").val(fileName);

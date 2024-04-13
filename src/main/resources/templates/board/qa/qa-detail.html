@@ -278,7 +278,7 @@
             let hasPrivate = $("#updateComSecretCheck" + commentId).is(':checked');
             $.ajax({
                 url:'/board/comment/' + commentId,
-                type: 'patch',
+                type: 'put',
                 data: {
                     content: contentVal,
                     hasPrivate: hasPrivate

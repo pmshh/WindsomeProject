@@ -197,7 +197,7 @@
                                                         <input class="addr-input" type="text" placeholder="기본주소"  th:value="${defaultAddress.addr}">
                                                     </div>
                                                     <div class="addr-detail-wrap">
-                                                        <input class="addr-detail-input" type="text" placeholder="나머지 주소(선택 입력 가능)"  th:value="${defaultAddress.addrDetail}">
+                                                        <input class="addr-detail-input" type="text" placeholder="나머지 주소"  th:value="${defaultAddress.addrDetail}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -600,6 +600,11 @@
 
             /* 상품 주문 버튼 클릭 이벤트 처리 */
             $(".order-btn").click(orderProducts);
+
+            $(".discount-code-use-btn").click(function () {
+                alert("입력하신 할인코드가 유효하지 않습니다. 다시 확인해주세요.");
+                $('.discount-code-input').val('');
+            });
         });
 
         /* 결제 관련 값 업데이트 */

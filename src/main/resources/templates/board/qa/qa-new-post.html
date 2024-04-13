@@ -193,17 +193,23 @@
                         originNo = qaId;
                     }
 
+                    let data = {
+                        boardType: "Q&A",
+                        title: $("select[name=title] option:selected").text(),
+                        content: contentInputVal,
+                        password: passwordInputVal,
+                        hasPrivate: $("input[name='secret']:checked").val(),
+                        originNo: originNo
+                    };
+
+                    let jsonString = JSON.stringify(data);
+
                     $.ajax({
                         url: '/board/qa/enroll',
                         type: 'POST',
-                        data: {
-                            boardType: "Q&A",
-                            title: $("select[name=title] option:selected").text(),
-                            content: contentInputVal,
-                            password: passwordInputVal,
-                            hasPrivate: $("input[name='secret']:checked").val(),
-                            originNo: originNo
-                        },
+                        contentType: "application/json",
+                        dataType: "text",
+                        data: jsonString,
                         success(res) {
                             alert(res);
                             location.href = '/board/qa';

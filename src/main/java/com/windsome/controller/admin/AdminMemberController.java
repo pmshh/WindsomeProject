@@ -135,7 +135,7 @@ public class AdminMemberController {
         } catch (AdminDeletionException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 삭제 중 오류 발생");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 삭제 도중 오류가 발생하였습니다.");
         }
     }
 }

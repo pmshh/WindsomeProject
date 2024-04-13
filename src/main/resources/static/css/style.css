@@ -716,7 +716,7 @@ a.btn-normal {
   display: inline-block;
 }
 .pagination-container ul li a {
-  color: #999;
+  color: black;
 }
 .pagination-container ul li.disabled {
   pointer-events: none;

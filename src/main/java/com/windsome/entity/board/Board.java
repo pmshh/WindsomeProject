@@ -1,11 +1,7 @@
 package com.windsome.entity.board;
 
 import com.windsome.dto.board.BoardDTO;
-import com.windsome.dto.board.notice.NoticeDTO;
-import com.windsome.dto.board.notice.NoticeUpdateDTO;
-import com.windsome.dto.board.qa.QaEnrollDTO;
 import com.windsome.dto.board.qa.QaUpdateDTO;
-import com.windsome.dto.board.review.ReviewEnrollDTO;
 import com.windsome.dto.board.review.ReviewUpdateDTO;
 import com.windsome.entity.auditing.BaseTimeEntity;
 import com.windsome.entity.member.Member;
@@ -14,8 +10,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)

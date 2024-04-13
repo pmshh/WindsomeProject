@@ -100,12 +100,11 @@ public class BoardControllerTest {
     @WithAccount("ADMIN")
     @DisplayName("Q&A 등록 테스트")
     public void enrollQa() throws Exception {
+        String json = "{\"title\": \"test\", \"content\": \"test\", \"password\": \"12341234\", \"hasPrivate\": true, \"originNo\": 0}";
+
         mockMvc.perform(post("/board/qa/enroll")
-                        .param("title", "test")
-                        .param("content", "test")
-                        .param("password", "12341234")
-                        .param("hasPrivate", "true")
-                        .param("originNo","0")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("게시글이 등록되었습니다."));
@@ -184,7 +183,7 @@ public class BoardControllerTest {
         boardRepository.save(board);
         Board findBoard = boardRepository.findByMemberId(member.getId());
 
-        mockMvc.perform(patch("/board/qa/{qaId}", findBoard.getId())
+        mockMvc.perform(put("/board/qa/{qaId}", findBoard.getId())
                         .param("title","test")
                         .param("content","test")
                         .param("hasPrivate","true")

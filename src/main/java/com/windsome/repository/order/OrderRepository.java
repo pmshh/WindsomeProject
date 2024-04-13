@@ -1,6 +1,5 @@
 package com.windsome.repository.order;
 
-import com.windsome.constant.OrderStatus;
 import com.windsome.dto.order.OrderDetailDTO;
 import com.windsome.entity.order.Order;
 import org.springframework.data.domain.Pageable;

@@ -96,7 +96,7 @@ public class BoardController {
      * Q&A 등록
      */
     @PostMapping("/qa/enroll")
-    public ResponseEntity<String> enrollQa(@CurrentMember Member member, BoardDTO boardDTO) {
+    public ResponseEntity<String> enrollQa(@CurrentMember Member member, @RequestBody BoardDTO boardDTO) {
         try {
             boardService.enrollQa(boardDTO, member);
         } catch (EntityNotFoundException e) {
@@ -139,11 +139,8 @@ public class BoardController {
     public String qaDtl(@PathVariable(value = "qaId") Long qaId, @RequestParam(required = false) String password,
                         @CurrentMember Member member, Model model, RedirectAttributes redirectAttr) {
         try {
-            // 비밀번호 검사를 하지 않고, url을 통해 직접 접근한 경우
-            Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);
-            if (password == null) {
-                return "redirect:/board/qa/" + qaId + "/password-verification";
-            } else if (!password.equals(qa.getPassword())) {
+            // 비밀번호 검사를 하지 않고, url을 통해 직접 접근한 경우 권한 검증
+            if (boardService.validatePost(member, qaId, password)) {
                 return "redirect:/board/qa/" + qaId + "/password-verification";
             }
 
@@ -183,7 +180,7 @@ public class BoardController {
     /**
      * Q&A 수정
      */
-    @PatchMapping("/qa/{qaId}")
+    @PutMapping("/qa/{qaId}")
     public ResponseEntity<String> updateQa(QaUpdateDTO qaUpdateDto) {
         try {
             boardService.updateQa(qaUpdateDto);
@@ -253,7 +250,7 @@ public class BoardController {
     }
 
     /**
-     * 리뷰 등록 -> 상품 검색
+     * 리뷰 등록 -> 상품 검색 팝업
      */
     @GetMapping("/reviews/product-selection")
     public String showProductSearchPopup(ProductSearchDTO searchDto, Optional<Integer> page, Optional<Integer> size, Model model) {

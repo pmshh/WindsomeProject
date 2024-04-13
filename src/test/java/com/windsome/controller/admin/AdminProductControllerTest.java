@@ -176,7 +176,7 @@ class AdminProductControllerTest {
         doNothing().when(productService).deleteProductImage(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/products/{productImageId}", 123L).with(csrf())
+        mockMvc.perform(delete("/admin/products/{productImageId}", 123L).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -191,7 +191,7 @@ class AdminProductControllerTest {
         doThrow(EntityNotFoundException.class).when(productService).deleteProductImage(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/products/{productImageId}", 123L).with(csrf())
+        mockMvc.perform(delete("/admin/products/{productImageId}", 123L).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -207,7 +207,7 @@ class AdminProductControllerTest {
         doThrow(new ProductImageDeletionException(errorMessage)).when(productService).deleteProductImage(anyLong());
 
         // Perform & Verify
-        mockMvc.perform(patch("/admin/products/{productImageId}", 123L)
+        mockMvc.perform(delete("/admin/products/{productImageId}", 123L)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString
+@ToString(exclude = {"member", "board"})
 public class Comment extends BaseTimeEntity {
 
     @Id

@@ -95,9 +95,7 @@
                             </div>
                         </div>
 
-                        <div class="pagination-container"
-                            th:with="start=${(products.number/maxPage)*maxPage + 1},
-                                     end=(${(products.totalPages == 0) ? 1 :
+                        <div class="pagination-container" th:with="start=${(products.number/maxPage)*maxPage + 1}, end=(${(products.totalPages == 0) ? 1 :
                                      (start + (maxPage - 1) < products.totalPages ? start + (maxPage - 1) : products.totalPages)})">
                             <ul>
                                 <li class="prev" th:classappend="${products.first} ? 'disabled'">
@@ -106,26 +104,21 @@
                                     </a>
                                 </li>
                                 <li class="prev" th:classappend="${products.first} ? 'disabled'">
-                                    <a
-                                        th:href="@{'/' + '?page=' + ${products.number - 1} + '&sort=' + ${productSearchDto.sort} + '&searchQuery=' + ${productSearchDto.searchQuery}}">
+                                    <a th:href="@{'/' + '?page=' + ${products.number - 1} + '&sort=' + ${productSearchDto.sort} + '&searchQuery=' + ${productSearchDto.searchQuery}}">
                                         <i class="fa-solid fa-angle-left"></i>
                                     </a>
                                 </li>
-                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}"
-                                    th:classappend="${products.number eq page - 1} ? 'active' : ''">
-                                    <a th:href="@{'/' + '?page=' + ${page - 1} + '&sort=' + ${productSearchDto.sort} + '&searchQuery=' + ${productSearchDto.searchQuery}}"
-                                        th:inline="text">[[${page}]]</a>
+                                <li class="page" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${products.number eq page - 1} ? 'active' : ''">
+                                    <a th:href="@{'/' + '?page=' + ${page - 1} + '&sort=' + ${productSearchDto.sort} + '&searchQuery=' + ${productSearchDto.searchQuery}}" th:inline="text">[[${page}]]</a>
                                 </li>
                                 <li class="next" th:classappend="${products.last} ? 'disabled'">
-                                    <a
-                                        th:href="@{'/' + '?page=' + ${products.number + 1} + '&sort=' + ${productSearchDto.sort} + '&searchQuery=' + ${productSearchDto.searchQuery}}">
+                                    <a th:href="@{'/' + '?page=' + ${products.number + 1} + '&sort=' + ${productSearchDto.sort} + '&searchQuery=' + ${productSearchDto.searchQuery}}">
                                         <i class="fa-solid fa-angle-right"></i>
                                     </a>
                                 </li>
                                 <li class="next" th:classappend="${products.last} ? 'disabled'">
                                     <a th:onclick="'javascript:page(' + ${products.totalPages - 1} + ')'">
-                                        <i class="fa-solid fa-angle-right"></i><i
-                                            class="fa-solid fa-angle-right"></i>
+                                        <i class="fa-solid fa-angle-right"></i><i class="fa-solid fa-angle-right"></i>
                                     </a>
                                 </li>
                             </ul>

@@ -1,6 +1,5 @@
 package com.windsome.controller.admin;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.windsome.dto.admin.PageDTO;
 import com.windsome.dto.product.ProductSearchDTO;
 import com.windsome.dto.product.ProductFormDTO;
@@ -143,7 +142,7 @@ public class AdminProductController {
     /**
      * 상품 이미지 삭제
      */
-    @PatchMapping("/products/{productImageId}")
+    @DeleteMapping("/products/{productImageId}")
     public ResponseEntity<String> deleteProductImage(@PathVariable Long productImageId) {
         try {
             productService.deleteProductImage(productImageId);
@@ -169,7 +168,7 @@ public class AdminProductController {
     }
 
     /**
-     * 카테고리 조회
+     * 상품 카테고리 전체 조회
      */
     @GetMapping("/products/categories")
     public ResponseEntity<String> fetchProductCategories() throws Exception {
