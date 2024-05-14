@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/layouts/admin-layout.html :: head"></div>
+    <div th:replace="layouts/admin-layout.html :: head"></div>
 </head>
 
 <body>
     <main class="admin-main-area">
-    <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='memberManagement')"></div>
+    <div th:replace="layouts/admin-layout.html :: sidebar(currentMenu='memberManagement')"></div>
 
     <article class="admin-content-area">
-        <div th:replace="/layouts/admin-layout.html :: nav"></div>
+        <div th:replace="layouts/admin-layout.html :: nav"></div>
 
         <!-- section start -->
         <section class="admin-section-area">
@@ -164,11 +164,11 @@
             </div>
         </section>
 
-        <div th:replace="/layouts/admin-layout.html :: footer"></div>
+        <div th:replace="layouts/admin-layout.html :: footer"></div>
     </article>
 </main>
 
-    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <div th:replace="layouts/admin-layout.html :: commonJs"></div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!-- custom js -->
     <script th:inline="javascript">

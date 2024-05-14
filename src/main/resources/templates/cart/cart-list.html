@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <div th:replace="/layouts/default-layout.html :: head"></div>
+    <div th:replace="layouts/default-layout.html :: head"></div>
 </head>
 
 <body>
     <main class="def-main-area">
-        <div th:replace="/layouts/default-layout.html :: sidebar"></div>
+        <div th:replace="layouts/default-layout.html :: sidebar"></div>
 
         <article class="def-content-area">
-            <div th:replace="/layouts/default-layout.html :: nav"></div>
+            <div th:replace="layouts/default-layout.html :: nav"></div>
 
             <!-- section start -->
             <section class="def-section-area">
@@ -187,11 +187,11 @@
             <form th:action="@{/orders/new}" method="get" id="orderForm">
             </form>
 
-            <div th:replace="/layouts/default-layout.html :: footer"></div>
+            <div th:replace="layouts/default-layout.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="/layouts/default-layout.html :: commonJs"></div>
+    <div th:replace="layouts/default-layout.html :: commonJs"></div>
     <!-- 사용자 JS -->
     <script th:inline="javascript">
         let orderForm = $("#orderForm");

@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <div th:replace="/layouts/admin-layout.html :: head"></div>
+    <div th:replace="layouts/admin-layout.html :: head"></div>
 </head>
 
 <body>
     <main class="admin-main-area">
-        <div th:replace="/layouts/admin-layout.html :: sidebar(currentMenu='productManagement')"></div>
+        <div th:replace="layouts/admin-layout.html :: sidebar(currentMenu='productManagement')"></div>
 
         <article class="admin-content-area">
-            <div th:replace="/layouts/admin-layout.html :: nav"></div>
+            <div th:replace="layouts/admin-layout.html :: nav"></div>
 
             <!-- section start -->
             <section class="admin-section-area">
@@ -162,11 +162,11 @@
                 <input type="hidden" name="searchQuery" th:value="${productSearchDto.searchQuery}">
             </form>
 
-            <div th:replace="/layouts/admin-layout.html :: footer"></div>
+            <div th:replace="layouts/admin-layout.html :: footer"></div>
         </article>
     </main>
 
-    <div th:replace="/layouts/admin-layout.html :: commonJs"></div>
+    <div th:replace="layouts/admin-layout.html :: commonJs"></div>
     <!-- custom js -->
     <script th:inline="javascript">
         let moveForm = $("#move-form");
