@@ -158,9 +158,13 @@
             <!-- sidebar toggle 기능 -->
             let toggleBtn = $('.menu-toggle');
             let sidebar = $('.admin-sidebar-area');
+            let checkbox = $('#hamburger');
             toggleBtn.click(function (e) {
                 e.preventDefault();
                 sidebar.toggleClass("active");
+
+                // 체크박스의 상태를 토글
+                checkbox.prop('checked', !checkbox.prop('checked'));
             });
 
             <!--프로필 toggle 기능-->
