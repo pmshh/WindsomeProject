@@ -48,18 +48,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/board/qa").permitAll()
-                .antMatchers("/board/qa/**").permitAll()
                 .antMatchers("/", "/login/**", "/logout", "/members/new/**", "/members/check-userid", "/members/email-verification",
                         "/forgot-credentials/**", "/product/**", "/board/**", "/payment", "/oauth2/**", "/payment/**").permitAll()
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
 
 //        http.exceptionHandling().accessDeniedPage("/error");
 
         http.sessionManagement(
                 session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 세션 생성 정책 설정
-                        .invalidSessionUrl("/login") // 세션이 유효하지 않을 때 리다이렉트할 URL
+                        .invalidSessionUrl("/") // 세션이 유효하지 않을 때 리다이렉트할 URL
                         .maximumSessions(1) // 최대 동시 세션 수
                         .expiredUrl("/login")); // 세션이 만료된 경우 리다이렉트할 URL
 
