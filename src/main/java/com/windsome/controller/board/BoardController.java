@@ -109,7 +109,11 @@ public class BoardController {
      * Q&A 비밀글 - 비밀번호 입력 화면
      */
     @GetMapping("/qa/{qaId}/password-verification")
-    public String secretForm(@PathVariable(value = "qaId") Long qaId, Model model) {
+    public String secretForm(@CurrentMember Member member, @PathVariable(value = "qaId") Long qaId, Model model) {
+        if (member == null) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("qaId", qaId);
         try {
             Board qa = boardRepository.findById(qaId).orElseThrow(EntityNotFoundException::new);

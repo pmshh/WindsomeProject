@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString(exclude = {"productImages", "reviews", "productOptions", "orderProducts", "cartProducts", "boards"})
+@ToString(exclude = {"productImages", "reviews", "productOptions", "orderProducts", "cartProducts"})
 public class Product extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,9 +51,6 @@ public class Product extends BaseEntity {
     private List<ProductImage> productImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Board> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> productOptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -63,7 +60,7 @@ public class Product extends BaseEntity {
     private List<CartProduct> cartProducts = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Board> boards = new ArrayList<>();
+    private List<Board> reviews = new ArrayList<>();
 
     /**
      * Constructors, Getters, Setters, etc.

@@ -21,9 +21,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPre
      */
     List<Board> findAllByHasNoticeOrderByRegTimeDesc(boolean isNotice);
 
-    @Query(value = "select b.board_id as boardId, b.title, b.content, b.has_notice as hasNotice, b.member_id as memberId, b.reg_time as regTime from Board b where b.board_id = :boardId" +
-            " union all (select b.board_id as boardId, b.title, b.content, b.has_notice as hasNotice, b.member_id as memberId, b.reg_time as regTime from Board b where b.board_id < :boardId and b.board_type = 'Notice' order by b.board_id desc limit 1)" +
-            " union all (select b.board_id as boardId, b.title, b.content, b.has_notice as hasNotice, b.member_id as memberId, b.reg_time as regTime from Board b where b.board_id > :boardId and b.board_type = 'Notice' order by b.board_id asc limit 1)", nativeQuery = true)
+    @Query(value = "select b.board_id as boardId, b.title, b.content, b.has_notice as hasNotice, b.member_id as memberId, b.reg_time as regTime from board b where b.board_id = :boardId" +
+            " union all (select b.board_id as boardId, b.title, b.content, b.has_notice as hasNotice, b.member_id as memberId, b.reg_time as regTime from board b where b.board_id < :boardId and b.board_type = 'Notice' order by b.board_id desc limit 1)" +
+            " union all (select b.board_id as boardId, b.title, b.content, b.has_notice as hasNotice, b.member_id as memberId, b.reg_time as regTime from board b where b.board_id > :boardId and b.board_type = 'Notice' order by b.board_id asc limit 1)", nativeQuery = true)
     List<NoticeDtlDtoInterface> getNoticeDtl(@Param("boardId") Long boardId);
 
     /**
