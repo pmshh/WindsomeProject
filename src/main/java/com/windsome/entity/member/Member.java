@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id", callSuper = false)
 @Builder @AllArgsConstructor @NoArgsConstructor
-@ToString(exclude = {"reviews", "addresses"})
+@ToString(exclude = {"boards", "addresses"})
 public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

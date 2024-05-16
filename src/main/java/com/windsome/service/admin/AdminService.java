@@ -26,6 +26,7 @@ import com.windsome.entity.order.Payment;
 import com.windsome.entity.product.Product;
 import com.windsome.entity.product.ProductOption;
 import com.windsome.exception.AdminDeletionException;
+import com.windsome.repository.member.MemberRepository;
 import com.windsome.service.board.BoardService;
 import com.windsome.service.member.AddressService;
 import com.windsome.service.member.MemberService;
@@ -64,6 +65,7 @@ public class AdminService {
     private final PaymentService paymentService;
     private final AddressService addressService;
     private final ProductOptionService productOptionService;
+    private final MemberRepository memberRepository;
 
     /**
      * dashboard 정보 조회
@@ -204,11 +206,14 @@ public class AdminService {
 
         // 회원 배송지 수정 및 저장
         Address address = addressService.getAddressByMemberIdAndIsDefault(member.getId(), true);
-        modelMapper.map(adminMemberDetailDTO, address);
+        address.setZipcode(adminMemberDetailDTO.getZipcode());
+        address.setAddr(adminMemberDetailDTO.getAddr());
+        address.setAddrDetail(adminMemberDetailDTO.getAddrDetail());
+        address.setTel(adminMemberDetailDTO.getTel());
         addressService.saveAddress(address);
 
         // 회원 저장
-        memberService.saveMember(member);
+        memberRepository.save(member);
     }
 
     /**
