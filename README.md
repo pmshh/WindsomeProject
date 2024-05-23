@@ -1,5 +1,5 @@
 # ShopProject :necktie:
->사이트 : 준비중
+>사이트 : http://windsome.shop
 <br>다양한 의류 상품을 판매하는 웹 쇼핑몰 사이트입니다. ([레퍼런스 사이트](https://lmis.co.kr))
 
 <br>![메인 화면](https://github.com/pmshh/ShopProject/assets/98300570/bfff6eba-a9b3-4264-8d09-362d30679762)
