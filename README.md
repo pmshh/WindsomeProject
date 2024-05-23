@@ -1,7 +1,7 @@
 # ShopProject :necktie:
->사이트 : http://windsome.shop
-<br>다양한 의류 상품을 판매하는 웹 쇼핑몰 사이트입니다. ([레퍼런스 사이트](https://lmis.co.kr))
-
+>사이트 : http://windsome.shop (test 계정: admin/admin)
+><br>다양한 의류 상품을 판매하는 웹 쇼핑몰 사이트입니다. ([레퍼런스 사이트](https://lmis.co.kr))
+>
 <br>![메인 화면](https://github.com/pmshh/ShopProject/assets/98300570/bfff6eba-a9b3-4264-8d09-362d30679762)
 ## 1. 개발 기간 & 참여 인원
 - 2023년 12월 14일 ~ 2024년 03월 27일
