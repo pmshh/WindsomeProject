@@ -76,3 +76,7 @@ productImgLocation: C:\shop\product
 
 # 리소스 업로드 경로
 uploadPath: file:\\\C:\shop\
+
+# IamPort API Key
+iamportApiKey: ${iamport-api-key}
+iamportSecretKey: ${iamport-secret-key}

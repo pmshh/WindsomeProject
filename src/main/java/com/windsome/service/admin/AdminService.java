@@ -213,7 +213,7 @@ public class AdminService {
         addressService.saveAddress(address);
 
         // 회원 저장
-        memberRepository.save(member);
+        memberService.saveMember(member); // 회원 저장
     }
 
     /**
