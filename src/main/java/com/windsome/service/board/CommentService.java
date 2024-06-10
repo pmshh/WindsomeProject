@@ -39,7 +39,7 @@ public class CommentService {
      * 댓글 조회
      */
     public List<CommentDTO> getCommentDtoList(Long qaId) {
-        return commentRepository.findAllByBoardId(qaId).stream()
+        return commentRepository.findAllActiveCommentsByBoardId(qaId).stream()
                 .map(comment -> new CommentDTO(comment.getId(), comment.getMember().getUserIdentifier(), comment.getMember().getName(), comment.getMember().getRole(), comment.getRegTime(), comment.getContent(), comment.isHasPrivate()))
                 .collect(Collectors.toList());
     }

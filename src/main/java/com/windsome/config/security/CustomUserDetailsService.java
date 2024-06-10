@@ -3,6 +3,8 @@ package com.windsome.config.security;
 import com.windsome.entity.member.Member;
 import com.windsome.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         if (member == null) {
+            throw new UsernameNotFoundException(userIdOrEmail);
+        }
+
+        // isDeleted가 true인 경우 로그인 거부
+        if (member.isDeleted()) {
             throw new UsernameNotFoundException(userIdOrEmail);
         }
 

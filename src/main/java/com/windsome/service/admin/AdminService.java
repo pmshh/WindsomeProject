@@ -65,7 +65,6 @@ public class AdminService {
     private final PaymentService paymentService;
     private final AddressService addressService;
     private final ProductOptionService productOptionService;
-    private final MemberRepository memberRepository;
 
     /**
      * dashboard 정보 조회
