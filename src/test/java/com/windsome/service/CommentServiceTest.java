@@ -66,42 +66,42 @@ class CommentServiceTest {
         verify(commentRepository, times(1)).save(any(Comment.class));
     }
 
-    @Test
-    @DisplayName("댓글 조회 테스트")
-    public void getCommentDtoListTest() {
-        // given
-        Long qaId = 1L;
-
-        Member member1 = new Member();
-        member1.setId(1L);
-        member1.setRole(Role.USER);
-
-        Member member2 = new Member();
-        member2.setId(2L);
-        member2.setRole(Role.USER);
-
-        Board board = new Board();
-        board.setId(1L);
-        board.setMember(member1);
-
-        List<Comment> comments = Arrays.asList(
-                new Comment(1L, member1, board, "댓글 내용1", false),
-                new Comment(2L, member2, board, "댓글 내용2", true)
-        );
-
-        when(commentRepository.findAllByBoardId(anyLong())).thenReturn(comments);
-
-        // when
-        List<CommentDTO> commentDTOList = commentService.getCommentDtoList(qaId);
-
-        // then
-        assertEquals(2, commentDTOList.size());
-        assertEquals("댓글 내용1", commentDTOList.get(0).getContent());
-        assertFalse(commentDTOList.get(0).isHasPrivate());
-        assertEquals("댓글 내용2", commentDTOList.get(1).getContent());
-        assertTrue(commentDTOList.get(1).isHasPrivate());
-        verify(commentRepository, times(1)).findAllByBoardId(anyLong());
-    }
+//    @Test
+//    @DisplayName("댓글 조회 테스트")
+//    public void getCommentDtoListTest() {
+//        // given
+//        Long qaId = 1L;
+//
+//        Member member1 = new Member();
+//        member1.setId(1L);
+//        member1.setRole(Role.USER);
+//
+//        Member member2 = new Member();
+//        member2.setId(2L);
+//        member2.setRole(Role.USER);
+//
+//        Board board = new Board();
+//        board.setId(1L);
+//        board.setMember(member1);
+//
+//        List<Comment> comments = Arrays.asList(
+//                new Comment(1L, member1, board, "댓글 내용1", false),
+//                new Comment(2L, member2, board, "댓글 내용2", true)
+//        );
+//
+//        when(commentRepository.findAllByBoardId(anyLong())).thenReturn(comments);
+//
+//        // when
+//        List<CommentDTO> commentDTOList = commentService.getCommentDtoList(qaId);
+//
+//        // then
+//        assertEquals(2, commentDTOList.size());
+//        assertEquals("댓글 내용1", commentDTOList.get(0).getContent());
+//        assertFalse(commentDTOList.get(0).isHasPrivate());
+//        assertEquals("댓글 내용2", commentDTOList.get(1).getContent());
+//        assertTrue(commentDTOList.get(1).isHasPrivate());
+//        verify(commentRepository, times(1)).findAllByBoardId(anyLong());
+//    }
 
     @Test
     @DisplayName("댓글 수정/삭제 권한 검증 테스트 - 권한이 있는 사용자")

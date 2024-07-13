@@ -18,6 +18,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 //        CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        response.sendRedirect("http://43.203.109.213:8080/");
+        response.sendRedirect("http://localhost:8080/");
     }
 }
