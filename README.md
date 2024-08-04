@@ -1,4 +1,4 @@
-# ShopProject :necktie:
+# WindsomeProject :necktie:
 >사이트 : http://windsome.shop (test 계정: admin/admin)
 ><br>다양한 의류 상품을 판매하는 웹 쇼핑몰 사이트입니다. ([레퍼런스 사이트](https://lmis.co.kr))
 >
