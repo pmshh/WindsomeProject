@@ -1,8 +1,9 @@
 ## :necktie: WindsomeProject 
+[윈섬 사이트 바로 가기](http://windsome.shop) - (TEST용 관리자 계정: ID: admin, PW: admin)<br><br>
 윈섬은 다양한 의류 상품을 판매하는 반응형 웹 쇼핑몰 사이트입니다.<br>
 사용자는 편리하게 의류를 탐색하고 구매할 수 있으며, 다양한 결제 옵션과 사용자 친화적인 인터페이스를 제공합니다.<br>
 
->([윈섬 사이트 바로 가기](http://windsome.shop)) - test 계정: admin/admin)<br>
+
 
 ![반응형](https://github.com/user-attachments/assets/812857f6-70fa-4c6a-988e-8786092a382e)
 
@@ -12,8 +13,8 @@
 1. [프로젝트 개요](#1-프로젝트-개요)
 2. [MVC 패턴 적용](#2-mvc-패턴-적용)
 3. [데이터베이스 설계 및 RDS 사용](#3-데이터베이스-설계-및-rds-사용)
-4. [API 설계](#4-api-설계)
-5. [주요 로직 및 코드 설명](#5-주요-로직-및-코드-설명)
+4. [주요 로직 및 코드 설명](#4-주요-로직-및-코드-설명)
+5. [API 설계](#5-api-설계)
 6. [트러블 슈팅](#6-트러블-슈팅)
 7. [기술적인 고민과 해결과정](#7-기술적인-고민과-해결과정)
 8. [향후 계획 또는 개선 사항](#8-향후-계획-또는-개선-사항)
@@ -74,62 +75,7 @@
 
 <br>
 
-## 4. API 설계
-
-프로젝트의 주요 API는 다음과 같이 설계되었습니다:
-
-<details>
-<summary>메인 화면 API - 접기/펼치기</summary>
-  
-![MainController](https://github.com/pmshh/ShopProject/assets/98300570/24316c95-d450-45b6-9886-0966eb3155e9)
-</details>
-
-<details>
-<summary>회원 관련 API - 접기/펼치기</summary>
-  
-![MemberController](https://github.com/pmshh/ShopProject/assets/98300570/39930324-99cf-4cdc-9af1-9134f4fbe74b)
-![AddressController](https://github.com/pmshh/ShopProject/assets/98300570/2e9e86d5-4f0b-40bb-89cc-4f60cd3fe781)
-</details>
-
-<details>
-<summary>상품 관련 API - 접기/펼치기</summary>
-  
-![ProductController](https://github.com/pmshh/ShopProject/assets/98300570/8226ab89-8b8e-4c77-aa7d-ea639fadff16)
-</details>
-
-<details>
-<summary>장바구니 관련 API - 접기/펼치기</summary>
-  
-![CartController](https://github.com/pmshh/ShopProject/assets/98300570/6b8b54d2-8d30-4e04-a653-3c25cfcbe398)
-</details>
-
-<details>
-<summary>주문 관련 API - 접기/펼치기</summary>
-  
-![OrderController](https://github.com/pmshh/ShopProject/assets/98300570/f4e97bc0-6995-4c0f-a457-22f6daf9161f)
-![PaymentController](https://github.com/pmshh/ShopProject/assets/98300570/f7c2e4ec-b7d7-45d7-9880-4d51cd45a5e4)
-</details>
-
-<details>
-<summary>게시판 관련 API - 접기/펼치기</summary>
-  
-![BoardController](https://github.com/pmshh/ShopProject/assets/98300570/b0617c24-27b0-4077-bfc7-81ac62d1de91)
-![CommentController](https://github.com/pmshh/ShopProject/assets/98300570/1194619b-4bed-4d7b-bd99-7b422d0d358e)
-</details>
-
-<details>
-<summary>어드민 페이지 관련 API - 접기/펼치기</summary>
-
-![AdminBoardController](https://github.com/pmshh/ShopProject/assets/98300570/c17eae1a-c4e5-4bfb-b4ea-764c03baae12)
-![AdminDashboardControler](https://github.com/pmshh/ShopProject/assets/98300570/b505104f-a979-452c-8565-3625f7b2f8c0)
-![AdminMemberController](https://github.com/pmshh/ShopProject/assets/98300570/b88514fd-8afa-4052-b12a-66536f2e524f)
-![AdminOrderController](https://github.com/pmshh/ShopProject/assets/98300570/9abc2fa8-402b-456e-8ee7-2bb4f4da79a4)
-![AdminProductController](https://github.com/pmshh/ShopProject/assets/98300570/dcfe5433-e4da-4a6d-ae82-6df92c2d0a76)
-</details>
-
-<br>
-
-## 5. 주요 로직 및 코드 설명
+## 4. 주요 로직 및 코드 설명
 
 ### 1) 로그인/회원가입 기능
 로그인 및 회원가입 기능은 Spring Security를 기반으로 구현되었습니다.
@@ -295,6 +241,61 @@ public class BoardService {
 - **예외 처리 전략**: 일관된 예외 처리 전략을 적용하여 안정성을 향상시켰습니다. 모든 예외는 `try-catch` 블록으로 처리되며, 상황에 맞는 적절한 오류 메시지를 반환하기 위해 커스텀 예외를 정의하였습니다. 예를 들어, 회원 삭제 시 회원이 존재하지 않는 경우 `EntityNotFoundException`을 발생시키고, 관리자 권한을 가진 회원을 삭제하려 할 때는 `AdminDeletionException`을 발생시킵니다. 이를 통해 코드의 가독성과 유지 보수성을 높였습니다.
 
 ![예외 처리 전략](https://github.com/user-attachments/assets/bfc9c1d1-bafa-4968-825f-a57cec53057f)
+
+<br>
+
+## 5. API 설계
+
+프로젝트의 주요 API는 다음과 같이 설계되었습니다:
+
+<details>
+<summary>메인 화면 API - 접기/펼치기</summary>
+  
+![MainController](https://github.com/pmshh/ShopProject/assets/98300570/24316c95-d450-45b6-9886-0966eb3155e9)
+</details>
+
+<details>
+<summary>회원 관련 API - 접기/펼치기</summary>
+  
+![MemberController](https://github.com/pmshh/ShopProject/assets/98300570/39930324-99cf-4cdc-9af1-9134f4fbe74b)
+![AddressController](https://github.com/pmshh/ShopProject/assets/98300570/2e9e86d5-4f0b-40bb-89cc-4f60cd3fe781)
+</details>
+
+<details>
+<summary>상품 관련 API - 접기/펼치기</summary>
+  
+![ProductController](https://github.com/pmshh/ShopProject/assets/98300570/8226ab89-8b8e-4c77-aa7d-ea639fadff16)
+</details>
+
+<details>
+<summary>장바구니 관련 API - 접기/펼치기</summary>
+  
+![CartController](https://github.com/pmshh/ShopProject/assets/98300570/6b8b54d2-8d30-4e04-a653-3c25cfcbe398)
+</details>
+
+<details>
+<summary>주문 관련 API - 접기/펼치기</summary>
+  
+![OrderController](https://github.com/pmshh/ShopProject/assets/98300570/f4e97bc0-6995-4c0f-a457-22f6daf9161f)
+![PaymentController](https://github.com/pmshh/ShopProject/assets/98300570/f7c2e4ec-b7d7-45d7-9880-4d51cd45a5e4)
+</details>
+
+<details>
+<summary>게시판 관련 API - 접기/펼치기</summary>
+  
+![BoardController](https://github.com/pmshh/ShopProject/assets/98300570/b0617c24-27b0-4077-bfc7-81ac62d1de91)
+![CommentController](https://github.com/pmshh/ShopProject/assets/98300570/1194619b-4bed-4d7b-bd99-7b422d0d358e)
+</details>
+
+<details>
+<summary>어드민 페이지 관련 API - 접기/펼치기</summary>
+
+![AdminBoardController](https://github.com/pmshh/ShopProject/assets/98300570/c17eae1a-c4e5-4bfb-b4ea-764c03baae12)
+![AdminDashboardControler](https://github.com/pmshh/ShopProject/assets/98300570/b505104f-a979-452c-8565-3625f7b2f8c0)
+![AdminMemberController](https://github.com/pmshh/ShopProject/assets/98300570/b88514fd-8afa-4052-b12a-66536f2e524f)
+![AdminOrderController](https://github.com/pmshh/ShopProject/assets/98300570/9abc2fa8-402b-456e-8ee7-2bb4f4da79a4)
+![AdminProductController](https://github.com/pmshh/ShopProject/assets/98300570/dcfe5433-e4da-4a6d-ae82-6df92c2d0a76)
+</details>
 
 <br>
 
