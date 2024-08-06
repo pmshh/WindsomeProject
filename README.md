@@ -1,7 +1,6 @@
 ## :necktie: WindsomeProject 
 [윈섬 사이트 바로 가기](http://windsome.shop) - (TEST용 관리자 계정: ID: admin, PW: admin)<br><br>
-윈섬은 다양한 의류 상품을 판매하는 반응형 웹 쇼핑몰 사이트입니다.<br>
-사용자는 편리하게 의류를 탐색하고 구매할 수 있으며, 다양한 결제 옵션과 사용자 친화적인 인터페이스를 제공합니다.<br>
+윈섬은 다양한 의류 상품을 판매하는 반응형 웹 쇼핑몰 사이트입니다. 사용자는 편리하게 의류를 탐색하고 구매할 수 있으며, 다양한 결제 옵션과 사용자 친화적인 인터페이스를 제공합니다.<br>
 
 
 
@@ -246,7 +245,7 @@ public class BoardService {
 
 ## 5. API 설계
 
-프로젝트의 주요 API는 다음과 같이 설계되었습니다:
+프로젝트의 주요 API는 다음과 같이 설계되었습니다.<br><br>
 
 <details>
 <summary>메인 화면 API - 접기/펼치기</summary>
@@ -319,6 +318,8 @@ AccountService에서 UserDetailsService를 구현하는 대신, 별도의 Custom
 #### [해당 경험을 통해 알게 된 점]
 이 경험을 통해 스프링의 빈 라이프사이클과 의존성 주입 메커니즘에 대한 이해를 높일 수 있었습니다. 또한, 의존성을 명확히 분리하여 순환 참조 문제를 방지하는 방법을 익혔습니다.
 
+<br>
+
 ### 2) LazyInitializationException 발생 및 해결 과정
 
 #### [문제 배경]
@@ -333,6 +334,8 @@ AccountService에서 UserDetailsService를 구현하는 대신, 별도의 Custom
 
 #### [해당 경험을 통해 알게 된 점]
 LAZY 로딩에 대한 이해를 높일 수 있었고, 영속성 컨텍스트와 관련된 예외를 방지하기 위해 DTO를 사용하는 것이 중요한 패턴임을 깨달았습니다.
+
+<br>
 
 ### 3) orphanRemoval 관련 오류 및 해결 과정
 
