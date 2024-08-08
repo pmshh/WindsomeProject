@@ -54,7 +54,7 @@
                                                     <img class="base-table__image" th:src="${review.imageUrl}">
                                                 </a>
                                                 <a class="base-table__link" th:href="${'/product/' + review.productId}">
-                                                    <span th:text="${#strings.substring(review.productName, 0, 13)} + ${#strings.length(review.productName) > 13 ? '...' : ''}"></span>
+                                                    <span th:text="${#strings.length(review.productName) > 13 ? #strings.substring(review.productName, 0, 13) + '...' : review.productName}"></span>
                                                 </a>
                                             </td>
                                             <td class="base-table__cell left pl20">
