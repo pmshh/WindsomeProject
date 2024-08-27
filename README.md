@@ -1,8 +1,6 @@
-![image](https://github.com/user-attachments/assets/f12e63cc-0b6e-4b30-9071-29f709838edb)![image](https://github.com/user-attachments/assets/bb14c14f-d44c-4219-858c-e4afdc82a68a)## :necktie: WindsomeProject 
+## :necktie: WindsomeProject 
 [윈섬 사이트 바로 가기](http://windsome.shop) - (TEST용 관리자 계정: ID: admin, PW: admin)<br><br>
 윈섬은 다양한 의류 상품을 판매하는 반응형 웹 쇼핑몰 사이트입니다. 사용자는 편리하게 의류를 탐색하고 구매할 수 있으며, 다양한 결제 옵션과 사용자 친화적인 인터페이스를 제공합니다.<br>
-
-
 
 ![반응형](https://github.com/user-attachments/assets/812857f6-70fa-4c6a-988e-8786092a382e)
 
