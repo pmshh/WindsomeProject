@@ -1,4 +1,4 @@
-## :necktie: WindsomeProject 
+![image](https://github.com/user-attachments/assets/f12e63cc-0b6e-4b30-9071-29f709838edb)![image](https://github.com/user-attachments/assets/bb14c14f-d44c-4219-858c-e4afdc82a68a)## :necktie: WindsomeProject 
 [윈섬 사이트 바로 가기](http://windsome.shop) - (TEST용 관리자 계정: ID: admin, PW: admin)<br><br>
 윈섬은 다양한 의류 상품을 판매하는 반응형 웹 쇼핑몰 사이트입니다. 사용자는 편리하게 의류를 탐색하고 구매할 수 있으며, 다양한 결제 옵션과 사용자 친화적인 인터페이스를 제공합니다.<br>
 
@@ -300,40 +300,40 @@ public class BoardService {
 
 ## 6. 트러블 슈팅
 
-### 1) 스프링 순환 참조
+### 1) 스프링 순환 참조 문제
 
 #### [문제 배경]
-프로젝트 진행 중, AccountService와 SecurityConfig 간에 스프링 순환 참조 문제가 발생했습니다. 이 문제는 스프링 빈을 생성하는 과정에서 발생했으며, 두 클래스 간의 의존성 주입이 상호 참조를 일으킨 것이 원인이었습니다.
+AccountService에서 AuthenticationManager를 의존성 주입하려고 하던 중, 순환 참조 문제가 발생했습니다. AccountService가 AuthenticationManager를 참조하고 있고, 동시에 AuthenticationManager가 SecurityConfig를 통해 AccountService를 간접적으로 참조하면서 스프링은 빈 생성 과정에서 어떤 빈을 먼저 생성해야 할지 결정하지 못해 순환 참조 문제가 발생한 것입니다.
 
-#### [해결 방법]
-문제를 해결하기 위해 스프링의 의존성 주입과 빈 생성 메커니즘을 다시 검토했습니다.<br>
-AccountService에서 UserDetailsService를 구현하는 대신, 별도의 CustomUserDetailsService 클래스를 만들어 UserDetailsService를 구현하게 했습니다.<br>
-이를 통해 SecurityConfig는 더 이상 AccountService를 참조하지 않게 되어 순환 참조 문제가 해결되었습니다.
-
-#### [이전 코드와 비교]
-- 이전 코드: AccountService와 SecurityConfig가 서로를 참조.<br>
-- 변경 후 코드: AccountService와 SecurityConfig 간의 참조를 제거하고, CustomUserDetailsService를 사용.<br><br>
+#### [해결 방법 및 이전 코드와 비교]
+이전 코드에서는 AccountService에서 UserDetailsService를 직접 구현하고 있었기 때문에, SecurityConfig에서 AccountService를 참조하면서 순환 참조 문제가 발생했습니다.<br><br>
+이 문제를 해결하기 위해, AccountService에서 UserDetailsService를 구현하지 않고, 별도의 CustomUserDetailsService 클래스를 생성하여 UserDetailsService를 구현하도록 변경하였습니다.<br><br>
+이로써, SecurityConfig는 더 이상 AccountService를 참조하지 않고 CustomUserDetailsService를 참조하게 되어 순환 참조 문제가 해결되었습니다.
+<br><br>
 ![스프링 순환 참조](https://github.com/user-attachments/assets/14c73d4e-ee15-4fb7-b794-b1a0e35bb1e4)
 
 #### [해당 경험을 통해 알게 된 점]
-이 경험을 통해 스프링의 빈 라이프사이클과 의존성 주입 메커니즘에 대한 이해를 높일 수 있었습니다. 또한, 의존성을 명확히 분리하여 순환 참조 문제를 방지하는 방법을 익혔습니다.
+- 스프링의 의존성 주입 개념과 스프링 빈 생성 과정에 대해 더욱 깊이 이해하게 되었습니다.
+- UserDetailsService와 같은 인터페이스는 별도의 클래스로 구현하는 것이 유지보수에 유리하다는 점을 알게 되었습니다.
 
 <br>
 
-### 2) LazyInitializationException 발생 및 해결 과정
+### 2) LazyInitializationException 오류
 
 #### [문제 배경]
-특정 메소드에서 LazyInitializationException이 발생했습니다. 이는 ProductOption 엔티티가 Product 엔티티와 N:1 관계를 가지고 있으며, ProductOption의 Product 속성이 FetchType.LAZY로 설정되어 있었기 때문입니다. 트랜잭션이 종료되면서 영속성 컨텍스트가 닫히고, 이후에 LAZY 로딩이 발생해 예외가 발생했습니다.
+주문한 상품의 옵션을 조회하는 기능에서 LazyInitializationException 오류가 발생했습니다. 해당 오류는 서비스 계층에서 DB로부터 데이터를 가져와 컨트롤러 계층으로 반환한 후, 컨트롤러 계층에서 지연 로딩된 엔티티에 접근하려 할 때, 트랜잭션 종료로 인해 영속성 컨텍스트가 닫히면서, 지연 로딩된 엔티티를 더 이상 불러올 수 없게 되어 문제가 발생한 것입니다.
 
-#### [해결 방법]
-서비스 계층에서 조회한 데이터를 DTO로 변환하여 반환함으로써 문제를 해결했습니다. 이를 통해 영속성 컨텍스트 종료 후에도 데이터를 사용할 수 있게 되었고, LAZY 로딩 문제를 피할 수 있었습니다.
+#### [시도한 해결 방법]
+- FetchType을 EAGER로 변경: 연관된 엔티티를 항상 즉시 로딩하도록 설정하는 방법입니다.
+- 컨트롤러에 @Transactional 추가: 컨트롤러 레벨에서 트랜잭션을 유지하도록 설정하는 방법입니다.
+- DTO 사용: 서비스 계층에서 영속성 컨텍스트를 벗어나기 전에 엔티티를 DTO로 변환하여 반환하는 방법입니다.
 
 #### [이전 코드와 비교]
-- 이전 코드: 서비스 계층에서 엔티티를 그대로 반환, 컨트롤러에서 사용.<br>
-- 변경 후 코드: 서비스 계층에서 DTO로 변환 후 반환, 컨트롤러에서 DTO 사용.
+최종적으로 서비스 계층에서 엔티티를 DTO로 변환하여 반환하는 방식을 채택했습니다. 이 방법을 통해 지연 로딩 문제를 피하면서도, 필요한 데이터만 안전하게 전달할 수 있었습니다.
 
 #### [해당 경험을 통해 알게 된 점]
-LAZY 로딩에 대한 이해를 높일 수 있었고, 영속성 컨텍스트와 관련된 예외를 방지하기 위해 DTO를 사용하는 것이 중요한 패턴임을 깨달았습니다.
+- JPA의 영속성 컨텍스트와 지연 로딩의 작동 방식에 대해 더욱 깊이 이해하게되었습니다.
+- FetchType이 Lazy로 설정된 엔티티에 접근할 때는 반드시 영속성 컨텍스트 내부에서 이루어진다는 것을 알게되었습니다.
 
 <br>
 
