@@ -1,6 +1,7 @@
 package com.windsome.config.security;
 
 import com.windsome.entity.member.Member;
+import com.windsome.exception.AccountDeactivatedException;
 import com.windsome.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // isDeleted가 true인 경우 로그인 거부
         if (member.isDeleted()) {
-            throw new UsernameNotFoundException(userIdOrEmail);
+            throw new AccountDeactivatedException("계정이 비활성화되었습니다.<br>자세한 사항은 관리자에게 문의하세요.");
         }
 
         return new memberAccount(member);

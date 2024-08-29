@@ -1,5 +1,6 @@
 package com.windsome.config.security;
 
+import com.windsome.exception.AccountDeactivatedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,8 +26,8 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
         String errorMessage = null;
         if (exception instanceof BadCredentialsException) {
             errorMessage = "아이디 또는 비밀번호를 잘못 입력했습니다.<br>입력하신 내용을 다시 확인해주세요.";
-        } else if (exception instanceof DisabledException) {
-            errorMessage = "계정이 비활성화되었습니다.<br>계정 상태를 확인하시고 다시 시도해주세요.";
+        } else if (exception instanceof InternalAuthenticationServiceException && exception.getCause() instanceof AccountDeactivatedException) {
+            errorMessage = "계정이 비활성화되었습니다.<br>자세한 사항은 관리자에게 문의하세요.";
         } else if (exception instanceof UsernameNotFoundException) {
             errorMessage = "계정이 존재하지 않습니다.<br>회원가입 진행 후 로그인 해주세요.";
         } else if (exception instanceof AuthenticationCredentialsNotFoundException) {

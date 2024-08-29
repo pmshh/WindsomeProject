@@ -6,6 +6,7 @@ import com.windsome.dto.oauth.NaverResponse;
 import com.windsome.dto.oauth.OAuth2Response;
 import com.windsome.entity.member.Address;
 import com.windsome.entity.member.Member;
+import com.windsome.exception.AccountDeactivatedException;
 import com.windsome.repository.member.AddressRepository;
 import com.windsome.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,10 @@ public class OAuth2UserDetailsService extends DefaultOAuth2UserService {
 
         String userIdentifier = oAuth2Response.getProvider() + "_" + oAuth2Response.getProviderId();
         Member existData = memberRepository.findByUserIdentifier(userIdentifier);
+
+        if (existData != null && existData.isDeleted()) {
+            throw new AccountDeactivatedException("계정이 비활성화되었습니다.<br>자세한 사항은 관리자에게 문의하세요.");
+        }
 
         Role role = Role.USER;
         if (existData == null) {
